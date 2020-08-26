@@ -120,6 +120,11 @@
         <li>자동완성</li>
     </ol>
 </details>
+<br>
+
+## Design prototype
+
+<a href="https://www.figma.com/file/8rmaBMo5bKoICpUrSlR34V/coinstagram-UI?node-id=0%3A1">![image](https://user-images.githubusercontent.com/62285872/91239936-9bda7380-e77b-11ea-8964-19df5bacddfb.png)</a>
 
 <br>
 
