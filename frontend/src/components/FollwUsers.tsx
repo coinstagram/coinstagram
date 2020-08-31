@@ -24,7 +24,7 @@ const StyledSection = styled.section`
 
   ul {
     display: flex;
-    transition: transform 0.3s;
+    transition: transform 0.4s;
     li + li {
       margin-left: 22.5px;
     }
@@ -33,43 +33,47 @@ const StyledSection = styled.section`
 
 interface State {
   count: number;
-  divPos: number;
-  lastLiPos: number;
+  slideCount: number;
 }
 
 function FollowUsers() {
   const [state, setState] = useState<State>({
     count: 0,
-    divPos: 0,
-    lastLiPos: 0,
+    slideCount: 0,
   });
-  const divRef = useRef<HTMLDivElement>(null);
   const ulRef = useRef<HTMLUListElement>(null);
+  const pos = useRef<number>(0);
+  const width = window.innerWidth;
 
   useEffect(() => {
-    const { divPos, lastLiPos, slideWidth } = getSlideInfo() as Position;
-  });
+    const { lastSlidePos, slideCount } = getSlideInfo() as slideInfo;
+    setState(state => ({
+      ...state,
+      slideCount,
+    }));
+
+    pos.current = lastSlidePos;
+  }, [width]);
 
   const next = useCallback(() => {
-    const { divPos, lastLiPos, slideWidth } = getSlideInfo() as Position;
-    const ul = ulRef.current;
-    if (ul === null) return;
-
-    ul.style.transform = `translateX(-${slideWidth * (state.count + 1)}px)`;
+    const { slideCount, slideWidth, ul } = getSlideInfo() as slideInfo;
 
     setState({
+      ...state,
       count: state.count + 1,
-      divPos,
-      lastLiPos: lastLiPos - slideWidth,
     });
+
+    if (Math.floor(slideCount) === state.count + 1) {
+      ul.style.transform = `translateX(-${pos.current}px)`;
+      return;
+    }
+    ul.style.transform = `translateX(-${slideWidth * (state.count + 1)}px)`;
   }, [state]);
 
   const prev = useCallback(() => {
     if (state.count === 0) return;
-    const ul = ulRef.current;
-    if (ul === null) return;
 
-    const { slideWidth } = getSlideInfo() as Position;
+    const { slideWidth, ul } = getSlideInfo() as slideInfo;
     ul.style.transform = `translateX(-${slideWidth * (state.count - 1)}px)`;
 
     setState({
@@ -80,10 +84,16 @@ function FollowUsers() {
 
   return (
     <StyledSection>
-      <div className="hidden-container" ref={divRef}>
+      <div className="hidden-container">
         {state.count !== 0 && <PrevBtn prev={prev} />}
-        {!(state.lastLiPos < state.divPos) && <NextBtn next={next} />}
+        {state.slideCount > state.count + 1 && <NextBtn next={next} />}
         <ul ref={ulRef}>
+          <li>
+            <Thumbnail size={56} />
+          </li>
+          <li>
+            <Thumbnail size={56} />
+          </li>
           <li>
             <Thumbnail size={56} />
           </li>
@@ -134,27 +144,33 @@ function FollowUsers() {
     </StyledSection>
   );
 
-  interface Position {
-    divPos: number;
-    lastLiPos: number;
+  interface slideInfo {
+    slideCount: number;
     slideWidth: number;
+    lastSlidePos: number;
+    ul: HTMLUListElement;
   }
 
   function getSlideInfo() {
-    const div = divRef.current;
     const ul = ulRef.current;
 
-    if (ul === null || div === null) return;
+    if (ul === null) return;
 
-    const li = ul.lastElementChild;
-    const divPos = div.getBoundingClientRect().right;
-    const lastLiPos = (li as HTMLLIElement).getBoundingClientRect().right;
-    const slideWidth = (li as HTMLLIElement).offsetWidth * 5;
+    const lastLi = ul.lastElementChild;
+    const firstLi = ul.firstElementChild;
+    const firstLiPos = (firstLi as HTMLLIElement).getBoundingClientRect().left;
+    const lastLiPos = (lastLi as HTMLLIElement).getBoundingClientRect().right;
+    const slideWidth = ul.offsetWidth;
+    const ulWidth = lastLiPos - firstLiPos + 10;
+    const lastSlidePos = ulWidth - slideWidth;
+    const slideCount = ulWidth / slideWidth;
+    console.log('lastSlidePos', lastSlidePos);
 
     return {
-      divPos,
-      lastLiPos,
+      slideCount,
       slideWidth,
+      lastSlidePos,
+      ul,
     };
   }
 }
