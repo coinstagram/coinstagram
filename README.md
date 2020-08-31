@@ -13,12 +13,19 @@
 
 <br>
 
-## 필수 구현기능
+## 구현기능
 
+<details>
+    <summary>로그인</summary>
+    <ol>
+        <li>로그인</li>
+        <li>회원가입</li>
+    </ol>
+</details>
 <details>
     <summary>홈</summary>
     <ol>
-        <li>내가 팔로우 한 계정들 캐러셀 기능</li>
+        <li>내가 팔로우 한 계정들 슬라이드 기능</li>
         <li>게시물
             <div>A) 계정이름 (클릭 시 해당 계정페이지로 이동)</div>
             <div>B) 태그된 위치 (클릭 시 해당위치가 태그된 게시물 랜덤 뷰)</div>
@@ -52,6 +59,7 @@
         </li>
     </ol>
 </details>
+
 
 <details>
     <summary>게시물 업로드</summary>
@@ -112,15 +120,53 @@
         </li>
     </ol>
 </details>
-
 <details>
     <summary>검색</summary>
     <ol>
-        <li>이름, 사용자 이름으로 검색</li>
+        <li>이름, 사용자 이름, (해쉬태그)로 검색</li>
         <li>자동완성</li>
     </ol>
 </details>
+
 <br>
+
+## 사용기술
+
+- 사용언어
+
+  HTML5, CSS3, JS6+, TS v3.7.5
+
+- 라이브러리
+
+  React v16.13.1
+
+- API
+
+  <details>
+      <summary>목록</summary>
+  	<div>axios v0.2</div>
+      <div>query-string v6.13.1</div>
+      <div>redux-devtools-extension v2.13.8</div>
+      <div>react-error-boundary v2.3.1</div>
+      <div>react-icons v3.11</div>
+      <div>react-redux v7.2.1</div>
+      <div>react-router-dom v5.2</div>
+      <div>connected-react-router v6.8</div>
+      <div>redux v4.0.5</div>
+      <div>redux-saga v1.1.3</div>
+      <div>styled-components v5.1.1</div>
+      <div>@types/react v16.9.48</div>
+      <div>@types/react-dom v16.9.8</div>
+      <div>@types/reac-redux v7.1.9</div>
+      <div>@types/react-router-dom v5.1.5</div>
+      <div>@types/styled-components v5.1.2</div>
+  </details>
+  
+- server & DB
+
+<br>
+
+
 
 ## Design prototype
 
@@ -130,4 +176,4 @@
 
 ## Flow Chart
 
-![instargram_flowchart](https://user-images.githubusercontent.com/62285872/90877949-da6cd880-e3df-11ea-9305-5a5b0f335300.png)
+![instargram_flowchart](https://user-images.githubusercontent.com/62285872/91688129-439cda80-eb9c-11ea-8c2b-0fa3f3d4f66c.png)
