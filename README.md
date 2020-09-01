@@ -163,10 +163,10 @@
   </details>
   
 - server
-  AWS 
+  <div>AWS</div> 
    
 - DB
-  mySql
+  <div>mySql</div>
 <br>
 
 
