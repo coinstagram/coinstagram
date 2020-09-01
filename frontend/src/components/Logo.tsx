@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 export const StyledH1 = styled.h1`
   font-size: 30px;
-  font-weight: normal;
+  font-weight: bold;
 
   &:active {
     color: rgb(142, 142, 142);
