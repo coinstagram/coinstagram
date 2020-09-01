@@ -53,22 +53,22 @@ function Join() {
     .rightLine {
       height: 1px;
       background: #dbdbdb;
-      
+
       width: 100%;
       position: relative;
-    top: 0.65em;
-}
+      top: 0.65em;
     }
+
     .or {
       margin: 0 18px;
       color: #828282;
-      font-weight : bold;
-      white-space : nowrap;
-      font-size: .9em;
+      font-weight: bold;
+      white-space: nowrap;
+      font-size: 0.9em;
     }
   `;
 
-  const Join = styled.div`
+  const Join = styled.form`
     input {
       background: #fafafa;
       color: #828282;
