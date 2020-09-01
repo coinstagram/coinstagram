@@ -162,8 +162,11 @@
       <div>@types/styled-components v5.1.2</div>
   </details>
   
-- server & DB
-
+- server
+  AWS 
+   
+- DB
+  mySql
 <br>
 
 
