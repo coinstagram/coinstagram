@@ -5,6 +5,7 @@
 
 html {
   font-size: 14px;
+  color: rgb(50, 50, 50);
 }
 
 body {
@@ -57,6 +58,10 @@ button {
   font-family: inherit;
 
   cursor: pointer;
+}
+
+dl {
+  margin: 0;
 }
 
 dd {

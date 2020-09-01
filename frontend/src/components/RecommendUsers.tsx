@@ -2,11 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import useWindowWidth from '../hooks/useWindowWidth';
 
+// components
+import RecommendUsersHeader from './RecommendUsersHeader';
+import RecommendUsersBody from './RecommendUsersBody';
+
 const StyledSection = styled.section`
   box-sizing: border-box;
   position: fixed;
-  width: 293px; /* max-width로 수정 필요 */
-  border: 1px solid rgb(219, 219, 219);
+  width: 313px; /* max-width로 수정 필요 */
 `;
 
 function RecommendUsers() {
@@ -14,7 +17,13 @@ function RecommendUsers() {
 
   if (width < 1000) return null;
 
-  return <StyledSection>RecommendUsers</StyledSection>;
+  return (
+    <StyledSection>
+      <h2 className="a11y-hidden">추천 계정</h2>
+      <RecommendUsersHeader />
+      <RecommendUsersBody />
+    </StyledSection>
+  );
 }
 
 export default RecommendUsers;
