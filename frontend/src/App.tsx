@@ -24,10 +24,10 @@ function App() {
           <Route path="/explore" component={Explore} />
           <Route path="/account/:userid/tagged" component={Profile} />
           <Route path="/account/:userid/saved" component={Profile} />
-          <Route path="/account/:userid" component={Profile} />
+          <Route path="/:userid" component={Profile} />
+          <Route path="/account/edit" component={Edit} />
           <Route path="/post/:postid" component={Post} />
           <Route path="/upload" component={Upload} />
-          <Route path="/edit" component={Edit} />
           <Route path="/join" component={Join} />
           <Route path="/" exact render={() => <Home />} />
           <Route component={NotFound} />
