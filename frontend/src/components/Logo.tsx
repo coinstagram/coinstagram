@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { login } from '../lib/api/users';
 
 const StyledH1 = styled.h1`
   font-size: 30px;
@@ -12,11 +13,18 @@ const StyledH1 = styled.h1`
   }
 `;
 
+const a = async () => {
+  console.log(await (await login()).data);
+};
+
 function Logo() {
   return (
-    <Link to="/">
-      <StyledH1>coInstagram</StyledH1>
-    </Link>
+    <>
+      <button onClick={a}>테스트 버튼 입니다.</button>
+      <Link to="/">
+        <StyledH1>coInstagram</StyledH1>
+      </Link>
+    </>
   );
 }
 
