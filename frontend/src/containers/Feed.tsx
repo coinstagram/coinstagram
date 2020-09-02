@@ -16,7 +16,7 @@ const StyledDiv = styled.div`
   .recommend-container {
     position: absolute;
     top: 0;
-    right: 315px;
+    right: 295px;
   }
 `;
 
