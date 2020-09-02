@@ -13,8 +13,10 @@ function Join() {
     margin: 0 auto;
   `;
   const JoinWrapper = styled.div`
+    /* test */
     width: 100%;
-    height: 542px;
+    /* height: 542px; */
+    height: 540px;
     background: #ffffff;
     border: 1px solid #dbdbdb;
     margin: 30px 0 10px 0;
