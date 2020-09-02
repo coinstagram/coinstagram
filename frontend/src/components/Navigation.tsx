@@ -125,9 +125,9 @@ function Navigation() {
           </button>
         </li>
         <li aria-label="내 프로필" id="profile" onClick={toggle}>
-          <StyledButton clicked={state.profile}>
+          {/* <StyledButton clicked={state.profile}>
             <Thumbnail size={26} />
-          </StyledButton>
+          </StyledButton> */}
         </li>
       </ul>
     </StyledNav>
