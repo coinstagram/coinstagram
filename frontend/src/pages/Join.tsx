@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import appStoreDownload from '../resource/image/appStoreDownload.png';
 import googleStoreDownload from '../resource/image/googleStoreDownload.png';
-import { StyledH1 } from '../components/Logo';
+import { StyledH1 } from '../components/header/Logo';
 
 function Join() {
   const appStoreUrl = 'https://apps.apple.com/app/instagram/id389801252?vt=lo';
