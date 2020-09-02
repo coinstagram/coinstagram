@@ -1,12 +1,12 @@
 import React from 'react';
-import useWindowWidth from '../hooks/useWindowWidth';
 
 // styles
 import StyledMain from '../styles/StyledMain';
+import useWindowWidth from '../hooks/useWindowWidth';
 
 // components
-import Header from '../components/Header';
-import Feed from '../containers/Feed';
+import Header from '../components/header/Header';
+import MainContainer from '../containers/MainContainer';
 
 function Home() {
   const width = useWindowWidth();
@@ -15,7 +15,7 @@ function Home() {
     <>
       <Header />
       <StyledMain width={width}>
-        <Feed />
+        <MainContainer />
       </StyledMain>
     </>
   );

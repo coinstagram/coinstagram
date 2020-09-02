@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useState, useRef } from 'react';
+import styled, { css } from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
-import useWindowWidth from '../hooks/useWindowWidth';
+import useWindowWidth from '../../hooks/useWindowWidth';
 
 // icons
 import {
@@ -16,7 +16,8 @@ import {
 import { FaCompass } from 'react-icons/fa';
 
 // components
-import Thumbnail from './Thumbnail';
+import Thumbnail from '../Thumbnail';
+import Modal from '../Modal';
 
 interface StyledNavProps {
   width: number;
@@ -35,7 +36,6 @@ const StyledNav = styled.nav`
     height: 25px;
   }
   svg {
-    color: rgb(50, 50, 50);
     font-size: 23px;
     width: 25px;
     height: 25px;
@@ -46,6 +46,28 @@ const StyledNav = styled.nav`
       color: rgb(120, 120, 120);
     }
   }
+`;
+
+const StyledButton = styled.button`
+  ${props =>
+    props.clicked &&
+    css`
+      & > span {
+        position: relative;
+        border: 1px solid rgb(255, 255, 255);
+      }
+      & > span::after {
+        content: '';
+        position: absolute;
+        top: ${-2}px;
+        bottom: ${-2}px;
+        left: ${-2}px;
+        right: ${-2}px;
+        z-index: -1;
+        border-radius: 50%;
+        background: rgb(0, 0, 0);
+      }
+    `}
 `;
 
 interface State {
@@ -60,6 +82,8 @@ function Navigation() {
     favorite: false,
     profile: false,
   });
+  const top = useRef<number>(0);
+  const left = useRef<number>(0);
 
   return (
     <StyledNav width={width}>
@@ -104,9 +128,13 @@ function Navigation() {
           </button>
         </li>
         <li aria-label="내 프로필" id="profile" onClick={toggle}>
-          <Thumbnail size={26} profile={state.profile} />
+          <StyledButton clicked={state.profile}>
+            <Thumbnail size={26} />
+          </StyledButton>
         </li>
       </ul>
+      {state.favorite && <Modal top={top.current} left={left.current} />}
+      {state.profile && <Modal top={top.current} left={left.current} />}
     </StyledNav>
   );
 
@@ -114,6 +142,14 @@ function Navigation() {
     currentTarget,
   }: React.MouseEvent<HTMLLIElement, MouseEvent>) {
     const id = (currentTarget as Element).id;
+    const posBottom = currentTarget.getBoundingClientRect().bottom;
+    const posCenter =
+      currentTarget.getBoundingClientRect().right -
+      currentTarget.getBoundingClientRect().width / 2;
+
+    top.current = posBottom;
+    left.current = posCenter;
+
     const isState = (x: string): x is keyof State => x in state;
     if (!isState(id)) return;
     setState({
