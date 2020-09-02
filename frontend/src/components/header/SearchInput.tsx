@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import useWindowWidth from '../hooks/useWindowWidth';
+import useWindowWidth from '../../hooks/useWindowWidth';
 
 // icons
 import { TiDelete } from 'react-icons/ti';

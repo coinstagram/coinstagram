@@ -1,12 +1,12 @@
 import React, { useRef, useCallback, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { loading } from '../styles/ThumbnailBorderStyle';
-import borderStyle from '../styles/ThumbnailBorderStyle';
+import { loading } from '../../styles/ThumbnailBorderStyle';
+import borderStyle from '../../styles/ThumbnailBorderStyle';
 
 // components
-import Thumbnail from './Thumbnail';
-import NextBtn from '../styles/NextBtn';
-import PrevBtn from '../styles/PrevBtn';
+import Thumbnail from '../Thumbnail';
+import NextBtn from '../../styles/NextBtn';
+import PrevBtn from '../../styles/PrevBtn';
 
 const StyledSection = styled.section`
   height: 84px;
@@ -74,14 +74,18 @@ function FollowUsers() {
   const width = window.innerWidth;
 
   useEffect(() => {
-    const { lastSlidePos, slideCount } = getSlideInfo() as slideInfo;
-    setState(state => ({
-      ...state,
+    const { lastSlidePos, slideCount, ul } = getSlideInfo() as slideInfo;
+    setState(st => ({
+      ...st,
       slideCount,
     }));
 
     pos.current = lastSlidePos;
-  }, [width]);
+
+    if (Math.floor(slideCount) === state.count) {
+      ul.style.transform = `translateX(-${pos.current}px)`;
+    }
+  }, [state.count, width]);
 
   const next = useCallback(() => {
     const { slideCount, slideWidth, ul } = getSlideInfo() as slideInfo;
@@ -99,8 +103,6 @@ function FollowUsers() {
   }, [state]);
 
   const prev = useCallback(() => {
-    if (state.count === 0) return;
-
     const { slideWidth, ul } = getSlideInfo() as slideInfo;
     ul.style.transform = `translateX(-${slideWidth * (state.count - 1)}px)`;
 
@@ -243,15 +245,6 @@ function FollowUsers() {
               </div>
             </StyledButton>
           </li>
-          <li>
-            <StyledButton onClick={loading}>
-              <Thumbnail size={56} />
-              <div tabIndex={-1}>
-                <dt className="a11y-hidden">유저 ID</dt>
-                <dd>user id1</dd>
-              </div>
-            </StyledButton>
-          </li>
         </ul>
       </div>
     </StyledSection>
@@ -267,7 +260,7 @@ function FollowUsers() {
     const firstLiPos = (firstLi as HTMLLIElement).getBoundingClientRect().left;
     const lastLiPos = (lastLi as HTMLLIElement).getBoundingClientRect().right;
     const slideWidth = ul.offsetWidth;
-    const ulWidth = lastLiPos - firstLiPos + 10;
+    const ulWidth = lastLiPos - firstLiPos + 10; // 10은 ul의 leftpadding값
     const lastSlidePos = ulWidth - slideWidth;
     const slideCount = ulWidth / slideWidth;
 

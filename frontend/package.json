@@ -70,5 +70,6 @@
     "lint-staged": "^10.2.13",
     "prettier": "^2.1.1",
     "redux-devtools-extension": "^2.13.8"
-  }
+  },
+  "proxy": "http://localhost:4000/"
 }

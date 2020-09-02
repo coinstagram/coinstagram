@@ -1,11 +1,11 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { loading } from '../styles/ThumbnailBorderStyle';
-import borderStyle from '../styles/ThumbnailBorderStyle';
+import { loading } from '../../styles/ThumbnailBorderStyle';
+import borderStyle from '../../styles/ThumbnailBorderStyle';
 
 // components
-import Thumbnail from './Thumbnail';
-import FollowBtn from './FollowBtn';
+import Thumbnail from '../Thumbnail';
+import FollowBtn from '../FollowBtn';
 
 const StyledDiv = styled.div`
   position: relative;

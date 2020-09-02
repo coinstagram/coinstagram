@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 
 // components
-import FollowUsers from '../components/FollwUsers';
-import PostList from '../components/PostList';
-import RecommendUsers from '../components/RecommendUsers';
+import FollowUsers from '../components/story/FollwUsers';
+import PostList from '../components/post/PostList';
+import RecommendUsers from '../components/recommend/RecommendUsers';
 
 const StyledDiv = styled.div`
   position: relative;
@@ -20,7 +21,14 @@ const StyledDiv = styled.div`
   }
 `;
 
-function Feed() {
+function Main() {
+  // const {} = useSelector();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // dispatch(saga 액션creator) 필요
+  }, [dispatch]);
+
   return (
     <StyledDiv>
       <div className="list-container">
@@ -34,4 +42,4 @@ function Feed() {
   );
 }
 
-export default Feed;
+export default Main;
