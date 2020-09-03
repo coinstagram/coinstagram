@@ -1,4 +1,13 @@
 import { AxiosError } from 'axios';
+declare module 'react' {
+  interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
+    width?: number;
+    count?: number;
+    clicked?: boolean;
+    size?: number;
+    isAnother?: boolean;
+  }
+}
 
 export interface AuthState {
   loading: boolean;
