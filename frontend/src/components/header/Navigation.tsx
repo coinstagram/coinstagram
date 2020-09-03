@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
 import useWindowWidth from '../../hooks/useWindowWidth';
@@ -17,7 +17,7 @@ import { FaCompass } from 'react-icons/fa';
 
 // components
 import Thumbnail from '../Thumbnail';
-import NavModal from '../NavModal';
+import NavModal from './NavModal';
 
 interface StyledNavProps {
   width: number;

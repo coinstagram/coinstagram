@@ -6,6 +6,20 @@ export interface AuthState {
   error: null | AxiosError;
 }
 
+export interface UserState {
+  loading: boolean;
+  error: null | AxiosError;
+  id: null | number;
+  user_email: null | string;
+  user_gender: null | string;
+  user_id: null | number;
+  user_introduce: null | string;
+  user_name: null | string;
+  user_password: null | string;
+  user_phone: null | number;
+  user_profile: null | string;
+}
+
 interface RootState {
   auth: {
     loading: boolean;

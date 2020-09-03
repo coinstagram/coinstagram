@@ -9,7 +9,7 @@ import RecommendUsersBody from './RecommendUsersBody';
 const StyledSection = styled.section`
   box-sizing: border-box;
   position: fixed;
-  width: 313px; /* max-width로 수정 필요 */
+  width: 313px;
 `;
 
 function RecommendUsers() {
