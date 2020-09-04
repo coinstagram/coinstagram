@@ -31,9 +31,8 @@ const StyledDiv = styled.div`
 const IconWrapper = styled.div`
   width: 100%;
   text-align: center;
-  /* &.IconWrapper {
-    display: none;
-  } */
+  display: none;
+
   .icon {
     font-size: 22px;
     padding: 10px 0;
@@ -49,53 +48,50 @@ const IconWrapper = styled.div`
   }
 `;
 
-// interface State {
-//   phoneOrEmail: string;
-//   userName: string;
-//   userId: string;
-//   password: string | number;
-//   valid: boolean;
-// }
+interface userNameState {
+  // phoneOrEmail: string;
+  userNameEntered: string;
+  // userId: string;
+  // password: string | number;
+  isUserNameFocused: boolean;
+  isUserNameValid: boolean;
+}
 
 export default function JoinInputBox() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
   // 이름_입력
-  const [phoneOrEmail, setPhoneOrEmail] = useState('');
-  const [userName, setUserName] = useState('');
-  const [userId, setUserId] = useState('');
-  const [password, setPassword] = useState('');
+  const [phoneOrEmail, setPhoneOrEmail] = useState<string | number>('');
+  const [userName, setUserName] = useState<userNameState>({
+    userNameEntered: '',
+    isUserNameFocused: true,
+    isUserNameValid: false,
+  });
+  const { userNameEntered, isUserNameFocused, isUserNameValid } = userName;
+  const [userId, setUserId] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
-  // 케이스 1
-  const handleUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserName(e.target.value);
+  const InputUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserName({
+      ...userName,
+      userNameEntered: e.target.value,
+      isUserNameValid: true,
+    });
   };
-  // const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   console.log('onBlur');
-  //   // validateName(userName);
-  //   handleUserName(e);
-  // };
-
-  // 이름_유효성 검사
-  // let nameChecked;
-  // const validateName = (userName: string): boolean => {
-  //   nameChecked = userName !== '' ? true : false;
-  //   console.log(nameChecked);
-  //   return nameChecked;
-  // };
-
-  // const handleUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setUserName(e.target.value);
-  // };
-
-  // const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   console.log('onBlur');
-  //   console.log(e.target);
-  //   validateName(userName);
-  //   handleUserName(e);
-  //   // console.log(e.target.value);
-  // };
+  const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserName({
+      ...userName,
+      isUserNameValid: userNameEntered !== '' ? true : false,
+      isUserNameFocused: false,
+    });
+  };
+  const onFocus = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserName({
+      ...userName,
+      isUserNameFocused: true,
+    });
+  };
 
   return (
     <StyledForm onSubmit={handleSubmit}>
@@ -120,16 +116,16 @@ export default function JoinInputBox() {
           <input
             type="text"
             name="userName"
-            value={userName}
-            onChange={handleUserName}
-            // onBlur={onBlur}
+            value={userNameEntered}
+            onChange={InputUserName}
+            onBlur={onBlur}
+            onFocus={onFocus}
             placeholder="성명"
             required
           ></input>
         </label>
-        {/* <IconWrapper style={{ display: nameChecked ? 'block' : 'none' }}> */}
-        <IconWrapper>
-          {userName ? (
+        <IconWrapper style={{ display: isUserNameFocused ? 'none' : 'block' }}>
+          {isUserNameValid ? (
             <BiCheckCircle className="icon check" />
           ) : (
             <RiCloseCircleLine className="icon close" />
