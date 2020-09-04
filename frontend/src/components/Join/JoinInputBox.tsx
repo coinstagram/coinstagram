@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { BiCheckCircle } from 'react-icons/bi';
 import { RiCloseCircleLine } from 'react-icons/ri';
+import { AiOutlineReload } from 'react-icons/ai';
+
 const StyledForm = styled.form``;
 const StyledDiv = styled.div`
   width: 268px;
@@ -28,9 +30,7 @@ const StyledDiv = styled.div`
 const IconWrapper = styled.div`
   width: 100%;
   text-align: center;
-  /* &.IconWrapper {
-    display: none;
-  } */
+  display: none;
   .icon {
     font-size: 22px;
     padding: 10px 0;
@@ -45,28 +45,54 @@ const IconWrapper = styled.div`
     }
   }
 `;
-// interface State {
-//   phoneOrEmail: string;
-//   userName: string;
-//   userId: string;
-//   password: string | number;
-//   valid: boolean;
-// }
+
+interface userNameState {
+  // phoneOrEmail: string;
+  userNameEntered: string;
+  // userId: string;
+  // password: string | number;
+  isUserNameFocused: boolean;
+  isUserNameValid: boolean;
+}
+
 export default function JoinInputBox() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
-  // 이름_입력
+
   const [phoneOrEmail, setPhoneOrEmail] = useState<string | number>('');
-  const [userName, setUserName] = useState<string>('');
+  // userName 상태
+  // 1) userNmeEntered : 사용자 입력값
+  // 2) isUserNameFocused : blur인 상태일 때만 오른쪽 v,x아이콘이 떠야하므로 그 상태 조절을 위한 불리언 값 필요
+  // 3) isUserNameValid : 유효성 검사(빈 문자열만 아니면 OK)->불리언 값
+  const [userName, setUserName] = useState<userNameState>({
+    userNameEntered: '',
+    isUserNameFocused: true,
+    isUserNameValid: false,
+  });
+  const { userNameEntered, isUserNameFocused, isUserNameValid } = userName;
   const [userId, setUserId] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  // 케이스 1
-  const handleUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserName(e.target.value);
+
+  const InputUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserName({
+      ...userName,
+      userNameEntered: e.target.value,
+      isUserNameValid: true,
+    });
   };
   const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('blur');
+    setUserName({
+      ...userName,
+      isUserNameValid: userNameEntered !== '' ? true : false,
+      isUserNameFocused: false,
+    });
+  };
+  const onFocus = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserName({
+      ...userName,
+      isUserNameFocused: true,
+    });
   };
 
   // 이름_유효성 검사
@@ -109,16 +135,18 @@ export default function JoinInputBox() {
           <input
             type="text"
             name="userName"
-            value={userName}
-            onChange={handleUserName}
+            value={userNameEntered}
+            onChange={InputUserName}
             onBlur={onBlur}
+            onFocus={onFocus}
             placeholder="성명"
             required
-          />
+          ></input>
         </label>
-        {/* <IconWrapper style={{ display: nameChecked ? 'block' : 'none' }}> */}
-        <IconWrapper>
-          {userName !== '' ? (
+        {/* v,x아이콘 display 상태: focus일 경우 none으로 안 보여지게, blur일 경우 block으로 보여지게  */}
+        <IconWrapper style={{ display: isUserNameFocused ? 'none' : 'block' }}>
+          {/* valid일 경우 check아이콘, 아닐 경우 x아이콘 */}
+          {isUserNameValid ? (
             <BiCheckCircle className="icon check" />
           ) : (
             <RiCloseCircleLine className="icon close" />

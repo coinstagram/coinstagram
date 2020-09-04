@@ -74,7 +74,7 @@ router.get('/user', verifyToken, async (req, res) => {
       data = { ...data, user, follower, folloee };
       console.log(data);
 
-      res.send({ data });
+      res.send({ success: true });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
