@@ -14,9 +14,15 @@ const StyledDiv = styled.div`
   border-radius: 3px;
   background: #fafafa;
   font-size: 0.9em;
-  span {
+
+  /* span {
     color: #828282;
-  }
+    padding-left: 10px;
+    width: 250px;
+    height: 36px;
+    font-size: 12px;
+  } */
+
   input {
     background: #fafafa;
     color: #828282;
@@ -94,24 +100,11 @@ export default function JoinInputBox() {
       isUserNameFocused: true,
     });
   };
+  const [isSpanVisible, setIsSpanVisible] = useState(false);
+  const onKeyDown = () => {
+    setIsSpanVisible(true);
+  };
 
-  // 이름_유효성 검사
-  // let nameChecked;
-  // const validateName = (userName: string): boolean => {
-  //   nameChecked = userName !== '' ? true : false;
-  //   console.log(nameChecked);
-  //   return nameChecked;
-  // };
-  // const handleUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setUserName(e.target.value);
-  // };
-  // const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   console.log('onBlur');
-  //   console.log(e.target);
-  //   validateName(userName);
-  //   handleUserName(e);
-  //   // console.log(e.target.value);
-  // };
   return (
     <StyledForm onSubmit={handleSubmit}>
       <StyledDiv>
@@ -131,7 +124,10 @@ export default function JoinInputBox() {
       </StyledDiv>
       <StyledDiv>
         <label>
-          {/* <span>성명</span> */}
+          <span style={{ display: isSpanVisible ? 'inline-block' : 'none' }}>
+            성명
+          </span>
+
           <input
             type="text"
             name="userName"
@@ -139,7 +135,8 @@ export default function JoinInputBox() {
             onChange={InputUserName}
             onBlur={onBlur}
             onFocus={onFocus}
-            placeholder="성명"
+            onKeyDown={onKeyDown}
+            // placeholder="성명"
             required
           ></input>
         </label>
