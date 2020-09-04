@@ -1,5 +1,5 @@
-const express = require("express");
-const pool = require("../config/database");
+const express = require('express');
+const pool = require('../config/database');
 const router = express.Router();
 
 /**
@@ -9,24 +9,24 @@ const router = express.Router();
  *  user_id
  * }
  */
-router.delete("/user", async (req, res) => {
+router.delete('/user', async (req, res) => {
   const { user_id } = req.body;
-  let sql = "";
+  let sql = '';
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      sql = "select * from users where user_id = ?";
+      sql = 'select * from users where user_id = ?';
       const [userData] = await connection.query(sql, user_id);
 
-      sql = "SET foreign_key_checks = 0;";
+      sql = 'SET foreign_key_checks = 0;';
       await connection.query(sql);
       sql = `delete from users where user_id = ?;`;
       const [result] = await connection.query(sql, user_id);
-      sql = "SET foreign_key_checks = 1;";
+      sql = 'SET foreign_key_checks = 1;';
       await connection.query(sql);
 
       if (result.affectedRows === 0) {
-        throw Error("지워지지 않음");
+        throw Error('지워지지 않음');
       }
 
       res.send(userData[0]);
@@ -34,10 +34,10 @@ router.delete("/user", async (req, res) => {
       await connection.rollback(); // ROLLBACK
       await connection.release();
       console.log(error);
-      res.status(500).json("SQL ERROR");
+      res.status(500).json('SQL ERROR');
     }
   } catch (error) {
-    res.status(500).json("DB CONNECT ERROR");
+    res.status(500).json('DB CONNECT ERROR');
   }
 });
 
