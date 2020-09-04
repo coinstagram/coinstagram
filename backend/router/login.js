@@ -16,7 +16,7 @@ const router = express.Router();
  * return : body{success:boolean}
  * success = true : cookie: token
  */
-router.get('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
   const { user_id, user_password } = req.body;
 
   let sql = '';
@@ -40,11 +40,17 @@ router.get('/login', async (req, res) => {
         res.send({ user_password: '' });
         throw Error('비밀번호가 틀렸습니다.');
       }
+      console.log(isuser[0]);
       // 토큰 발급
       const token = jwt.sign(
         {
           id: isuser[0].user_id,
-          username: isuser[0].user_name,
+          name: isuser[0].user_name,
+          gender: isuser[0].user_gender,
+          introduce: isuser[0].user_introduce,
+          phone: isuser[0].user_phone,
+          email: isuser[0].user_email,
+          profile: isuser[0].user_profile,
         },
         // eslint-disable-next-line no-undef
         process.env.JWT_SECRET,
@@ -52,10 +58,11 @@ router.get('/login', async (req, res) => {
           expiresIn: '7d',
         },
       );
-      res.cookie('access_token', token);
+      res.cookie('access_token', token, { httpOnly: true });
+
       connection.commit();
       await connection.release();
-      res.send({ success: true });
+      res.send({ success: true, token });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();

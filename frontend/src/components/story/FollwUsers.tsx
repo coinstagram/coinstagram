@@ -114,10 +114,10 @@ function FollowUsers() {
 
   return (
     <StyledSection>
-      <h2 className="a11y-hidden">팔로우한 계정</h2>
+      <h3 className="a11y-hidden">팔로우한 계정</h3>
       <div className="hidden-container">
-        {state.count !== 0 && <PrevBtn prev={prev} />}
-        {state.slideCount > state.count + 1 && <NextBtn next={next} />}
+        {state.count !== 0 && <PrevBtn onClick={prev} />}
+        {state.slideCount > state.count + 1 && <NextBtn onClick={next} />}
         <ul ref={ulRef}>
           <li>
             <StyledButton onClick={loading}>

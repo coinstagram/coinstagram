@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 // icons
-import { RiSettings3Line, RiBookmarkLine } from 'react-icons/ri';
+import { RiSettings3Line } from 'react-icons/ri';
 import { CgProfile } from 'react-icons/cg';
 import { BiBookmark } from 'react-icons/bi';
 
-const StyledDivBg = styled.div`
+export const StyledDivBg = styled.div`
   position: fixed;
   top: 0;
   left: 0;

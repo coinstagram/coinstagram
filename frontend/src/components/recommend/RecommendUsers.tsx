@@ -9,7 +9,7 @@ import RecommendUsersBody from './RecommendUsersBody';
 const StyledSection = styled.section`
   box-sizing: border-box;
   position: fixed;
-  width: 313px; /* max-width로 수정 필요 */
+  width: 313px;
 `;
 
 function RecommendUsers() {
@@ -19,7 +19,7 @@ function RecommendUsers() {
 
   return (
     <StyledSection>
-      <h2 className="a11y-hidden">추천 계정</h2>
+      <h3 className="a11y-hidden">추천 계정</h3>
       <RecommendUsersHeader />
       <RecommendUsersBody />
     </StyledSection>

@@ -1,5 +1,8 @@
 import styled from 'styled-components';
-import { WidthProps } from '../type';
+
+export interface WidthProps {
+  width?: number;
+}
 
 const StyledMain = styled.main`
   max-width: 975px;
