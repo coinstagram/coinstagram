@@ -22,6 +22,7 @@ const StyledDiv = styled.div`
     height: 36px;
     font-size: 12px;
   } */
+
   input {
     background: #fafafa;
     color: #828282;
@@ -103,6 +104,7 @@ export default function JoinInputBox() {
   const onKeyDown = () => {
     setIsSpanVisible(true);
   };
+
   return (
     <StyledForm onSubmit={handleSubmit}>
       <StyledDiv>

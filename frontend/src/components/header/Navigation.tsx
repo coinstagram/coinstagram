@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
 import useWindowWidth from '../../hooks/useWindowWidth';
@@ -17,7 +17,7 @@ import { FaCompass } from 'react-icons/fa';
 
 // components
 import Thumbnail from '../Thumbnail';
-import Modal from '../Modal';
+import NavModal from './NavModal';
 
 interface StyledNavProps {
   width: number;
@@ -118,7 +118,7 @@ function Navigation() {
             )}
           </Link>
         </li>
-        <li aria-label="새 소식" id="favorite" onClick={toggle}>
+        <li aria-label="새 소식" onClick={toggle} id="favorite">
           <button>
             {state.favorite ? (
               <BsHeartFill tabIndex={-1} />
@@ -126,15 +126,27 @@ function Navigation() {
               <BsHeart tabIndex={-1} />
             )}
           </button>
+          {state.favorite && (
+            <NavModal
+              top={top.current}
+              left={left.current}
+              favorite={state.favorite}
+            />
+          )}
         </li>
-        <li aria-label="내 프로필" id="profile" onClick={toggle}>
+        <li aria-label="내 프로필" onClick={toggle} id="profile">
           <StyledButton clicked={state.profile}>
             <Thumbnail size={26} />
           </StyledButton>
+          {state.profile && (
+            <NavModal
+              top={top.current}
+              left={left.current}
+              profile={state.profile}
+            />
+          )}
         </li>
       </ul>
-      {state.favorite && <Modal top={top.current} left={left.current} />}
-      {state.profile && <Modal top={top.current} left={left.current} />}
     </StyledNav>
   );
 
@@ -152,6 +164,7 @@ function Navigation() {
 
     const isState = (x: string): x is keyof State => x in state;
     if (!isState(id)) return;
+
     setState({
       ...state,
       [id]: !state[id],

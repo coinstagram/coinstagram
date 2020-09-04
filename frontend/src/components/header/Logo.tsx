@@ -13,9 +13,11 @@ export const StyledH1 = styled.h1`
 
 function Logo() {
   return (
-    <Link to="/">
-      <StyledH1>coInstagram</StyledH1>
-    </Link>
+    <>
+      <Link to="/">
+        <StyledH1>coInstagram</StyledH1>
+      </Link>
+    </>
   );
 }
 

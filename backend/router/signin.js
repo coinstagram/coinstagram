@@ -13,6 +13,7 @@ const router = express.Router();
  *  user_name
  *  user_email
  * }
+ * return : body{success:boolean}
  */
 router.post('/signin/email', async (req, res) => {
   const { user_id, user_password, user_name, user_email } = req.body;
@@ -31,16 +32,14 @@ router.post('/signin/email', async (req, res) => {
         user_name,
         user_email,
       ]);
-      sql = 'SELECT * FROM users where user_id = ?';
-      const [rows] = await connection.query(sql, user_id);
       connection.commit();
       await connection.release();
-      res.send(rows[0]);
+      res.send({ success: true });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
       console.log(error);
-      res.status(500).json('SQL ERROR');
+      res.send({ success: false });
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
@@ -56,6 +55,7 @@ router.post('/signin/email', async (req, res) => {
  *  user_name
  *  user_phone
  * }
+ * return : body{success:boolean}
  */
 router.post('/signin/phone', async (req, res) => {
   const { user_id, user_password, user_name, user_phone } = req.body;
@@ -73,14 +73,14 @@ router.post('/signin/phone', async (req, res) => {
         user_name,
         user_phone,
       ]);
-      sql = 'SELECT * FROM users where user_id = ?';
-      const [rows] = await connection.query(sql, user_id);
+      connection.commit();
       await connection.release();
-      res.send(rows[0]);
+      res.send({ success: true });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
-      res.status(500).json('SQL ERROR');
+      console.log(error);
+      res.send({ success: false });
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');

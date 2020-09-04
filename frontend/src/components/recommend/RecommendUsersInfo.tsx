@@ -5,7 +5,7 @@ import borderStyle from '../../styles/ThumbnailBorderStyle';
 
 // components
 import Thumbnail from '../Thumbnail';
-import FollowBtn from '../FollowBtn';
+import FollowBtn from './FollowBtn';
 
 const StyledDiv = styled.div`
   position: relative;

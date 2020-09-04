@@ -9,6 +9,7 @@ const StyledButton = styled.button`
   width: 32px;
   height: 32px;
   transition: transform 0.2s;
+  z-index: 1;
 
   span {
     display: inline-block;
@@ -26,12 +27,12 @@ const StyledButton = styled.button`
 `;
 
 interface NextBtnProps {
-  next: () => void;
+  onClick?: () => void;
 }
 
-function NextBtn({ next }: NextBtnProps) {
+function NextBtn({ onClick }: NextBtnProps) {
   return (
-    <StyledButton onClick={next}>
+    <StyledButton onClick={onClick} aria-label="다음 보기" className="next-btn">
       <span tabIndex={-1}></span>
     </StyledButton>
   );

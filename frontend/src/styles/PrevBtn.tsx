@@ -8,6 +8,7 @@ const StyledButton = styled.button`
   left: 1px;
   width: 32px;
   height: 32px;
+  z-index: 1;
 
   span {
     display: inline-block;
@@ -26,12 +27,12 @@ const StyledButton = styled.button`
 `;
 
 interface PrevBtnProps {
-  prev: () => void;
+  onClick?: () => void;
 }
 
-function PrevBtn({ prev }: PrevBtnProps) {
+function PrevBtn({ onClick }: PrevBtnProps) {
   return (
-    <StyledButton onClick={prev}>
+    <StyledButton onClick={onClick} aria-label="이전 보기" className="prev-btn">
       <span tabIndex={-1}></span>
     </StyledButton>
   );

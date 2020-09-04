@@ -1,38 +1,68 @@
+require('dotenv').config();
 const express = require('express');
 const pool = require('../config/database');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
 /**
-
+ * login
+ * /login
+ * {
+ *  user_id,
+ *  user_password
+ * }
+ * return : body{success:boolean}
+ * success = true : cookie: token
  */
-router.get('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
   const { user_id, user_password } = req.body;
 
   let sql = '';
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      sql = 'SELECT user_id, user_password FROM users where user_id = ?';
+      sql = 'SELECT * FROM users where user_id = ?';
       const [isuser] = await connection.query(sql, user_id);
-      console.log(isuser);
+
+      // id 확인
       if (isuser[0] === undefined) {
         res.send({ user_id: '' });
         throw Error('유저가 없습니다.');
-      } else {
-        const isPassword = await bcrypt.compare(
-          user_password + '',
-          isuser[0].user_password,
-        );
-        if (!isPassword) {
-          res.send({ user_password: '' });
-          throw Error('비밀번호가 틀렸습니다.');
-        }
       }
+      // 비밀번호 확인
+      const isPassword = await bcrypt.compare(
+        user_password + '',
+        isuser[0].user_password,
+      );
+      if (!isPassword) {
+        res.send({ user_password: '' });
+        throw Error('비밀번호가 틀렸습니다.');
+      }
+      console.log(isuser[0]);
+      // 토큰 발급
+      const token = jwt.sign(
+        {
+          id: isuser[0].user_id,
+          name: isuser[0].user_name,
+          gender: isuser[0].user_gender,
+          introduce: isuser[0].user_introduce,
+          phone: isuser[0].user_phone,
+          email: isuser[0].user_email,
+          profile: isuser[0].user_profile,
+        },
+        // eslint-disable-next-line no-undef
+        process.env.JWT_SECRET,
+        {
+          expiresIn: '7d',
+        },
+      );
+      res.cookie('access_token', token, { httpOnly: true });
+
       connection.commit();
       await connection.release();
-      res.send(isuser[0]);
+      res.send({ success: true, token });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();

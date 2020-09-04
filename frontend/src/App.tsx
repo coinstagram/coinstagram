@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback, createContext } from 'react';
 import { history } from './redux/create';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ConnectedRouter } from 'connected-react-router';
@@ -14,26 +14,41 @@ import Upload from './pages/Upload';
 import Explore from './pages/Explore';
 import FatalError from './pages/FatalError';
 import NotFound from './pages/NotFound';
+import PostModal from './components/post/PostModal';
+import ModalGlobalStyle from './styles/ModalGlobalStyle';
+
+type ModalFunc = () => void;
+
+export const ModalContext = createContext<ModalFunc | null>(null);
 
 function App() {
+  const [modal, setModal] = useState<boolean>(false);
+
+  const popModal = useCallback(() => {
+    setModal(!modal);
+  }, [modal]);
+
   return (
     <ErrorBoundary FallbackComponent={FatalError}>
-      <ConnectedRouter history={history}>
-        <Switch>
-          <Route path="/explore/tags/:tagid" component={Explore} />
-          <Route path="/explore" component={Explore} />
-          <Route path="/account/:userid/tagged" component={Profile} />
-          <Route path="/account/:userid/saved" component={Profile} />
-          <Route path="/account/:userid" component={Profile} />
-          <Route path="/post/:postid" component={Post} />
-          <Route path="/upload" component={Upload} />
-          <Route path="/edit" component={Edit} />
-          <Route path="/join" component={Join} />
-          <Route path="/" exact render={() => <Home />} />
-          <Route component={NotFound} />
-          <Route />
-        </Switch>
-      </ConnectedRouter>
+      <ModalGlobalStyle modal={modal} />
+      <ModalContext.Provider value={popModal}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route path="/explore/tags/:tagid" component={Explore} />
+            <Route path="/post/:postid" component={Post} />
+            <Route path="/explore" component={Explore} />
+            <Route path="/upload" component={Upload} />
+            <Route path="/join" component={Join} />
+            <Route path="/account/:userid/tagged" component={Profile} />
+            <Route path="/account/:userid/saved" component={Profile} />
+            <Route path="/account/edit" component={Edit} />
+            <Route path="/:userid" component={Profile} />
+            <Route path="/" exact component={Home} />
+            <Route component={NotFound} />
+          </Switch>
+          {modal && <PostModal popModal={popModal} />}
+        </ConnectedRouter>
+      </ModalContext.Provider>
     </ErrorBoundary>
   );
 }
