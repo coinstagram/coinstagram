@@ -63,36 +63,39 @@ export default function JoinInputBox() {
   };
   // 이름_입력
   const [phoneOrEmail, setPhoneOrEmail] = useState('');
-  const [userName, setUserName] = useState<string>('');
+  const [userName, setUserName] = useState('');
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
 
+  // 케이스 1
   const handleUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserName(e.target.value);
   };
-
-  // 이름_유효성 검사
-  let nameChecked;
-  const validateName = (userName: string): boolean => {
-    nameChecked = userName !== '' ? true : false;
-    console.log(nameChecked);
-    return nameChecked;
-  };
-
-  // let handleUserName;
-  // const onBlur = () => {
+  // const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   console.log('onBlur');
   //   // validateName(userName);
-  //   handleUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     console.log(e.target.value);
-  //     setUserName(e.target.value);
-  //   };
+  //   handleUserName(e);
   // };
 
-  const onBlur = () => {
-    console.log('onBlur');
-    validateName(userName);
-  };
+  // 이름_유효성 검사
+  // let nameChecked;
+  // const validateName = (userName: string): boolean => {
+  //   nameChecked = userName !== '' ? true : false;
+  //   console.log(nameChecked);
+  //   return nameChecked;
+  // };
+
+  // const handleUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setUserName(e.target.value);
+  // };
+
+  // const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   console.log('onBlur');
+  //   console.log(e.target);
+  //   validateName(userName);
+  //   handleUserName(e);
+  //   // console.log(e.target.value);
+  // };
 
   return (
     <StyledForm onSubmit={handleSubmit}>
@@ -119,7 +122,7 @@ export default function JoinInputBox() {
             name="userName"
             value={userName}
             onChange={handleUserName}
-            onBlur={onBlur}
+            // onBlur={onBlur}
             placeholder="성명"
             required
           ></input>
