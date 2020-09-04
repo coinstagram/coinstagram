@@ -31,6 +31,9 @@ const StyledDiv = styled.div`
 const IconWrapper = styled.div`
   width: 100%;
   text-align: center;
+  /* &.IconWrapper {
+    display: none;
+  } */
   .icon {
     font-size: 22px;
     padding: 10px 0;
@@ -46,40 +49,51 @@ const IconWrapper = styled.div`
   }
 `;
 
-interface State {
-  nameEntered: string;
-  isNameValid: boolean;
-}
+// interface State {
+//   phoneOrEmail: string;
+//   userName: string;
+//   userId: string;
+//   password: string | number;
+//   valid: boolean;
+// }
 
 export default function JoinInputBox() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
   // 이름_입력
-  const [userName, setUserName] = useState<State>({
-    nameEntered: '',
-    isNameValid: false,
-  });
-  const { nameEntered, isNameValid } = userName;
+  const [phoneOrEmail, setPhoneOrEmail] = useState('');
+  const [userName, setUserName] = useState<string>('');
+  const [userId, setUserId] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setUserName({
-      ...userName,
-      nameEntered: value,
-    });
-    validateName(value);
+    setUserName(e.target.value);
   };
 
   // 이름_유효성 검사
-  const validateName = (nameEntered: string) => {
-    if (nameEntered.length > 1) {
-      setUserName({
-        nameEntered,
-        isNameValid: true,
-      });
-    }
+  let nameChecked;
+  const validateName = (userName: string): boolean => {
+    nameChecked = userName !== '' ? true : false;
+    console.log(nameChecked);
+    return nameChecked;
   };
+
+  // let handleUserName;
+  // const onBlur = () => {
+  //   console.log('onBlur');
+  //   // validateName(userName);
+  //   handleUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //     console.log(e.target.value);
+  //     setUserName(e.target.value);
+  //   };
+  // };
+
+  const onBlur = () => {
+    console.log('onBlur');
+    validateName(userName);
+  };
+
   return (
     <StyledForm onSubmit={handleSubmit}>
       <StyledDiv>
@@ -87,13 +101,14 @@ export default function JoinInputBox() {
           {/* <span>휴대폰 번호 또는 이메일 주소</span> */}
           <input
             type="text"
-            name="phoneNumber"
+            name="phoneOrEmail"
+            value={phoneOrEmail}
             placeholder="휴대폰 번호 또는 이메일 주소"
             required
           ></input>
         </label>
         <IconWrapper>
-          <BiCheckCircle className="icon check" />
+          {/* <BiCheckCircle className="icon check" /> */}
         </IconWrapper>
       </StyledDiv>
       <StyledDiv>
@@ -102,14 +117,16 @@ export default function JoinInputBox() {
           <input
             type="text"
             name="userName"
-            placeholder="성명"
-            value={nameEntered}
+            value={userName}
             onChange={handleUserName}
+            onBlur={onBlur}
+            placeholder="성명"
             required
           ></input>
         </label>
+        {/* <IconWrapper style={{ display: nameChecked ? 'block' : 'none' }}> */}
         <IconWrapper>
-          {isNameValid ? (
+          {userName ? (
             <BiCheckCircle className="icon check" />
           ) : (
             <RiCloseCircleLine className="icon close" />
@@ -119,10 +136,16 @@ export default function JoinInputBox() {
       <StyledDiv>
         <label>
           {/* <span>사용자 이름</span> */}
-          <input type="text" name="userId" placeholder="사용자 이름" required />
+          <input
+            type="text"
+            name="userId"
+            value={userId}
+            placeholder="사용자 이름"
+            required
+          />
         </label>
         <IconWrapper>
-          <AiOutlineReload className="icon reload" />
+          {/* <AiOutlineReload className="icon reload" /> */}
         </IconWrapper>
       </StyledDiv>
       <StyledDiv>
@@ -131,12 +154,13 @@ export default function JoinInputBox() {
           <input
             type="password"
             name="password"
+            value={password}
             placeholder="비밀번호"
             required
           />
         </label>
         <IconWrapper>
-          <AiOutlineReload className="icon reload" />
+          {/* <AiOutlineReload className="icon reload" /> */}
         </IconWrapper>
       </StyledDiv>
     </StyledForm>
