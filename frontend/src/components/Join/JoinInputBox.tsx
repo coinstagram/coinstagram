@@ -15,9 +15,13 @@ const StyledDiv = styled.div`
   background: #fafafa;
   font-size: 0.9em;
 
-  span {
+  /* span {
     color: #828282;
-  }
+    padding-left: 10px;
+    width: 250px;
+    height: 36px;
+    font-size: 12px;
+  } */
   input {
     background: #fafafa;
     color: #828282;
@@ -95,7 +99,10 @@ export default function JoinInputBox() {
       isUserNameFocused: true,
     });
   };
-
+  const [isSpanVisible, setIsSpanVisible] = useState(false);
+  const onKeyDown = () => {
+    setIsSpanVisible(true);
+  };
   return (
     <StyledForm onSubmit={handleSubmit}>
       <StyledDiv>
@@ -115,7 +122,10 @@ export default function JoinInputBox() {
       </StyledDiv>
       <StyledDiv>
         <label>
-          {/* <span>성명</span> */}
+          <span style={{ display: isSpanVisible ? 'inline-block' : 'none' }}>
+            성명
+          </span>
+
           <input
             type="text"
             name="userName"
@@ -123,7 +133,8 @@ export default function JoinInputBox() {
             onChange={InputUserName}
             onBlur={onBlur}
             onFocus={onFocus}
-            placeholder="성명"
+            onKeyDown={onKeyDown}
+            // placeholder="성명"
             required
           ></input>
         </label>
