@@ -8,31 +8,31 @@ const SIGNIN_START = 'coinstagram/auth/SIGNIN_START' as const;
 const SIGNIN_SUCCESS = 'coinstagram/auth/SIGNIN_SUCCESS' as const;
 const SIGNIN_FAIL = 'coinstagram/auth/SIGNIN_FAIL' as const;
 
-type AuthActions =
-  | ReturnType<typeof signinStart>
-  | ReturnType<typeof signinSuccess>
-  | ReturnType<typeof signinFail>;
-
 // action creator
 const signinStart = () => ({
   type: SIGNIN_START,
 });
-const signinSuccess = (id: string) => ({
+const signinSuccess = (token: string) => ({
   type: SIGNIN_SUCCESS,
-  payload: id,
+  payload: token,
 });
 const signinFail = (error: AxiosError) => ({
   type: SIGNIN_FAIL,
   payload: error,
 });
 
+type AuthActions =
+  | ReturnType<typeof signinStart>
+  | ReturnType<typeof signinSuccess>
+  | ReturnType<typeof signinFail>;
+
 // saga action type
 const SIGNIN_REQUEST_SAGA = 'SIGNIN_REQUEST_SAGA' as const;
 
 // saga action creator
-export const signinRequestSaga = (id: string) => ({
+export const signinRequestSaga = (token: string) => ({
   type: SIGNIN_REQUEST_SAGA,
-  payload: id,
+  payload: token,
 });
 
 type SagaActions = ReturnType<typeof signinRequestSaga>;
@@ -50,9 +50,11 @@ export function* authSaga() {
 
 const initialState: AuthState = {
   loading: false,
-  id: null,
   error: null,
+  token: null,
 };
+
+// reducer
 
 function authReducer(
   state: AuthState = initialState,
@@ -62,20 +64,20 @@ function authReducer(
     case SIGNIN_START:
       return {
         loading: true,
-        id: null,
         error: null,
+        token: null,
       };
     case SIGNIN_SUCCESS:
       return {
         loading: false,
-        id: action.payload,
         error: null,
+        token: action.payload,
       };
     case SIGNIN_FAIL:
       return {
         loading: false,
-        id: null,
         error: action.payload,
+        token: null,
       };
     default:
       return state;

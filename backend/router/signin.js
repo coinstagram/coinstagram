@@ -86,4 +86,5 @@ router.post('/signin/phone', async (req, res) => {
     res.status(500).json('DB CONNECT ERROR');
   }
 });
+
 module.exports = router;

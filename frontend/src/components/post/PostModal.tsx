@@ -5,12 +5,12 @@ import { Link } from 'react-router-dom';
 // styles
 import { StyledDivBg } from '../header/NavModal';
 
-const StyledBg = styled(StyledDivBg)`
+export const StyledBg = styled(StyledDivBg)`
   background-color: rgba(0, 0, 0, 0.65);
   z-index: 20;
 `;
 
-const StyledModal = styled.div`
+export const StyledModal = styled.div`
   position: absolute;
   top: calc(50% - 150px);
   left: calc(50% - 200px);

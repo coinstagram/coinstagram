@@ -1,15 +1,12 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
+import { UserInfoState } from '../../type';
 
 export default class userService {
-  static async getUserinfo(user_id: string) {
-    const res = await axios.get('/user', {
-      params: { user_id },
+  static async getUserinfo(userId: string) {
+    const res: AxiosResponse<UserInfoState> = await axios.get('/user', {
+      params: { user_id: userId },
     });
 
     return res.data;
   }
-
-  static async getFollowerUsers() {}
-
-  static async getFolloweeUsers() {}
 }

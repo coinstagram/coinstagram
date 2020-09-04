@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import styled from 'styled-components';
 
 // styles
 import StyledMain from '../styles/StyledMain';
@@ -8,6 +9,22 @@ import useWindowWidth from '../hooks/useWindowWidth';
 // components
 import Header from '../components/header/Header';
 import MainContainer from '../containers/MainContainer';
+
+const StyledDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  display: flex;
+  top: 100px;
+  left: 10px;
+
+  button {
+    border: 1px solid black;
+    border-radius: 6px;
+    padding: 5px;
+    margin-top: 5px;
+  }
+`;
 
 function Home() {
   const width = useWindowWidth();
@@ -18,61 +35,72 @@ function Home() {
       <StyledMain width={width}>
         <MainContainer />
       </StyledMain>
-      <button onClick={getUsers}>유저 get버튼</button>
-      <button onClick={getUser}>유저한명 get버튼</button>
-      <button onClick={signupPhone}>회원가입 버튼</button>
-      <button onClick={getFollower}>follower 검색</button>
-      <button onClick={getFollowee}>followee 검색</button>
-      <button onClick={followUser}>팔로우하기</button>
+      <StyledDiv>
+        <button onClick={signupEmail}>회원가입</button>
+        <button onClick={login}>로그인</button>
+        <button onClick={getUser}>내 유저정보 요청</button>
+        <button onClick={getRandom}>랜덤 유저 5명 요청</button>
+        <button onClick={follow}>follow</button>
+      </StyledDiv>
     </>
   );
+}
 
-  async function followUser() {
-    const res = await axios.post('/relationship', {
-      data: {
-        follower_id: 'user1',
-        followee_id: 'user2',
-      },
-    });
+export default Home;
 
-    console.log(res.data);
-  }
+async function login() {
+  const res = await axios.post('/login', {
+    user_id: 'user1',
+    user_password: 'asdf',
+  });
 
-  async function followCancel() {}
+  const { token } = res.data;
+  localStorage.setItem('access_token', token);
+}
 
-  async function getFollower() {
-    const res = await axios.get('/relationship/follower');
-  }
+async function getUser() {
+  const token = await localStorage.getItem('access_token');
+  const res = await axios.get('/user', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
-  async function getFollowee() {
-    const res = await axios.get('/relationship/followee');
-  }
+  console.log(res.data);
+}
 
-  async function getUsers() {
-    const res = await axios.get('/users');
-    console.log(res.data);
-  }
+async function getRandom() {
+  const res = await axios.get('/users/random');
 
-  async function getUser() {
-    const res = await axios.get('/user', {
-      params: { user_id: 'user1' },
-    });
+  console.log(res);
+}
 
-    console.log(res.data);
-  }
-
-  async function signupPhone() {
-    await axios.post('/user/phone', {
-      user_id: `${createRandom()}`,
-      user_password: `${createRandom()}의 password`,
-      user_name: `${createRandom()}의 name`,
-      user_phone: `${createRandom()}의 phone`,
-    });
-  }
+async function signupEmail() {
+  await axios.post('/signin/email', {
+    user_id: `user${createRandom()}`,
+    user_password: `asdf`,
+    user_name: `${createRandom()}의 name`,
+    user_email: `${createRandom()}의 email`,
+  });
 }
 
 function createRandom() {
   return Math.floor(Math.random() * 10);
 }
 
-export default Home;
+async function follow() {
+  const token = await localStorage.getItem('access_token');
+  const res = await axios.post(
+    '/user/relationship',
+    {
+      followee_id: 'user1',
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  console.log(res.data);
+}
