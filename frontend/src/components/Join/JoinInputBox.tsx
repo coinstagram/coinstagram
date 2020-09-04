@@ -32,7 +32,6 @@ const IconWrapper = styled.div`
   width: 100%;
   text-align: center;
   display: none;
-
   .icon {
     font-size: 22px;
     padding: 10px 0;
@@ -61,8 +60,12 @@ export default function JoinInputBox() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
-  // 이름_입력
+
   const [phoneOrEmail, setPhoneOrEmail] = useState<string | number>('');
+  // userName 상태
+  // 1) userNmeEntered : 사용자 입력값
+  // 2) isUserNameFocused : blur인 상태일 때만 오른쪽 v,x아이콘이 떠야하므로 그 상태 조절을 위한 불리언 값 필요
+  // 3) isUserNameValid : 유효성 검사(빈 문자열만 아니면 OK)->불리언 값
   const [userName, setUserName] = useState<userNameState>({
     userNameEntered: '',
     isUserNameFocused: true,
@@ -124,7 +127,9 @@ export default function JoinInputBox() {
             required
           ></input>
         </label>
+        {/* v,x아이콘 display 상태: focus일 경우 none으로 안 보여지게, blur일 경우 block으로 보여지게  */}
         <IconWrapper style={{ display: isUserNameFocused ? 'none' : 'block' }}>
+          {/* valid일 경우 check아이콘, 아닐 경우 x아이콘 */}
           {isUserNameValid ? (
             <BiCheckCircle className="icon check" />
           ) : (
