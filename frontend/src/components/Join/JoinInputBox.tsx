@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import styled, { css } from 'styled-components';
+import React, { useState, useRef, useEffect } from 'react';
+import styled from 'styled-components';
 import { BiCheckCircle } from 'react-icons/bi';
 import { RiCloseCircleLine } from 'react-icons/ri';
 import { AiOutlineReload } from 'react-icons/ai';
@@ -15,31 +15,26 @@ const StyledDiv = styled.div`
   background: #fafafa;
   font-size: 0.9em;
 
-  /* span {
-    color: #828282;
-    padding-left: 10px;
-    width: 250px;
-    height: 36px;
-    font-size: 12px;
-  } */
-
-  input {
-    background: #fafafa;
-    color: #828282;
-    padding: 10px;
-    margin-top: 2px;
-    border: none;
-    width: 228px;
-    height: 36px;
+  label {
+    width: 100%;
+    input {
+      background: #fafafa;
+      color: #828282;
+      padding: 10px;
+      margin-top: 2px;
+      border: none;
+      /* width: 228px; */
+      width: 100%;
+      height: 36px;
+    }
   }
 `;
 const IconWrapper = styled.div`
-  width: 100%;
   text-align: center;
   display: none;
   .icon {
     font-size: 22px;
-    padding: 10px 0;
+    padding: 10px;
     &.close {
       color: #ef3f4f;
     }
@@ -50,15 +45,20 @@ const IconWrapper = styled.div`
       color: #d5d6d7;
     }
   }
+  .button {
+    margin-left: 8px;
+  }
 `;
 
 interface userNameState {
-  // phoneOrEmail: string;
   userNameEntered: string;
-  // userId: string;
-  // password: string | number;
   isUserNameFocused: boolean;
   isUserNameValid: boolean;
+}
+interface passwordState {
+  passwordEntered: string;
+  isPasswordValid: boolean;
+  isPasswordFocused: boolean;
 }
 
 export default function JoinInputBox() {
@@ -66,21 +66,28 @@ export default function JoinInputBox() {
     e.preventDefault();
   };
 
+  // 인풋 상태
   const [phoneOrEmail, setPhoneOrEmail] = useState<string | number>('');
-  // userName 상태
-  // 1) userNmeEntered : 사용자 입력값
-  // 2) isUserNameFocused : blur인 상태일 때만 오른쪽 v,x아이콘이 떠야하므로 그 상태 조절을 위한 불리언 값 필요
-  // 3) isUserNameValid : 유효성 검사(빈 문자열만 아니면 OK)->불리언 값
+
   const [userName, setUserName] = useState<userNameState>({
     userNameEntered: '',
     isUserNameFocused: true,
     isUserNameValid: false,
   });
   const { userNameEntered, isUserNameFocused, isUserNameValid } = userName;
-  const [userId, setUserId] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
 
-  const InputUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [userId, setUserId] = useState<string>('');
+
+  const [password, setPassword] = useState<passwordState>({
+    passwordEntered: '',
+    isPasswordFocused: false,
+    isPasswordValid: false,
+  });
+  const { passwordEntered, isPasswordValid, isPasswordFocused } = password;
+  const [isPasswordShown, setPasswordShown] = useState(false);
+
+  // 성명
+  const inputUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserName({
       ...userName,
       userNameEntered: e.target.value,
@@ -100,9 +107,27 @@ export default function JoinInputBox() {
       isUserNameFocused: true,
     });
   };
-  const [isSpanVisible, setIsSpanVisible] = useState(false);
-  const onKeyDown = () => {
-    setIsSpanVisible(true);
+  // 비밀번호
+
+  const inputPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword({
+      ...password,
+      passwordEntered: e.target.value,
+      isPasswordValid: passwordEntered.length >= 6 ? true : false,
+    });
+  };
+
+  // const passwordRef = useRef<HTMLInputElement>(null);
+  // const buttonRef = useRef<HTMLButtonElement>(null);
+  // const toggleButton = () => {
+  //   console.log('clicked');
+  //   setPassword({ ...password });
+  //   if (passwordRef.current !== null)
+  //     return (passwordRef.current.type = 'password' ? 'text' : 'password');
+  //   if (buttonRef.current !== null) return (buttonRef.innerText = 'check');
+  // };
+  const toggleShowPassword = () => {
+    setPasswordShown(!isPasswordShown);
   };
 
   return (
@@ -124,24 +149,27 @@ export default function JoinInputBox() {
       </StyledDiv>
       <StyledDiv>
         <label>
-          <span style={{ display: isSpanVisible ? 'inline-block' : 'none' }}>
+          {/* <span style={{ display: isSpanVisible ? 'inline-block' : 'none' }}>
             성명
-          </span>
-
+          </span> */}
           <input
             type="text"
             name="userName"
             value={userNameEntered}
-            onChange={InputUserName}
+            onChange={inputUserName}
             onBlur={onBlur}
             onFocus={onFocus}
-            onKeyDown={onKeyDown}
-            // placeholder="성명"
+            placeholder="성명"
             required
           ></input>
         </label>
         {/* v,x아이콘 display 상태: focus일 경우 none으로 안 보여지게, blur일 경우 block으로 보여지게  */}
-        <IconWrapper style={{ display: isUserNameFocused ? 'none' : 'block' }}>
+        <IconWrapper
+          style={{
+            display:
+              !isUserNameFocused && userNameEntered !== '' ? 'block' : 'none',
+          }}
+        >
           {/* valid일 경우 check아이콘, 아닐 경우 x아이콘 */}
           {isUserNameValid ? (
             <BiCheckCircle className="icon check" />
@@ -169,15 +197,36 @@ export default function JoinInputBox() {
         <label>
           {/* <span>비밀번호</span> */}
           <input
-            type="password"
+            type={isPasswordShown ? 'text' : 'password'}
             name="password"
-            value={password}
+            value={passwordEntered}
+            onChange={inputPassword}
+            onBlur={onBlur}
+            onFocus={onFocus}
             placeholder="비밀번호"
             required
           />
         </label>
-        <IconWrapper>
-          {/* <AiOutlineReload className="icon reload" /> */}
+        <IconWrapper
+          style={{
+            display: isPasswordFocused ? 'none' : 'flex',
+            alignItems: 'center',
+          }}
+        >
+          {isPasswordValid ? (
+            <BiCheckCircle className="icon check" />
+          ) : (
+            <RiCloseCircleLine className="icon close" />
+          )}
+          <div style={{ whiteSpace: 'nowrap' }}>
+            <button
+              type="button"
+              onClick={toggleShowPassword}
+              style={{ fontWeight: 'bold', fontSize: '1rem' }}
+            >
+              비밀번호 표시
+            </button>
+          </div>
         </IconWrapper>
       </StyledDiv>
     </StyledForm>
