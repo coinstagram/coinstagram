@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { login } from '../../lib/api/users';
+import { log } from 'console';
 
 export const StyledH1 = styled.h1`
   font-size: 30px;
@@ -13,7 +14,8 @@ export const StyledH1 = styled.h1`
 `;
 
 const a = async () => {
-  console.log(await (await login()).data);
+  const a = await login();
+  console.log(a.data.token);
 };
 
 function Logo() {
