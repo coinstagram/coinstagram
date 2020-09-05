@@ -44,13 +44,13 @@ router.post('/login', async (req, res) => {
       // 토큰 발급
       const token = jwt.sign(
         {
-          id: isuser[0].user_id,
-          name: isuser[0].user_name,
-          gender: isuser[0].user_gender,
-          introduce: isuser[0].user_introduce,
-          phone: isuser[0].user_phone,
-          email: isuser[0].user_email,
-          profile: isuser[0].user_profile,
+          user_id: isuser[0].user_id,
+          user_name: isuser[0].user_name,
+          user_gender: isuser[0].user_gender,
+          user_introduce: isuser[0].user_introduce,
+          user_phone: isuser[0].user_phone,
+          user_email: isuser[0].user_email,
+          user_profile: isuser[0].user_profile,
         },
         // eslint-disable-next-line no-undef
         process.env.JWT_SECRET,
@@ -58,6 +58,7 @@ router.post('/login', async (req, res) => {
           expiresIn: '7d',
         },
       );
+      console.log(token);
       res.cookie('access_token', token, { httpOnly: true });
 
       connection.commit();

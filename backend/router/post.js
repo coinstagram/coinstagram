@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const { verifyToken } = require('./jwtMiddleware');
 const pool = require('../config/database');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
 /**
  * add post
@@ -55,7 +58,7 @@ router.post('/post', verifyToken, async (req, res) => {
  * posts data (20)
  * /posts
  */
-router.get('/posts', async (req, res) => {
+router.get('/posts', verifyToken, async (req, res) => {
   let sql = '';
   try {
     const connection = await pool.getConnection(async (conn) => conn);
@@ -110,7 +113,7 @@ router.get('/post/:post_id', verifyToken, async (req, res) => {
  *  post_id
  * }
  */
-router.get('/post/postId/:post_id', async (req, res) => {
+router.get('/post/postId/:post_id', verifyToken, async (req, res) => {
   const { post_id } = req.params;
   let sql = '';
 
@@ -142,7 +145,7 @@ router.get('/post/postId/:post_id', async (req, res) => {
  *  post_title
  * }
  */
-router.get('/post/userId/:user_id', async (req, res) => {
+router.get('/post/userId/:user_id', verifyToken, async (req, res) => {
   let sql = '';
   const { user_id } = req.params;
   console.log(user_id);
@@ -165,6 +168,43 @@ router.get('/post/userId/:user_id', async (req, res) => {
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
   }
+});
+
+/**
+ * add image
+ * /images
+ */
+try {
+  fs.accessSync('uploads');
+} catch (error) {
+  console.log('upload 폴더 생성');
+  fs.mkdirSync('uploads');
+}
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, done) {
+      done(null, 'uploads');
+    },
+    filename(req, file, done) {
+      const ext = path.extname(file.originalname); // 확장자
+      const basename = path.basename(file.originalname, ext); // 베이스 이름
+      done(null, basename + '_' + new Date().getTime() + ext); // 베이스이름(시간).확장자
+    },
+  }),
+  limits: { fileSize: 100 * 1027 * 1024 }, // 100MB
+  // 단 이미지나 동영상은 백엔드를 거치지 않고
+  // 프론트에서 바로 클라우드로 보내는게 좋다.
+});
+router.post('/images', verifyToken, upload.array('image'), async (req, res) => {
+  const file = req.files.map(({ path }) => {
+    const change = path.split(' ');
+    const changePath = change[0];
+    const changeFilename = change[1].split('.')[0];
+    const changeFiletype = change[1].split('.')[1];
+    return { changePath, changeFilename, changeFiletype };
+  });
+  console.log(file);
+  res.json(req.files.map((v) => v.filename));
 });
 
 module.exports = router;
