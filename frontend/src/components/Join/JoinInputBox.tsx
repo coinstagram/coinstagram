@@ -23,14 +23,16 @@ const StyledDiv = styled.div`
       padding: 10px;
       margin-top: 2px;
       border: none;
-      /* width: 228px; */
       width: 100%;
       height: 36px;
+      outline: none;
     }
   }
 `;
 const IconWrapper = styled.div`
+  transition: 1s;
   text-align: center;
+  align-items: center;
   display: none;
   .icon {
     font-size: 22px;
@@ -45,20 +47,23 @@ const IconWrapper = styled.div`
       color: #d5d6d7;
     }
   }
-  .button {
-    margin-left: 8px;
+  div {
+    white-space: nowrap;
+    .toggleBtn {
+      font-weight: bold;
+      font-size: 1rem;
+      outline: none;
+    }
   }
 `;
 
 interface userNameState {
   userNameEntered: string;
-  isUserNameFocused: boolean;
   isUserNameValid: boolean;
 }
 interface passwordState {
   passwordEntered: string;
   isPasswordValid: boolean;
-  isPasswordFocused: boolean;
 }
 
 export default function JoinInputBox() {
@@ -72,19 +77,17 @@ export default function JoinInputBox() {
 
   const [userName, setUserName] = useState<userNameState>({
     userNameEntered: '',
-    isUserNameFocused: true,
     isUserNameValid: false,
   });
-  const { userNameEntered, isUserNameFocused, isUserNameValid } = userName;
+  const { userNameEntered, isUserNameValid } = userName;
 
   const [userId, setUserId] = useState<string>('');
 
   const [password, setPassword] = useState<passwordState>({
     passwordEntered: '',
-    isPasswordFocused: false,
     isPasswordValid: false,
   });
-  const { passwordEntered, isPasswordFocused, isPasswordValid } = password;
+  const { passwordEntered, isPasswordValid } = password;
   const [isPasswordShown, setPasswordShown] = useState(false);
 
   // 성명
@@ -92,20 +95,7 @@ export default function JoinInputBox() {
     setUserName({
       ...userName,
       userNameEntered: e.target.value,
-      isUserNameValid: userNameEntered.length > 6 ? true : false,
-    });
-  };
-  const onNameBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserName({
-      ...userName,
-      isUserNameValid: userNameEntered.length > 6 ? true : false,
-      isUserNameFocused: false,
-    });
-  };
-  const onNameFocus = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserName({
-      ...userName,
-      isUserNameFocused: true,
+      isUserNameValid: userNameEntered.length >= 6 ? true : false,
     });
   };
   // 비밀번호
@@ -115,18 +105,6 @@ export default function JoinInputBox() {
       ...password,
       passwordEntered: e.target.value,
       isPasswordValid: passwordEntered.length >= 6 ? true : false,
-    });
-  };
-  const onPasswordBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword({
-      ...password,
-      isPasswordFocused: false,
-    });
-  };
-  const onPasswordFocus = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword({
-      ...password,
-      isPasswordFocused: true,
     });
   };
 
@@ -158,8 +136,6 @@ export default function JoinInputBox() {
             name="userName"
             value={userNameEntered}
             onChange={inputUserName}
-            onBlur={onNameBlur}
-            onFocus={onNameFocus}
             placeholder="성명"
             required
           ></input>
@@ -167,7 +143,7 @@ export default function JoinInputBox() {
 
         <IconWrapper
           style={{
-            display: isUserNameFocused ? 'none' : 'block',
+            display: userNameEntered ? 'block' : 'none',
           }}
         >
           {isUserNameValid ? (
@@ -199,16 +175,14 @@ export default function JoinInputBox() {
             name="password"
             value={passwordEntered}
             onChange={inputPassword}
-            onBlur={onPasswordBlur}
-            onFocus={onPasswordFocus}
             placeholder="비밀번호"
             required
           />
         </label>
         <IconWrapper
           style={{
-            display: isPasswordFocused ? 'none' : 'flex',
-            alignItems: 'center',
+            display: passwordEntered ? 'flex' : 'none',
+            // alignItems: 'center',
           }}
         >
           {isPasswordValid ? (
@@ -216,13 +190,13 @@ export default function JoinInputBox() {
           ) : (
             <RiCloseCircleLine className="icon close" />
           )}
-          <div style={{ whiteSpace: 'nowrap' }}>
+          <div>
             <button
+              className="toggleBtn"
               type="button"
               onClick={toggleShowPassword}
-              style={{ fontWeight: 'bold', fontSize: '1rem' }}
             >
-              비밀번호 표시
+              {isPasswordShown ? '숨기기' : '비밀번호 표시'}
             </button>
           </div>
         </IconWrapper>
