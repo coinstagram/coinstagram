@@ -10,12 +10,25 @@ import { createBrowserHistory } from 'history';
 export const history = createBrowserHistory();
 const sagaMiddleWare = createSagaMiddleware();
 
-// const preloadedState: RootState = {}
+function preloadedState(token: string | null): RootState {
+  return {
+    auth: {
+      loading: false,
+      error: null,
+      token,
+    },
+    user: {
+      loading: false,
+      error: null,
+      userInfo: null,
+    },
+  };
+}
 
-function create(): Store<RootState> {
+function create(token: string | null): Store<RootState> {
   const store: Store<RootState> = createStore(
     rootReducer(history),
-    // preloadedState,
+    preloadedState(token),
     composeWithDevTools(
       applyMiddleware(routerMiddleware(history), sagaMiddleWare),
     ),

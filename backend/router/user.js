@@ -57,24 +57,24 @@ router.get('/user', verifyToken, async (req, res) => {
     // eslint-disable-next-line no-undef
     process.env.JWT_SECRET,
   );
-  const user = { id, name, gender, introduce, phone, email, profile };
+  const userInfo = { id, name, gender, introduce, phone, email, profile };
 
   let sql = '';
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
       sql = `select user_id from users where user_id in(select followee_id from users_relationship where follower_id = ?);`;
-      const [followee_id] = await connection.query(sql, user.id);
+      const [followee_id] = await connection.query(sql, userInfo.id);
       const follower = followee_id.map(({ user_id }) => user_id);
 
       sql = `select user_id from users where user_id in(select follower_id from users_relationship where followee_id = ?);`;
-      const [follower_id] = await connection.query(sql, user.id);
+      const [follower_id] = await connection.query(sql, userInfo.id);
       const folloee = follower_id.map((user_id) => user_id);
 
-      data = { ...data, user, follower, folloee };
+      data = { ...data, userInfo, follower, folloee };
       console.log(data);
 
-      res.send({ success: true });
+      res.send(data);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();

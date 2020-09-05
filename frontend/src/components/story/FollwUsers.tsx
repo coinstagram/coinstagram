@@ -1,6 +1,6 @@
 import React, { useRef, useCallback, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { loading } from '../../styles/ThumbnailBorderStyle';
+import { rotate } from '../../styles/ThumbnailBorderStyle';
 import borderStyle from '../../styles/ThumbnailBorderStyle';
 
 // components
@@ -120,125 +120,8 @@ function FollowUsers() {
         {state.slideCount > state.count + 1 && <NextBtn onClick={next} />}
         <ul ref={ulRef}>
           <li>
-            <StyledButton onClick={loading}>
-              <Thumbnail size={56} />
-              <div tabIndex={-1}>
-                <dt className="a11y-hidden">유저 ID</dt>
-                <dd>user id1</dd>
-              </div>
-            </StyledButton>
-          </li>
-          <li>
-            <StyledButton onClick={loading}>
-              <Thumbnail size={56} />
-              <div tabIndex={-1}>
-                <dt className="a11y-hidden">유저 ID</dt>
-                <dd>user id1</dd>
-              </div>
-            </StyledButton>
-          </li>
-          <li>
-            <StyledButton onClick={loading}>
-              <Thumbnail size={56} />
-              <div tabIndex={-1}>
-                <dt className="a11y-hidden">유저 ID</dt>
-                <dd>user id1</dd>
-              </div>
-            </StyledButton>
-          </li>
-          <li>
-            <StyledButton onClick={loading}>
-              <Thumbnail size={56} />
-              <div tabIndex={-1}>
-                <dt className="a11y-hidden">유저 ID</dt>
-                <dd>user id1</dd>
-              </div>
-            </StyledButton>
-          </li>
-          <li>
-            <StyledButton onClick={loading}>
-              <Thumbnail size={56} />
-              <div tabIndex={-1}>
-                <dt className="a11y-hidden">유저 ID</dt>
-                <dd>user id1</dd>
-              </div>
-            </StyledButton>
-          </li>
-          <li>
-            <StyledButton onClick={loading}>
-              <Thumbnail size={56} />
-              <div tabIndex={-1}>
-                <dt className="a11y-hidden">유저 ID</dt>
-                <dd>user id1</dd>
-              </div>
-            </StyledButton>
-          </li>
-          <li>
-            <StyledButton onClick={loading}>
-              <Thumbnail size={56} />
-              <div tabIndex={-1}>
-                <dt className="a11y-hidden">유저 ID</dt>
-                <dd>user id1</dd>
-              </div>
-            </StyledButton>
-          </li>
-          <li>
-            <StyledButton onClick={loading}>
-              <Thumbnail size={56} />
-              <div tabIndex={-1}>
-                <dt className="a11y-hidden">유저 ID</dt>
-                <dd>user id1</dd>
-              </div>
-            </StyledButton>
-          </li>
-          <li>
-            <StyledButton onClick={loading}>
-              <Thumbnail size={56} />
-              <div tabIndex={-1}>
-                <dt className="a11y-hidden">유저 ID</dt>
-                <dd>user id1</dd>
-              </div>
-            </StyledButton>
-          </li>
-          <li>
-            <StyledButton onClick={loading}>
-              <Thumbnail size={56} />
-              <div tabIndex={-1}>
-                <dt className="a11y-hidden">유저 ID</dt>
-                <dd>user id1</dd>
-              </div>
-            </StyledButton>
-          </li>
-          <li>
-            <StyledButton onClick={loading}>
-              <Thumbnail size={56} />
-              <div tabIndex={-1}>
-                <dt className="a11y-hidden">유저 ID</dt>
-                <dd>user id1</dd>
-              </div>
-            </StyledButton>
-          </li>
-          <li>
-            <StyledButton onClick={loading}>
-              <Thumbnail size={56} />
-              <div tabIndex={-1}>
-                <dt className="a11y-hidden">유저 ID</dt>
-                <dd>user id1</dd>
-              </div>
-            </StyledButton>
-          </li>
-          <li>
-            <StyledButton onClick={loading}>
-              <Thumbnail size={56} />
-              <div tabIndex={-1}>
-                <dt className="a11y-hidden">유저 ID</dt>
-                <dd>user id1</dd>
-              </div>
-            </StyledButton>
-          </li>
-          <li>
-            <StyledButton onClick={loading}>
-              <Thumbnail size={56} />
+            <StyledButton onClick={click}>
+              <Thumbnail size={56} imageUrl={null} />
               <div tabIndex={-1}>
                 <dt className="a11y-hidden">유저 ID</dt>
                 <dd>user id1</dd>
@@ -249,6 +132,10 @@ function FollowUsers() {
       </div>
     </StyledSection>
   );
+
+  function click(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    rotate(e);
+  }
 
   function getSlideInfo() {
     const ul = ulRef.current;

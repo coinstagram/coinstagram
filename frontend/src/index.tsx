@@ -6,7 +6,8 @@ import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import create from './redux/create';
 
-const store = create();
+const token = localStorage.getItem('access_token');
+const store = create(token);
 
 ReactDOM.render(
   <Provider store={store}>

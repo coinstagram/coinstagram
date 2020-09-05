@@ -14,12 +14,17 @@ import Upload from './pages/Upload';
 import Explore from './pages/Explore';
 import FatalError from './pages/FatalError';
 import NotFound from './pages/NotFound';
-import PostModal from './components/post/PostModal';
 import ModalGlobalStyle from './styles/ModalGlobalStyle';
 
-type ModalFunc = () => void;
+interface ModalType {
+  modal: boolean;
+  popModal: () => void;
+}
 
-export const ModalContext = createContext<ModalFunc | null>(null);
+export const ModalContext = createContext<ModalType>({
+  modal: false,
+  popModal() {},
+});
 
 function App() {
   const [modal, setModal] = useState<boolean>(false);
@@ -31,7 +36,7 @@ function App() {
   return (
     <ErrorBoundary FallbackComponent={FatalError}>
       <ModalGlobalStyle modal={modal} />
-      <ModalContext.Provider value={popModal}>
+      <ModalContext.Provider value={{ modal, popModal }}>
         <ConnectedRouter history={history}>
           <Switch>
             <Route path="/explore/tags/:tagid" component={Explore} />
@@ -46,7 +51,6 @@ function App() {
             <Route path="/" exact component={Home} />
             <Route component={NotFound} />
           </Switch>
-          {modal && <PostModal popModal={popModal} />}
         </ConnectedRouter>
       </ModalContext.Provider>
     </ErrorBoundary>

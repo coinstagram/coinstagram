@@ -1,10 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
+import RootState from '../type';
 
 // components
-import Logo from './Logo';
-import Navigation from './Navigation';
-import SearchInput from './SearchInput';
+import Logo from '../components/header/Logo';
+import Navigation from '../components/header/Navigation';
+import SearchInput from '../components/header/SearchInput';
+import { useSelector } from 'react-redux';
 
 const StyledHeader = styled.header`
   position: fixed;
@@ -27,12 +29,15 @@ const StyledHeader = styled.header`
 `;
 
 function Header() {
+  const { userInfo } = useSelector((state: RootState) => state.user);
+  const profile = userInfo !== null ? userInfo.profile : null;
+
   return (
     <StyledHeader>
       <div className="container">
         <Logo />
         <SearchInput />
-        <Navigation />
+        <Navigation imageUrl={profile} />
       </div>
     </StyledHeader>
   );

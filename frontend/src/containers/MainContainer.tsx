@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import FollowUsers from '../components/story/FollwUsers';
 import PostList from '../components/post/PostList';
 import RecommendUsers from '../components/recommend/RecommendUsers';
+import RootState from '../type';
+import { getUserInfo } from '../redux/modules/user';
 
 const StyledDiv = styled.div`
   position: relative;
@@ -21,13 +23,17 @@ const StyledDiv = styled.div`
   }
 `;
 
-function Main() {
-  // const {} = useSelector();
+function MainContainer() {
+  const { user, auth } = useSelector((state: RootState) => state);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // dispatch(saga 액션creator) 필요
-  }, [dispatch]);
+    function getUser(token: string | null) {
+      dispatch(getUserInfo(token));
+    }
+
+    getUser(auth.token);
+  }, [auth.token, dispatch]);
 
   return (
     <StyledDiv>
@@ -42,4 +48,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default MainContainer;

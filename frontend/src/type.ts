@@ -1,6 +1,11 @@
 import { AxiosError } from 'axios';
 
-export interface FollowState {
+export interface imageState {
+  path: string;
+  name: string;
+}
+
+export interface AnotherUserState {
   id: null | string;
   name: null | string;
   profile: null | string;
@@ -13,14 +18,9 @@ export interface UserInfoState {
   gender: null | string;
   introduce: null | string;
   phone: null | number;
-  profile: null | imageState;
-  followers: FollowState;
-  followees: FollowState;
-}
-
-export interface imageState {
-  path: string;
-  name: string;
+  profile: null | string;
+  followers: null | AnotherUserState;
+  followees: null | AnotherUserState;
 }
 
 export type stringArray = string[];
@@ -35,7 +35,7 @@ export interface commentState {
 
 export interface PostState {
   id: null | string;
-  post_images: null | imageState;
+  post_images: null | string;
   post_title: null | string;
   post_tags: stringArray;
   post_anotherUsers: stringArray;
@@ -64,16 +64,8 @@ export interface PostsState {
 }
 
 interface RootState {
-  auth: {
-    loading: boolean;
-    error: null | AxiosError;
-    token: null | string;
-  };
-  user: {
-    loading: boolean;
-    error: null | AxiosError;
-    userInfo: null | UserInfoState;
-  };
+  auth: AuthState;
+  user: UserState;
   // 다른 reducer의 상태 추가 필요
 }
 

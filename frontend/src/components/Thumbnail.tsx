@@ -1,5 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+
+// image
 import profile from '../resource/image/profile_none.jpg';
 
 const StyledSpan = styled.span`
@@ -19,11 +21,11 @@ const StyledSpan = styled.span`
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-image: url(${({ imageUrl }: ThumbnailProps) =>
-    imageUrl === '' ? profile : imageUrl});
+    imageUrl === null ? profile : imageUrl});
 `;
 
 interface ThumbnailProps {
-  imageUrl: string;
+  imageUrl: string | null;
   size: number;
 }
 
@@ -37,9 +39,5 @@ function Thumbnail({ imageUrl, size }: ThumbnailProps) {
     />
   );
 }
-
-Thumbnail.defaultProps = {
-  imageUrl: '',
-};
 
 export default React.memo(Thumbnail);
