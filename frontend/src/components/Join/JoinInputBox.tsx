@@ -67,6 +67,7 @@ export default function JoinInputBox() {
   };
 
   // 인풋 상태
+
   const [phoneOrEmail, setPhoneOrEmail] = useState<string | number>('');
 
   const [userName, setUserName] = useState<userNameState>({
@@ -83,7 +84,7 @@ export default function JoinInputBox() {
     isPasswordFocused: false,
     isPasswordValid: false,
   });
-  const { passwordEntered, isPasswordValid, isPasswordFocused } = password;
+  const { passwordEntered, isPasswordFocused, isPasswordValid } = password;
   const [isPasswordShown, setPasswordShown] = useState(false);
 
   // 성명
@@ -91,17 +92,17 @@ export default function JoinInputBox() {
     setUserName({
       ...userName,
       userNameEntered: e.target.value,
-      isUserNameValid: true,
+      isUserNameValid: userNameEntered.length > 6 ? true : false,
     });
   };
-  const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onNameBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserName({
       ...userName,
-      isUserNameValid: userNameEntered !== '' ? true : false,
+      isUserNameValid: userNameEntered.length > 6 ? true : false,
       isUserNameFocused: false,
     });
   };
-  const onFocus = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onNameFocus = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserName({
       ...userName,
       isUserNameFocused: true,
@@ -116,16 +117,19 @@ export default function JoinInputBox() {
       isPasswordValid: passwordEntered.length >= 6 ? true : false,
     });
   };
+  const onPasswordBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword({
+      ...password,
+      isPasswordFocused: false,
+    });
+  };
+  const onPasswordFocus = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword({
+      ...password,
+      isPasswordFocused: true,
+    });
+  };
 
-  // const passwordRef = useRef<HTMLInputElement>(null);
-  // const buttonRef = useRef<HTMLButtonElement>(null);
-  // const toggleButton = () => {
-  //   console.log('clicked');
-  //   setPassword({ ...password });
-  //   if (passwordRef.current !== null)
-  //     return (passwordRef.current.type = 'password' ? 'text' : 'password');
-  //   if (buttonRef.current !== null) return (buttonRef.innerText = 'check');
-  // };
   const toggleShowPassword = () => {
     setPasswordShown(!isPasswordShown);
   };
@@ -149,28 +153,23 @@ export default function JoinInputBox() {
       </StyledDiv>
       <StyledDiv>
         <label>
-          {/* <span style={{ display: isSpanVisible ? 'inline-block' : 'none' }}>
-            성명
-          </span> */}
           <input
             type="text"
             name="userName"
             value={userNameEntered}
             onChange={inputUserName}
-            onBlur={onBlur}
-            onFocus={onFocus}
+            onBlur={onNameBlur}
+            onFocus={onNameFocus}
             placeholder="성명"
             required
           ></input>
         </label>
-        {/* v,x아이콘 display 상태: focus일 경우 none으로 안 보여지게, blur일 경우 block으로 보여지게  */}
+
         <IconWrapper
           style={{
-            display:
-              !isUserNameFocused && userNameEntered !== '' ? 'block' : 'none',
+            display: isUserNameFocused ? 'none' : 'block',
           }}
         >
-          {/* valid일 경우 check아이콘, 아닐 경우 x아이콘 */}
           {isUserNameValid ? (
             <BiCheckCircle className="icon check" />
           ) : (
@@ -195,14 +194,13 @@ export default function JoinInputBox() {
       </StyledDiv>
       <StyledDiv>
         <label>
-          {/* <span>비밀번호</span> */}
           <input
             type={isPasswordShown ? 'text' : 'password'}
             name="password"
             value={passwordEntered}
             onChange={inputPassword}
-            onBlur={onBlur}
-            onFocus={onFocus}
+            onBlur={onPasswordBlur}
+            onFocus={onPasswordFocus}
             placeholder="비밀번호"
             required
           />
