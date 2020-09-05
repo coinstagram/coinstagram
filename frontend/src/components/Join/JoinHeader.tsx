@@ -33,13 +33,13 @@ export default function JoinHeader() {
       top: 0.65em;
     }
 
-    .or {
+    /* .or {
       margin: 0 18px;
       color: #828282;
       font-weight: bold;
       white-space: nowrap;
       font-size: 0.9em;
-    }
+    } */
   `;
   return (
     <>
@@ -49,7 +49,7 @@ export default function JoinHeader() {
       </Header>
       <OrBorder>
         <div className="leftLine"></div>
-        <div className="or">또는</div>
+        {/* <div className="or">또는</div> */}
         <div className="rightLine"></div>
       </OrBorder>
     </>
