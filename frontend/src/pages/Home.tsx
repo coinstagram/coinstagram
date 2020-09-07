@@ -8,7 +8,8 @@ import useWindowWidth from '../hooks/useWindowWidth';
 
 // components
 import Header from '../containers/Header';
-import MainContainer from '../containers/MainContainer';
+import Main from '../containers/Main';
+import PostModal from '../components/PostModal';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -26,14 +27,19 @@ const StyledDiv = styled.div`
   }
 `;
 
-function Home() {
+interface HomeProps {
+  postModal: boolean;
+  popPostModal: () => void;
+}
+
+function Home({ postModal, popPostModal }: HomeProps) {
   const width = useWindowWidth();
 
   return (
     <>
       <Header />
       <StyledMain width={width}>
-        <MainContainer />
+        <Main />
       </StyledMain>
       <StyledDiv>
         <button onClick={signupEmail}>회원가입</button>
@@ -41,11 +47,12 @@ function Home() {
         <button onClick={getUser}>내 유저정보 요청</button>
         <button onClick={getRandom}>랜덤 유저 5명 요청</button>
       </StyledDiv>
+      {postModal && <PostModal popModal={popPostModal} />}
     </>
   );
 }
 
-export default Home;
+export default React.memo(Home);
 
 async function login() {
   const res = await axios.post('/login', {

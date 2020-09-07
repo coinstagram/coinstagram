@@ -104,8 +104,6 @@ function FollowUsers({ followers, loading, error }: FoolowUsersProps) {
     }
   }, [followers, width, state.count, state.slideCount]);
 
-  console.log(state.visual);
-
   const next = useCallback(() => {
     const li = liRef.current;
     const ul = ulRef.current;
