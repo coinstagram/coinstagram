@@ -58,34 +58,36 @@ const StyledBtn = styled.button`
 `;
 
 function PostListHeader() {
-  const popModal = useContext(ModalContext);
-  const setModal = () => {
-    if (popModal === null) return;
-    popModal();
-  };
+  const { popPostModal } = useContext(ModalContext);
 
   return (
-    <StyledDiv>
-      <button>
-        <Thumbnail size={35} />
-        <UsernameDiv tabIndex={-1}>
-          <dt className="a11y-hidden">user name</dt>
-          <dd>user id</dd>
-        </UsernameDiv>
-      </button>
-      <Link to="/explore/tags/12345">
-        <LocationDiv tabIndex={-1}>
-          <dt className="a11y-hidden">location</dt>
-          <dd>location</dd>
-        </LocationDiv>
-      </Link>
-      <StyledBtn onClick={setModal}>
-        <div tabIndex={-1}>
-          <span></span>
-        </div>
-      </StyledBtn>
-    </StyledDiv>
+    <>
+      <StyledDiv>
+        <button>
+          <Thumbnail size={35} imageUrl={null} />
+          <UsernameDiv tabIndex={-1}>
+            <dt className="a11y-hidden">user name</dt>
+            <dd>user id</dd>
+          </UsernameDiv>
+        </button>
+        <Link to="/explore/tags/12345">
+          <LocationDiv tabIndex={-1}>
+            <dt className="a11y-hidden">location</dt>
+            <dd>location</dd>
+          </LocationDiv>
+        </Link>
+        <StyledBtn onClick={setModal}>
+          <div tabIndex={-1}>
+            <span></span>
+          </div>
+        </StyledBtn>
+      </StyledDiv>
+    </>
   );
+
+  function setModal() {
+    popPostModal();
+  }
 }
 
 export default PostListHeader;

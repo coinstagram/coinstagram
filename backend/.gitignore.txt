@@ -1,6 +1,6 @@
 
-# Created by https://www.toptal.com/developers/gitignore/api/react,node,windows,visualstudiocode
-# Edit at https://www.toptal.com/developers/gitignore?templates=react,node,windows,visualstudiocode
+# Created by https://www.toptal.com/developers/gitignore/api/node,react,visualstudiocode,windows
+# Edit at https://www.toptal.com/developers/gitignore?templates=node,react,visualstudiocode,windows
 
 ### Node ###
 # Logs
@@ -162,4 +162,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.toptal.com/developers/gitignore/api/react,node,windows,visualstudiocode
+# End of https://www.toptal.com/developers/gitignore/api/node,react,visualstudiocode,windows

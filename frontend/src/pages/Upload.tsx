@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '../components/header/Header';
+import Header from '../containers/Header';
 import StyledMain from '../styles/StyledMain';
 import styled from 'styled-components';
 import useWindowWidth from '../hooks/useWindowWidth';
@@ -33,4 +33,4 @@ function Upload() {
   );
 }
 
-export default Upload;
+export default React.memo(Upload);

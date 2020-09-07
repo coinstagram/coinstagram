@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '../components/header/Header';
+import Header from '../containers/Header';
 import StyledMain from '../styles/StyledMain';
 
 function Edit() {
@@ -11,4 +11,4 @@ function Edit() {
   );
 }
 
-export default Edit;
+export default React.memo(Edit);

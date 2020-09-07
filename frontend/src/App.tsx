@@ -1,7 +1,5 @@
 import React, { useState, useCallback, createContext } from 'react';
 import { history } from './redux/create';
-import { ErrorBoundary } from 'react-error-boundary';
-import { ConnectedRouter } from 'connected-react-router';
 import { Switch, Route } from 'react-router-dom';
 
 // pages
@@ -14,24 +12,40 @@ import Upload from './pages/Upload';
 import Explore from './pages/Explore';
 import FatalError from './pages/FatalError';
 import NotFound from './pages/NotFound';
-import PostModal from './components/post/PostModal';
 import ModalGlobalStyle from './styles/ModalGlobalStyle';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ConnectedRouter } from 'connected-react-router';
 
-type ModalFunc = () => void;
+interface ModalType {
+  popPostModal: () => void;
+  popFollowModal: () => void;
+  followModal: boolean;
+}
 
-export const ModalContext = createContext<ModalFunc | null>(null);
+export const ModalContext = createContext<ModalType>({
+  popPostModal() {},
+  popFollowModal() {},
+  followModal: false,
+});
 
 function App() {
-  const [modal, setModal] = useState<boolean>(false);
+  const [postModal, setPostModal] = useState<boolean>(false);
+  const [followModal, setFollowModal] = useState<boolean>(false);
 
-  const popModal = useCallback(() => {
-    setModal(!modal);
-  }, [modal]);
+  const popFollowModal = useCallback(() => {
+    setFollowModal(!followModal);
+  }, [followModal]);
+
+  const popPostModal = useCallback(() => {
+    setPostModal(!postModal);
+  }, [postModal]);
 
   return (
     <ErrorBoundary FallbackComponent={FatalError}>
-      <ModalGlobalStyle modal={modal} />
-      <ModalContext.Provider value={popModal}>
+      <ModalGlobalStyle postModal={postModal} followModal={followModal} />
+      <ModalContext.Provider
+        value={{ popPostModal, popFollowModal, followModal }}
+      >
         <ConnectedRouter history={history}>
           <Switch>
             <Route path="/explore/tags/:tagid" component={Explore} />
@@ -43,10 +57,15 @@ function App() {
             <Route path="/account/:userid/saved" component={Profile} />
             <Route path="/account/edit" component={Edit} />
             <Route path="/:userid" component={Profile} />
-            <Route path="/" exact component={Home} />
+            <Route
+              path="/"
+              exact
+              render={() => (
+                <Home postModal={postModal} popPostModal={popPostModal} />
+              )}
+            />
             <Route component={NotFound} />
           </Switch>
-          {modal && <PostModal popModal={popModal} />}
         </ConnectedRouter>
       </ModalContext.Provider>
     </ErrorBoundary>

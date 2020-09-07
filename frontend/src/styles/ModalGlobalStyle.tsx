@@ -1,17 +1,25 @@
 import { createGlobalStyle, css } from 'styled-components';
 
 interface ModalGlobalStyleProps {
-  modal: boolean;
+  postModal: boolean;
+  followModal: boolean;
 }
 
 const ModalGlobalStyle = createGlobalStyle`
   body {
     ${(props: ModalGlobalStyleProps) =>
-      props.modal &&
+      props.postModal &&
       css`
         height: 100vh;
         overflow-y: hidden;
       `}
+
+      ${(props: ModalGlobalStyleProps) =>
+        props.followModal &&
+        css`
+          height: 100vh;
+          overflow-y: hidden;
+        `}
   }
 `;
 

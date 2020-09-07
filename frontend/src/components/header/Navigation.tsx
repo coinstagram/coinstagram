@@ -85,7 +85,11 @@ interface State {
   profile: boolean;
 }
 
-function Navigation() {
+interface NavigationProps {
+  imageUrl: null | string;
+}
+
+function Navigation({ imageUrl }: NavigationProps) {
   const width = useWindowWidth();
   const page = useLocation().pathname.split('/')[1];
   const [state, setState] = useState<State>({
@@ -146,7 +150,7 @@ function Navigation() {
         </li>
         <li aria-label="내 프로필" onClick={toggle} id="profile">
           <StyledButton clicked={state.profile}>
-            <Thumbnail size={26} />
+            <Thumbnail size={26} imageUrl={imageUrl} />
           </StyledButton>
           {state.profile && (
             <NavModal
@@ -181,5 +185,9 @@ function Navigation() {
     });
   }
 }
+
+Navigation.defaultProp = {
+  imageUrl: '',
+};
 
 export default Navigation;
