@@ -40,17 +40,6 @@ function Home() {
         <button onClick={login}>로그인</button>
         <button onClick={getUser}>내 유저정보 요청</button>
         <button onClick={getRandom}>랜덤 유저 5명 요청</button>
-        <button onClick={follow}>
-          <div>user1</div>
-          <div>user2</div>
-          <div>user3</div>
-          <div>user4</div>
-          <div>user5</div>
-          <div>user6</div>
-          <div>user7</div>
-          <div>user8</div>
-          <div>user9</div>
-        </button>
       </StyledDiv>
     </>
   );
@@ -60,7 +49,7 @@ export default Home;
 
 async function login() {
   const res = await axios.post('/login', {
-    user_id: 'user1',
+    user_id: 'user2',
     user_password: 'asdf',
   });
 
@@ -96,24 +85,4 @@ async function signupEmail() {
 
 function createRandom() {
   return Math.floor(Math.random() * 10);
-}
-
-async function follow({
-  target,
-}: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-  console.log(target);
-  const token = await localStorage.getItem('access_token');
-  const res = await axios.post(
-    '/user/relationship',
-    {
-      followee_id: `${(target as Element).textContent}`,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  );
-
-  console.log(res.data);
 }

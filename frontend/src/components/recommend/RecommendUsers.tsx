@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import useWindowWidth from '../../hooks/useWindowWidth';
+import { AnotherUserState, UserState } from '../../type';
 
 // components
 import RecommendUsersHeader from './RecommendUsersHeader';
@@ -12,7 +13,21 @@ const StyledSection = styled.section`
   width: 313px;
 `;
 
-function RecommendUsers() {
+interface RecommendUsersProps {
+  loading: boolean;
+  error: null | Error;
+  user: null | UserState;
+  randomUsers: AnotherUserState[];
+  followers: AnotherUserState[];
+}
+
+function RecommendUsers({
+  loading,
+  error,
+  user,
+  randomUsers,
+  followers,
+}: RecommendUsersProps) {
   const width = useWindowWidth();
 
   if (width < 1000) return null;
@@ -20,8 +35,13 @@ function RecommendUsers() {
   return (
     <StyledSection>
       <h3 className="a11y-hidden">추천 계정</h3>
-      <RecommendUsersHeader />
-      <RecommendUsersBody />
+      <RecommendUsersHeader user={user} />
+      <RecommendUsersBody
+        loading={loading}
+        error={error}
+        randomUsers={randomUsers}
+        followers={followers}
+      />
     </StyledSection>
   );
 }

@@ -90,10 +90,6 @@ function PostModal({ popModal }: PostModalProps) {
       </StyledModal>
     </StyledBg>
   );
-
-  function click() {
-    console.log('click');
-  }
 }
 
 export default PostModal;

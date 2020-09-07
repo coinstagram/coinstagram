@@ -29,8 +29,8 @@ const StyledHeader = styled.header`
 `;
 
 function Header() {
-  const { userInfo } = useSelector((state: RootState) => state.user);
-  const profile = userInfo !== null ? userInfo.profile : null;
+  const { user } = useSelector((state: RootState) => state.userInfo);
+  const profile = user !== null ? user.user_profile : null;
 
   return (
     <StyledHeader>
