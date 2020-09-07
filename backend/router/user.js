@@ -61,10 +61,6 @@ router.delete('/user/relationship/:user', verifyToken, async (req, res) => {
   );
   const { user } = req.params;
   console.log(user);
-<<<<<<< HEAD
-
-=======
->>>>>>> d6a6afc865a8e387e0a64701c2efc682b4787e55
   if (user === user_id) {
     throw Error('나를 팔로우 취소 할 수 없습니다.');
   }
@@ -83,10 +79,6 @@ router.delete('/user/relationship/:user', verifyToken, async (req, res) => {
       sql =
         'delete from users_relationship where follower_id = ? and followee_id = ?';
       await connection.query(sql, [user_id, user]);
-<<<<<<< HEAD
-
-=======
->>>>>>> d6a6afc865a8e387e0a64701c2efc682b4787e55
       res.send({ success: true });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
@@ -119,7 +111,6 @@ router.get('/user', verifyToken, async (req, res) => {
       sql = `select user_id, user_name, user_profile from users where user_id in(select followee_id from users_relationship where follower_id = ?);`;
       const [followee_id] = await connection.query(sql, user.user_id);
       const follower = followee_id.map((user) => user);
-<<<<<<< HEAD
 
       sql = `select user_id, user_name, user_profile from users where user_id in(select follower_id from users_relationship where followee_id = ?);`;
       const [follower_id] = await connection.query(sql, user.user_id);
@@ -128,14 +119,6 @@ router.get('/user', verifyToken, async (req, res) => {
       data = { user, follower, followee };
 
       res.send({ data });
-=======
-      sql = `select user_id, user_name, user_profile from users where user_id in(select follower_id from users_relationship where followee_id = ?);`;
-      const [follower_id] = await connection.query(sql, user.user_id);
-      const followee = follower_id.map((user) => user);
-      data = { user, follower, followee };
-      console.log(data);
-      res.send(data);
->>>>>>> d6a6afc865a8e387e0a64701c2efc682b4787e55
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
