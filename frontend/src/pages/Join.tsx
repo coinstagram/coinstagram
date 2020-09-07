@@ -5,7 +5,8 @@ import JoinInputBox from '../components/Join/JoinInputBox';
 import JoinHeader from '../components/Join/JoinHeader';
 import JoinAppDownload from '../components/Join/JoinAppDownload';
 import JoinAskLogin from '../components/Join/JoinAskLogin';
-import JoinButton from '../components/Join/JoinButton';
+import JoinLoginButton from '../styles/JoinLoginButton';
+import JoinPolicy from '../components/Join/JoinPolicy';
 
 function Join() {
   const StyledDiv = styled.div`
@@ -27,9 +28,10 @@ function Join() {
       <JoinWrapper>
         <JoinHeader />
         <JoinInputBox />
-        <JoinButton />
+        <JoinLoginButton content="가입" />
+        <JoinPolicy />
       </JoinWrapper>
-      <JoinAskLogin />
+      <JoinAskLogin askContent="계정이 있으신가요?" content="로그인" />
       <JoinAppDownload />
     </StyledDiv>
   );

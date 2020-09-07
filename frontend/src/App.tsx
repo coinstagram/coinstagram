@@ -45,7 +45,7 @@ function App() {
             <Route path="/explore" component={Explore} />
             <Route path="/upload" component={Upload} />
             <Route path="/join" component={Join} />
-            <Route path="/join" component={Login} />
+            <Route path="/login" component={Login} />
             <Route path="/account/:userid/tagged" component={Profile} />
             <Route path="/account/:userid/saved" component={Profile} />
             <Route path="/account/edit" component={Edit} />

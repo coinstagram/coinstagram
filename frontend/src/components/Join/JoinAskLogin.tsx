@@ -1,7 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export default function JoinAskLogin() {
+interface ContentProps {
+  askContent?: string;
+  content?: string;
+}
+export default function JoinAskLogin({ askContent, content }: ContentProps) {
   const StyledAskLogin = styled.div`
     height: 70px;
     background: #ffffff;
@@ -17,9 +21,8 @@ export default function JoinAskLogin() {
   `;
   return (
     <StyledAskLogin>
-      {/* 로그인 페이지 라우팅 구현 필요 */}
       <p>
-        계정이 있으신가요? <b className="login">로그인</b>
+        {askContent} <b className="login">{content}</b>
       </p>
     </StyledAskLogin>
   );

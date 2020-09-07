@@ -1,5 +1,5 @@
 // 로그인 관련 reducer file
-import { AuthState } from '../../type';
+import { SignupState } from '../../type';
 import { AxiosError } from 'axios';
 import { takeEvery } from 'redux-saga/effects';
 
