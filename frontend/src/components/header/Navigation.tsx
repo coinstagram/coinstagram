@@ -19,6 +19,16 @@ import { FaCompass } from 'react-icons/fa';
 import Thumbnail from '../Thumbnail';
 import NavModal from './NavModal';
 
+declare module 'react' {
+  interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
+    width?: number;
+    count?: number;
+    clicked?: boolean;
+    size?: number;
+    isAnother?: boolean;
+  }
+}
+
 interface StyledNavProps {
   width: number;
 }
