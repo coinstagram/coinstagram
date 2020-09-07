@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { verifyToken } = require('./jwtMiddleware');
+const jwt = require('jsonwebtoken');
+const mysql = require('mysql2');
 const pool = require('../config/database');
 const multer = require('multer');
 const path = require('path');
@@ -19,9 +21,14 @@ const fs = require('fs');
  * }
  */
 router.post('/post', verifyToken, async (req, res) => {
+  const token = req.headers.authorization.split('Bearer ')[1];
+  const { user_id } = jwt.verify(
+    token,
+    // eslint-disable-next-line no-undef
+    process.env.JWT_SECRET,
+  );
   const {
     post_title,
-    user_id,
     post_context = '',
     post_anotheruser = '',
     post_location = '',
@@ -107,26 +114,80 @@ router.get('/post/:post_id', verifyToken, async (req, res) => {
 });
 
 /**
- * post detail(post_id)
- * /post/:post_id
+ * add comment
+ * /comment
  * {
  *  post_id
+ *  comment_text
  * }
  */
-router.get('/post/postId/:post_id', verifyToken, async (req, res) => {
-  const { post_id } = req.params;
+router.post('/comment', async (req, res) => {
+  const token = req.headers.authorization.split('Bearer ')[1];
+  const { user_id } = jwt.verify(
+    token,
+    // eslint-disable-next-line no-undef
+    process.env.JWT_SECRET,
+  );
+  const { post_id, comment_text } = req.body;
   let sql = '';
-
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      sql = `SELECT distinct a.id, a.post_title, a.created_at, GROUP_CONCAT(c.name) as hashtag, d.user_name, (SELECT COUNT(*) FROM post_like where post_id = ?) "like" FROM 
-        (SELECT * FROM posts where id = ?) a left outer join post_tags b on a.id = b.post_id
-        inner join tag c on b.tag_id = c.id
-        inner join users d on a.user_id = d.user_id;`;
-      const [check] = await connection.query(sql, [post_id, post_id]);
+      sql =
+        'insert into comments(post_id, user_id, comment_text) values(?, ?, ?);';
+      await connection.query(sql, [post_id, user_id, comment_text]);
+      sql = 'SELECT * FROM comments ORDER BY id DESC LIMIT 1';
+      const [newComment] = await connection.query(sql);
+      res.send(newComment[0]);
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      res.status(500).json('SQL ERROR');
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
+});
 
-      res.send(check[0]);
+/**
+ * add child comment
+ * /like
+ * {
+ *  post_id
+ *  comment_text
+ *  parent
+ * }
+ */
+router.post('/comment/child', async (req, res) => {
+  const token = req.headers.authorization.split('Bearer ')[1];
+  const { user_id } = jwt.verify(
+    token,
+    // eslint-disable-next-line no-undef
+    process.env.JWT_SECRET,
+  );
+  const { post_id, comment_text, parent } = req.body;
+  let sql = '';
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      // 부모 댓글이 있나 확인
+      sql = 'select count(*) from comments where id = ?';
+      const [isParent] = await connection.query(sql, parent);
+      if (isParent === 0) {
+        res.status(500).json('댓글이 없습니다.');
+      }
+      sql = 'select * from comments where parent is null and id = ?;';
+      const [isparent] = await connection.query(sql, parent);
+      if (isparent.length === 0) {
+        throw Error('부모 댓글이 아닙니다.');
+      }
+
+      sql =
+        'insert into comments(post_id, user_id, comment_text, parent) values(?, ?, ?, ?);';
+      await connection.query(sql, [post_id, user_id, comment_text, parent]);
+      sql = 'SELECT * FROM comments where id = ? or parent = ?';
+      const [newComment] = await connection.query(sql, [parent, parent]);
+      res.send(newComment);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
@@ -139,26 +200,84 @@ router.get('/post/postId/:post_id', verifyToken, async (req, res) => {
 });
 
 /**
- * post detail(user_id)
- * /post/userId/:user_id
- * {
- *  post_title
- * }
+ * get post comment
+ * /comment/post/:id
  */
-router.get('/post/userId/:user_id', verifyToken, async (req, res) => {
+router.get('/comment/post/:post_id', verifyToken, async (req, res) => {
+  const { post_id } = req.params;
   let sql = '';
-  const { user_id } = req.params;
-  console.log(user_id);
-  let data = [];
+
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      sql = 'select * from posts where user_id = ? limit 15';
-      const [check] = await connection.query(sql, +user_id);
-      // eslint-disable-next-line no-unused-vars
-      data = { post: check[0] };
+      sql = `SELECT * FROM comments where post_id = ?`;
+      const [check] = await connection.query(sql, post_id);
 
-      sql = `select * from users where user_id = ?`;
+      res.send(check);
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      console.log(error);
+      res.status(500).json('SQL ERROR');
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
+});
+
+/**
+ * get post detail
+ * /user/post/:user_id
+ */
+router.get('/user/post/:user_id', verifyToken, async (req, res) => {
+  const { user_id } = req.params;
+  let sql = ``;
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      sql = `select * from posts where user_id = ?`;
+      const [check] = await connection.query(sql, user_id);
+
+      res.send(check);
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      console.log(error);
+      res.status(500).json('SQL ERROR');
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
+});
+
+/**
+ * login user friend post
+ * /user/relationship/post
+ */
+router.get('/user/relationship/post', verifyToken, async (req, res) => {
+  const token = req.headers.authorization.split('Bearer ')[1];
+  const userData = jwt.verify(
+    token,
+    // eslint-disable-next-line no-undef
+    process.env.JWT_SECRET,
+  );
+  const user = userData;
+  let sql = '';
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      sql = `select user_id from users where user_id in(select followee_id from users_relationship where follower_id = ?);`;
+      const [followee_id] = await connection.query(sql, user.user_id);
+      sql = `select * from posts where user_id = ?;`;
+
+      let sqls = '';
+      let params = [];
+      followee_id.map(({ user_id }) => {
+        params = [user_id];
+        sqls += mysql.format(sql, params);
+      });
+      const [[test]] = await connection.query(sqls);
+      res.json({ data: test });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
@@ -195,6 +314,7 @@ const upload = multer({
   // 단 이미지나 동영상은 백엔드를 거치지 않고
   // 프론트에서 바로 클라우드로 보내는게 좋다.
 });
+
 router.post('/images', verifyToken, upload.array('image'), async (req, res) => {
   const file = req.files.map(({ path }) => {
     const change = path.split(' ');
@@ -204,6 +324,7 @@ router.post('/images', verifyToken, upload.array('image'), async (req, res) => {
     return { changePath, changeFilename, changeFiletype };
   });
   console.log(file);
+  console.log(req.file);
   res.json(req.files.map((v) => v.filename));
 });
 

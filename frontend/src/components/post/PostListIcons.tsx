@@ -8,6 +8,11 @@ import {
   BsChat,
 } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
+declare module 'react' {
+  interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
+    like?: boolean;
+  }
+}
 
 const StyledDiv = styled.div`
   height: 64px;
