@@ -1,11 +1,12 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { loading } from '../../styles/ThumbnailBorderStyle';
+import { rotate } from '../../styles/ThumbnailBorderStyle';
 import borderStyle from '../../styles/ThumbnailBorderStyle';
 
 // components
 import Thumbnail from '../Thumbnail';
 import FollowBtn from './FollowBtn';
+import { AnotherUserState } from '../../type';
 
 const StyledDiv = styled.div`
   position: relative;
@@ -48,29 +49,63 @@ const StyledDivUsername = styled.div`
 interface RecommendUserInfoProps {
   size: number;
   isAnother?: boolean;
+  userId: null | string;
+  userName: null | string;
+  userProfile: null | string;
+  followers?: AnotherUserState[];
 }
 
-function RecommendUsersInfo({ size, isAnother }: RecommendUserInfoProps) {
+function RecommendUsersInfo({
+  size,
+  isAnother,
+  userId,
+  userName,
+  userProfile,
+  followers,
+}: RecommendUserInfoProps) {
   return (
-    <StyledDiv size={size} isAnother={isAnother}>
-      <button onClick={loading}>
-        <Thumbnail size={size} />
+    <StyledDiv
+      size={size}
+      isAnother={isAnother}
+      userId={userId}
+      userName={userName}
+      userProfile={userProfile}
+      followers={followers}
+    >
+      <button onClick={rotate}>
+        <Thumbnail size={size} imageUrl={userProfile} />
         <div tabIndex={-1}>
           <dt className="a11y-hidden">user id</dt>
-          <dd>user_id</dd>
+          <dd>{userId}</dd>
         </div>
       </button>
-      <StyledDivUsername size={size}>
+      <StyledDivUsername
+        size={size}
+        isAnother={isAnother}
+        userId={userId}
+        userName={userName}
+        userProfile={userProfile}
+        followers={followers}
+      >
         <dt className="a11y-hidden">user name</dt>
-        <dd>user name</dd>
+        <dd>{userName}</dd>
       </StyledDivUsername>
-      {isAnother && <FollowBtn size={size} />}
+      {isAnother && (
+        <FollowBtn
+          size={size}
+          userId={userId}
+          userName={userName}
+          userProfile={userProfile}
+          followers={followers}
+        />
+      )}
     </StyledDiv>
   );
 }
 
 RecommendUsersInfo.defaultProps = {
   isAnother: false,
+  followers: [],
 };
 
-export default RecommendUsersInfo;
+export default React.memo(RecommendUsersInfo);

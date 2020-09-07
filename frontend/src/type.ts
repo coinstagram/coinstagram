@@ -1,21 +1,7 @@
-import { AxiosError } from 'axios';
-
-export interface FollowState {
-  id: null | string;
-  name: null | string;
-  profile: null | string;
-}
-
-export interface UserInfoState {
-  id: null | number;
-  name: null | string;
-  email: null | string;
-  gender: null | string;
-  introduce: null | string;
-  phone: null | number;
-  profile: null | imageState;
-  followers: FollowState;
-  followees: FollowState;
+export interface followState {
+  loading: boolean;
+  error: null | Error;
+  users: AnotherUserState[];
 }
 
 export interface imageState {
@@ -23,10 +9,34 @@ export interface imageState {
   name: string;
 }
 
+export interface UserResponseState {
+  user: UserState;
+  follower: AnotherUserState[];
+  followee: AnotherUserState[];
+}
+
+export interface AnotherUserState {
+  user_id: null | string;
+  user_name: null | string;
+  user_profile: null | string;
+}
+
+export interface UserState {
+  user_id: null | string;
+  user_name: null | string;
+  user_email: null | string;
+  user_gender: null | string;
+  user_introduce: null | string;
+  user_phone: null | number;
+  user_profile: null | string;
+  iat?: number;
+  exp?: number;
+}
+
 export type stringArray = string[];
 
 export interface commentState {
-  id: null | string;
+  comment_id: null | string;
   comment_text: null | string;
   createdAt: null | string;
   likes: null | stringArray;
@@ -34,8 +44,9 @@ export interface commentState {
 }
 
 export interface PostState {
-  id: null | string;
-  post_images: null | imageState;
+  post_id: null | string;
+  user_id: null | string;
+  post_images: null | string;
   post_title: null | string;
   post_tags: stringArray;
   post_anotherUsers: stringArray;
@@ -48,13 +59,22 @@ export interface PostState {
 export interface AuthState {
   loading: boolean;
   token: null | string;
-  error: null | AxiosError;
+  error: null | Error;
 }
 
-export interface UserState {
+export interface UserInfoState {
   loading: boolean;
-  error: null | AxiosError;
-  userInfo: null | UserInfoState;
+  error: null | Error;
+  user: null | UserState;
+  followers: followState;
+  followees: AnotherUserState[];
+  randomUsers: AnotherUserState[];
+}
+
+export interface AnotehrUserInfoState {
+  loading: boolean;
+  error: null | Error;
+  user: null | UserState;
 }
 
 export interface PostsState {
@@ -64,17 +84,9 @@ export interface PostsState {
 }
 
 interface RootState {
-  auth: {
-    loading: boolean;
-    error: null | AxiosError;
-    token: null | string;
-  };
-  user: {
-    loading: boolean;
-    error: null | AxiosError;
-    userInfo: null | UserInfoState;
-  };
-  // 다른 reducer의 상태 추가 필요
+  auth: AuthState;
+  userInfo: UserInfoState;
+  anotherUserInfo: AnotehrUserInfoState;
 }
 
 export default RootState;

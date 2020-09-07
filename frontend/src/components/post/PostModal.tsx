@@ -47,6 +47,11 @@ export const StyledModal = styled.div`
   }
 `;
 
+const StyledSpan = styled.span`
+  color: rgb(237, 73, 86);
+  font-weight: bold;
+`;
+
 interface PostModalProps {
   popModal: () => void;
 }
@@ -56,14 +61,18 @@ function PostModal({ popModal }: PostModalProps) {
     <StyledBg onClick={popModal}>
       <StyledModal>
         <ul>
-          {/* {내 정보와 비교 => true && <li><button><span>팔로우 취소</span></button></li>} */}
           <li>
-            <Link to="/post/:postid" onClick={popModal}>
+            <button>
+              <StyledSpan tabIndex={-1}>팔로우 취소</StyledSpan>
+            </button>
+          </li>
+          <li>
+            <Link to="/post/:postid">
               <span tabIndex={-1}>게시물로 이동</span>
             </Link>
           </li>
           <li>
-            <Link to="/upload" onClick={popModal}>
+            <Link to="/upload">
               <span tabIndex={-1}>수정</span>
             </Link>
           </li>
@@ -73,7 +82,7 @@ function PostModal({ popModal }: PostModalProps) {
             </button>
           </li>
           <li>
-            <button onClick={popModal}>
+            <button>
               <span tabIndex={-1}>닫기</span>
             </button>
           </li>
