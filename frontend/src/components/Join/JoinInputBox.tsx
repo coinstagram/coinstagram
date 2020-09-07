@@ -57,91 +57,46 @@ const IconWrapper = styled.div`
   }
 `;
 
-interface userNameState {
-  userNameEntered: string;
-  isUserNameValid: boolean;
-}
-interface passwordState {
-  passwordEntered: string;
-  isPasswordValid: boolean;
-}
-interface phoneEmailState {
-  phoneEmailEntered: string | number;
-  isPhoneEmailValid: boolean;
-}
-
 export default function JoinInputBox() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
 
   // 인풋 상태
-
-  const [phoneEmail, setPhoneEmail] = useState({
-    phoneEmailEntered: '',
-    isPhoneEmailValid: false,
-  });
-  const { phoneEmailEntered, isPhoneEmailValid } = phoneEmail;
-
-  const [userName, setUserName] = useState<userNameState>({
-    userNameEntered: '',
-    isUserNameValid: false,
-  });
-  const { userNameEntered, isUserNameValid } = userName;
-
-  const [userId, setUserId] = useState<string>('');
-
-  const [password, setPassword] = useState<passwordState>({
-    passwordEntered: '',
-    isPasswordValid: false,
-  });
-  const { passwordEntered, isPasswordValid } = password;
+  const [phoneEmail, setPhoneEmail] = useState('');
+  const [userName, setUserName] = useState('');
+  const [userId, setUserId] = useState('');
+  const [password, setPassword] = useState('');
   const [isPasswordShown, setPasswordShown] = useState(false);
 
   // 전화번호, 이메일
   const emailRegExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
   const phoneRegExp = /^\d{3}-\d{3,4}-\d{4}$/;
   const inputPhoneEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPhoneEmail({
-      ...phoneEmail,
-      phoneEmailEntered: e.target.value,
-      isPhoneEmailValid:
-        phoneRegExp.test(phoneEmailEntered) ||
-        emailRegExp.test(phoneEmailEntered)
-          ? true
-          : false,
-    });
-    console.log(phoneEmailEntered, isPhoneEmailValid);
+    setPhoneEmail(e.target.value);
   };
-  // useEffect(() => {
-  //   console.log(phoneEmailEntered, isPhoneEmailValid);
-  // }, [phoneEmailEntered, isPhoneEmailValid]);
 
   // 성명
   const inputUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserName({
-      ...userName,
-      userNameEntered: e.target.value,
-      // isUserNameValid: userNameEntered.length >= 6 ? true : false,
-    });
-    console.log(userNameEntered);
+    setUserName(e.target.value);
   };
-  useEffect(() => {
-    if (userNameEntered.length >= 6) {
-      setUserName(state => ({
-        ...state,
-        isUserNameValid: true,
-      }));
-    }
-  }, [userNameEntered]);
+  // useEffect(() => {
+  //   if (userNameEntered.length >= 6) {
+  //     setUserName(state => ({
+  //       ...state,
+  //       isUserNameValid: true,
+  //     }));
+  //   }
+  // }, [userNameEntered]);
+  // 사용자 이름
+  const idRegExp = /^[a-zA-Z0-9]{4,12}$/;
+  const inputUserId = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserId(e.target.value);
+  };
 
   // 비밀번호
   const inputPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword({
-      ...password,
-      passwordEntered: e.target.value,
-      isPasswordValid: passwordEntered.length >= 6 ? true : false,
-    });
+    setPassword(e.target.value);
   };
 
   const toggleShowPassword = () => {
@@ -155,7 +110,7 @@ export default function JoinInputBox() {
           <input
             type="text"
             name="phoneEmail"
-            value={phoneEmailEntered}
+            value={phoneEmail}
             onChange={inputPhoneEmail}
             placeholder="휴대폰 번호 또는 이메일 주소"
             required
@@ -163,10 +118,10 @@ export default function JoinInputBox() {
         </label>
         <IconWrapper
           style={{
-            display: phoneEmailEntered ? 'block' : 'none',
+            display: phoneEmail ? 'block' : 'none',
           }}
         >
-          {isPhoneEmailValid ? (
+          {phoneRegExp.test(phoneEmail) || emailRegExp.test(phoneEmail) ? (
             <BiCheckCircle className="icon check" />
           ) : (
             <RiCloseCircleLine className="icon close" />
@@ -178,7 +133,7 @@ export default function JoinInputBox() {
           <input
             type="text"
             name="userName"
-            value={userNameEntered}
+            value={userName}
             onChange={inputUserName}
             placeholder="성명"
             required
@@ -187,10 +142,10 @@ export default function JoinInputBox() {
 
         <IconWrapper
           style={{
-            display: userNameEntered ? 'block' : 'none',
+            display: userName ? 'block' : 'none',
           }}
         >
-          {isUserNameValid ? (
+          {userName.length >= 6 ? (
             <BiCheckCircle className="icon check" />
           ) : (
             <RiCloseCircleLine className="icon close" />
@@ -199,17 +154,25 @@ export default function JoinInputBox() {
       </StyledDiv>
       <StyledDiv>
         <label>
-          {/* <span>사용자 이름</span> */}
           <input
             type="text"
             name="userId"
             value={userId}
+            onChange={inputUserId}
             placeholder="사용자 이름"
             required
           />
         </label>
-        <IconWrapper>
-          {/* <AiOutlineReload className="icon reload" /> */}
+        <IconWrapper
+          style={{
+            display: userId ? 'block' : 'none',
+          }}
+        >
+          {idRegExp.test(userId) ? (
+            <BiCheckCircle className="icon check" />
+          ) : (
+            <RiCloseCircleLine className="icon close" />
+          )}
         </IconWrapper>
       </StyledDiv>
       <StyledDiv>
@@ -217,7 +180,7 @@ export default function JoinInputBox() {
           <input
             type={isPasswordShown ? 'text' : 'password'}
             name="password"
-            value={passwordEntered}
+            value={password}
             onChange={inputPassword}
             placeholder="비밀번호"
             required
@@ -225,11 +188,10 @@ export default function JoinInputBox() {
         </label>
         <IconWrapper
           style={{
-            display: passwordEntered ? 'flex' : 'none',
-            // alignItems: 'center',
+            display: password ? 'flex' : 'none',
           }}
         >
-          {isPasswordValid ? (
+          {password.length >= 6 ? (
             <BiCheckCircle className="icon check" />
           ) : (
             <RiCloseCircleLine className="icon close" />
