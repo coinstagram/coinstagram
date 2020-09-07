@@ -34,7 +34,7 @@ const borderStyle = (offset: number) => css`
   }
 `;
 
-export function loading({
+export function rotate({
   currentTarget,
 }: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
   currentTarget.classList.toggle('selected');

@@ -7,7 +7,7 @@ import StyledMain from '../styles/StyledMain';
 import useWindowWidth from '../hooks/useWindowWidth';
 
 // components
-import Header from '../components/header/Header';
+import Header from '../containers/Header';
 import MainContainer from '../containers/MainContainer';
 
 const StyledDiv = styled.div`
@@ -40,7 +40,6 @@ function Home() {
         <button onClick={login}>로그인</button>
         <button onClick={getUser}>내 유저정보 요청</button>
         <button onClick={getRandom}>랜덤 유저 5명 요청</button>
-        <button onClick={follow}>follow</button>
       </StyledDiv>
     </>
   );
@@ -50,7 +49,7 @@ export default Home;
 
 async function login() {
   const res = await axios.post('/login', {
-    user_id: 'user1',
+    user_id: 'user2',
     user_password: 'asdf',
   });
 
@@ -86,21 +85,4 @@ async function signupEmail() {
 
 function createRandom() {
   return Math.floor(Math.random() * 10);
-}
-
-async function follow() {
-  const token = await localStorage.getItem('access_token');
-  const res = await axios.post(
-    '/user/relationship',
-    {
-      followee_id: 'user1',
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  );
-
-  console.log(res.data);
 }
