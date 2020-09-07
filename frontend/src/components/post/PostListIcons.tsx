@@ -3,8 +3,8 @@ import styled, { css } from 'styled-components';
 import {
   BsHeartFill,
   BsHeart,
-  BsBookmark,
-  BsFillBookmarkFill,
+  BsBookmarks,
+  BsBookmarksFill,
   BsChat,
 } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
@@ -83,7 +83,7 @@ function PostListIcons() {
         </div>
         <button onClick={click} id="favorite">
           <span tabIndex={-1}>
-            {state.favorite ? <BsFillBookmarkFill /> : <BsBookmark />}
+            {state.favorite ? <BsBookmarksFill /> : <BsBookmarks />}
           </span>
         </button>
       </IconDiv>

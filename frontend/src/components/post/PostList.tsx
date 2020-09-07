@@ -10,17 +10,44 @@ import PostListIcons from './PostListIcons';
 const StyledArticle = styled.article`
   border: 1px solid rgb(219, 219, 219);
   border-radius: 3px;
+
+  & + & {
+    margin-top: 60px;
+  }
 `;
 
 function PostList() {
   return (
-    <StyledArticle>
-      <h3 className="a11y-hidden">follow user의 게시물</h3>
-      <PostListHeader />
-      <PostListBody />
-      <PostListIcons />
-      <PostListComment />
-    </StyledArticle>
+    <>
+      <StyledArticle>
+        <h3 className="a11y-hidden"> user OO의 게시물</h3>
+        <PostListHeader />
+        <PostListBody />
+        <PostListIcons />
+        <PostListComment />
+      </StyledArticle>
+      <StyledArticle>
+        <h3 className="a11y-hidden"> user OO의 게시물</h3>
+        <PostListHeader />
+        <PostListBody />
+        <PostListIcons />
+        <PostListComment />
+      </StyledArticle>
+      <StyledArticle>
+        <h3 className="a11y-hidden"> user OO의 게시물</h3>
+        <PostListHeader />
+        <PostListBody />
+        <PostListIcons />
+        <PostListComment />
+      </StyledArticle>
+      <StyledArticle>
+        <h3 className="a11y-hidden"> user OO의 게시물</h3>
+        <PostListHeader />
+        <PostListBody />
+        <PostListIcons />
+        <PostListComment />
+      </StyledArticle>
+    </>
   );
 }
 
