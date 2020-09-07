@@ -17,10 +17,22 @@ function preloadedState(token: string | null): RootState {
       error: null,
       token,
     },
-    user: {
+    userInfo: {
       loading: false,
       error: null,
-      userInfo: null,
+      user: null,
+      followers: {
+        loading: false,
+        error: null,
+        users: [],
+      },
+      followees: [],
+      randomUsers: [],
+    },
+    anotherUserInfo: {
+      loading: false,
+      error: null,
+      user: null,
     },
   };
 }

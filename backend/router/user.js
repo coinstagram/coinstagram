@@ -51,37 +51,33 @@ router.post('/user/relationship', verifyToken, async (req, res) => {
  *  followee_id
  * }
  */
-router.delete('/user/relationship', verifyToken, async (req, res) => {
+router.delete('/user/relationship/:user', verifyToken, async (req, res) => {
   const token = req.headers.authorization.split('Bearer ')[1];
   const { user_id } = jwt.verify(
     token,
     // eslint-disable-next-line no-undef
     process.env.JWT_SECRET,
   );
-  const { followee_id } = req.body;
-  if (followee_id === user_id) {
+  const { user } = req.params;
+  console.log(user);
+  if (user === user_id) {
     throw Error('나를 팔로우 취소 할 수 없습니다.');
   }
-
   let sql = '';
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
       sql = 'select followee_id from users_relationship where follower_id = ?';
       const [compareFollowee] = await connection.query(sql, user_id);
-
       const [isFollowee] = compareFollowee.filter((followee) => {
-        return +followee.followee_id === followee_id;
+        return followee.followee_id === user;
       });
-
       if (!isFollowee) {
         throw Error('해당 친구가 없습니다.');
       }
-
       sql =
         'delete from users_relationship where follower_id = ? and followee_id = ?';
-      await connection.query(sql, [user_id, followee_id]);
-
+      await connection.query(sql, [user_id, user]);
       res.send({ success: true });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
@@ -107,24 +103,19 @@ router.get('/user', verifyToken, async (req, res) => {
     process.env.JWT_SECRET,
   );
   const user = userData;
-
   let sql = '';
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
       sql = `select user_id, user_name, user_profile from users where user_id in(select followee_id from users_relationship where follower_id = ?);`;
       const [followee_id] = await connection.query(sql, user.user_id);
-      const follower = followee_id.map(({ user_id }) => user_id);
-
+      const follower = followee_id.map((user) => user);
       sql = `select user_id, user_name, user_profile from users where user_id in(select follower_id from users_relationship where followee_id = ?);`;
       const [follower_id] = await connection.query(sql, user.user_id);
-      const folloee = follower_id.map((user_id) => user_id);
-
-      data = { user, follower, folloee };
+      const followee = follower_id.map((user) => user);
+      data = { user, follower, followee };
       console.log(data);
-
-      res.send({ success: true });
-      77;
+      res.send(data);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
@@ -146,7 +137,7 @@ router.get('/users/random', async (req, res) => {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      sql = `select user_id, user_name, user_profile from users ORDER BY RAND() LIMIT 5;`;
+      sql = `select user_id, user_name, user_profile from users ORDER BY RAND() LIMIT 6;`;
       const [check] = await connection.query(sql);
       res.send(check);
     } catch (error) {
