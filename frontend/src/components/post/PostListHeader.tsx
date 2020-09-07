@@ -4,7 +4,6 @@ import { ModalContext } from '../../App';
 
 // components
 import Thumbnail from '../Thumbnail';
-import PostModal from './PostModal';
 
 // styles
 import spriteImg from '../../resource/image/spriteImages.png';
@@ -59,7 +58,7 @@ const StyledBtn = styled.button`
 `;
 
 function PostListHeader() {
-  const { modal, popModal } = useContext(ModalContext);
+  const { popPostModal } = useContext(ModalContext);
 
   return (
     <>
@@ -83,12 +82,11 @@ function PostListHeader() {
           </div>
         </StyledBtn>
       </StyledDiv>
-      {modal && <PostModal popModal={popModal} />}
     </>
   );
 
   function setModal() {
-    popModal();
+    popPostModal();
   }
 }
 

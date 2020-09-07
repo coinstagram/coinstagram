@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 // styles
-import { StyledDivBg } from '../header/NavModal';
+import { StyledDivBg } from './header/NavModal';
 
 export const StyledBg = styled(StyledDivBg)`
   background-color: rgba(0, 0, 0, 0.65);
@@ -47,7 +47,7 @@ export const StyledModal = styled.div`
   }
 `;
 
-const StyledSpan = styled.span`
+export const StyledSpan = styled.span`
   color: rgb(237, 73, 86);
   font-weight: bold;
 `;
