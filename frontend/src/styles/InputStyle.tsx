@@ -3,16 +3,22 @@ import styled from 'styled-components';
 import { BiCheckCircle } from 'react-icons/bi';
 import { RiCloseCircleLine } from 'react-icons/ri';
 
+interface passwordProps {
+  style?: { marginBottom: string };
+}
 interface InputProps {
   type: string;
   name: string;
   value: string;
-  onChange: () => void;
+  // onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (text: string) => void;
   placeholder: string;
   toggleIcon: boolean;
   display: string;
   children?: React.ReactNode;
+  style?: passwordProps;
 }
+
 export default function InputStyle({
   type,
   name,
@@ -22,6 +28,7 @@ export default function InputStyle({
   toggleIcon,
   display,
   children,
+  style,
 }: InputProps) {
   const StyledDiv = styled.div`
     width: 268px;
@@ -75,7 +82,9 @@ export default function InputStyle({
       }
     }
   `;
-
+  function test(e: React.ChangeEvent<HTMLInputElement>) {
+    onChange(e.target.value);
+  }
   return (
     <StyledDiv>
       <label>
@@ -83,18 +92,13 @@ export default function InputStyle({
           type={type}
           name={name}
           value={value}
-          onChange={onChange}
+          onChange={test}
           placeholder={placeholder}
           required
+          style={style}
         ></input>
       </label>
-      <IconWrapper
-      // display={display}
-      // value={value}
-      // style={{
-      //   display: { value } ? { display } : 'none',
-      // }}
-      >
+      <IconWrapper>
         {{ toggleIcon } ? (
           <BiCheckCircle className="icon check" />
         ) : (

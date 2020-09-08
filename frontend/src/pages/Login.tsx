@@ -38,8 +38,7 @@ export default function Login() {
         <Login>
           <MainLogo style={{ marginBottom: '40px' }}>coInstagram</MainLogo>
           <InputUserId />
-          {/* <InputPassword style={{ marginBottom: '20px' }} /> */}
-          <InputPassword />
+          <InputPassword style={{ marginBottom: '20px' }} />
           <JoinLoginButton content="로그인"></JoinLoginButton>
         </Login>
         <JoinAskLogin askContent="계정이 없으신가요?" content="가입하기" />
