@@ -3,13 +3,12 @@ import axios from 'axios';
 import styled from 'styled-components';
 
 // styles
-import StyledMain from '../styles/StyledMain';
+import StyledMain from '../components/common/StyledMain';
 import useWindowWidth from '../hooks/useWindowWidth';
 
 // components
-import Header from '../containers/Header';
-import Main from '../containers/Main';
-import PostModal from '../components/PostModal';
+import Header from '../components/header/Header';
+import HomeMain from '../containers/HomeMain';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -27,46 +26,52 @@ const StyledDiv = styled.div`
   }
 `;
 
-interface HomeProps {
-  postModal: boolean;
-  popPostModal: () => void;
-}
-
-function Home({ postModal, popPostModal }: HomeProps) {
+function Home() {
   const width = useWindowWidth();
 
   return (
     <>
       <Header />
       <StyledMain width={width}>
-        <Main />
+        <HomeMain />
       </StyledMain>
       <StyledDiv>
         <button onClick={signupEmail}>회원가입</button>
         <button onClick={login}>로그인</button>
-        <button onClick={getUser}>내 유저정보 요청</button>
-        <button onClick={getRandom}>랜덤 유저 5명 요청</button>
+        <button onClick={upload}>업로드</button>
+        <button onClick={getPosts}>전체 게시물</button>
+        <button onClick={getComment}>특정 게시물 댓글</button>
+        <button onClick={addComments}>특정 게시물 댓글달기</button>
+        <button onClick={getAnotherPosts}>다른유저 게시물</button>
+        <button onClick={getFollowerPosts}>팔로워들 게시물</button>
       </StyledDiv>
-      {postModal && <PostModal popModal={popPostModal} />}
     </>
   );
 }
 
 export default React.memo(Home);
 
-async function login() {
-  const res = await axios.post('/login', {
-    user_id: 'user2',
-    user_password: 'asdf',
-  });
+const token = localStorage.getItem('access_token');
 
-  const { token } = res.data;
-  localStorage.setItem('access_token', token);
+async function addComments() {
+  const res = await axios.post(
+    '/comment',
+    {
+      post_id: 1,
+      comment_text: 'post1의 댓글',
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  console.log(res);
 }
 
-async function getUser() {
-  const token = await localStorage.getItem('access_token');
-  const res = await axios.get('/user', {
+async function getComment() {
+  const res = await axios.get('/comment/post/1', {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -75,10 +80,62 @@ async function getUser() {
   console.log(res.data);
 }
 
-async function getRandom() {
-  const res = await axios.get('/users/random');
+async function upload() {
+  const res = await axios.post(
+    '/post',
+    {
+      post_context: 'post1의 내용',
+      post_anotheruser: 'user1',
+      post_location: 'location1',
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
 
-  console.log(res);
+  console.log(res.data);
+}
+
+async function getPosts() {
+  const res = await axios.get('/posts', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  console.log(res.data);
+}
+
+async function getAnotherPosts() {
+  const res = await axios.get('/user/post/user3', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  console.log(res.data);
+}
+
+async function getFollowerPosts() {
+  const res = await axios.get('/user/relationship/post', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  console.log(res.data);
+}
+
+async function login() {
+  const res = await axios.post('/login', {
+    user_id: 'user3',
+    user_password: 'asdf',
+  });
+
+  const { token } = res.data;
+  localStorage.setItem('access_token', token);
 }
 
 async function signupEmail() {

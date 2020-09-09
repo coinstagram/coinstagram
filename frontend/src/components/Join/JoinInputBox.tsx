@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { BiCheckCircle } from 'react-icons/bi';
 import { RiCloseCircleLine } from 'react-icons/ri';
-import { AiOutlineReload } from 'react-icons/ai';
 
 const StyledForm = styled.form``;
 const StyledDiv = styled.div`

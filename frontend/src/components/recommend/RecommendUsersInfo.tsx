@@ -1,52 +1,16 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
-import { rotate } from '../../styles/ThumbnailBorderStyle';
-import borderStyle from '../../styles/ThumbnailBorderStyle';
+import { rotate } from '../common/ThumbnailBorderStyle';
+import { AnotherUserState } from '../../type';
+import { useHistory } from 'react-router-dom';
+
+// styles
+import { StyledDiv, StyledDivUsername } from './RecommendUsersInfoStyle';
 
 // components
-import Thumbnail from '../Thumbnail';
+import Thumbnail from '../common/Thumbnail';
 import FollowBtn from './FollowBtn';
-import { AnotherUserState } from '../../type';
 
-const StyledDiv = styled.div`
-  position: relative;
-  button {
-    display: flex;
-    border-radius: 50%;
-    ${({ isAnother }: RecommendUserInfoProps) => isAnother && borderStyle(4)}
-
-    div {
-      outline: none;
-
-      dd {
-        position: absolute;
-        font-weight: bold;
-        ${({ size }: RecommendUserInfoProps) => css`
-          left: ${(size * 4) / 3};
-          top: ${(size * 1) / 5};
-        `}
-
-        &:active {
-          color: rgb(142, 142, 142);
-        }
-      }
-    }
-  }
-`;
-
-const StyledDivUsername = styled.div`
-  dd {
-    position: absolute;
-    font-size: 12px;
-    color: rgb(142, 142, 142);
-    ${({ size }: RecommendUserInfoProps) => css`
-      left: ${(size * 4) / 3};
-      top: ${(size * 3) / 5};
-    `};
-  }
-`;
-
-interface RecommendUserInfoProps {
+export interface RecommendUserInfoProps {
   size: number;
   isAnother?: boolean;
   userId: null | string;
@@ -63,6 +27,8 @@ function RecommendUsersInfo({
   userProfile,
   followers,
 }: RecommendUserInfoProps) {
+  const history = useHistory();
+
   return (
     <StyledDiv
       size={size}
@@ -72,7 +38,7 @@ function RecommendUsersInfo({
       userProfile={userProfile}
       followers={followers}
     >
-      <button onClick={rotate}>
+      <button onClick={e => click(e, userId)}>
         <Thumbnail size={size} imageUrl={userProfile} />
         <div tabIndex={-1}>
           <dt className="a11y-hidden">user id</dt>
@@ -101,6 +67,16 @@ function RecommendUsersInfo({
       )}
     </StyledDiv>
   );
+
+  function click(
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    user_id: string,
+  ) {
+    rotate(e);
+    setTimeout(() => {
+      history.push(`/${user_id}`);
+    }, 1500);
+  }
 }
 
 RecommendUsersInfo.defaultProps = {
