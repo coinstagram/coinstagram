@@ -1,9 +1,8 @@
 import React from 'react';
-import Header from '../containers/Header';
-import StyledMain from '../styles/StyledMain';
+import Header from '../components/header/Header';
+import StyledMain, { WidthProps } from '../components/common/StyledMain';
 import styled from 'styled-components';
 import useWindowWidth from '../hooks/useWindowWidth';
-import { WidthProps } from '../styles/StyledMain';
 
 // containers
 import UploadContainer from '../containers/UploadContainer';

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { StyledH1 } from '../header/Logo';
+import { StyledH1 } from '../header/LogoStyle';
 
 export default function JoinHeader() {
   const Header = styled.div`

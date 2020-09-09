@@ -118,7 +118,7 @@ router.get('/user', verifyToken, async (req, res) => {
 
       data = { user, follower, followee };
 
-      res.send({ data });
+      res.send(data);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
@@ -171,8 +171,8 @@ router.get('/user/:user_id', verifyToken, async (req, res) => {
     try {
       sql = `select user_id, user_name, user_gender, user_introduce, user_phone
       , user_email, user_profile from users where user_id = ?`;
-      const [user] = await connection.query(sql, user_id);
-      const userData = user[0];
+      const [userData] = await connection.query(sql, user_id);
+      const user = userData[0];
 
       sql = `select user_id, user_name, user_profile from users where user_id in(select followee_id from users_relationship where follower_id = ?);`;
       const [followee_id] = await connection.query(sql, user_id);
@@ -182,7 +182,7 @@ router.get('/user/:user_id', verifyToken, async (req, res) => {
       const [follower_id] = await connection.query(sql, user_id);
       const followee = follower_id.map((user) => user);
 
-      data = { userData, follower, followee };
+      data = { user, follower, followee };
       res.json(data);
     } catch (error) {
       await connection.rollback(); // ROLLBACK

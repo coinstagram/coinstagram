@@ -1,52 +1,15 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components';
 import { AnotherUserState } from '../../type';
-import { followContext } from '../../containers/Main';
-
-// components;
-import Spinner from '../Spinner';
+import { followContext } from '../../containers/HomeMain';
 import { ModalContext } from '../../App';
 
-const StyledButton = styled.button`
-  position: absolute;
-  right: 10px;
-  top: ${({ size }: FollowBtnProps) => `${size / 5}`};
+// styles
+import { StyledButton } from './FollowBtnStyle';
 
-  color: rgb(0, 149, 246);
-  font-weight: bold;
-  font-size: 12px;
+// components;
+import Spinner from '../common/Spinner';
 
-  span {
-    outline: none;
-    &:active {
-      filter: brightness(1.2);
-    }
-
-    &.follow-cancel {
-      color: rgb(0, 0, 0);
-      &:active {
-        color: rgb(50, 50, 50);
-      }
-    }
-  }
-
-  .active > span {
-    display: none;
-  }
-
-  .follow > div {
-    display: none;
-  }
-  .follow-cancel > div {
-    display: none;
-  }
-
-  .active > div {
-    display: block;
-  }
-`;
-
-interface FollowBtnProps {
+export interface FollowBtnProps {
   size: number;
   userId: string | null;
   userName: string | null;
