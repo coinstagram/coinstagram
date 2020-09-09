@@ -196,6 +196,7 @@ router.get('/comment/post/:post_id', verifyToken, async (req, res) => {
     try {
       sql = `SELECT * FROM comments where post_id = ?`;
       const [check] = await connection.query(sql, post_id);
+      check.sort((a, b) => (a['id'] < b['id'] ? 1 : -1));
       res.send(check);
     } catch (error) {
       await connection.rollback(); // ROLLBACK

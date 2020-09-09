@@ -8,5 +8,7 @@ declare module 'react' {
     clicked?: boolean;
     size?: number;
     isAnother?: boolean;
+    hasLocation?: string | null;
+    comment?: string | null;
   }
 }
