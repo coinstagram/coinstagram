@@ -6,7 +6,7 @@ const followUrl = '/user/relationship';
 
 interface IUserService {
   getUserData: (token: string | null) => Promise<UserResponseState>;
-  getRandomUser: () => Promise<AnotherUserState[]>;
+  getRandomUser: (token: string | null) => Promise<AnotherUserState[]>;
   getAnotherUserData: (
     user_Id: string,
     token: string | null,
@@ -36,8 +36,12 @@ const UserService: IUserService = class {
     return res.data;
   }
 
-  static async getRandomUser() {
-    const res = await axios.get<AnotherUserState[]>(`${getUrl}s/random`);
+  static async getRandomUser(token: string | null) {
+    const res = await axios.get<AnotherUserState[]>(`${getUrl}s/random`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return res.data;
   }

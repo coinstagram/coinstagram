@@ -132,6 +132,7 @@ function* getUserSaga() {
     yield put(successGetUserInfo(getUserData));
     const randomUsers: AnotherUserState[] = yield call(
       UserService.getRandomUser,
+      token,
     );
     yield put(successGetRandomUser(randomUsers));
   } catch (error) {
@@ -200,7 +201,11 @@ function userInfoReducer(
         loading: true,
         error: null,
         user: null,
-        followers: state.followers,
+        followers: {
+          loading: true,
+          error: null,
+          users: [],
+        },
         followees: [],
         randomUsers: [],
       };

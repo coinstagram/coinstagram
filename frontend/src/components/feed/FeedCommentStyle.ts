@@ -1,8 +1,8 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const StyledContainer = styled.div`
   form {
-    border-top: 1px solid rgb(219, 219, 219);
+    border-top: 1px solid rgb(239, 239, 239);
     margin-bottom: 0;
   }
   fieldset {
@@ -18,10 +18,25 @@ export const StyledContainer = styled.div`
         border: none;
         padding: 16px;
         width: 100%;
-        resize: none;
+        height: 55px;
         outline: none;
+        font-size: 14.5px;
+
+        &::placeholder {
+          font-size: 14.5px;
+        }
       }
       label {
+        button {
+          opacity: 0.4;
+          cursor: initial;
+          ${props =>
+            props.comment &&
+            css`
+              cursor: pointer;
+              opacity: 1;
+            `}
+        }
         span {
           display: inline-block;
           outline: none;
