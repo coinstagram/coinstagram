@@ -11,6 +11,7 @@ import ModalGlobalStyle from './components/common/ModalGlobalStyle';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import Join from './pages/Join';
+import Login from './pages/Login';
 import Edit from './pages/Edit';
 import Post from './pages/Post';
 import Upload from './pages/Upload';
@@ -57,6 +58,7 @@ function App() {
             <Route path="/explore" component={Explore} />
             <Route path="/upload" component={Upload} />
             <Route path="/join" component={Join} />
+            <Route path="/login" component={Login} />
             <Route path="/account/:userid/tagged" component={Profile} />
             <Route path="/account/:userid/saved" component={Profile} />
             <Route path="/account/edit" component={Edit} />

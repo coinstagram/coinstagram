@@ -1,7 +1,10 @@
-import React from 'react';
 import styled from 'styled-components';
 
-const StyledJoinWrapper = styled.div`
+export const StyledDiv = styled.div`
+  width: 350px;
+  margin: 0 auto;
+`;
+export const StyledJoinWrapper = styled.div`
   width: 100%;
   height: 542px;
   background: #ffffff;
@@ -10,7 +13,3 @@ const StyledJoinWrapper = styled.div`
   padding: 0 40px;
   box-sizing: border-box;
 `;
-
-export default function JoinWrapper() {
-  return <StyledJoinWrapper />;
-}
