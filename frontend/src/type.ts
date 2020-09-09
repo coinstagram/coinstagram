@@ -63,6 +63,12 @@ export interface AuthState {
   error: null | Error;
 }
 
+export interface SignupState {
+  loading: boolean;
+  token: null | string;
+  error: null | Error;
+}
+
 export interface UserInfoState {
   loading: boolean;
   error: null | Error;
