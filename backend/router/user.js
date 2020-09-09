@@ -136,11 +136,22 @@ router.get('/user', verifyToken, async (req, res) => {
  */
 router.get('/users/random', async (req, res) => {
   let sql = '';
-
+  const token = req.headers.authorization.split('Bearer ')[1];
+  const { user_id } = jwt.verify(
+    token,
+    // eslint-disable-next-line no-undef
+    process.env.JWT_SECRET,
+  );
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      sql = `select user_id, user_name, user_profile from users ORDER BY RAND() LIMIT 6;`;
+      sql = `select user_id from users where user_id in(select followee_id from users_relationship where follower_id = ?);`;
+      const [followee_id] = await connection.query(sql, user_id);
+      sql = `select user_id, user_name, user_profile from users where not user_id in(${[
+        ...followee_id.map(({ user_id }) => `"${user_id}"`),
+        `"${user_id}"`,
+      ]}) ORDER BY RAND() LIMIT 5;`;
+      console.log(sql);
       const [check] = await connection.query(sql);
       res.send(check);
     } catch (error) {
