@@ -1,13 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 
+const Policy = styled.small`
+  color: #828282;
+  padding: 20px 10px 10px;
+  display: block;
+  text-align: center;
+`;
+
 export default function JoinPolicy() {
-  const Policy = styled.small`
-    color: #828282;
-    padding: 20px 10px 10px;
-    display: block;
-    text-align: center;
-  `;
   return (
     <>
       <Policy>

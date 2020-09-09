@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import InputStyle from '../../styles/InputStyle';
+import InputCommon from './InputCommon';
 
 export default function InputPhone() {
   const [phoneEmail, setPhoneEmail] = useState('');
@@ -12,7 +12,7 @@ export default function InputPhone() {
 
   return (
     <>
-      <InputStyle
+      <InputCommon
         type="text"
         name="phoneEmail"
         value={phoneEmail}
@@ -22,7 +22,7 @@ export default function InputPhone() {
           phoneRegExp.test(phoneEmail) || emailRegExp.test(phoneEmail)
         }
         display="block"
-      ></InputStyle>
+      ></InputCommon>
     </>
   );
 }

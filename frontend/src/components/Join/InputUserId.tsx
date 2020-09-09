@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import InputStyle from '../../styles/InputStyle';
+import InputCommon from './InputCommon';
 
 export default function InputPhone() {
   const [userId, setUserId] = useState('');
@@ -10,7 +10,7 @@ export default function InputPhone() {
 
   return (
     <>
-      <InputStyle
+      <InputCommon
         type="text"
         name="userId"
         value={userId}
@@ -18,7 +18,7 @@ export default function InputPhone() {
         placeholder="사용자 이름"
         toggleIcon={idRegExp.test(userId)}
         display="block"
-      ></InputStyle>
+      ></InputCommon>
     </>
   );
 }

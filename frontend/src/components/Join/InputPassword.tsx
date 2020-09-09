@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import InputStyle from '../../styles/InputStyle';
+import InputCommon from './InputCommon';
 
-interface passwordProps {
+export interface passwordProps {
   style?: { marginBottom: string };
 }
 
 export default function InputPassword({ style }: passwordProps) {
+  // export default function InputPassword() {
   const [password, setPassword] = useState('');
   const [isPasswordShown, setPasswordShown] = useState(false);
 
@@ -18,7 +19,7 @@ export default function InputPassword({ style }: passwordProps) {
   };
   return (
     <>
-      <InputStyle
+      <InputCommon
         type={isPasswordShown ? 'text' : 'password'}
         name="password"
         value={password}
@@ -38,7 +39,7 @@ export default function InputPassword({ style }: passwordProps) {
             {isPasswordShown ? '숨기기' : '비밀번호 표시'}
           </button>
         </div>
-      </InputStyle>
+      </InputCommon>
     </>
   );
 }

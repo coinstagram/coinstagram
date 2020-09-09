@@ -6,9 +6,8 @@ import InputUserName from './InputUserName';
 import InputUserId from './InputUserId';
 import InputPassword from './InputPassword';
 
+const StyledForm = styled.form``;
 export default function JoinInputBox() {
-  const StyledForm = styled.form``;
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
