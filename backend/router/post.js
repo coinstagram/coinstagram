@@ -7,12 +7,10 @@ const pool = require('../config/database');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-
 /**
  * add post
  * /post
  * {
- *  post_title,
  *  user_id,
  *  post_context = "",
  *  post_anotheruser = "",
@@ -28,27 +26,22 @@ router.post('/post', verifyToken, async (req, res) => {
     process.env.JWT_SECRET,
   );
   const {
-    post_title,
     post_context = '',
     post_anotheruser = '',
     post_location = '',
   } = req.body;
   let sql = '';
-
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      sql = `insert into posts(post_title, user_id, post_context, post_anotheruser, post_location)
-    values(?, ?, ?, ?, ?)`;
-
+      sql = `insert into posts(user_id, post_context, post_anotheruser, post_location)
+    values( ?, ?, ?, ?)`;
       await connection.query(sql, [
-        post_title,
         user_id,
         post_context,
         post_anotheruser,
         post_location,
       ]);
-
       res.send({ success: true });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
@@ -60,7 +53,6 @@ router.post('/post', verifyToken, async (req, res) => {
     res.status(500).json('DB CONNECT ERROR');
   }
 });
-
 /**
  * posts data (20)
  * /posts
@@ -70,7 +62,7 @@ router.get('/posts', verifyToken, async (req, res) => {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      sql = 'select * from posts limit 20';
+      sql = 'select * from posts order by id desc limit 20 ;';
       const [check] = await connection.query(sql);
       res.send(check);
     } catch (error) {
@@ -83,7 +75,6 @@ router.get('/posts', verifyToken, async (req, res) => {
     res.status(500).json('DB CONNECT ERROR');
   }
 });
-
 /**
  * get post detail
  * /post/:post_id
@@ -91,16 +82,14 @@ router.get('/posts', verifyToken, async (req, res) => {
 router.get('/post/:post_id', verifyToken, async (req, res) => {
   const { post_id } = req.params;
   let sql = '';
-
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      sql = `SELECT distinct a.id, a.post_title, a.created_at, GROUP_CONCAT(c.name) as hashtag, d.user_name, (SELECT COUNT(*) FROM post_like where post_id = ?) "like" FROM 
+      sql = `SELECT distinct a.id as post_id, a.created_at, GROUP_CONCAT(c.name) as hashtag, d.user_name, (SELECT COUNT(*) FROM post_like where post_id = ?) "like" FROM 
       (SELECT * FROM posts where id = ?) a left outer join post_tags b on a.id = b.post_id
       inner join tag c on b.tag_id = c.id
       inner join users d on a.user_id = d.user_id;`;
       const [check] = await connection.query(sql, [post_id, post_id]);
-
       res.send(check[0]);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
@@ -112,7 +101,6 @@ router.get('/post/:post_id', verifyToken, async (req, res) => {
     res.status(500).json('DB CONNECT ERROR');
   }
 });
-
 /**
  * add comment
  * /comment
@@ -148,7 +136,6 @@ router.post('/comment', async (req, res) => {
     res.status(500).json('DB CONNECT ERROR');
   }
 });
-
 /**
  * add child comment
  * /like
@@ -181,7 +168,6 @@ router.post('/comment/child', async (req, res) => {
       if (isparent.length === 0) {
         throw Error('부모 댓글이 아닙니다.');
       }
-
       sql =
         'insert into comments(post_id, user_id, comment_text, parent) values(?, ?, ?, ?);';
       await connection.query(sql, [post_id, user_id, comment_text, parent]);
@@ -198,7 +184,6 @@ router.post('/comment/child', async (req, res) => {
     res.status(500).json('DB CONNECT ERROR');
   }
 });
-
 /**
  * get post comment
  * /comment/post/:id
@@ -206,13 +191,11 @@ router.post('/comment/child', async (req, res) => {
 router.get('/comment/post/:post_id', verifyToken, async (req, res) => {
   const { post_id } = req.params;
   let sql = '';
-
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
       sql = `SELECT * FROM comments where post_id = ?`;
       const [check] = await connection.query(sql, post_id);
-
       res.send(check);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
@@ -224,7 +207,6 @@ router.get('/comment/post/:post_id', verifyToken, async (req, res) => {
     res.status(500).json('DB CONNECT ERROR');
   }
 });
-
 /**
  * get post detail
  * /user/post/:user_id
@@ -235,9 +217,8 @@ router.get('/user/post/:user_id', verifyToken, async (req, res) => {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      sql = `select * from posts where user_id = ?`;
+      sql = `select * from posts where user_id = ? order by id desc`;
       const [check] = await connection.query(sql, user_id);
-
       res.send(check);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
@@ -249,7 +230,6 @@ router.get('/user/post/:user_id', verifyToken, async (req, res) => {
     res.status(500).json('DB CONNECT ERROR');
   }
 });
-
 /**
  * login user friend post
  * /user/relationship/post
@@ -268,16 +248,19 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
     try {
       sql = `select user_id from users where user_id in(select followee_id from users_relationship where follower_id = ?);`;
       const [followee_id] = await connection.query(sql, user.user_id);
-      sql = `select * from posts where user_id = ?;`;
-
+      sql = `select * from posts where user_id = ? order by id desc;`;
       let sqls = '';
       let params = [];
       followee_id.map(({ user_id }) => {
         params = [user_id];
         sqls += mysql.format(sql, params);
       });
-      const [[test]] = await connection.query(sqls);
-      res.json({ data: test });
+      console.log(sqls);
+      const [test] = await connection.query(sqls);
+      const list = [];
+      test.forEach((item) => list.push(...item));
+      list.sort((a, b) => (a['id'] < b['id'] ? 1 : -1));
+      res.json(list);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
@@ -288,7 +271,6 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
     res.status(500).json('DB CONNECT ERROR');
   }
 });
-
 /**
  * add image
  * /images
@@ -314,7 +296,6 @@ const upload = multer({
   // 단 이미지나 동영상은 백엔드를 거치지 않고
   // 프론트에서 바로 클라우드로 보내는게 좋다.
 });
-
 router.post('/images', verifyToken, upload.array('image'), async (req, res) => {
   const file = req.files.map(({ path }) => {
     const change = path.split(' ');
@@ -327,5 +308,4 @@ router.post('/images', verifyToken, upload.array('image'), async (req, res) => {
   console.log(req.file);
   res.json(req.files.map((v) => v.filename));
 });
-
 module.exports = router;
