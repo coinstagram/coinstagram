@@ -1,5 +1,5 @@
 import React from 'react';
-import { MainLogo, Header, StyledH2, OrBorder } from './JoinHeader.style';
+import { MainLogo, Header, StyledH2, OrBorder } from './JoinHeaderStyle';
 
 export default function JoinHeader() {
   return (

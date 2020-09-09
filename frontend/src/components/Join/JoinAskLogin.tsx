@@ -1,5 +1,5 @@
 import React from 'react';
-import { ContentProps, StyledAskLogin } from './JoinAskLogin.style';
+import { ContentProps, StyledAskLogin } from './JoinAskLoginStyle';
 
 export default function JoinAskLogin({ askContent, content }: ContentProps) {
   return (

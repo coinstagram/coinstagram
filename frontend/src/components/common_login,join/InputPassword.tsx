@@ -23,7 +23,7 @@ export default function InputPassword({ style }: passwordProps) {
         type={isPasswordShown ? 'text' : 'password'}
         name="password"
         value={password}
-        onChange={inputPassword}
+        onInput={inputPassword}
         placeholder="비밀번호"
         toggleIcon={password.length >= 6}
         display="flex"

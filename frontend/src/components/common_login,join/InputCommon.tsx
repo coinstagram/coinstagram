@@ -1,22 +1,21 @@
 import React from 'react';
-import { InputProps, StyledDiv, IconWrapper } from './InputCommon.style';
+import { InputProps, StyledDiv, IconWrapper } from './InputCommonStyle';
 import { BiCheckCircle } from 'react-icons/bi';
 import { RiCloseCircleLine } from 'react-icons/ri';
-import { passwordProps } from './InputPassword';
 
 export default function InputStyle({
   type,
   name,
   value,
-  onChange,
+  onInput,
   placeholder,
   toggleIcon,
   display,
   children,
   style,
 }: InputProps) {
-  function test(e: React.ChangeEvent<HTMLInputElement>) {
-    onChange(e.target.value);
+  function handleInput(e: React.ChangeEvent<HTMLInputElement>) {
+    onInput(e.target.value);
   }
 
   return (
@@ -26,8 +25,7 @@ export default function InputStyle({
           type={type}
           name={name}
           value={value}
-          onChange={test}
-          // onChange={(e)=>onChange(e.target.value)}
+          onChange={handleInput}
           placeholder={placeholder}
           required
         />

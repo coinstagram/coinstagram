@@ -6,12 +6,11 @@ export interface InputProps extends passwordProps {
   type: string;
   name: string;
   value: string;
-  onChange: (text: string) => void;
+  onInput: (text: string) => void;
   placeholder: string;
   toggleIcon: boolean;
   display: string;
   children?: React.ReactNode;
-  // style?: { marginBottom: string };
 }
 export const StyledDiv = styled.div`
   width: 268px;

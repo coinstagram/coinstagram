@@ -5,33 +5,16 @@ import JoinAppDownload from '../components/Join/JoinAppDownload';
 import JoinAskLogin from '../components/Join/JoinAskLogin';
 import LoginPhoneImage from '../components/login/LoginPhoneImage';
 import JoinLoginButton from '../components/Join/JoinLoginButton';
-import { MainLogo } from '../components/Join/JoinHeader.style';
-import InputUserId from '../components/Join/InputUserId';
-import InputPassword from '../components/Join/InputPassword';
-import { StyledDiv, LoginWrapper, StyledLogin } from './Login.style';
+import { MainLogo } from '../components/Join/JoinHeaderStyle';
+import InputUserId from '../components/common_login,join/InputUserId';
+import InputPassword from '../components/common_login,join/InputPassword';
+import {
+  StyledDiv,
+  LoginWrapper,
+  StyledLogin,
+} from '../components/login/LoginStyle';
 
-// const StyledDiv = styled.div`
-//   width: 935px;
-//   height: 618px;
-//   margin: 50px auto;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-// `;
-// const LoginWrapper = styled.div`
-//   width: 350px;
-//   height: 606px;
-// `;
-// const StyledLogin = styled.div`
-//   height: 350px;
-//   background: #ffffff;
-//   border: 1px solid #dbdbdb;
-//   margin: 50px 0 10px 0;
-//   padding: 0 40px;
-//   box-sizing: border-box;
-// `;
-
-export default function Login() {
+function Login() {
   return (
     <StyledDiv>
       <LoginPhoneImage />
@@ -48,3 +31,4 @@ export default function Login() {
     </StyledDiv>
   );
 }
+export default React.memo(Login);

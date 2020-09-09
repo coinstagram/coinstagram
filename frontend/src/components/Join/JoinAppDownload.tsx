@@ -4,7 +4,7 @@ import {
   googleStoreUrl,
   AppDownload,
   AppDownloadWrapper,
-} from './JoinAppDownload.style';
+} from './JoinAppDownloadStyle';
 import appStoreDownload from '../../../src/resource/image/appStoreDownload.png';
 import googleStoreDownload from '../../../src/resource/image/googleStoreDownload.png';
 

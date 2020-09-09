@@ -3,8 +3,8 @@ import InputCommon from './InputCommon';
 
 export default function InputPhone() {
   const [userName, setUserName] = useState('');
-  const inputUserName = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setUserName(e.target.value);
+  const inputUserName = (text: string): void => {
+    setUserName(text);
   };
 
   return (
@@ -13,7 +13,7 @@ export default function InputPhone() {
         type="text"
         name="userName"
         value={userName}
-        onChange={() => inputUserName}
+        onInput={inputUserName}
         placeholder="성명"
         toggleIcon={userName.length >= 6}
         display="block"

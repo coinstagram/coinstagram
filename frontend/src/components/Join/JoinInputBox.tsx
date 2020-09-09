@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import InputPhone from './InputPhone';
-import InputUserName from './InputUserName';
-import InputUserId from './InputUserId';
-import InputPassword from './InputPassword';
+import InputPhone from '../common_login,join/InputPhone';
+import InputUserName from '../common_login,join/InputUserName';
+import InputUserId from '../common_login,join/InputUserId';
+import InputPassword from '../common_login,join/InputPassword';
 
 const StyledForm = styled.form``;
 export default function JoinInputBox() {

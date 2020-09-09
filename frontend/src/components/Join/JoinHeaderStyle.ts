@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { StyledH1 } from '../header/Logo';
+import { StyledH1 } from '../header/LogoStyle';
 
 export const MainLogo = styled(StyledH1)`
   font-size: 50px;
