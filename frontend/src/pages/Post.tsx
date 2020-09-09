@@ -1,6 +1,6 @@
 import React from 'react';
-import Header from '../containers/Header';
-import StyledMain from '../styles/StyledMain';
+import Header from '../components/header/Header';
+import StyledMain from '../components/common/StyledMain';
 
 function Post() {
   return (
@@ -11,4 +11,4 @@ function Post() {
   );
 }
 
-export default Post;
+export default React.memo(Post);

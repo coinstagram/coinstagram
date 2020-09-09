@@ -1,8 +1,11 @@
 import React, { useState, useCallback, createContext } from 'react';
 import { history } from './redux/create';
+import { Switch, Route } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ConnectedRouter } from 'connected-react-router';
-import { Switch, Route } from 'react-router-dom';
+
+// styles
+import ModalGlobalStyle from './components/common/ModalGlobalStyle';
 
 // pages
 import Home from './pages/Home';
@@ -15,29 +18,39 @@ import Upload from './pages/Upload';
 import Explore from './pages/Explore';
 import FatalError from './pages/FatalError';
 import NotFound from './pages/NotFound';
-import ModalGlobalStyle from './styles/ModalGlobalStyle';
 
 interface ModalType {
-  modal: boolean;
-  popModal: () => void;
+  popPostModal: () => void;
+  popFollowModal: () => void;
+  postModal: boolean;
+  followModal: boolean;
 }
 
 export const ModalContext = createContext<ModalType>({
-  modal: false,
-  popModal() {},
+  popPostModal() {},
+  popFollowModal() {},
+  postModal: false,
+  followModal: false,
 });
 
 function App() {
-  const [modal, setModal] = useState<boolean>(false);
+  const [postModal, setPostModal] = useState<boolean>(false);
+  const [followModal, setFollowModal] = useState<boolean>(false);
 
-  const popModal = useCallback(() => {
-    setModal(!modal);
-  }, [modal]);
+  const popFollowModal = useCallback(() => {
+    setFollowModal(!followModal);
+  }, [followModal]);
+
+  const popPostModal = useCallback(() => {
+    setPostModal(!postModal);
+  }, [postModal]);
 
   return (
     <ErrorBoundary FallbackComponent={FatalError}>
-      <ModalGlobalStyle modal={modal} />
-      <ModalContext.Provider value={{ modal, popModal }}>
+      <ModalGlobalStyle postModal={postModal} followModal={followModal} />
+      <ModalContext.Provider
+        value={{ popPostModal, popFollowModal, postModal, followModal }}
+      >
         <ConnectedRouter history={history}>
           <Switch>
             <Route path="/explore/tags/:tagid" component={Explore} />

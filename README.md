@@ -154,6 +154,9 @@
       <div>connected-react-router v6.8</div>
       <div>redux v4.0.5</div>
       <div>redux-saga v1.1.3</div>
+      <div>react-slick</div>
+      <div>react-spinners</div>
+      <div>slick-carousel</div>
       <div>styled-components v5.1.1</div>
       <div>@types/react v16.9.48</div>
       <div>@types/react-dom v16.9.8</div>

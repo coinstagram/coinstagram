@@ -10,7 +10,7 @@ const StyledDiv = styled.div`
 `;
 
 function UploadHeader() {
-  return <StyledDiv>새 게시물 작성</StyledDiv>;
+  return <StyledDiv>새 게시물 작성1</StyledDiv>;
 }
 
 export default UploadHeader;
