@@ -196,6 +196,7 @@ router.get('/comment/post/:post_id', verifyToken, async (req, res) => {
     try {
       sql = `SELECT * FROM comments where post_id = ?`;
       const [check] = await connection.query(sql, post_id);
+      check.sort((a, b) => (a['id'] < b['id'] ? 1 : -1));
       res.send(check);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
@@ -251,6 +252,7 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
       sql = `select * from posts where user_id = ? order by id desc;`;
       let sqls = '';
       let params = [];
+      if (followee_id.length === 0) return res.json(followee_id);
       followee_id.map(({ user_id }) => {
         params = [user_id];
         sqls += mysql.format(sql, params);
@@ -259,7 +261,6 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
       const [test] = await connection.query(sqls);
       const list = [];
       test.forEach((item) => list.push(...item));
-      list.sort((a, b) => (a['id'] < b['id'] ? 1 : -1));
       res.json(list);
     } catch (error) {
       await connection.rollback(); // ROLLBACK

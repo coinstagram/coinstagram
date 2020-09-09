@@ -1,19 +1,22 @@
 import axios from 'axios';
-import { UserResponseState, AnotherUserState, UserState } from '../../type';
+import { UserResponseState, AnotherUserState } from '../../type';
 
 const getUrl = '/user';
 const followUrl = '/user/relationship';
 
 interface IUserService {
   getUserData: (token: string | null) => Promise<UserResponseState>;
-  getRandomUser: () => Promise<AnotherUserState[]>;
-  getAnotherUserData: (userId: string) => Promise<UserState>;
+  getRandomUser: (token: string | null) => Promise<AnotherUserState[]>;
+  getAnotherUserData: (
+    user_Id: string,
+    token: string | null,
+  ) => Promise<UserResponseState>;
   followUser: (userid: string, token: string | null) => void;
   CancelFollowUser: (userid: string, token: string | null) => void;
 }
 
 const UserService: IUserService = class {
-  static async getUserData(token: string | null): Promise<UserResponseState> {
+  static async getUserData(token: string | null) {
     const res = await axios.get<UserResponseState>(getUrl, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -23,14 +26,22 @@ const UserService: IUserService = class {
     return res.data;
   }
 
-  static async getRandomUser() {
-    const res = await axios.get<AnotherUserState[]>(`${getUrl}s/random`);
+  static async getAnotherUserData(user_id: string, token: string | null) {
+    const res = await axios.get<UserResponseState>(`${getUrl}/${user_id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return res.data;
   }
 
-  static async getAnotherUserData(userId: string) {
-    const res = await axios.get<UserState>(`${getUrl}/${userId}`);
+  static async getRandomUser(token: string | null) {
+    const res = await axios.get<AnotherUserState[]>(`${getUrl}s/random`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return res.data;
   }

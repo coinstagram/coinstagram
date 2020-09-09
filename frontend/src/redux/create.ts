@@ -33,6 +33,13 @@ function preloadedState(token: string | null): RootState {
       loading: false,
       error: null,
       user: null,
+      followers: [],
+      followees: [],
+    },
+    posts: {
+      loading: false,
+      error: null,
+      FeedPosts: [],
     },
   };
 }

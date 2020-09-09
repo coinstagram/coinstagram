@@ -4,11 +4,6 @@ export interface followState {
   users: AnotherUserState[];
 }
 
-export interface imageState {
-  path: string;
-  name: string;
-}
-
 export interface UserResponseState {
   user: UserState;
   follower: AnotherUserState[];
@@ -35,28 +30,47 @@ export interface UserState {
 
 export type stringArray = string[];
 
-export interface commentState {
-  comment_id: null | string;
-  comment_text: null | string;
-  createdAt: null | string;
-  likes: null | stringArray;
-  replied?: null | commentState;
+export interface imageState {
+  path: string;
+  name: string;
 }
 
-export interface PostState {
-  post_id: null | string;
+export interface EachCommentState {
+  id: null | string;
   user_id: null | string;
-  post_images: null | string;
-  post_title: null | string;
-  post_tags: stringArray;
-  post_anotherUsers: stringArray;
-  post_locations: stringArray;
+  post_id: null | string;
+  comment_text: null | string;
   created_at: null | string;
-  likes: null | stringArray;
-  comments: null | commentState;
+  // parent?: null | boolean;
+}
+
+export interface commentsState {
+  loading: boolean;
+  error: null | Error;
+  comments: EachCommentState[];
+  // likes: null | stringArray;
+}
+
+export interface EachPostState {
+  id: null | string;
+  user_id: null | string;
+  post_context: null | string;
+  // post_images: null | string;
+  // post_tags: stringArray;
+  post_anotheruser: null | string;
+  post_location: null | string;
+  created_at: null | string;
+  // comments:
+  // likes:
 }
 
 export interface AuthState {
+  loading: boolean;
+  token: null | string;
+  error: null | Error;
+}
+
+export interface SignupState {
   loading: boolean;
   token: null | string;
   error: null | Error;
@@ -71,22 +85,27 @@ export interface UserInfoState {
   randomUsers: AnotherUserState[];
 }
 
-export interface AnotehrUserInfoState {
+export interface AnotherUserInfoState {
   loading: boolean;
   error: null | Error;
   user: null | UserState;
+  followers: AnotherUserState[];
+  followees: AnotherUserState[];
 }
 
 export interface PostsState {
-  FeedPosts: PostState;
-  bookmarkPosts: PostState;
-  taggedPosts: PostState;
+  loading: boolean;
+  error: null | Error;
+  FeedPosts: EachPostState[];
+  // bookmarkPosts: EachPostState[];
+  // taggedPosts: EachPostState[];
 }
 
 interface RootState {
   auth: AuthState;
   userInfo: UserInfoState;
-  anotherUserInfo: AnotehrUserInfoState;
+  anotherUserInfo: AnotherUserInfoState;
+  posts: PostsState;
 }
 
 export default RootState;

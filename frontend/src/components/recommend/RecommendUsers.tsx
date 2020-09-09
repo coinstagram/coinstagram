@@ -1,17 +1,13 @@
 import React from 'react';
-import styled from 'styled-components';
 import useWindowWidth from '../../hooks/useWindowWidth';
 import { AnotherUserState, UserState } from '../../type';
+
+// styles
+import { StyledSection } from './RecommendUsersStyle';
 
 // components
 import RecommendUsersHeader from './RecommendUsersHeader';
 import RecommendUsersBody from './RecommendUsersBody';
-
-const StyledSection = styled.section`
-  box-sizing: border-box;
-  position: fixed;
-  width: 313px;
-`;
 
 interface RecommendUsersProps {
   loading: boolean;
