@@ -1,7 +1,5 @@
 import { createReducer, createAction, ActionType } from 'typesafe-actions';
 
-const prefix = 'coinstagram/upload';
-
 // 타입설정
 type postData = {
   user_id: String;
@@ -18,9 +16,9 @@ type uploadState = {
 };
 
 // 액션 타입
-const ADD_POST_FAILURE = `${prefix}/ADD_POST_FAILURE`;
-const ADD_POST_REQUEST = `${prefix}/ADD_POST_REQUEST`;
-const ADD_POST_SUCCESS = `${prefix}/ADD_POST_SUCCESS`;
+const ADD_POST_FAILURE = `coinstagram/upload/ADD_POST_FAILURE`;
+const ADD_POST_REQUEST = `coinstagram/upload/ADD_POST_REQUEST`;
+const ADD_POST_SUCCESS = `coinstagram/upload/ADD_POST_SUCCESS`;
 const ADD_POST = `coinstagram/upload/ADD_POST` as const;
 
 // 액션 생성 함수
@@ -46,7 +44,6 @@ const actions = {
   add_post,
 };
 type PostActions = ActionType<typeof actions>;
-type TestAction = ReturnType<typeof add_post>;
 
 // 초기설정
 const initialState: uploadState = {
@@ -62,19 +59,45 @@ const initialState: uploadState = {
   },
 };
 
-// 리듀서 만들기
-// const postReducer = createReducer<uploadState, PostActions>(initialState, {
-//   [ADD_POST]: (state, action) => ({
-//     ...initialState,
-//     ...action.payload,
-//   }),
-// });
+// 리듀서
+const postReducer = createReducer<uploadState, PostActions>(initialState, {
+  [ADD_POST]: (state, action) => ({
+    ...state,
+    data: {
+      ...action.payload,
+    },
+  }),
+  [ADD_POST_SUCCESS]: state => ({
+    ...state,
+    addPostLoading: false,
+    addPostDone: true,
+  }),
+  [ADD_POST_REQUEST]: state => ({
+    ...state,
+    addPostLoading: true,
+  }),
+  [ADD_POST_FAILURE]: (state, action) => ({
+    ...state,
+    addPostLoading: false,
+    addPostDone: false,
+    addPostError: action.payload,
+  }),
+});
 
-function testReducer(state = initialState, action: TestAction) {
-  switch (action.type) {
-    case ADD_POST:
-      action.payload;
-  }
-}
+// saga
+// saga action
+const ADD_POST_SAGA = `coinstagram/upload/ADD_POST_SAGA` as const;
+// saga action creator
+export const addPostSaga = (data: postData) => ({
+  type: ADD_POST_SAGA,
+  payload: {
+    ...data,
+  },
+});
+// saga action type
+type addPostSagaActions = ReturnType<typeof addPostSaga>;
+
+// saga function
+function* addPostSagafun(action: postData) {}
 
 export default postReducer;

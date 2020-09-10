@@ -38,16 +38,16 @@ export interface imageState {
 export interface EachCommentState {
   id: null | string;
   user_id: null | string;
-  post_id: null | string;
+  post_id: null | number;
   comment_text: null | string;
   created_at: null | string;
-  // parent?: null | boolean;
+  parent?: null | boolean;
 }
 
-export interface commentsState {
+export interface CommentsState {
   loading: boolean;
   error: null | Error;
-  comments: EachCommentState[];
+  postComments: EachCommentState[];
   // likes: null | stringArray;
 }
 
@@ -64,13 +64,13 @@ export interface EachPostState {
   // likes:
 }
 
-export interface AuthState {
+export interface SignupState {
   loading: boolean;
   token: null | string;
   error: null | Error;
 }
 
-export interface SignupState {
+export interface AuthState {
   loading: boolean;
   token: null | string;
   error: null | Error;
@@ -106,6 +106,7 @@ interface RootState {
   userInfo: UserInfoState;
   anotherUserInfo: AnotherUserInfoState;
   posts: PostsState;
+  comments: CommentsState;
 }
 
 export default RootState;

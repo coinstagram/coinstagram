@@ -48,6 +48,8 @@ router.post('/post', verifyToken, async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
@@ -70,6 +72,8 @@ router.get('/posts', verifyToken, async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
@@ -96,6 +100,8 @@ router.get('/post/:post_id', verifyToken, async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
@@ -131,6 +137,8 @@ router.post('/comment', async (req, res) => {
       await connection.rollback(); // ROLLBACK
       await connection.release();
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
@@ -179,6 +187,8 @@ router.post('/comment/child', async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
@@ -203,6 +213,8 @@ router.get('/comment/post/:post_id', verifyToken, async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
@@ -226,6 +238,8 @@ router.get('/user/post/:user_id', verifyToken, async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
@@ -259,14 +273,14 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
       });
       console.log(sqls);
       const [test] = await connection.query(sqls);
-      const list = [];
-      test.forEach((item) => list.push(...item));
-      res.json(list);
+      res.json(test);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');

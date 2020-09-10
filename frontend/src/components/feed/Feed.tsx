@@ -1,6 +1,4 @@
 import React, { useEffect } from 'react';
-
-// types
 import RootState, { EachPostState } from '../../type';
 
 // styles
@@ -19,6 +17,7 @@ interface FeedProps {
   feedPosts: EachPostState[];
   userProfile: null | string;
   getFeedPosts: (user_id: string) => void;
+  getCommentsPost: (post_id: number) => void;
 }
 
 function Feed({
@@ -27,6 +26,7 @@ function Feed({
   feedPosts,
   userProfile,
   getFeedPosts,
+  getCommentsPost,
 }: FeedProps) {
   const { user } = useSelector((state: RootState) => state.userInfo);
   const user_id = user && user.user_id;
@@ -38,7 +38,7 @@ function Feed({
 
   return (
     <>
-      {feedPosts.length === 0 && loading === false && (
+      {feedPosts.length === 0 && loading === false && error === null && (
         <div>팔로우 유저가 없습니다. 지금 바로 팔로우 해보세요!</div>
       )}
       {feedPosts.length === 0 && loading === true && (
@@ -63,6 +63,8 @@ function Feed({
               userId={post.user_id}
               postId={+post.id}
               context={post.post_context}
+              getCommentsPost={getCommentsPost}
+              postCreatedTime={post.created_at}
             />
           </StyledArticle>
         ))}
