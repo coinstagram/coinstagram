@@ -136,6 +136,7 @@ function HomeMain() {
           popPostModal={popPostModal}
           popFollowModal={popFollowModal}
           postId={postId}
+          userId={user_id}
         />
       )}
     </followContext.Provider>

@@ -41,6 +41,11 @@ function preloadedState(token: string | null): RootState {
       error: null,
       FeedPosts: [],
     },
+    comments: {
+      loading: false,
+      error: null,
+      postComments: [],
+    },
   };
 }
 

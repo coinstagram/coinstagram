@@ -39,6 +39,8 @@ router.post('/user/relationship', verifyToken, async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
@@ -85,6 +87,8 @@ router.delete('/user/relationship/:user', verifyToken, async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
@@ -124,6 +128,8 @@ router.get('/user', verifyToken, async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
@@ -159,6 +165,8 @@ router.get('/users/random', async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
@@ -200,6 +208,8 @@ router.get('/user/:user_id', verifyToken, async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');

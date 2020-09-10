@@ -85,9 +85,9 @@ async function upload() {
   const res = await axios.post(
     '/post',
     {
-      post_context: 'post1의 내용',
-      post_anotheruser: 'user1',
-      post_location: 'location1',
+      post_context: '이야이야 게시물이다 재밌다.',
+      post_anotheruser: '태그 유저어어',
+      post_location: '건대입구',
     },
     {
       headers: {

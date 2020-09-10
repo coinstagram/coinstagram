@@ -72,6 +72,9 @@ router.post('/login', async (req, res) => {
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
+  } finally {
+    const connection = await pool.getConnection(async (conn) => conn);
+    await connection.release();
   }
 });
 
