@@ -1,68 +1,103 @@
-import axios from 'axios';
-import {
-  createAction,
-  ActionType,
-  // createStandardAction,
-} from 'typesafe-actions';
-// import { type } from 'os';
-// import { enableES5, produce } from 'immer';
+import { createReducer, createAction, ActionType } from 'typesafe-actions';
 
-// const pro = (...args: any) => {
-//   enableES5();
-//   return produce(...args);
-// };
-
-const prefix = 'coinstagram/upload';
-
-const UPLOAD_IMAGES_FAILURE = `${prefix}/UPLOAD_IMAGES_FAILURE`;
-const UPLOAD_IMAGES_REQUEST = `${prefix}/UPLOAD_IMAGES_REQUEST`;
-const UPLOAD_IMAGES_SUCCESS = `${prefix}/UPLOAD_IMAGES_SUCCESS`;
-
-const ADD_POST_FAILURE = `${prefix}/UPLOAD_IMAGES_FAILURE`;
-const ADD_POST_REQUEST = `${prefix}/UPLOAD_IMAGES_REQUEST`;
-const ADD_POST_SUCCESS = `${prefix}/UPLOAD_IMAGES_SUCCESS`;
-
-export const upload_image_failure = createAction(UPLOAD_IMAGES_FAILURE)();
-export const upload_image_request = createAction(UPLOAD_IMAGES_REQUEST)();
-export const upload_image_success = createAction(UPLOAD_IMAGES_SUCCESS)();
-
-function uploadImagesAPI(data: Array<File>) {
-  return axios.post('/post/images', data);
-}
-type ImageUploadState = {
-  uploadImagesLoading: Boolean;
-  uploadImagesDone: Boolean;
-  uploadImagesError: Error;
+// 타입설정
+type postData = {
+  user_id: String;
+  post_context: String;
+  post_anotheruser: String;
+  post_location: String;
+  tag: Array<String>;
+};
+type uploadState = {
+  addPostLoading: boolean;
+  addPostDone: boolean;
+  addPostError: Error;
+  data: postData;
 };
 
-const initialState: ImageUploadState = {
-  uploadImagesLoading: false,
-  uploadImagesDone: false,
-  uploadImagesError: null,
-};
+// 액션 타입
+const ADD_POST_FAILURE = `coinstagram/upload/ADD_POST_FAILURE`;
+const ADD_POST_REQUEST = `coinstagram/upload/ADD_POST_REQUEST`;
+const ADD_POST_SUCCESS = `coinstagram/upload/ADD_POST_SUCCESS`;
+const ADD_POST = `coinstagram/upload/ADD_POST` as const;
 
+// 액션 생성 함수
+export const add_post_failure = createAction(ADD_POST_FAILURE)<Error>();
+export const add_post_request = createAction(ADD_POST_REQUEST)();
+export const add_post_success = createAction(ADD_POST_SUCCESS)();
+export const add_post = (data: postData) => ({
+  type: ADD_POST,
+  payload: {
+    user_id: data.user_id,
+    post_context: data.post_context,
+    post_anotheruser: data.post_anotheruser,
+    post_location: data.post_location,
+    tag: data.tag,
+  },
+});
+
+// 액션의 객체 타입 만들기
 const actions = {
-  upload_image_failure,
-  upload_image_request,
-  upload_image_success,
+  add_post_failure,
+  add_post_request,
+  add_post_success,
+  add_post,
+};
+type PostActions = ActionType<typeof actions>;
+
+// 초기설정
+const initialState: uploadState = {
+  addPostLoading: false,
+  addPostDone: false,
+  addPostError: null,
+  data: {
+    user_id: '',
+    post_context: '',
+    post_anotheruser: '',
+    post_location: '',
+    tag: [],
+  },
 };
 
-type UploadAction = ActionType<typeof actions>;
+// 리듀서
+const postReducer = createReducer<uploadState, PostActions>(initialState, {
+  [ADD_POST]: (state, action) => ({
+    ...state,
+    data: {
+      ...action.payload,
+    },
+  }),
+  [ADD_POST_SUCCESS]: state => ({
+    ...state,
+    addPostLoading: false,
+    addPostDone: true,
+  }),
+  [ADD_POST_REQUEST]: state => ({
+    ...state,
+    addPostLoading: true,
+  }),
+  [ADD_POST_FAILURE]: (state, action) => ({
+    ...state,
+    addPostLoading: false,
+    addPostDone: false,
+    addPostError: action.payload,
+  }),
+});
 
-// function reducer(
-// state: ImageUploadState = initialState,
-// action: UploadAction,
-// ): ImageUploadState {
-// switch (action.type) {
-//   case UPLOAD_IMAGES_FAILURE:
-//     // return {uploadImagesLoading: };
-//   case UPLOAD_IMAGES_REQUEST:
-//     return {};
-//   case UPLOAD_IMAGES_SUCCESS:
-//     return {};
-//   default:
-//     return initialState;
-// }
-// }
+// saga
+// saga action
+const ADD_POST_SAGA = `coinstagram/upload/ADD_POST_SAGA` as const;
+// saga action creator
+export const addPostSaga = (data: postData) => ({
+  type: ADD_POST_SAGA,
+  payload: {
+    ...data,
+  },
+});
+// saga action type
+type addPostSagaActions = ReturnType<typeof addPostSaga>;
 
-// export default reducer;
+// saga function
+function* addPostSagafun(action: postData) {}
+
+export default postReducer;

@@ -6,6 +6,7 @@ import posts from './post';
 import comments from './comment';
 import { connectRouter } from 'connected-react-router';
 import { History } from 'history';
+import postReducer from './upload';
 
 const rootReducer = (history: History) =>
   combineReducers({
@@ -13,6 +14,7 @@ const rootReducer = (history: History) =>
     userInfo,
     anotherUserInfo,
     posts,
+    postReducer,
     comments,
     router: connectRouter(history),
   });
