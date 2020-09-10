@@ -8,7 +8,7 @@ interface ICommentService {
     token: string | null,
     post_id: number,
     comment_text: string,
-  ) => void;
+  ) => Promise<EachCommentState>;
   getComment: (
     token: string | null,
     post_id: number,
@@ -21,7 +21,7 @@ const CommentService: ICommentService = class {
     post_id: number,
     comment_text: string,
   ) {
-    await axios.post(
+    const res = await axios.post<EachCommentState>(
       baseUrl,
       {
         post_id,
@@ -33,6 +33,8 @@ const CommentService: ICommentService = class {
         },
       },
     );
+
+    return res.data;
   }
 
   static async getComment(token: string | null, post_id: number) {

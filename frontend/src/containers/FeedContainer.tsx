@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import RootState from '../type';
 import { useSelector, useDispatch } from 'react-redux';
 import { getFeedPostsSaga } from '../redux/modules/post';
+import { getPostComments } from '../redux/modules/comment';
 
 // components
 import Feed from '../components/feed/Feed';
@@ -19,6 +20,13 @@ function FeedContainer() {
     [dispatch],
   );
 
+  const getCommentsPost = useCallback(
+    (post_id: number) => {
+      dispatch(getPostComments(post_id));
+    },
+    [dispatch],
+  );
+
   return (
     <Feed
       loading={loading}
@@ -26,6 +34,7 @@ function FeedContainer() {
       feedPosts={FeedPosts}
       userProfile={user_profile}
       getFeedPosts={getFeedPosts}
+      getCommentsPost={getCommentsPost}
     />
   );
 }

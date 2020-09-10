@@ -1,12 +1,14 @@
-import { select, put, call, takeLatest } from 'redux-saga/effects';
-import RootState, { EachCommentState, commentsState } from '../../type';
+import { select, put, call, takeLeading, takeEvery } from 'redux-saga/effects';
+import RootState, { EachCommentState, CommentsState } from '../../type';
 import CommentService from '../services/commentService';
 
 // action type
 const START_GET_COMMENTS = 'coinstagram/comment/START_GET_COMMENTS' as const;
 const SUCCESS_GET_COMMENTS = 'coinstagram/comment/SUCCESS_GET_COMMENTS' as const;
-const SUCCESS_ADD_COMMENT = 'coinstagram/comment/SUCCESS_ADD_COMMENT' as const;
 const FAIL_GET_COMMENTS = 'coinstagram/comment/FAIL_GET_COMMENTS' as const;
+const START_ADD_COMMENT = 'coinstagram/comment/START_ADD_COMMENT' as const;
+const SUCCESS_ADD_COMMENT = 'coinstagram/comment/SUCCESS_ADD_COMMENT' as const;
+const FAIL_ADD_COMMENT = 'coinstagram/comment/FAIL_ADD_COMMENT' as const;
 
 // action creator
 const startGetComments = () => ({
@@ -20,35 +22,49 @@ const successGetComments = (postComments: EachCommentState[]) => ({
   },
 });
 
-const successAddComment = () => ({
-  type: SUCCESS_ADD_COMMENT,
-});
-
 const failGetComments = (error: Error) => ({
   type: FAIL_GET_COMMENTS,
   payload: error,
 });
 
-type commentActions =
+const startAddComment = () => ({
+  type: START_ADD_COMMENT,
+});
+
+const successAddComment = (addComment: EachCommentState) => ({
+  type: SUCCESS_ADD_COMMENT,
+  payload: {
+    addComment,
+  },
+});
+
+const failAddComment = (error: Error) => ({
+  type: FAIL_ADD_COMMENT,
+  payload: error,
+});
+
+type CommentActions =
   | ReturnType<typeof startGetComments>
   | ReturnType<typeof successGetComments>
+  | ReturnType<typeof failGetComments>
+  | ReturnType<typeof startAddComment>
   | ReturnType<typeof successAddComment>
-  | ReturnType<typeof failGetComments>;
+  | ReturnType<typeof failAddComment>;
 
 // saga action
 const GET_POST_COMMENTS = 'GET_POST_COMMENTS' as const;
-const ADD_POST_COMMENTS = 'ADD_POST_COMMENTS' as const;
+const ADD_POST_COMMENT = 'ADD_POST_COMMENT' as const;
 
 // saga action creator
-const getPostComments = (post_id: number) => ({
+export const getPostComments = (post_id: number) => ({
   type: GET_POST_COMMENTS,
   payload: {
     post_id,
   },
 });
 
-const addPostComment = (comment_text: string, post_id: number) => ({
-  type: ADD_POST_COMMENTS,
+export const addPostComment = (post_id: number, comment_text: string) => ({
+  type: ADD_POST_COMMENT,
   payload: {
     post_id,
     comment_text,
@@ -56,8 +72,8 @@ const addPostComment = (comment_text: string, post_id: number) => ({
 });
 
 type commentSagaActions =
-  | ReturnType<typeof getPostComments>
-  | ReturnType<typeof addPostComment>;
+  // | ReturnType<typeof getPostComments>
+  ReturnType<typeof addPostComment>;
 
 // saga function
 function* getComments(action: commentSagaActions) {
@@ -77,29 +93,75 @@ function* getComments(action: commentSagaActions) {
 
 function* addComment(action: commentSagaActions) {
   try {
-  } catch (error) {}
+    const { token } = yield select((state: RootState) => state.auth);
+    yield put(startGetComments());
+    const addComment = yield call(
+      CommentService.addComment,
+      token,
+      action.payload.post_id,
+      action.payload.comment_text,
+    );
+    yield put(successAddComment(addComment));
+  } catch (error) {
+    yield put(failAddComment(error));
+  }
 }
 
 // saga function register
-function* commentSaga() {
-  yield takeLatest(GET_POST_COMMENTS, getComments);
-  yield takeLatest(ADD_POST_COMMENTS, addComment);
+export function* commentSaga() {
+  yield takeEvery(GET_POST_COMMENTS, getComments);
+  yield takeLeading(ADD_POST_COMMENT, addComment);
 }
 
 // initial state
-const initialState: commentsState = {
+const initialState: CommentsState = {
   loading: false,
   error: null,
-  comments: [],
-  // likes: [],
+  postComments: [],
 };
 
 // reducer
 function commentReducer(
-  state: commentsState = initialState,
-  action: commentActions,
+  state: CommentsState = initialState,
+  action: CommentActions,
 ) {
   switch (action.type) {
+    case START_GET_COMMENTS:
+      return {
+        loading: true,
+        error: null,
+        postComments: [],
+      };
+    case SUCCESS_GET_COMMENTS:
+      return {
+        loading: false,
+        error: null,
+        postComments: [...state.postComments, ...action.paylaod.postComments],
+      };
+    case FAIL_GET_COMMENTS:
+      return {
+        loading: false,
+        error: action.payload,
+        postComments: [],
+      };
+    case START_ADD_COMMENT:
+      return {
+        loading: true,
+        error: null,
+        postComments: [],
+      };
+    case SUCCESS_ADD_COMMENT:
+      return {
+        loading: false,
+        error: null,
+        postComments: [...state.postComments, action.payload.addComment],
+      };
+    case FAIL_ADD_COMMENT:
+      return {
+        loading: false,
+        error: action.payload,
+        postComments: state.postComments,
+      };
     default:
       return state;
   }

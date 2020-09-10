@@ -24,14 +24,12 @@ const PostService: IPostService = class {
   }
 
   static async getFollowersPosts(token: string | null) {
-    console.log(token);
     const res = await axios.get<EachPostState[]>('/user/relationship/post', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
-    console.log(res);
     return res.data;
   }
 

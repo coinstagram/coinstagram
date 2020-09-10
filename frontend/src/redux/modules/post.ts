@@ -100,7 +100,6 @@ function* getFeedPosts(action: postsActions) {
       PostService.getFollowersPosts,
       token,
     );
-    console.log(action.payload.user_id);
     const myPosts: EachPostState[] = yield call(
       PostService.getUserPosts,
       token,
