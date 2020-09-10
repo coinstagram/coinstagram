@@ -43,13 +43,6 @@ const failAddComment = (error: Error) => ({
   payload: error,
 });
 
-<<<<<<< HEAD
-type commentActions =
-  | ReturnType<typeof startGetComments>
-  | ReturnType<typeof successGetComments>
-  | ReturnType<typeof successAddComment>
-  | ReturnType<typeof failGetComments>;
-=======
 type CommentActions =
   | ReturnType<typeof startGetComments>
   | ReturnType<typeof successGetComments>
@@ -57,7 +50,6 @@ type CommentActions =
   | ReturnType<typeof startAddComment>
   | ReturnType<typeof successAddComment>
   | ReturnType<typeof failAddComment>;
->>>>>>> 780690fe06ecf26898a7f1a20edfbe6f1f35c24e
 
 // saga action
 const GET_POST_COMMENTS = 'GET_POST_COMMENTS' as const;

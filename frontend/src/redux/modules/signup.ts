@@ -1,3 +1,5 @@
+import { call, put } from 'redux-saga/effects';
+
 // 로그인 관련 reducer file
 import { SignupState } from '../../type';
 import { AxiosError } from 'axios';
@@ -39,8 +41,13 @@ type SagaActions = ReturnType<typeof signupRequestSaga>;
 
 // saga function
 function* signupSaga(action: SagaActions) {
+  yield put({ type: SIGNUP_START });
   try {
-  } catch (e) {}
+    const payload = yield call(signupStart);
+    yield put({ type: SIGNUP_SUCCESS, payload });
+  } catch (e) {
+    yield put({ type: SIGNUP_FAIL, payload: e, error: true });
+  }
 }
 
 // saga function register

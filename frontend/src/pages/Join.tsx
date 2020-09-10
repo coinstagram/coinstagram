@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Link } from 'react-router-dom';
-import JoinInputBox from '../components/Join/JoinInputBox';
+import JoinContainer from '../containers/JoinContainer';
 import JoinHeader from '../components/Join/JoinHeader';
 import JoinAppDownload from '../components/Join/JoinAppDownload';
 import JoinAskLogin from '../components/Join/JoinAskLogin';
@@ -14,7 +14,7 @@ function Join() {
     <StyledDiv>
       <StyledJoinWrapper>
         <JoinHeader />
-        <JoinInputBox />
+        <JoinContainer />
         <JoinLoginButton content="가입" />
         <JoinPolicy />
       </StyledJoinWrapper>
