@@ -13,6 +13,7 @@ interface FeedCommentProps {
   context: null | string;
   postId: number;
   getCommentsPost: (post_id: number) => void;
+  addCommentPost: (post_id: number, comment_text: string) => void;
   postCreatedTime: string;
 }
 
@@ -21,6 +22,7 @@ function FeedComment({
   context,
   postId,
   getCommentsPost,
+  addCommentPost,
   postCreatedTime,
 }: FeedCommentProps) {
   return (
@@ -37,7 +39,11 @@ function FeedComment({
           {computePassedTime(postCreatedTime)}
         </StyledPassedTimeDiv>
       </StyledContainer>
-      <FeedAddComment userId={userId} postId={postId} />
+      <FeedAddComment
+        userId={userId}
+        postId={postId}
+        addCommentPost={addCommentPost}
+      />
     </>
   );
 

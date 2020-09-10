@@ -18,7 +18,11 @@ interface State {
   favorite: boolean;
 }
 
-function FeedIcons() {
+interface FeedIconsProps {
+  postId: number;
+}
+
+function FeedIcons({ postId }: FeedIconsProps) {
   const [state, setState] = useState<State>({
     like: false,
     favorite: false,
@@ -33,7 +37,7 @@ function FeedIcons() {
               {state.like ? <BsHeartFill /> : <BsHeart />}
             </span>
           </button>
-          <Link to="/post/:postid">
+          <Link to={`/post/${postId}`}>
             <span tabIndex={-1}>
               <BsChat />
             </span>
