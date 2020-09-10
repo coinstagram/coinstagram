@@ -18,6 +18,7 @@ interface FeedProps {
   userProfile: null | string;
   getFeedPosts: (user_id: string) => void;
   getCommentsPost: (post_id: number) => void;
+  addCommentPost: (post_id: number, comment_text: string) => void;
 }
 
 function Feed({
@@ -27,6 +28,7 @@ function Feed({
   userProfile,
   getFeedPosts,
   getCommentsPost,
+  addCommentPost,
 }: FeedProps) {
   const { user } = useSelector((state: RootState) => state.userInfo);
   const user_id = user && user.user_id;
@@ -58,12 +60,13 @@ function Feed({
               userProfile={userProfile}
             />
             <FeedBody />
-            <FeedIcons />
+            <FeedIcons postId={+post.id} />
             <FeedComment
               userId={post.user_id}
               postId={+post.id}
               context={post.post_context}
               getCommentsPost={getCommentsPost}
+              addCommentPost={addCommentPost}
               postCreatedTime={post.created_at}
             />
           </StyledArticle>

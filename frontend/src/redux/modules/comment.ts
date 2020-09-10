@@ -94,7 +94,7 @@ function* getComments(action: commentSagaActions) {
 function* addComment(action: commentSagaActions) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
-    yield put(startGetComments());
+    yield put(startAddComment());
     const addComment = yield call(
       CommentService.addComment,
       token,
@@ -148,7 +148,7 @@ function commentReducer(
       return {
         loading: true,
         error: null,
-        postComments: [],
+        postComments: state.postComments,
       };
     case SUCCESS_ADD_COMMENT:
       return {
