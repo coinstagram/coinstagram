@@ -43,6 +43,8 @@ router.post('/signin/email', async (req, res) => {
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
+  } finally {
+    await connection.release();
   }
 });
 

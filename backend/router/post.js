@@ -15,7 +15,6 @@ const fs = require('fs');
  *  post_context = "",
  *  post_anotheruser = "",
  *  post_location = "",
- *  tag = "",
  * }
  */
 router.post('/post', verifyToken, async (req, res) => {
@@ -89,10 +88,10 @@ router.get('/post/:post_id', verifyToken, async (req, res) => {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      sql = `SELECT distinct a.id as post_id, a.created_at, GROUP_CONCAT(c.name) as hashtag, d.user_name, (SELECT COUNT(*) FROM post_like where post_id = ?) "like" FROM 
+      sql = `SELECT distinct a.id as post_id, a.user_id, a.post_context, a.post_anotheruser,a.created_at, a.post_location, GROUP_CONCAT(c.name) as hashtag, d.user_name, (SELECT COUNT(*) FROM post_like where post_id = ?) "like" FROM 
       (SELECT * FROM posts where id = ?) a left outer join post_tags b on a.id = b.post_id
-      inner join tag c on b.tag_id = c.id
-      inner join users d on a.user_id = d.user_id;`;
+      left outer join tag c on b.tag_id = c.id
+      left outer join users d on a.user_id = d.user_id;`;
       const [check] = await connection.query(sql, [post_id, post_id]);
       res.send(check[0]);
     } catch (error) {
