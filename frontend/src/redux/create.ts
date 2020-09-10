@@ -45,6 +45,7 @@ function preloadedState(token: string | null): RootState {
       loading: false,
       error: null,
       postComments: [],
+      myComments: [],
     },
   };
 }

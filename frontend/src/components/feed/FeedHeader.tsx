@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { ModalContext } from '../../App';
-import { followContext } from '../../containers/HomeMain';
+import { followContext } from '../HomeMain';
 import { Link, useHistory } from 'react-router-dom';
 
 // components

@@ -15,11 +15,12 @@ import {
 import { ModalContext } from '../App';
 
 // components
-import FollowUsersContainer from './FollowUsersContainer';
-import RecommendUsersContainer from './RecommendUsersContainer';
-import FeedContainer from './FeedContainer';
-import FollowCancelModal from '../components/common/FollowCancelModal';
-import PostModal from '../components/common/PostModal';
+import FollowUsersContainer from '../containers/FollowUsersContainer';
+import RecommendUsersContainer from '../containers/RecommendUsersContainer';
+import FeedContainer from '../containers/FeedContainer';
+import FollowCancelModal from './common/FollowCancelModal';
+import PostModal from './common/PostModal';
+import { getAnotherUserSaga } from '../redux/modules/anotherUser';
 
 export interface contextValue {
   follow: (
@@ -74,6 +75,10 @@ function HomeMain() {
   useEffect(() => {
     dispatch(getUserInfoSaga());
   }, [dispatch]);
+
+  const getAnotherUserInfo = useCallback(() => {
+    dispatch(getAnotherUserSaga(user_id));
+  }, [dispatch, user_id]);
 
   const changePostId = useCallback((post_id: number) => {
     setPostId(post_id);
@@ -137,6 +142,7 @@ function HomeMain() {
           popFollowModal={popFollowModal}
           postId={postId}
           userId={user_id}
+          getAnotherUserInfo={getAnotherUserInfo}
         />
       )}
     </followContext.Provider>

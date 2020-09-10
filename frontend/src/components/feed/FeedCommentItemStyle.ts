@@ -18,12 +18,9 @@ export const StyledLi = styled.li`
     margin: 0 0 0 5px;
   }
 
-  & + & {
-    margin-top: 5px;
-  }
-
   [class^='like-'] {
     flex-grow: 2;
+    font-size: 12px;
     text-align: right;
     margin-right: 5px;
 

@@ -11,6 +11,7 @@ interface PostModalProps {
   popFollowModal: () => void;
   postId: number;
   userId: string | null;
+  getAnotherUserInfo: () => void;
 }
 
 function PostModal({
@@ -18,6 +19,7 @@ function PostModal({
   popFollowModal,
   postId,
   userId,
+  getAnotherUserInfo,
 }: PostModalProps) {
   const { user_id } = useSelector((state: RootState) => state.userInfo.user);
 
@@ -46,9 +48,9 @@ function PostModal({
               </button>
             </li>
           )}
-          <li>
+          <li onClick={getAnotherUserInfo} tabIndex={-1}>
             <Link to={`/post/${postId}`}>
-              <span tabIndex={-1}>게시물로 이동</span>
+              <span>게시물로 이동</span>
             </Link>
           </li>
           <li>

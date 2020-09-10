@@ -43,6 +43,8 @@ const PostService: IPostService = class {
     return res.data;
   }
 
+  // static async getSelectedPosts()
+
   // static async deletePosts..
 
   // static async patchPosts..

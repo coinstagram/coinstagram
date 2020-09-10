@@ -48,11 +48,12 @@ export interface CommentsState {
   loading: boolean;
   error: null | Error;
   postComments: EachCommentState[];
+  myComments: EachCommentState[];
   // likes: null | stringArray;
 }
 
 export interface EachPostState {
-  id: null | string;
+  id: number;
   user_id: null | string;
   post_context: null | string;
   // post_images: null | string;
