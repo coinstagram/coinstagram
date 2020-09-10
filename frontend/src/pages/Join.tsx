@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Link } from 'react-router-dom';
 import JoinInputBox from '../components/Join/JoinInputBox';
 import JoinHeader from '../components/Join/JoinHeader';
 import JoinAppDownload from '../components/Join/JoinAppDownload';
@@ -17,7 +18,9 @@ function Join() {
         <JoinLoginButton content="가입" />
         <JoinPolicy />
       </StyledJoinWrapper>
-      <JoinAskLogin askContent="계정이 있으신가요?" content="로그인" />
+      <Link to={'/login'}>
+        <JoinAskLogin askContent="계정이 있으신가요?" content="로그인" />
+      </Link>
       <JoinAppDownload />
     </StyledDiv>
   );

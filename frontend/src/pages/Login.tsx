@@ -13,6 +13,7 @@ import {
   LoginWrapper,
   StyledLogin,
 } from '../components/login/LoginStyle';
+import { Link } from 'react-router-dom';
 
 function Login() {
   return (
@@ -23,9 +24,12 @@ function Login() {
           <MainLogo style={{ marginBottom: '40px' }}>coInstagram</MainLogo>
           <InputUserId />
           <InputPassword style={{ marginBottom: '20px' }} />
-          <JoinLoginButton content="로그인"></JoinLoginButton>
+
+          <JoinLoginButton content="로그인" />
         </StyledLogin>
-        <JoinAskLogin askContent="계정이 없으신가요?" content="가입하기" />
+        <Link to={'/join'}>
+          <JoinAskLogin askContent="계정이 없으신가요?" content="가입하기" />
+        </Link>
         <JoinAppDownload />
       </LoginWrapper>
     </StyledDiv>

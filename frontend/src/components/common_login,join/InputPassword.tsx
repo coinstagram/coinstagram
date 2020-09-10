@@ -6,7 +6,6 @@ export interface passwordProps {
 }
 
 export default function InputPassword({ style }: passwordProps) {
-  // export default function InputPassword() {
   const [password, setPassword] = useState('');
   const [isPasswordShown, setPasswordShown] = useState(false);
 
@@ -30,15 +29,17 @@ export default function InputPassword({ style }: passwordProps) {
         style={style}
       >
         {' '}
-        <div>
-          <button
-            className="toggleBtn"
-            type="button"
-            onClick={toggleShowPassword}
-          >
-            {isPasswordShown ? '숨기기' : '비밀번호 표시'}
-          </button>
-        </div>
+        {password !== '' && (
+          <div>
+            <button
+              className="toggleBtn"
+              type="button"
+              onClick={toggleShowPassword}
+            >
+              {isPasswordShown ? '숨기기' : '비밀번호 표시'}
+            </button>
+          </div>
+        )}
       </InputCommon>
     </>
   );

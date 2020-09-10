@@ -3,7 +3,7 @@ import { InputProps, StyledDiv, IconWrapper } from './InputCommonStyle';
 import { BiCheckCircle } from 'react-icons/bi';
 import { RiCloseCircleLine } from 'react-icons/ri';
 
-export default function InputStyle({
+export default function InputCommon({
   type,
   name,
   value,
