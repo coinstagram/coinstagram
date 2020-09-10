@@ -6,13 +6,18 @@ import { StyledForm } from './FeedAddCommentStyle';
 interface FeedAddCommentProps {
   userId: string;
   postId: number;
+  addCommentPost: (post_id: number, comment_text: string) => void;
 }
 
-function FeedAddComment({ userId, postId }: FeedAddCommentProps) {
+function FeedAddComment({
+  userId,
+  postId,
+  addCommentPost,
+}: FeedAddCommentProps) {
   const [comment, setComment] = useState<string>('');
 
   return (
-    <StyledForm onClick={addComment} comment={comment}>
+    <StyledForm onSubmit={addComment} comment={comment.trim()}>
       <fieldset>
         <legend className="a11y-hidden">Add comment</legend>
         <div>
@@ -24,7 +29,7 @@ function FeedAddComment({ userId, postId }: FeedAddCommentProps) {
             onChange={changeComment}
           />
           <label htmlFor={`${userId}-${postId}`}>
-            <button disabled={comment === '' ? true : false}>
+            <button disabled={comment.trim() === '' ? true : false}>
               <span tabIndex={-1}>게시</span>
             </button>
           </label>
@@ -34,12 +39,16 @@ function FeedAddComment({ userId, postId }: FeedAddCommentProps) {
   );
 
   function changeComment(e: React.ChangeEvent<HTMLInputElement>) {
-    setComment(e.target.value);
     e.stopPropagation();
+    setComment(e.target.value);
   }
 
   function addComment(e: React.MouseEvent<HTMLFormElement, MouseEvent>) {
-    // e.preventDefault();
+    e.preventDefault();
+
+    if (comment.trim() === '') return;
+    addCommentPost(postId, comment);
+    setComment('');
   }
 }
 

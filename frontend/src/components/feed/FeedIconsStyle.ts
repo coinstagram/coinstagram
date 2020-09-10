@@ -22,7 +22,7 @@ export const IconDiv = styled.div`
 
     &#like {
       ${props =>
-        props.like === true &&
+        props.like &&
         css`
           color: rgb(250, 82, 82);
           &:hover {

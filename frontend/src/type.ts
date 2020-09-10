@@ -36,7 +36,7 @@ export interface imageState {
 }
 
 export interface EachCommentState {
-  id: null | string;
+  id: null | number;
   user_id: null | string;
   post_id: null | number;
   comment_text: null | string;
