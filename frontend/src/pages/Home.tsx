@@ -44,6 +44,7 @@ function Home() {
         <button onClick={addComments}>특정 게시물 댓글달기</button>
         <button onClick={getAnotherPosts}>다른유저 게시물</button>
         <button onClick={getFollowerPosts}>팔로워들 게시물</button>
+        <button onClick={getRandom}>랜던 유저</button>
       </StyledDiv>
     </>
   );
@@ -57,8 +58,8 @@ async function addComments() {
   const res = await axios.post(
     '/comment',
     {
-      post_id: 1,
-      comment_text: 'post1의 댓글',
+      post_id: 2,
+      comment_text: '댓글 테스트 post_id 2',
     },
     {
       headers: {
@@ -71,7 +72,7 @@ async function addComments() {
 }
 
 async function getComment() {
-  const res = await axios.get('/comment/post/1', {
+  const res = await axios.get('/comment/post/2', {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -130,7 +131,7 @@ async function getFollowerPosts() {
 
 async function login() {
   const res = await axios.post('/login', {
-    user_id: 'user3',
+    user_id: 'user7',
     user_password: 'asdf',
   });
 
@@ -149,4 +150,14 @@ async function signupEmail() {
 
 function createRandom() {
   return Math.floor(Math.random() * 10);
+}
+
+async function getRandom() {
+  const res = await axios.get('/users/random', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  console.log(res.data);
 }

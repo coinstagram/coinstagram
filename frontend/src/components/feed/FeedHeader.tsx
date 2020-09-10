@@ -36,13 +36,13 @@ function FeedHeader({
       <StyledDiv>
         <button onClick={pageMove}>
           <Thumbnail size={35} imageUrl={userProfile} />
-          <UsernameDiv tabIndex={-1}>
+          <UsernameDiv tabIndex={-1} hasLocation={location}>
             <dt className="a11y-hidden">user id</dt>
             <dd>{userId}</dd>
           </UsernameDiv>
         </button>
         <Link to={`/explore/tags/${location}`}>
-          <LocationDiv tabIndex={-1}>
+          <LocationDiv tabIndex={-1} hasLocation={location}>
             <dt className="a11y-hidden">location</dt>
             <dd>{location}</dd>
           </LocationDiv>

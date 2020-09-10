@@ -35,13 +35,20 @@ export interface imageState {
   name: string;
 }
 
-export interface commentState {
+export interface EachCommentState {
   id: null | string;
   user_id: null | string;
   post_id: null | string;
   comment_text: null | string;
   created_at: null | string;
-  likes: null | stringArray;
+  // parent?: null | boolean;
+}
+
+export interface commentsState {
+  loading: boolean;
+  error: null | Error;
+  comments: EachCommentState[];
+  // likes: null | stringArray;
 }
 
 export interface EachPostState {

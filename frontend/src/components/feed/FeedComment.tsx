@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // styles
@@ -11,8 +11,10 @@ interface FeedCommentProps {
 }
 
 function FeedComment({ userId, context, postId }: FeedCommentProps) {
+  const [comment, setComment] = useState<string>('');
+
   return (
-    <StyledContainer>
+    <StyledContainer comment={comment}>
       <StyledDiv>
         <div>
           <dt className="a11y-hidden">post owner id</dt>
@@ -31,10 +33,12 @@ function FeedComment({ userId, context, postId }: FeedCommentProps) {
             <input
               id={`${userId}-${postId}`}
               type="text"
+              value={comment}
               placeholder="댓글 달기..."
+              onChange={changeComment}
             />
             <label htmlFor={`${userId}-${postId}`}>
-              <button>
+              <button disabled={comment === '' ? true : false}>
                 <span tabIndex={-1}>게시</span>
               </button>
             </label>
@@ -44,8 +48,13 @@ function FeedComment({ userId, context, postId }: FeedCommentProps) {
     </StyledContainer>
   );
 
+  function changeComment(e: React.ChangeEvent<HTMLInputElement>) {
+    setComment(e.target.value);
+    e.stopPropagation();
+  }
+
   function addComment(e: React.MouseEvent<HTMLFormElement, MouseEvent>) {
-    e.preventDefault();
+    // e.preventDefault();
   }
 }
 
