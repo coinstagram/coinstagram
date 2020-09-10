@@ -30,10 +30,10 @@ const failGetComments = (error: Error) => ({
 });
 
 type commentActions =
-  | ReturnType<typeof startGetComment>
-  | ReturnType<typeof successGetComment>
+  | ReturnType<typeof startGetComments>
+  | ReturnType<typeof successGetComments>
   | ReturnType<typeof successAddComment>
-  | ReturnType<typeof failGetComment>;
+  | ReturnType<typeof failGetComments>;
 
 // saga action
 const GET_POST_COMMENTS = 'GET_POST_COMMENTS' as const;
