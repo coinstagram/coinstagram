@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import RootState from '../../type';
-import { Link } from 'react-router-dom';
 
 // styles
 import { StyledDiv } from './FeedCommentListStyle';
+
+// components
+import FeedCommentItem from './FeedCommentItem';
 
 interface FeedCommentListProps {
   userId: null | string;
@@ -31,17 +33,12 @@ function FeedCommentList({
         {postComments.map(
           comment =>
             comment.post_id === +postId && (
-              <li key={comment.id}>
-                <div>
-                  <dt className="a11y-hidden">comment owner id</dt>
-                  <dd>
-                    <Link to={`/${comment.user_id}`}>
-                      <span tabIndex={-1}>{comment.user_id}</span>
-                    </Link>
-                  </dd>
-                </div>
-                <p>{comment.comment_text}</p>
-              </li>
+              <FeedCommentItem
+                key={comment.id}
+                commentId={comment.id}
+                userId={comment.user_id}
+                commentText={comment.comment_text}
+              />
             ),
         )}
       </ul>

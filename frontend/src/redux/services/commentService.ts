@@ -33,6 +33,7 @@ const CommentService: ICommentService = class {
         },
       },
     );
+    console.log(res.data);
 
     return res.data;
   }
