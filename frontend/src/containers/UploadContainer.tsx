@@ -6,7 +6,7 @@ import UploadInput from '../components/upload/UploadInput';
 import UploadDetails from '../components/upload/UploadDetails';
 import { StyledButton } from '../components/upload/UploadDetails.style';
 import { useDispatch } from 'react-redux';
-import { add_post } from '../redux/modules/upload';
+import { add_post, addPostSaga } from '../redux/modules/upload';
 
 export interface contextValue {
   user_id: String;
@@ -44,9 +44,11 @@ const UploadContainer = () => {
         ...data,
         post_context: value,
       });
-
-      console.log({ ...data });
     }
+  };
+
+  const onsubmit = (e: any) => {
+    dispatch(addPostSaga(data));
   };
 
   return (
@@ -54,7 +56,7 @@ const UploadContainer = () => {
       <UploadHeader />
       <UploadInput change={onchange} />
       <UploadDetails change={onchange} />
-      <StyledButton>계시하기</StyledButton>
+      <StyledButton onClick={onsubmit}>계시하기</StyledButton>
     </>
   );
 };
