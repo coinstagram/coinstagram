@@ -10,10 +10,19 @@ import FeedCommentItem from './FeedCommentItem';
 
 interface FeedCommentListProps {
   postId: number;
+  visual?: boolean;
   getCommentsPost: (post_id: number) => void;
+  viewTime?: boolean;
+  thumbnail?: boolean;
 }
 
-function FeedCommentList({ postId, getCommentsPost }: FeedCommentListProps) {
+function FeedCommentList({
+  postId,
+  visual,
+  getCommentsPost,
+  viewTime,
+  thumbnail,
+}: FeedCommentListProps) {
   const { postComments, myComments } = useSelector(
     (state: RootState) => state.comments,
   );
@@ -34,21 +43,25 @@ function FeedCommentList({ postId, getCommentsPost }: FeedCommentListProps) {
     <StyledDiv>
       <ul>
         {mergedComments.length < 3 &&
+          !visual &&
           currentPostMyComments.map(comment => (
             <FeedCommentItem
               key={comment.id}
               commentId={comment.id}
               userId={comment.user_id}
+              userProfile={null}
               commentText={comment.comment_text}
+              createdTime={comment.created_at}
+              thumbnail={thumbnail}
             />
           ))}
-        {mergedComments.length >= 3 && (
+        {mergedComments.length >= 3 && !visual && (
           <>
             {currentPostComments.length >= 3 && (
               <li>
                 <button className="comment-more">
                   <span tabIndex={-1}>
-                    댓글{currentPostComments.length}개 모두 보기
+                    댓글 {currentPostComments.length}개 모두 보기
                   </span>
                 </button>
               </li>
@@ -58,7 +71,10 @@ function FeedCommentList({ postId, getCommentsPost }: FeedCommentListProps) {
                 key={currentPostComments[0].id}
                 commentId={currentPostComments[0].id}
                 userId={currentPostComments[0].user_id}
+                userProfile={null}
                 commentText={currentPostComments[0].comment_text}
+                createdTime={currentPostComments[0].created_at}
+                thumbnail={thumbnail}
               />
             )}
             {currentPostComments[1] && (
@@ -66,7 +82,10 @@ function FeedCommentList({ postId, getCommentsPost }: FeedCommentListProps) {
                 key={currentPostComments[1].id}
                 commentId={currentPostComments[1].id}
                 userId={currentPostComments[1].user_id}
+                userProfile={null}
                 commentText={currentPostComments[1].comment_text}
+                createdTime={currentPostComments[1].created_at}
+                thumbnail={thumbnail}
               />
             )}
             {currentPostMyComments.map(comment => (
@@ -74,14 +93,34 @@ function FeedCommentList({ postId, getCommentsPost }: FeedCommentListProps) {
                 key={comment.id}
                 commentId={comment.id}
                 userId={comment.user_id}
+                userProfile={null}
                 commentText={comment.comment_text}
+                createdTime={comment.created_at}
+                thumbnail={thumbnail}
               />
             ))}
           </>
         )}
+        {visual &&
+          mergedComments.map(comment => (
+            <FeedCommentItem
+              key={comment.id}
+              commentId={comment.id}
+              userId={comment.user_id}
+              userProfile={null}
+              commentText={comment.comment_text}
+              createdTime={comment.created_at}
+              viewTime={viewTime}
+              thumbnail={thumbnail}
+            />
+          ))}
       </ul>
     </StyledDiv>
   );
 }
+
+FeedCommentList.defaultProps = {
+  thumbnail: false,
+};
 
 export default FeedCommentList;

@@ -96,7 +96,8 @@ async function upload() {
   const res = await axios.post(
     '/post',
     {
-      post_context: '이야이야 게시물이다 재밌다.',
+      post_context:
+        '게시물 길게 써보기 ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁdddddddddddddddddddddddddddddddddddddㅁㄴ아리ㅓㄴ이런얄ㄷㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅂㅂㅂㅂㅂㅂㅂㅂㅂㅂㅂㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㅈㅂ[갲ㅂㄷㄱ[ㅂㅈㄷㄱㅈㄷㄱㅈㄱㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ.',
       post_anotheruser: '태그 유저어어',
       post_location: '건대입구',
     },

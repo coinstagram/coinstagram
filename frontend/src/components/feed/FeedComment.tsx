@@ -43,7 +43,8 @@ function FeedComment({
   );
 }
 
-export function computePassedTime(time: string) {
+export function computePassedTime(time: null | string) {
+  if (!time) return;
   const date = time.split('T')[0].split('-');
   const times = time.split('T')[1].split(':');
   const now = new Date();

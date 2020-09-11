@@ -28,32 +28,32 @@ function FeedHeader({
   userProfile,
 }: FeedHeaderProps) {
   const { popPostModal } = useContext(ModalContext);
-  const { setFollowInfo, changePostId } = useContext(followContext);
+  const value = useContext(followContext);
+  const setFollowInfo = value && value.setFollowInfo;
+  const changePostId = value && value.changePostId;
   const history = useHistory();
 
   return (
-    <>
-      <StyledDiv>
-        <button onClick={pageMove}>
-          <Thumbnail size={35} imageUrl={userProfile} />
-          <UsernameDiv tabIndex={-1} hasLocation={location}>
-            <dt className="a11y-hidden">user id</dt>
-            <dd>{userId}</dd>
-          </UsernameDiv>
-        </button>
-        <Link to={`/explore/tags/${location}`}>
-          <LocationDiv tabIndex={-1} hasLocation={location}>
-            <dt className="a11y-hidden">location</dt>
-            <dd>{location}</dd>
-          </LocationDiv>
-        </Link>
-        <StyledBtn onClick={setModal}>
-          <div tabIndex={-1}>
-            <span></span>
-          </div>
-        </StyledBtn>
-      </StyledDiv>
-    </>
+    <StyledDiv>
+      <button onClick={pageMove}>
+        <Thumbnail size={35} imageUrl={userProfile} />
+        <UsernameDiv tabIndex={-1} hasLocation={location}>
+          <dt className="a11y-hidden">user id</dt>
+          <dd>{userId}</dd>
+        </UsernameDiv>
+      </button>
+      <Link to={`/explore/tags/${location}`}>
+        <LocationDiv tabIndex={-1} hasLocation={location}>
+          <dt className="a11y-hidden">location</dt>
+          <dd>{location}</dd>
+        </LocationDiv>
+      </Link>
+      <StyledBtn onClick={setModal}>
+        <div tabIndex={-1}>
+          <span></span>
+        </div>
+      </StyledBtn>
+    </StyledDiv>
   );
 
   function pageMove() {
@@ -64,6 +64,7 @@ function FeedHeader({
 
   function setModal() {
     popPostModal();
+    if (!changePostId || !setFollowInfo) return;
     changePostId(postId);
     setFollowInfo(userId, userProfile, null);
   }

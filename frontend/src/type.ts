@@ -65,6 +65,12 @@ export interface EachPostState {
   // likes:
 }
 
+export interface SelectedPostState {
+  loading: boolean;
+  error: null | Error;
+  post: null | EachPostState;
+}
+
 export interface SignupState {
   loading: boolean;
   token: null | string;
@@ -98,6 +104,7 @@ export interface PostsState {
   loading: boolean;
   error: null | Error;
   FeedPosts: EachPostState[];
+  selectedPost: SelectedPostState;
   // bookmarkPosts: EachPostState[];
   // taggedPosts: EachPostState[];
 }

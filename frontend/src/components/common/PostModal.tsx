@@ -1,17 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import RootState from '../../type';
 
 // styles
 import { StyledBg, StyledModal, StyledSpan } from './PostModalStyle';
-import { useSelector } from 'react-redux';
-import RootState from '../../type';
 
 interface PostModalProps {
   popPostModal: () => void;
   popFollowModal: () => void;
   postId: number;
   userId: string | null;
-  getAnotherUserInfo: () => void;
 }
 
 function PostModal({
@@ -19,9 +18,10 @@ function PostModal({
   popFollowModal,
   postId,
   userId,
-  getAnotherUserInfo,
 }: PostModalProps) {
-  const { user_id } = useSelector((state: RootState) => state.userInfo.user);
+  const user = useSelector((state: RootState) => state.userInfo.user);
+  const user_id = user && user.user_id;
+  const urlPost = +useLocation().pathname.split('/')[2];
 
   return (
     <StyledBg onClick={popPostModal}>
@@ -48,11 +48,13 @@ function PostModal({
               </button>
             </li>
           )}
-          <li onClick={getAnotherUserInfo} tabIndex={-1}>
-            <Link to={`/post/${postId}`}>
-              <span>게시물로 이동</span>
-            </Link>
-          </li>
+          {!urlPost && (
+            <li>
+              <Link to={`/post/${postId}`}>
+                <span tabIndex={-1}>게시물로 이동</span>
+              </Link>
+            </li>
+          )}
           <li>
             <button>
               <span tabIndex={-1}>닫기</span>

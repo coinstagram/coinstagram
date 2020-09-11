@@ -132,21 +132,21 @@ function commentReducer(
         loading: true,
         error: null,
         postComments: [],
-        myComments: [],
+        myComments: state.myComments,
       };
     case SUCCESS_GET_COMMENTS:
       return {
         loading: false,
         error: null,
         postComments: [...state.postComments, ...action.paylaod.postComments],
-        myComments: [],
+        myComments: state.myComments,
       };
     case FAIL_GET_COMMENTS:
       return {
         loading: false,
         error: action.payload,
         postComments: [],
-        myComments: [],
+        myComments: state.myComments,
       };
     case START_ADD_COMMENT:
       return {
