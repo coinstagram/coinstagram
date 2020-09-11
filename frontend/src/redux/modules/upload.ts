@@ -1,7 +1,14 @@
 import { createReducer, createAction, ActionType } from 'typesafe-actions';
+import { AuthState } from '../../type';
+import { select, put, call, takeEvery, getContext } from 'redux-saga/effects';
+import RootState from '../../type';
+import axios from 'axios';
+import uploadService from '../services/uploadService';
+import { history } from '../create';
+import { push } from 'connected-react-router';
 
 // 타입설정
-type postData = {
+export type postData = {
   user_id: String;
   post_context: String;
   post_anotheruser: String;
@@ -98,6 +105,22 @@ export const addPostSaga = (data: postData) => ({
 type addPostSagaActions = ReturnType<typeof addPostSaga>;
 
 // saga function
-function* addPostSagafun(action: postData) {}
+
+function* addPostSagafun(action: addPostSagaActions) {
+  try {
+    yield put(add_post_request());
+    const { token }: AuthState = yield select((state: RootState) => state.auth);
+    yield put(add_post(action.payload));
+    yield call(uploadService.uploadPost, action.payload, token);
+    yield put(add_post_success());
+    yield put(push('/'));
+  } catch (error) {
+    yield put(add_post_failure(error));
+  }
+}
+
+export function* uploadSaga() {
+  yield takeEvery(ADD_POST_SAGA, addPostSagafun);
+}
 
 export default postReducer;

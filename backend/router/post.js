@@ -29,6 +29,7 @@ router.post('/post', verifyToken, async (req, res) => {
     post_anotheruser = '',
     post_location = '',
   } = req.body;
+  console.log('testAPI');
   let sql = '';
   try {
     const connection = await pool.getConnection(async (conn) => conn);
