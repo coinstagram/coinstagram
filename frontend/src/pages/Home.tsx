@@ -8,7 +8,7 @@ import useWindowWidth from '../hooks/useWindowWidth';
 
 // components
 import Header from '../components/header/Header';
-import HomeMain from '../containers/HomeMain';
+import HomeMain from '../components/HomeMain';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -45,6 +45,7 @@ function Home() {
         <button onClick={getAnotherPosts}>다른유저 게시물</button>
         <button onClick={getFollowerPosts}>팔로워들 게시물</button>
         <button onClick={getRandom}>랜던 유저</button>
+        <button onClick={getSelectedPost}>특정 게시물 정보</button>
       </StyledDiv>
     </>
   );
@@ -53,6 +54,16 @@ function Home() {
 export default React.memo(Home);
 
 const token = localStorage.getItem('access_token');
+
+async function getSelectedPost() {
+  const res = await axios.get('/post/1', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  console.log(res.data);
+}
 
 async function addComments() {
   const res = await axios.post(
@@ -85,7 +96,8 @@ async function upload() {
   const res = await axios.post(
     '/post',
     {
-      post_context: '이야이야 게시물이다 재밌다.',
+      post_context:
+        '게시물 길게 써보기 ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁdddddddddddddddddddddddddddddddddddddㅁㄴ아리ㅓㄴ이런얄ㄷㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅂㅂㅂㅂㅂㅂㅂㅂㅂㅂㅂㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㅈㅂ[갲ㅂㄷㄱ[ㅂㅈㄷㄱㅈㄷㄱㅈㄱㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ.',
       post_anotheruser: '태그 유저어어',
       post_location: '건대입구',
     },

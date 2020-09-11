@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import RootState, { EachPostState } from '../../type';
+import { EachPostState } from '../../type';
 
 // styles
 import { StyledArticle } from './FeedStyle';
@@ -9,13 +9,13 @@ import FeedHeader from './FeedHeader';
 import FeedBody from './FeedBody';
 import FeedComment from './FeedComment';
 import FeedIcons from './FeedIcons';
-import { useSelector } from 'react-redux';
 
 interface FeedProps {
   loading: boolean;
   error: null | Error;
   feedPosts: EachPostState[];
   userProfile: null | string;
+  userId: null | string;
   getFeedPosts: (user_id: string) => void;
   getCommentsPost: (post_id: number) => void;
   addCommentPost: (post_id: number, comment_text: string) => void;
@@ -26,17 +26,15 @@ function Feed({
   error,
   feedPosts,
   userProfile,
+  userId,
   getFeedPosts,
   getCommentsPost,
   addCommentPost,
 }: FeedProps) {
-  const { user } = useSelector((state: RootState) => state.userInfo);
-  const user_id = user && user.user_id;
-
   useEffect(() => {
-    if (!user_id) return;
-    getFeedPosts(user_id);
-  }, [getFeedPosts, user_id]);
+    if (!userId) return;
+    getFeedPosts(userId);
+  }, [getFeedPosts, userId]);
 
   return (
     <>
@@ -55,15 +53,15 @@ function Feed({
             <h3 className="a11y-hidden">{post.user_id}의 게시물</h3>
             <FeedHeader
               userId={post.user_id}
-              postId={+post.id}
+              postId={post.id}
               location={post.post_location}
               userProfile={userProfile}
             />
             <FeedBody />
-            <FeedIcons postId={+post.id} />
+            <FeedIcons postId={post.id} />
             <FeedComment
               userId={post.user_id}
-              postId={+post.id}
+              postId={post.id}
               context={post.post_context}
               getCommentsPost={getCommentsPost}
               addCommentPost={addCommentPost}

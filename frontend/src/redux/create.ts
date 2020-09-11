@@ -40,11 +40,17 @@ function preloadedState(token: string | null): RootState {
       loading: false,
       error: null,
       FeedPosts: [],
+      selectedPost: {
+        loading: false,
+        error: null,
+        post: null,
+      },
     },
     comments: {
       loading: false,
       error: null,
       postComments: [],
+      myComments: [],
     },
   };
 }

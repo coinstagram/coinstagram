@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { AnotherUserState } from '../../type';
-import { followContext } from '../../containers/HomeMain';
+import { followContext } from '../HomeMain';
 import { ModalContext } from '../../App';
 
 // styles

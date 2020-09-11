@@ -1,21 +1,34 @@
 import styled from 'styled-components';
 
 export const StyledDiv = styled.div`
-  display: flex;
-  align-items: center;
+  position: relative;
+  padding-left: ${props => props.thumbnail && 50};
 
-  span {
-    font-weight: bold;
-    outline: none;
-    align-self: end;
+  .owner-comment {
+    display: inline-block;
+    margin-right: 5px;
+    dd {
+      display: inline-block;
+      span {
+        font-weight: bold;
+        outline: none;
 
-    &:hover {
-      color: rgb(142, 142, 142);
+        &:active {
+          color: rgb(142, 142, 142);
+        }
+      }
+      .thumbnail {
+        position: absolute;
+        top: -2px;
+        left: 0;
+      }
     }
   }
 
-  p {
-    line-height: 15px;
-    margin: 0 0 0 5px;
+  time {
+    display: block;
+    font-size: 12px;
+    color: rgb(142, 142, 142);
+    margin-top: 15px;
   }
 `;

@@ -10,6 +10,10 @@ interface IPostService {
     token: string | null,
     user_id: string,
   ) => Promise<EachPostState[]>;
+  getSelectedPost: (
+    token: string | null,
+    post_id: number,
+  ) => Promise<EachPostState>;
 }
 
 const PostService: IPostService = class {
@@ -42,6 +46,18 @@ const PostService: IPostService = class {
 
     return res.data;
   }
+
+  static async getSelectedPost(token: string | null, post_id: number) {
+    const res = await axios.get<EachPostState>(`/post/${post_id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return res.data;
+  }
+
+  // static async getSelectedPosts()
 
   // static async deletePosts..
 

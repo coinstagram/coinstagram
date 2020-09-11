@@ -48,11 +48,12 @@ export interface CommentsState {
   loading: boolean;
   error: null | Error;
   postComments: EachCommentState[];
+  myComments: EachCommentState[];
   // likes: null | stringArray;
 }
 
 export interface EachPostState {
-  id: null | string;
+  id: number;
   user_id: null | string;
   post_context: null | string;
   // post_images: null | string;
@@ -62,6 +63,12 @@ export interface EachPostState {
   created_at: null | string;
   // comments:
   // likes:
+}
+
+export interface SelectedPostState {
+  loading: boolean;
+  error: null | Error;
+  post: null | EachPostState;
 }
 
 export interface SignupState {
@@ -97,6 +104,7 @@ export interface PostsState {
   loading: boolean;
   error: null | Error;
   FeedPosts: EachPostState[];
+  selectedPost: SelectedPostState;
   // bookmarkPosts: EachPostState[];
   // taggedPosts: EachPostState[];
 }
