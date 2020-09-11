@@ -145,7 +145,7 @@ router.post('/comment', async (req, res) => {
 });
 /**
  * add child comment
- * /like
+ * /comment/child
  * {
  *  post_id
  *  comment_text
@@ -321,4 +321,120 @@ router.post('/images', verifyToken, upload.array('image'), async (req, res) => {
   console.log(req.file);
   res.json(req.files.map((v) => v.filename));
 });
+
+/**
+ * add post like
+ * /post/like
+ * {
+ *  post_id
+ * }
+ */
+router.post('/post/like', async (req, res) => {
+  const token = req.headers.authorization.split('Bearer ')[1];
+  const userData = jwt.verify(
+    token,
+    // eslint-disable-next-line no-undef
+    process.env.JWT_SECRET,
+  );
+  const { user_id } = userData;
+  const { post_id } = req.body;
+
+  let sql = '';
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      sql = 'insert into post_like values (?, ?)';
+
+      await connection.query(sql, [post_id, user_id]);
+
+      sql = 'select count(*) as likeCount from post_like where post_id = ?';
+      const [check] = await connection.query(sql, post_id);
+      res.send(check[0]);
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      console.log(error);
+      res.status(500).json('SQL ERROR');
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
+});
+
+/**
+ * add comment like
+ * /comment/child
+ * {
+ *  post_id
+ *  post_id
+ * }
+ */
+router.post('/comment/like', async (req, res) => {
+  const token = req.headers.authorization.split('Bearer ')[1];
+  const userData = jwt.verify(
+    token,
+    // eslint-disable-next-line no-undef
+    process.env.JWT_SECRET,
+  );
+  const { user_id } = userData;
+  const { comment_id, post_id } = req.body;
+  let sql = '';
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      sql = 'insert into comment_like values (?, ?, ?)';
+      await connection.query(sql, [user_id, comment_id, post_id]);
+      sql =
+        'select count(*) as comment_like from comment_like where comment_id = ? and post_id = ?';
+      const [check] = await connection.query(sql, [comment_id, post_id]);
+      res.send(check[0]);
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      console.log(error);
+      res.status(500).json('SQL ERROR');
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
+});
+
+/**
+ * add bookmark
+ * /bookmark
+ * {
+ *  post_id
+ * }
+ */
+router.post('/bookmark', async (req, res) => {
+  const token = req.headers.authorization.split('Bearer ')[1];
+  const userData = jwt.verify(
+    token,
+    // eslint-disable-next-line no-undef
+    process.env.JWT_SECRET,
+  );
+  const { user_id } = userData;
+  const { post_id } = req.body;
+  let sql = '';
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      sql = 'insert into bookmark values (?, ?)';
+      await connection.query(sql, [user_id, post_id]);
+      sql = `select b.post_title, (select count(*) from bookmark where user_id = ?) as userBookmark,
+      (select count(*) from bookmark where post_id = ?) as postBookmark
+      from bookmark as a inner join posts as b where a.post_id = ? and a.post_id = b.id;`;
+      const [check] = await connection.query(sql, [user_id, post_id, post_id]);
+      res.send(check[0]);
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      console.log(error);
+      res.status(500).json('SQL ERROR');
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
+});
+
 module.exports = router;
