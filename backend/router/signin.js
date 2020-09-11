@@ -40,11 +40,11 @@ router.post('/signin/email', async (req, res) => {
       await connection.release();
       console.log(error);
       res.send({ success: false });
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
-  } finally {
-    await connection.release();
   }
 });
 
