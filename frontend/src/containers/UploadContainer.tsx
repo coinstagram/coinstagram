@@ -5,8 +5,9 @@ import UploadHeader from '../components/upload/UploadHeader';
 import UploadInput from '../components/upload/UploadInput';
 import UploadDetails from '../components/upload/UploadDetails';
 import { StyledButton } from '../components/upload/UploadDetails.style';
-import { useDispatch } from 'react-redux';
-import { add_post, addPostSaga } from '../redux/modules/upload';
+import { useDispatch, useSelector } from 'react-redux';
+import { add_post, addPostSaga, postData } from '../redux/modules/upload';
+import postReducer from '../redux/modules/upload';
 
 export interface contextValue {
   user_id: String;
@@ -48,7 +49,8 @@ const UploadContainer = () => {
   };
 
   const onsubmit = (e: any) => {
-    dispatch(addPostSaga(data));
+    dispatch(add_post(data));
+    dispatch(addPostSaga());
   };
 
   return (
