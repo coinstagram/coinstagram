@@ -118,6 +118,7 @@ const initialState: CommentsState = {
   loading: false,
   error: null,
   postComments: [],
+  myComments: [],
 };
 
 // reducer
@@ -131,36 +132,42 @@ function commentReducer(
         loading: true,
         error: null,
         postComments: [],
+        myComments: state.myComments,
       };
     case SUCCESS_GET_COMMENTS:
       return {
         loading: false,
         error: null,
         postComments: [...state.postComments, ...action.paylaod.postComments],
+        myComments: state.myComments,
       };
     case FAIL_GET_COMMENTS:
       return {
         loading: false,
         error: action.payload,
         postComments: [],
+        myComments: state.myComments,
       };
     case START_ADD_COMMENT:
       return {
         loading: true,
         error: null,
         postComments: state.postComments,
+        myComments: state.myComments,
       };
     case SUCCESS_ADD_COMMENT:
       return {
         loading: false,
         error: null,
-        postComments: [...state.postComments, action.payload.addComment],
+        postComments: state.postComments,
+        myComments: [...state.myComments, action.payload.addComment],
       };
     case FAIL_ADD_COMMENT:
       return {
         loading: false,
         error: action.payload,
         postComments: state.postComments,
+        myComments: state.myComments,
       };
     default:
       return state;

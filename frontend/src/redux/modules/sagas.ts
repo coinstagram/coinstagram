@@ -4,6 +4,7 @@ import { userInfoSaga } from './userInfo';
 import { anotherUserSaga } from './anotherUser';
 import { postsSaga } from './post';
 import { commentSaga } from './comment';
+import { uploadSaga } from './upload';
 
 function* rootSaga() {
   yield all([
@@ -12,6 +13,7 @@ function* rootSaga() {
     anotherUserSaga(),
     postsSaga(),
     commentSaga(),
+    uploadSaga(),
   ]);
 }
 

@@ -1,27 +1,20 @@
-import React, {
-  useEffect,
-  useCallback,
-  createContext,
-  useState,
-  useContext,
-} from 'react';
+import React, { useCallback, createContext, useState, useContext } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import {
-  getUserInfoSaga,
   followUserSaga,
   cancelFollowUserSaga,
 } from '../redux/modules/userInfo';
 import { ModalContext } from '../App';
 
 // components
-import FollowUsersContainer from './FollowUsersContainer';
-import RecommendUsersContainer from './RecommendUsersContainer';
-import FeedContainer from './FeedContainer';
-import FollowCancelModal from '../components/common/FollowCancelModal';
-import PostModal from '../components/common/PostModal';
+import FollowUsersContainer from '../containers/FollowUsersContainer';
+import RecommendUsersContainer from '../containers/RecommendUsersContainer';
+import FeedContainer from '../containers/FeedContainer';
+import FollowCancelModal from './common/FollowCancelModal';
+import PostModal from './common/PostModal';
 
-export interface contextValue {
+interface contextValue {
   follow: (
     user_id: string,
     user_name: string,
@@ -51,7 +44,7 @@ const StyledDiv = styled.div`
   }
 `;
 
-interface ModalState {
+export interface ModalState {
   user_id: string;
   user_profile: null | string;
   targetEl: null | HTMLSpanElement;
@@ -70,10 +63,6 @@ function HomeMain() {
   );
 
   const { user_id, user_profile, targetEl } = followModalState;
-
-  useEffect(() => {
-    dispatch(getUserInfoSaga());
-  }, [dispatch]);
 
   const changePostId = useCallback((post_id: number) => {
     setPostId(post_id);

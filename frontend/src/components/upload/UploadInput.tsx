@@ -1,39 +1,11 @@
 import React, { useRef, useCallback } from 'react';
-import styled from 'styled-components';
-import uploadImg from '../../resource/image/uploadImg.png';
+import { StyledDiv, StyledLabel } from './UploadInput.style';
 
-const StyledDiv = styled.div`
-  border-bottom: 1px solid rgb(219, 219, 219);
-`;
+interface UploadDetailsProps {
+  change: (event: React.ChangeEvent<HTMLButtonElement>) => void;
+}
 
-const StyledLabel = styled.label`
-  position: relative;
-  display: block;
-  height: 478px;
-
-  background-image: url(${uploadImg});
-  background-repeat: no-repeat;
-  background-position: 46% 40%;
-  background-size: 40%;
-  cursor: pointer;
-
-  span {
-    display: block;
-    outline: none;
-    height: 100%;
-  }
-
-  p {
-    position: absolute;
-    width: 100%;
-    text-align: center;
-    bottom: 20%;
-    font-size: 16px;
-    font-weight: bold;
-    color: rgb(142, 142, 142);
-  }
-`;
-const UploadInput: React.FC = () => {
+const UploadInput: React.FC<UploadDetailsProps> = ({ change }) => {
   const imageInput = useRef<HTMLInputElement>(null);
   const onClickImageUpload = useCallback(() => {
     imageInput.current.click();
@@ -46,6 +18,7 @@ const UploadInput: React.FC = () => {
       imageFormData.append('image', f);
     });
   }, []);
+
   return (
     <StyledDiv>
       <StyledLabel htmlFor="upload" tabIndex={0}>
