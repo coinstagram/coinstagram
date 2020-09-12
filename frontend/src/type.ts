@@ -68,6 +68,14 @@ export interface SignupState {
   loading: boolean;
   token: null | string;
   error: null | Error;
+  userData: SignupInfoState[];
+}
+
+export interface SignupInfoState {
+  user_email: null | string;
+  user_name: null | string;
+  user_id: null | string;
+  user_password: null | string;
 }
 
 export interface AuthState {
@@ -107,6 +115,7 @@ interface RootState {
   anotherUserInfo: AnotherUserInfoState;
   posts: PostsState;
   comments: CommentsState;
+  singupInfo: SignupInfoState;
 }
 
 export default RootState;

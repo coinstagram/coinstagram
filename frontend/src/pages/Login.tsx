@@ -24,7 +24,6 @@ function Login() {
           <MainLogo style={{ marginBottom: '40px' }}>coInstagram</MainLogo>
           <InputUserId />
           <InputPassword style={{ marginBottom: '20px' }} />
-
           <JoinLoginButton content="로그인" />
         </StyledLogin>
         <Link to={'/join'}>

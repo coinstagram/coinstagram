@@ -41,7 +41,8 @@ type SagaActions = ReturnType<typeof signupRequestSaga>;
 
 // saga function
 function* signupSaga(action: SagaActions) {
-  yield put({ type: SIGNUP_START });
+  // yield put({ type: SIGNUP_START });
+  yield put(signupStart());
   try {
     const payload = yield call(signupStart);
     yield put({ type: SIGNUP_SUCCESS, payload });
