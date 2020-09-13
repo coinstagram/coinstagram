@@ -275,9 +275,11 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
       });
       console.log(sqls);
       const [test] = await connection.query(sqls);
+      // console.log(test);
+      const arr = [];
       const result = test.filter((el) => el.length !== 0);
-      console.log('result', result);
-      res.json(...result);
+      result.forEach((res) => arr.push(...res));
+      res.json(arr);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
@@ -378,7 +380,7 @@ router.get('/post/like/:post_id', async (req, res) => {
         'select user_id from users where user_id in (select user_id from post_like where post_id = ?)';
 
       const [data] = await connection.query(sql, post_id);
-      res.send({ post_like: data.map(({ user_id }) => user_id) });
+      res.send(data.map(({ user_id }) => user_id));
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
@@ -438,7 +440,7 @@ router.get('/comment/like/:post_id', async (req, res) => {
 
       const [data] = await connection.query(sql, post_id);
       console.log(data);
-      res.send({ comment_like: data.map((data) => data) });
+      res.send(data.map((data) => data));
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
@@ -493,7 +495,7 @@ router.get('/bookmark/:user_id', async (req, res) => {
     try {
       sql = `select post_id from bookmark where user_id = ?;`;
       const [check] = await connection.query(sql, user_id);
-      res.send({ bookmark: check.map(({ post_id }) => post_id) });
+      res.send(check.map(({ post_id }) => post_id));
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
