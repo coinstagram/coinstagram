@@ -273,7 +273,11 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
       });
       console.log(sqls);
       const [test] = await connection.query(sqls);
-      res.json(test);
+      // console.log(test);
+      const arr = [];
+      const result = test.filter((el) => el.length !== 0);
+      result.forEach((res) => arr.push(...res));
+      res.json(arr);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
@@ -413,7 +417,7 @@ router.get('/post/like/:post_id', async (req, res) => {
         'select user_id from users where user_id in (select user_id from post_like where post_id = ?)';
 
       const [data] = await connection.query(sql, post_id);
-      res.send({ post_like: data.map(({ user_id }) => user_id), post_id });
+      res.send([{ user_id: data.map(({ user_id }) => user_id), post_id }]);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
@@ -469,11 +473,12 @@ router.get('/comment/like/:post_id', async (req, res) => {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
       sql =
-        'select * from comment_like where post_id in(select post_id from comments where post_id = ?)';
+        'select user_id, comment_id from comment_like where post_id in(select post_id from comments where post_id = ?)';
 
       const [data] = await connection.query(sql, post_id);
       console.log(data);
-      res.send({ comment_like: data.map((data) => data), post_id });
+
+      res.send({ post_id, comment: data.map((data) => data) });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
