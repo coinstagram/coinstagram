@@ -1,9 +1,9 @@
 import { call, put } from 'redux-saga/effects';
 
 // 로그인 관련 reducer file
-import { SignupState } from '../../type';
 import { AxiosError } from 'axios';
 import { takeEvery } from 'redux-saga/effects';
+import { SignupState } from '../../type';
 
 // action type
 const SIGNUP_START = 'coinstagram/signup/SIGNUP_START' as const;
@@ -11,12 +11,13 @@ const SIGNUP_SUCCESS = 'coinstagram/signup/SIGNUP_SUCCESS' as const;
 const SIGNUP_FAIL = 'coinstagram/signup/SIGNUP_FAIL' as const;
 
 // action creator
-const signupStart = () => ({
+const signupStart = (credentials: string) => ({
   type: SIGNUP_START,
+  payload: credentials,
 });
-const signupSuccess = (token: string) => ({
+const signupSuccess = (user: string) => ({
   type: SIGNUP_SUCCESS,
-  payload: token,
+  payload: user,
 });
 const signupFail = (error: AxiosError) => ({
   type: SIGNUP_FAIL,
@@ -32,34 +33,39 @@ type SignupActions =
 const SIGNUP_REQUEST_SAGA = 'SIGNUP_REQUEST_SAGA' as const;
 
 // saga action creator
-export const signupRequestSaga = (token: string) => ({
+export const signupRequestSaga = (userData: string) => ({
   type: SIGNUP_REQUEST_SAGA,
-  payload: token,
+  payload: userData,
 });
 
 type SagaActions = ReturnType<typeof signupRequestSaga>;
 
 // saga function
-function* signupSaga(action: SagaActions) {
-  // yield put({ type: SIGNUP_START });
+function* SignupSaga(action: SagaActions) {
   yield put(signupStart());
   try {
     const payload = yield call(signupStart);
-    yield put({ type: SIGNUP_SUCCESS, payload });
+    yield put(signupSuccess(token));
   } catch (e) {
-    yield put({ type: SIGNUP_FAIL, payload: e, error: true });
+    yield put(signupFail(error));
   }
 }
 
 // saga function register
-export function* SignupSaga() {
+export function* signupSaga() {
   yield takeEvery(SIGNUP_REQUEST_SAGA, signupSaga);
 }
 
 const initialState: SignupState = {
   loading: false,
-  error: null,
   token: null,
+  error: null,
+  userData: {
+    user_email: null,
+    user_name: null,
+    user_id: null,
+    user_password: null,
+  },
 };
 
 // reducer
@@ -69,20 +75,22 @@ function SignupReducer(
   action: SignupActions,
 ): SignupState {
   switch (action.type) {
-    case SIGNUP_START:
-      return {
-        loading: true,
-        error: null,
-        token: null,
-      };
+    // case SIGNUP_START:
+    //   return {
+    //     loading: true,
+    //     error: null,
+    //     token: null,
+    //   };
     case SIGNUP_SUCCESS:
       return {
+        ...state,
         loading: false,
         error: null,
         token: action.payload,
       };
     case SIGNUP_FAIL:
       return {
+        ...state,
         loading: false,
         error: action.payload,
         token: null,

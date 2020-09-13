@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import InputCommon from './InputCommon';
 
 export default function InputPhone() {
-  const [userName, setUserName] = useState('');
+  const [user_name, setUserName] = useState('');
   const inputUserName = (text: string): void => {
     setUserName(text);
   };
@@ -11,11 +11,11 @@ export default function InputPhone() {
     <>
       <InputCommon
         type="text"
-        name="userName"
-        value={userName}
+        name="user_name"
+        value={user_name}
         onInput={inputUserName}
         placeholder="성명"
-        toggleIcon={userName.length >= 6}
+        toggleIcon={user_name.length >= 6}
         display="block"
       ></InputCommon>
     </>

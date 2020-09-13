@@ -6,7 +6,7 @@ export interface passwordProps {
 }
 
 export default function InputPassword({ style }: passwordProps) {
-  const [password, setPassword] = useState('');
+  const [user_password, setPassword] = useState('');
   const [isPasswordShown, setPasswordShown] = useState(false);
 
   const inputPassword = (text: string): void => {
@@ -20,16 +20,16 @@ export default function InputPassword({ style }: passwordProps) {
     <>
       <InputCommon
         type={isPasswordShown ? 'text' : 'password'}
-        name="password"
-        value={password}
+        name="user_password"
+        value={user_password}
         onInput={inputPassword}
         placeholder="비밀번호"
-        toggleIcon={password.length >= 6}
+        toggleIcon={user_password.length >= 6}
         display="flex"
         style={style}
       >
         {' '}
-        {password !== '' && (
+        {user_password !== '' && (
           <div>
             <button
               className="toggleBtn"
