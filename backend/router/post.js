@@ -272,7 +272,9 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
       });
       console.log(sqls);
       const [test] = await connection.query(sqls);
-      res.json(test);
+      const result = test.filter((el) => el.length !== 0);
+      console.log('result', result);
+      res.json(...result);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
