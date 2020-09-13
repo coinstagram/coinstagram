@@ -42,7 +42,10 @@ router.post('/post', verifyToken, async (req, res) => {
         post_anotheruser,
         post_location,
       ]);
-      res.send({ success: true });
+      sql = `select id from posts order by id desc limit 1; `;
+      const [post_id] = await connection.query(sql);
+      console.log(post_id[0].id);
+      res.send({ post_id: post_id[0].id });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
@@ -272,7 +275,11 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
       });
       console.log(sqls);
       const [test] = await connection.query(sqls);
-      res.json(test);
+      // console.log(test);
+      const arr = [];
+      const result = test.filter((el) => el.length !== 0);
+      result.forEach((res) => arr.push(...res));
+      res.json(arr);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
@@ -348,9 +355,32 @@ router.post('/post/like', async (req, res) => {
 
       await connection.query(sql, [post_id, user_id]);
 
-      sql = 'select count(*) as likeCount from post_like where post_id = ?';
-      const [check] = await connection.query(sql, post_id);
-      res.send(check[0]);
+      // sql =
+      //   'select user_id from users where user_id in (select user_id from post_like where post_id = ?)';
+      // const [check] = await connection.query(sql, post_id);
+      res.send({ success: true });
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      console.log(error);
+      res.status(500).json('SQL ERROR');
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
+});
+
+router.get('/post/like/:post_id', async (req, res) => {
+  const { post_id } = req.params;
+  let sql = '';
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      sql =
+        'select user_id from users where user_id in (select user_id from post_like where post_id = ?)';
+
+      const [data] = await connection.query(sql, post_id);
+      res.send(data.map(({ user_id }) => user_id));
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
@@ -364,10 +394,10 @@ router.post('/post/like', async (req, res) => {
 
 /**
  * add comment like
- * /comment/child
+ * /comment/like
  * {
  *  post_id
- *  post_id
+ *  comment_id
  * }
  */
 router.post('/comment/like', async (req, res) => {
@@ -385,8 +415,7 @@ router.post('/comment/like', async (req, res) => {
     try {
       sql = 'insert into comment_like values (?, ?, ?)';
       await connection.query(sql, [user_id, comment_id, post_id]);
-      sql =
-        'select count(*) as comment_like from comment_like where comment_id = ? and post_id = ?';
+      sql = 'select * from comment_like where comment_id = ? and post_id = ?';
       const [check] = await connection.query(sql, [comment_id, post_id]);
       res.send(check[0]);
     } catch (error) {
@@ -400,6 +429,28 @@ router.post('/comment/like', async (req, res) => {
   }
 });
 
+router.get('/comment/like/:post_id', async (req, res) => {
+  const { post_id } = req.params;
+  let sql = '';
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      sql =
+        'select * from comment_like where post_id in(select post_id from comments where post_id = ?)';
+
+      const [data] = await connection.query(sql, post_id);
+      console.log(data);
+      res.send(data.map((data) => data));
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      console.log(error);
+      res.status(500).json('SQL ERROR');
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
+});
 /**
  * add bookmark
  * /bookmark
@@ -422,11 +473,63 @@ router.post('/bookmark', async (req, res) => {
     try {
       sql = 'insert into bookmark values (?, ?)';
       await connection.query(sql, [user_id, post_id]);
-      sql = `select b.post_title, (select count(*) from bookmark where user_id = ?) as userBookmark,
-      (select count(*) from bookmark where post_id = ?) as postBookmark
-      from bookmark as a inner join posts as b where a.post_id = ? and a.post_id = b.id;`;
-      const [check] = await connection.query(sql, [user_id, post_id, post_id]);
+      sql = `select post_id from bookmark where user_id = ?;`;
+      const [check] = await connection.query(sql, user_id);
       res.send(check[0]);
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      console.log(error);
+      res.status(500).json('SQL ERROR');
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
+});
+
+router.get('/bookmark/:user_id', async (req, res) => {
+  const { user_id } = req.params;
+  let sql = '';
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      sql = `select post_id from bookmark where user_id = ?;`;
+      const [check] = await connection.query(sql, user_id);
+      res.send(check.map(({ post_id }) => post_id));
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      console.log(error);
+      res.status(500).json('SQL ERROR');
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
+});
+
+router.delete('/post/:post_id', async (req, res) => {
+  const { post_id } = req.params;
+  let sql = '';
+  let sqls = [];
+  let params = [];
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      sql = 'SET foreign_key_checks = 0;';
+      sqls += mysql.format(sql);
+      sql = 'delete from posts where id = ?;';
+      params = [post_id];
+      sqls += mysql.format(sql, params);
+      sql = 'SET foreign_key_checks = 1;';
+      sqls += mysql.format(sql);
+
+      const [test] = await connection.query(sqls);
+
+      if (test[1].affectedRows === 0) {
+        res.send({ success: false });
+      } else {
+        res.send({ success: true });
+      }
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import RootState from '../../type';
+import RootState, { AnotherUserState } from '../../type';
 
 // styles
 import { StyledBg, StyledModal, StyledSpan } from './PostModalStyle';
@@ -11,6 +11,15 @@ interface PostModalProps {
   popFollowModal: () => void;
   postId: number;
   userId: string | null;
+  userName?: string;
+  userProfile: null | string;
+  followers: AnotherUserState[];
+  follow: (
+    user_id: string,
+    user_name: string,
+    user_profile: null | string,
+  ) => void;
+  deletePost: (post_id: number) => void;
 }
 
 function PostModal({
@@ -18,9 +27,15 @@ function PostModal({
   popFollowModal,
   postId,
   userId,
+  userName,
+  userProfile,
+  followers,
+  follow,
+  deletePost,
 }: PostModalProps) {
   const user = useSelector((state: RootState) => state.userInfo.user);
   const user_id = user && user.user_id;
+  const history = useHistory();
   const urlPost = +useLocation().pathname.split('/')[2];
 
   return (
@@ -35,19 +50,28 @@ function PostModal({
                 </button>
               </li>
               <li>
-                <button>
+                <button onClick={postDelete}>
                   <span tabIndex={-1}>삭제</span>
                 </button>
               </li>
             </>
           )}
-          {user_id !== userId && (
-            <li>
-              <button onClick={popCancelFollowModal}>
-                <StyledSpan tabIndex={-1}>팔로우 취소</StyledSpan>
-              </button>
-            </li>
-          )}
+          {followers.some(follower => follower.user_id === userId) &&
+            user_id !== userId && (
+              <li>
+                <button onClick={popCancelFollowModal}>
+                  <StyledSpan tabIndex={-1}>팔로우 취소</StyledSpan>
+                </button>
+              </li>
+            )}
+          {followers.every(follower => follower.user_id !== userId) &&
+            user_id !== userId && (
+              <li>
+                <button onClick={() => follow(userId, userName, userProfile)}>
+                  <StyledSpan tabIndex={-1}>팔로우 </StyledSpan>
+                </button>
+              </li>
+            )}
           {!urlPost && (
             <li>
               <Link to={`/post/${postId}`}>
@@ -65,6 +89,11 @@ function PostModal({
     </StyledBg>
   );
 
+  function postDelete() {
+    deletePost(postId);
+    history.push('/');
+  }
+
   function popCancelFollowModal(
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) {
@@ -72,5 +101,9 @@ function PostModal({
     popFollowModal();
   }
 }
+
+PostModal.defaultProps = {
+  userName: null,
+};
 
 export default PostModal;

@@ -4,6 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ConnectedRouter } from 'connected-react-router';
 import { useDispatch } from 'react-redux';
+import { getUserInfoSaga } from './redux/modules/userInfo';
 
 // styles
 import ModalGlobalStyle from './components/common/ModalGlobalStyle';
@@ -19,7 +20,6 @@ import Upload from './pages/Upload';
 import Explore from './pages/Explore';
 import FatalError from './pages/FatalError';
 import NotFound from './pages/NotFound';
-import { getUserInfoSaga } from './redux/modules/userInfo';
 
 interface ModalType {
   popPostModal: () => void;
@@ -51,6 +51,11 @@ function App() {
   useEffect(() => {
     dispatch(getUserInfoSaga());
   }, [dispatch]);
+
+  // useEffect(() => {
+  //   if (!user_id) return;
+  //   dispatch(getFeedPostsSaga(user_id));
+  // }, [dispatch, user_id]);
 
   return (
     <ErrorBoundary FallbackComponent={FatalError}>

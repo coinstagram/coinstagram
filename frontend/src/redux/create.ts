@@ -42,7 +42,11 @@ function preloadedState(token: string | null): RootState {
         users: [],
       },
       followees: [],
-      randomUsers: [],
+      randomUsers: {
+        loading: false,
+        error: null,
+        users: [],
+      },
     },
     anotherUserInfo: {
       loading: false,

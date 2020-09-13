@@ -3,7 +3,7 @@ import { FollowBtnProps } from './FollowBtn';
 
 export const StyledButton = styled.button`
   position: absolute;
-  right: 10px;
+  right: ${props => (props.isheader ? 50 : 10)};
   top: ${({ size }: FollowBtnProps) => `${size / 5}`};
 
   color: rgb(0, 149, 246);

@@ -1,5 +1,5 @@
 import RootState, { PostsState, EachPostState } from '../../type';
-import { takeLatest, put, select, call } from 'redux-saga/effects';
+import { takeLatest, put, select, call, takeLeading } from 'redux-saga/effects';
 import PostService from '../services/postService';
 
 // action type
@@ -12,6 +12,10 @@ const FAIL_GET_POSTS = 'coinstagram/post/FAIL_GET_POSTS' as const;
 const START_GET_POST_SELECTED = 'coinstagram/post/START_GET_POST_SELECTED' as const;
 const SUCCESS_GET_POST_SELECTED = 'coinstagram/post/SUCCESS_GET_POST_SELECTED' as const;
 const FAIL_GET_POST_SELECTED = 'coinstagram/post/FAIL_GET_POST_SELECTED' as const;
+
+const START_DELETE_POST = '/coinstagram/post/START_DELETE_POST' as const;
+const SUCCESS_DELETE_POST = '/coinstagram/post/SUCCESS_DELETE_POST' as const;
+const FAIL_DELETE_POST = '/coinstagram/post/FAIL_DELETE_POST' as const;
 
 // action creator
 const startGetPosts = () => ({
@@ -62,6 +66,22 @@ const failGetPostSelcted = (error: Error) => ({
   payload: error,
 });
 
+const startDeletePost = () => ({
+  type: START_DELETE_POST,
+});
+
+const successDeletePost = (post_id: number) => ({
+  type: SUCCESS_DELETE_POST,
+  payload: {
+    post_id,
+  },
+});
+
+const failDeletePost = (error: Error) => ({
+  type: FAIL_DELETE_POST,
+  payload: error,
+});
+
 type PostActions =
   | ReturnType<typeof startGetPosts>
   | ReturnType<typeof successGetPostsUser>
@@ -70,13 +90,17 @@ type PostActions =
   | ReturnType<typeof failGetPosts>
   | ReturnType<typeof startGetPostSelected>
   | ReturnType<typeof successGetPostSelected>
-  | ReturnType<typeof failGetPostSelcted>;
+  | ReturnType<typeof failGetPostSelcted>
+  | ReturnType<typeof startDeletePost>
+  | ReturnType<typeof successDeletePost>
+  | ReturnType<typeof failDeletePost>;
 
 // saga action type
 const GET_RANDOM_POSTS_SAGA = 'GET_RANDOM_POSTS_SAGA' as const;
 const GET_FEED_POSTS_SAGA = 'GET_FEED_POSTS_SAGA' as const;
 const GET_USER_POSTS_SAGA = 'GET_USER_POSTS_SAGA' as const;
 const GET_SELECTED_POST_SAGA = 'GET_SELECTED_POST_SAGA' as const;
+const DELETE_POST_SAGA = 'DELETE_POST_SAGA' as const;
 
 // saga action creator
 export const getRandomPostsSaga = () => ({
@@ -104,11 +128,20 @@ export const getSelectedPostSaga = (post_id: number) => ({
   },
 });
 
+export const deletePostSaga = (post_id: number) => ({
+  type: DELETE_POST_SAGA,
+  payload: {
+    post_id,
+  },
+});
+
 type PostSagaActions =
   | ReturnType<typeof getUserPostsSaga>
   | ReturnType<typeof getFeedPostsSaga>;
 
-type selectedPostSagaAction = ReturnType<typeof getSelectedPostSaga>;
+type onePostSagaAction =
+  | ReturnType<typeof getSelectedPostSaga>
+  | ReturnType<typeof deletePostSaga>;
 
 // saga function
 function* getRandomPosts() {
@@ -159,7 +192,7 @@ function* getUserPosts(action: PostSagaActions) {
   }
 }
 
-function* getSelectedPost(action: selectedPostSagaAction) {
+function* getSelectedPost(action: onePostSagaAction) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
     yield put(startGetPostSelected());
@@ -174,12 +207,24 @@ function* getSelectedPost(action: selectedPostSagaAction) {
   }
 }
 
+function* deletePost(action: onePostSagaAction) {
+  try {
+    const { token } = yield select((state: RootState) => state.auth);
+    yield put(startDeletePost());
+    yield call(PostService.deletePost, token, action.payload.post_id);
+    yield put(successDeletePost(action.payload.post_id));
+  } catch (error) {
+    yield put(failDeletePost(error));
+  }
+}
+
 // saga function register
 export function* postsSaga() {
   yield takeLatest(GET_RANDOM_POSTS_SAGA, getRandomPosts);
-  yield takeLatest(GET_FEED_POSTS_SAGA, getFeedPosts);
+  yield takeLeading(GET_FEED_POSTS_SAGA, getFeedPosts);
   yield takeLatest(GET_USER_POSTS_SAGA, getUserPosts);
   yield takeLatest(GET_SELECTED_POST_SAGA, getSelectedPost);
+  yield takeLatest(DELETE_POST_SAGA, deletePost);
 }
 
 // initial state
@@ -218,6 +263,13 @@ function postReducer(
           post: null,
         },
       };
+    case START_DELETE_POST:
+      return {
+        loading: true,
+        error: null,
+        FeedPosts: state.FeedPosts,
+        selectedPost: state.selectedPost,
+      };
     case SUCCESS_GET_POSTS_RANDOM:
       return {
         loading: false,
@@ -250,6 +302,15 @@ function postReducer(
           post: action.payload.selectedPost,
         },
       };
+    case SUCCESS_DELETE_POST:
+      return {
+        loading: false,
+        error: null,
+        FeedPosts: state.FeedPosts.filter(
+          post => post.id !== action.payload.post_id,
+        ),
+        selectedPost: state.selectedPost,
+      };
     case FAIL_GET_POSTS:
       return {
         loading: false,
@@ -267,6 +328,13 @@ function postReducer(
           error: action.payload,
           post: null,
         },
+      };
+    case FAIL_DELETE_POST:
+      return {
+        loading: false,
+        error: null,
+        FeedPosts: state.FeedPosts,
+        selectedPost: state.selectedPost,
       };
     default:
       return state;
