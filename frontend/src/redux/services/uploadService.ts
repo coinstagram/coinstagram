@@ -20,9 +20,24 @@ const uploadService = class {
         },
       },
     );
+    const { post_id } = res.data;
+    console.log(post_id, data.image);
+
+    await axios.post(
+      `${getUrl}/image`,
+      {
+        post_id,
+        image: [...data.image],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
     return res.data;
   }
-  static async uploadImage(data: postData, token: String) {}
 };
 
 export default uploadService;
