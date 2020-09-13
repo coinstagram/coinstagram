@@ -1,5 +1,5 @@
 import { call, put, select, takeEvery, takeLeading } from 'redux-saga/effects';
-import RootState, { likeState } from '../../type';
+import RootState, { likeState, userLikesState } from '../../type';
 import LikeService from '../services/likeService';
 
 // action type
@@ -16,7 +16,7 @@ const startGetPostLikes = () => ({
   type: START_GET_POST_LIKES,
 });
 
-const successGetPostLikes = (postLikes: string[]) => ({
+const successGetPostLikes = (postLikes: userLikesState[]) => ({
   type: SUCCESS_GET_POST_LIKES,
   payload: {
     postLikes,
@@ -32,10 +32,11 @@ const startAddPostLike = () => ({
   type: START_ADD_POST_LIKE,
 });
 
-const successAddPostLike = (user_id: string) => ({
+const successAddPostLike = (user_id: string, post_id: number) => ({
   type: SUCCESS_ADD_POST_LIKE,
   payload: {
     user_id,
+    post_id,
   },
 });
 
@@ -79,12 +80,12 @@ function* getPostLikes(action: getLikesSagaAction) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
     yield put(startGetPostLikes());
-    const postLikes = yield call(
+    const userLikes = yield call(
       LikeService.getLikesPost,
       token,
       action.payload.post_id,
     );
-    yield put(successGetPostLikes(postLikes));
+    yield put(successGetPostLikes(userLikes));
   } catch (error) {
     yield put(failGetPostLikes(error));
   }
@@ -96,7 +97,7 @@ function* addPostLike(action: postLikeSagaAction) {
     const { user_id } = yield select((state: RootState) => state.userInfo.user);
     yield put(startAddPostLike());
     yield call(LikeService.addLikePost, token, action.payload.post_id);
-    yield put(successAddPostLike(user_id));
+    yield put(successAddPostLike(user_id, action.payload.post_id));
   } catch (error) {
     yield put(failAddPostLike(error));
   }
@@ -138,7 +139,10 @@ function likeReducer(state: likeState = initialState, action: likeActios) {
         postLikes: {
           loading: false,
           error: null,
-          userLikes: action.payload.postLikes,
+          userLikes: [
+            ...state.postLikes.userLikes,
+            ...action.payload.postLikes,
+          ],
         },
         commentLikes: state.commentLikes,
       };
@@ -165,7 +169,14 @@ function likeReducer(state: likeState = initialState, action: likeActios) {
         postLikes: {
           loading: false,
           error: null,
-          userLikes: [...state.postLikes.userLikes, action.payload.user_id],
+          userLikes: state.postLikes.userLikes.map(like =>
+            +like.post_id === action.payload.post_id
+              ? {
+                  post_id: like.post_id,
+                  user_id: [...like.user_id, action.payload.user_id],
+                }
+              : like,
+          ),
         },
         commentLikes: state.commentLikes,
       };

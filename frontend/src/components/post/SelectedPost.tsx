@@ -48,6 +48,7 @@ function SelectedPost({
 }: SelectedPostProps) {
   const { selectedPost } = useSelector((state: RootState) => state.posts);
   const { users } = useSelector((state: RootState) => state.userInfo.followers);
+  const { user_id } = useSelector((state: RootState) => state.userInfo.user);
 
   const selectedPostInfo = selectedPost.post;
   const { postModal, followModal, popPostModal, popFollowModal } = useContext(
@@ -95,6 +96,7 @@ function SelectedPost({
             />
           </StyledDiv>
           <FeedIcons
+            myId={user_id}
             postId={selectedPostId}
             getPostLikes={getPostLikes}
             addPostLikes={addPostLikes}

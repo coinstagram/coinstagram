@@ -117,7 +117,7 @@ async function postLike() {
   const res = await axios.post(
     '/post/like',
     {
-      post_id: 1,
+      post_id: 5,
     },
     {
       headers: {
@@ -217,7 +217,7 @@ async function getFollowerPosts() {
 
 async function login() {
   const res = await axios.post('/login', {
-    user_id: 'user7',
+    user_id: 'user3',
     user_password: 'asdf',
   });
 

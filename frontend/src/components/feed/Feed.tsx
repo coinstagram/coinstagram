@@ -82,6 +82,7 @@ function Feed({
             />
             <FeedBody />
             <FeedIcons
+              myId={myId}
               postId={post.id}
               getPostLikes={getPostLikes}
               addPostLikes={addPostLikes}

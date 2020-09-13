@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // icons
@@ -14,7 +14,6 @@ import { useSelector } from 'react-redux';
 
 // styles
 import { StyledDiv, IconDiv } from './FeedIconsStyle';
-import LikeService from '../../redux/services/likeService';
 
 interface State {
   like: boolean;
@@ -22,33 +21,43 @@ interface State {
 }
 
 interface FeedIconsProps {
+  myId: string;
   postId: number;
   getPostLikes: (post_id: number) => void;
   addPostLikes: (post_id: number) => void;
 }
 
-function FeedIcons({ postId, getPostLikes, addPostLikes }: FeedIconsProps) {
-  // const { userLikes } = useSelector(
-  // (state: RootState) => state.likes.postLikes,
-  // );
-  const { token } = useSelector((state: RootState) => state.auth);
-  const likeUsersRef = useRef<string[]>([]);
+function FeedIcons({
+  myId,
+  postId,
+  getPostLikes,
+  addPostLikes,
+}: FeedIconsProps) {
+  const { userLikes } = useSelector(
+    (state: RootState) => state.likes.postLikes,
+  );
+  const postLikesInfo = userLikes.find(like => +like.post_id === postId);
+  const likesCount =
+    postLikesInfo === undefined ? 0 : postLikesInfo.user_id.length;
   const [state, setState] = useState<State>({
     like: false,
     favorite: false,
   });
 
-  async function getLikes() {
-    const usersArray = await LikeService.getLikesPost(token, postId);
-    likeUsersRef.current = usersArray;
-    console.log(likeUsersRef.current);
-  }
-
-  getLikes();
-
   useEffect(() => {
     getPostLikes(postId);
   }, [getPostLikes, postId]);
+
+  useEffect(() => {
+    const isLiked =
+      postLikesInfo && postLikesInfo.user_id.some(userId => userId === myId);
+    if (!isLiked) return;
+
+    setState(st => ({
+      ...st,
+      like: true,
+    }));
+  }, [postLikesInfo, myId]);
 
   return (
     <StyledDiv>
@@ -72,10 +81,8 @@ function FeedIcons({ postId, getPostLikes, addPostLikes }: FeedIconsProps) {
         </button>
       </IconDiv>
       <div>
-        {likeUsersRef.current.length === 0 && <p>지금 좋아요를 눌러보세요</p>}
-        {likeUsersRef.current.length !== 0 && (
-          <p>{likeUsersRef.current.length}명이 좋아합니다.</p>
-        )}
+        {likesCount === 0 && <p>지금 좋아요를 눌러보세요</p>}
+        {likesCount !== 0 && <p>{likesCount}명이 좋아합니다.</p>}
       </div>
     </StyledDiv>
   );

@@ -51,10 +51,15 @@ export interface CommentsState {
   myComments: EachCommentState[];
 }
 
+export interface userLikesState {
+  post_id: number;
+  user_id: string[];
+}
+
 export interface EachLikeState {
   loading: boolean;
   error: null | Error;
-  userLikes: string[];
+  userLikes: userLikesState[];
 }
 
 export interface likeState {
