@@ -49,7 +49,22 @@ export interface CommentsState {
   error: null | Error;
   postComments: EachCommentState[];
   myComments: EachCommentState[];
-  // likes: null | stringArray;
+}
+
+export interface userLikesState {
+  post_id: number;
+  user_id: string[];
+}
+
+export interface EachLikeState {
+  loading: boolean;
+  error: null | Error;
+  userLikes: userLikesState[];
+}
+
+export interface likeState {
+  postLikes: EachLikeState;
+  commentLikes: EachLikeState;
 }
 
 export interface EachPostState {
@@ -115,6 +130,7 @@ interface RootState {
   anotherUserInfo: AnotherUserInfoState;
   posts: PostsState;
   comments: CommentsState;
+  likes: likeState;
 }
 
 export default RootState;

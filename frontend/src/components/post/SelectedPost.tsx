@@ -26,6 +26,8 @@ interface SelectedPostProps {
   getUserPosts: () => void;
   getCommentsPost: () => void;
   addCommentPost: (post_id: number, comment_text: string) => void;
+  getPostLikes: (post_id: number) => void;
+  addPostLikes: (post_id: number) => void;
   follow: () => void;
   cancelFollow: () => void;
   deletePost: (post_id: number) => void;
@@ -38,12 +40,15 @@ function SelectedPost({
   getUserPosts,
   getCommentsPost,
   addCommentPost,
+  getPostLikes,
+  addPostLikes,
   follow,
   cancelFollow,
   deletePost,
 }: SelectedPostProps) {
   const { selectedPost } = useSelector((state: RootState) => state.posts);
   const { users } = useSelector((state: RootState) => state.userInfo.followers);
+  const { user_id } = useSelector((state: RootState) => state.userInfo.user);
 
   const selectedPostInfo = selectedPost.post;
   const { postModal, followModal, popPostModal, popFollowModal } = useContext(
@@ -90,7 +95,12 @@ function SelectedPost({
               thumbnail={true}
             />
           </StyledDiv>
-          <FeedIcons postId={selectedPostId} />
+          <FeedIcons
+            myId={user_id}
+            postId={selectedPostId}
+            getPostLikes={getPostLikes}
+            addPostLikes={addPostLikes}
+          />
           <StyledPassedTimeDiv
             className={`${selectedPostId}-createdTime`}
             marginLeft={true}

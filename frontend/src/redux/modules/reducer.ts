@@ -1,12 +1,13 @@
 import { combineReducers } from 'redux';
+import { connectRouter } from 'connected-react-router';
+import { History } from 'history';
 import auth from './auth';
 import userInfo from './userInfo';
 import anotherUserInfo from './anotherUser';
 import posts from './post';
 import comments from './comment';
-import { connectRouter } from 'connected-react-router';
-import { History } from 'history';
 import postReducer from './upload';
+import likes from './like';
 
 const rootReducer = (history: History) =>
   combineReducers({
@@ -16,6 +17,7 @@ const rootReducer = (history: History) =>
     posts,
     postReducer,
     comments,
+    likes,
     router: connectRouter(history),
   });
 

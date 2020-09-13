@@ -50,6 +50,7 @@ function Home() {
         <button onClick={getPostLikes}>특정 게시물에 좋아요 get</button>
         <button onClick={addBookmark}>특정 게시물에 북마크</button>
         <button onClick={getBookmark}>특정 유저의 북마크</button>
+        <button onClick={addCommentLike}>댓글 좋아요 추가</button>
       </StyledDiv>
     </>
   );
@@ -85,6 +86,23 @@ async function addBookmark() {
   console.log(res.data);
 }
 
+async function addCommentLike() {
+  const res = await axios.post(
+    '/comment/like',
+    {
+      post_id: 1,
+      comment_id: 1,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  console.log(res.data);
+}
+
 async function getPostLikes() {
   const res = await axios.get('/post/like/1', {
     headers: {
@@ -99,7 +117,7 @@ async function postLike() {
   const res = await axios.post(
     '/post/like',
     {
-      post_id: 1,
+      post_id: 5,
     },
     {
       headers: {
@@ -199,7 +217,7 @@ async function getFollowerPosts() {
 
 async function login() {
   const res = await axios.post('/login', {
-    user_id: 'user7',
+    user_id: 'user3',
     user_password: 'asdf',
   });
 
