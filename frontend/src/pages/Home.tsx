@@ -50,6 +50,7 @@ function Home() {
         <button onClick={getPostLikes}>특정 게시물에 좋아요 get</button>
         <button onClick={addBookmark}>특정 게시물에 북마크</button>
         <button onClick={getBookmark}>특정 유저의 북마크</button>
+        <button onClick={addCommentLike}>댓글 좋아요 추가</button>
       </StyledDiv>
     </>
   );
@@ -74,6 +75,23 @@ async function addBookmark() {
     '/bookmark',
     {
       post_id: 2,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  console.log(res.data);
+}
+
+async function addCommentLike() {
+  const res = await axios.post(
+    '/comment/like',
+    {
+      post_id: 1,
+      comment_id: 1,
     },
     {
       headers: {

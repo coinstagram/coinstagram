@@ -26,6 +26,8 @@ interface SelectedPostProps {
   getUserPosts: () => void;
   getCommentsPost: () => void;
   addCommentPost: (post_id: number, comment_text: string) => void;
+  getPostLikes: (post_id: number) => void;
+  addPostLikes: (post_id: number) => void;
   follow: () => void;
   cancelFollow: () => void;
   deletePost: (post_id: number) => void;
@@ -38,6 +40,8 @@ function SelectedPost({
   getUserPosts,
   getCommentsPost,
   addCommentPost,
+  getPostLikes,
+  addPostLikes,
   follow,
   cancelFollow,
   deletePost,
@@ -90,7 +94,11 @@ function SelectedPost({
               thumbnail={true}
             />
           </StyledDiv>
-          <FeedIcons postId={selectedPostId} />
+          <FeedIcons
+            postId={selectedPostId}
+            getPostLikes={getPostLikes}
+            addPostLikes={addPostLikes}
+          />
           <StyledPassedTimeDiv
             className={`${selectedPostId}-createdTime`}
             marginLeft={true}

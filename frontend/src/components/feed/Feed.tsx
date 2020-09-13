@@ -14,22 +14,24 @@ interface FeedProps {
   loading: boolean;
   error: null | Error;
   feedPosts: EachPostState[];
-  myProfile: null | string;
   myId: null | string;
   getFeedPosts: (user_id: string) => void;
   getCommentsPost: (post_id: number) => void;
   addCommentPost: (post_id: number, comment_text: string) => void;
+  getPostLikes: (post_id: number) => void;
+  addPostLikes: (post_id: number) => void;
 }
 
 function Feed({
   loading,
   error,
   feedPosts,
-  myProfile,
   myId,
   getFeedPosts,
   getCommentsPost,
   addCommentPost,
+  getPostLikes,
+  addPostLikes,
 }: FeedProps) {
   const lastItemRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver>();
@@ -79,7 +81,11 @@ function Feed({
               location={post.post_location}
             />
             <FeedBody />
-            <FeedIcons postId={post.id} />
+            <FeedIcons
+              postId={post.id}
+              getPostLikes={getPostLikes}
+              addPostLikes={addPostLikes}
+            />
             <FeedComment
               userId={post.user_id}
               postId={post.id}

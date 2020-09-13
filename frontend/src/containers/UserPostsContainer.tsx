@@ -13,6 +13,7 @@ import {
   cancelFollowUserSaga,
   followUserSaga,
 } from '../redux/modules/userInfo';
+import { addPostLikeSaga, getPostLikesSaga } from '../redux/modules/like';
 
 // components
 import SelectedPost from '../components/post/SelectedPost';
@@ -53,6 +54,20 @@ function UserPostsContainer() {
     [dispatch],
   );
 
+  const getPostLikes = useCallback(
+    (post_id: number) => {
+      dispatch(getPostLikesSaga(post_id));
+    },
+    [dispatch],
+  );
+
+  const addPostLikes = useCallback(
+    (post_id: number) => {
+      dispatch(addPostLikeSaga(post_id));
+    },
+    [dispatch],
+  );
+
   const follow = useCallback(() => {
     dispatch(
       followUserSaga(selectedUserId, selectedUserName, selectedUserProfile),
@@ -79,6 +94,8 @@ function UserPostsContainer() {
         getUserPosts={getUserPosts}
         getCommentsPost={getCommentsPost}
         addCommentPost={addCommentPost}
+        getPostLikes={getPostLikes}
+        addPostLikes={addPostLikes}
         follow={follow}
         cancelFollow={cancelFollow}
         deletePost={deletePost}

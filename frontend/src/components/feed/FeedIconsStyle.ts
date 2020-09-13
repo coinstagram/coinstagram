@@ -19,17 +19,17 @@ export const IconDiv = styled.div`
     span {
       outline: none;
     }
+  }
 
-    &#like {
-      ${props =>
-        props.like &&
-        css`
-          color: rgb(250, 82, 82);
-          &:hover {
-            color: rgb(255, 107, 107);
-          }
-        `};
-    }
+  [class^='like-'] {
+    ${props =>
+      props.like &&
+      css`
+        color: rgb(250, 82, 82);
+        &:hover {
+          color: rgb(255, 107, 107);
+        }
+      `};
   }
 
   a {
