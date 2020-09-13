@@ -11,11 +11,12 @@ function FeedContainer() {
   const dispatch = useDispatch();
   const { posts, userInfo } = useSelector((state: RootState) => state);
   const { loading, error, FeedPosts } = posts;
-  const user_profile = userInfo.user && userInfo.user.user_profile;
+  const myId = userInfo.user && userInfo.user.user_id;
+  const myProfile = userInfo.user && userInfo.user.user_profile;
 
   const getFeedPosts = useCallback(
-    (user_id: string) => {
-      dispatch(getFeedPostsSaga(user_id));
+    (userId: string) => {
+      dispatch(getFeedPostsSaga(userId));
     },
     [dispatch],
   );
@@ -39,7 +40,8 @@ function FeedContainer() {
       loading={loading}
       error={error}
       feedPosts={FeedPosts}
-      userProfile={user_profile}
+      myId={myId}
+      myProfile={myProfile}
       getFeedPosts={getFeedPosts}
       getCommentsPost={getCommentsPost}
       addCommentPost={addCommentPost}
@@ -47,4 +49,4 @@ function FeedContainer() {
   );
 }
 
-export default FeedContainer;
+export default React.memo(FeedContainer);

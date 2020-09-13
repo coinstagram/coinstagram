@@ -12,6 +12,17 @@ export const StyledModal = styled.div`
   left: calc(50% - 200px);
   background-color: rgb(255, 255, 255);
   border-radius: 12px;
+  animation: smaller 0.2s;
+
+  @keyframes smaller {
+    0% {
+      transform: scale(1.1);
+    }
+
+    100% {
+      transform: scale(1);
+    }
+  }
 
   li + li {
     border-top: 1px solid rgb(219, 219, 219);

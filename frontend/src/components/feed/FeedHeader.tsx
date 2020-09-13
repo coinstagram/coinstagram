@@ -1,10 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { ModalContext } from '../../App';
-import { followContext } from '../../containers/HomeMain';
+import { followContext } from '../HomeMain';
 import { Link, useHistory } from 'react-router-dom';
-
-// components
-import Thumbnail from '../common/Thumbnail';
+import { useSelector } from 'react-redux';
+import RootState from '../../type';
 
 // styles
 import {
@@ -14,46 +13,82 @@ import {
   StyledBtn,
 } from './FeedHeaderStyle';
 
+// components
+import Thumbnail from '../common/Thumbnail';
+import FollowBtn from '../recommend/FollowBtn';
+
 interface FeedHeaderProps {
   userId: string;
+  userProfile?: null | string;
   postId: number;
   location: null | string;
-  userProfile: null | string;
 }
 
 function FeedHeader({
   userId,
+  userProfile,
   postId,
   location,
-  userProfile,
 }: FeedHeaderProps) {
+  const { user, followers } = useSelector((state: RootState) => state.userInfo);
+  const myId = user && user.user_id;
+  const myProfile = user && user.user_profile;
+  const followersInfo = followers.users;
   const { popPostModal } = useContext(ModalContext);
-  const { setFollowInfo, changePostId } = useContext(followContext);
+  const value = useContext(followContext);
+  const setFollowInfo = value && value.setFollowInfo;
+  const changePostId = value && value.changePostId;
   const history = useHistory();
+  const profileRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (userId === myId) {
+      profileRef.current = myProfile;
+    } else {
+      const feedFollower = followersInfo.find(
+        follower => follower.user_id === userId,
+      );
+
+      profileRef.current = feedFollower && feedFollower.user_profile;
+    }
+  }, [followersInfo, myId, myProfile, userId]);
 
   return (
-    <>
-      <StyledDiv>
-        <button onClick={pageMove}>
-          <Thumbnail size={35} imageUrl={userProfile} />
-          <UsernameDiv tabIndex={-1} hasLocation={location}>
-            <dt className="a11y-hidden">user id</dt>
-            <dd>{userId}</dd>
-          </UsernameDiv>
-        </button>
-        <Link to={`/explore/tags/${location}`}>
-          <LocationDiv tabIndex={-1} hasLocation={location}>
-            <dt className="a11y-hidden">location</dt>
-            <dd>{location}</dd>
-          </LocationDiv>
-        </Link>
-        <StyledBtn onClick={setModal}>
-          <div tabIndex={-1}>
-            <span></span>
-          </div>
-        </StyledBtn>
-      </StyledDiv>
-    </>
+    <StyledDiv>
+      <button onClick={pageMove}>
+        <Thumbnail
+          size={35}
+          imageUrl={
+            userProfile === undefined ? profileRef.current : userProfile
+          }
+        />
+        <UsernameDiv tabIndex={-1} hasLocation={location}>
+          <dt className="a11y-hidden">user id</dt>
+          <dd>{userId}</dd>
+        </UsernameDiv>
+      </button>
+      <Link to={`/explore/tags/${location}`}>
+        <LocationDiv tabIndex={-1} hasLocation={location}>
+          <dt className="a11y-hidden">location</dt>
+          <dd>{location}</dd>
+        </LocationDiv>
+      </Link>
+      {userId !== myId && (
+        <FollowBtn
+          size={120}
+          userId={userId}
+          userName={undefined}
+          userProfile={profileRef.current}
+          followers={followersInfo}
+          isheader={true}
+        />
+      )}
+      <StyledBtn onClick={setModal}>
+        <div tabIndex={-1}>
+          <span></span>
+        </div>
+      </StyledBtn>
+    </StyledDiv>
   );
 
   function pageMove() {
@@ -64,9 +99,16 @@ function FeedHeader({
 
   function setModal() {
     popPostModal();
+    if (!changePostId || !setFollowInfo) return;
     changePostId(postId);
-    setFollowInfo(userId, userProfile, null);
+    const profile =
+      userProfile === undefined ? profileRef.current : userProfile;
+    setFollowInfo(userId, profile, null);
   }
 }
 
-export default FeedHeader;
+FeedHeader.defaultProps = {
+  // userProfile:
+};
+
+export default React.memo(FeedHeader);

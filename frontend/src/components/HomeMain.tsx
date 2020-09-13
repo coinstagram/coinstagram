@@ -1,27 +1,22 @@
-import React, {
-  useEffect,
-  useCallback,
-  createContext,
-  useState,
-  useContext,
-} from 'react';
+import React, { useCallback, createContext, useState, useContext } from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
-  getUserInfoSaga,
   followUserSaga,
   cancelFollowUserSaga,
 } from '../redux/modules/userInfo';
+import { deletePostSaga } from '../redux/modules/post';
 import { ModalContext } from '../App';
 
 // components
-import FollowUsersContainer from './FollowUsersContainer';
-import RecommendUsersContainer from './RecommendUsersContainer';
-import FeedContainer from './FeedContainer';
-import FollowCancelModal from '../components/common/FollowCancelModal';
-import PostModal from '../components/common/PostModal';
+import FollowUsersContainer from '../containers/FollowUsersContainer';
+import RecommendUsersContainer from '../containers/RecommendUsersContainer';
+import FeedContainer from '../containers/FeedContainer';
+import FollowCancelModal from './common/FollowCancelModal';
+import PostModal from './common/PostModal';
+import RootState from '../type';
 
-export interface contextValue {
+interface contextValue {
   follow: (
     user_id: string,
     user_name: string,
@@ -51,13 +46,14 @@ const StyledDiv = styled.div`
   }
 `;
 
-interface ModalState {
+export interface ModalState {
   user_id: string;
   user_profile: null | string;
   targetEl: null | HTMLSpanElement;
 }
 
 function HomeMain() {
+  const { users } = useSelector((state: RootState) => state.userInfo.followers);
   const dispatch = useDispatch();
   const [followModalState, setFollowModalState] = useState<ModalState>({
     user_id: '',
@@ -70,10 +66,6 @@ function HomeMain() {
   );
 
   const { user_id, user_profile, targetEl } = followModalState;
-
-  useEffect(() => {
-    dispatch(getUserInfoSaga());
-  }, [dispatch]);
 
   const changePostId = useCallback((post_id: number) => {
     setPostId(post_id);
@@ -89,6 +81,13 @@ function HomeMain() {
   const cancelFollow = useCallback(() => {
     dispatch(cancelFollowUserSaga(user_id));
   }, [dispatch, user_id]);
+
+  const deletePost = useCallback(
+    (post_id: number) => {
+      dispatch(deletePostSaga(post_id));
+    },
+    [dispatch],
+  );
 
   const setFollowInfo = useCallback(
     (
@@ -137,6 +136,10 @@ function HomeMain() {
           popFollowModal={popFollowModal}
           postId={postId}
           userId={user_id}
+          userProfile={user_profile}
+          followers={users}
+          follow={follow}
+          deletePost={deletePost}
         />
       )}
     </followContext.Provider>

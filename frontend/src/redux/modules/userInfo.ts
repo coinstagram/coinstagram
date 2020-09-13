@@ -1,8 +1,8 @@
 import RootState, {
   UserInfoState,
+  AuthState,
   UserResponseState,
   AnotherUserState,
-  AuthState,
 } from '../../type';
 import { put, call, takeEvery, select, delay } from 'redux-saga/effects';
 import UserService from '../services/userService';
@@ -11,7 +11,10 @@ import UserService from '../services/userService';
 const START_GET_USERINFO = 'coinstagram/user/START_GET_USERINFO' as const;
 const SUCCESS_GET_USERINFO = 'coinstagram/user/SUCCESS_GET_USERINFO' as const;
 const FAIL_GET_USER_INFO = 'coinstagram/user/FAIL_GET_USER_INFO' as const;
+
+const START_GET_RANDOM_USER = 'coinstagram/user/START_GET_RANDOM_USER' as const;
 const SUCCESS_GET_RANDOM_USER = 'coinstagram/user/SUCCESS_GET_RANDOM_USER' as const;
+const FAIL_GET_RANDOM_USER = 'coinstagram/user/FAIL_GET_RANDOM_USER' as const;
 
 const START_FOLLOW_USER = '/coinstagram/user/START_FOLLOW_USER' as const;
 const FOLLOW_USER = '/coinstagram/user/FOLLOW_USER' as const;
@@ -35,11 +38,20 @@ const failUserInfo = (error: Error) => ({
   payload: error,
 });
 
+const startGetRandomUser = () => ({
+  type: START_GET_RANDOM_USER,
+});
+
 const successGetRandomUser = (randomUsers: AnotherUserState[]) => ({
   type: SUCCESS_GET_RANDOM_USER,
   payload: {
     randomUsers,
   },
+});
+
+const failGetRandomUser = (error: Error) => ({
+  type: FAIL_GET_RANDOM_USER,
+  payload: error,
 });
 
 const startFollowUser = () => ({
@@ -75,7 +87,9 @@ type UserActions =
   | ReturnType<typeof startGetUserInfo>
   | ReturnType<typeof successGetUserInfo>
   | ReturnType<typeof failUserInfo>
+  | ReturnType<typeof startGetRandomUser>
   | ReturnType<typeof successGetRandomUser>
+  | ReturnType<typeof failGetRandomUser>
   | ReturnType<typeof startFollowUser>
   | ReturnType<typeof followUser>
   | ReturnType<typeof cancelFollowUser>
@@ -84,7 +98,6 @@ type UserActions =
 // saga action type
 const GET_USERINFO_SAGA = 'GET_USERINFO_SAGA' as const;
 const GET_RANDOM_USER_SAGA = 'GET_RANDOM_USER_SAGA' as const;
-
 const FOLLOW_USER_SAGA = 'FOLLOW_USER_SAGA' as const;
 const CANCEL_FOLLOW_USER_SAGA = 'CANCEL_FOLLOW_USER_SAGA' as const;
 
@@ -93,7 +106,7 @@ export const getUserInfoSaga = () => ({
   type: GET_USERINFO_SAGA,
 });
 
-export const getRandomUserSaga = () => ({
+export const getRandomUserInfoSaga = () => ({
   type: GET_RANDOM_USER_SAGA,
 });
 
@@ -130,13 +143,22 @@ function* getUserSaga() {
       token,
     );
     yield put(successGetUserInfo(getUserData));
+  } catch (error) {
+    yield put(failUserInfo(error));
+  }
+}
+
+function* getRandomUserSaga() {
+  try {
+    const { token }: AuthState = yield select((state: RootState) => state.auth);
+    yield put(startGetRandomUser());
     const randomUsers: AnotherUserState[] = yield call(
       UserService.getRandomUser,
       token,
     );
     yield put(successGetRandomUser(randomUsers));
   } catch (error) {
-    yield put(failUserInfo(error));
+    yield put(failGetRandomUser(error));
   }
 }
 
@@ -172,6 +194,7 @@ function* followingCancelSaga(action: followSagaActions) {
 // saga function register
 export function* userInfoSaga() {
   yield takeEvery(GET_USERINFO_SAGA, getUserSaga);
+  yield takeEvery(GET_RANDOM_USER_SAGA, getRandomUserSaga);
   yield takeEvery(FOLLOW_USER_SAGA, followingUserSaga);
   yield takeEvery(CANCEL_FOLLOW_USER_SAGA, followingCancelSaga);
 }
@@ -187,7 +210,11 @@ const initialState: UserInfoState = {
     users: [],
   },
   followees: [],
-  randomUsers: [],
+  randomUsers: {
+    loading: false,
+    error: null,
+    users: [],
+  },
 };
 
 // reducer
@@ -207,7 +234,7 @@ function userInfoReducer(
           users: [],
         },
         followees: [],
-        randomUsers: [],
+        randomUsers: state.randomUsers,
       };
     case SUCCESS_GET_USERINFO:
       return {
@@ -220,7 +247,20 @@ function userInfoReducer(
           users: action.payload.userData.follower,
         },
         followees: action.payload.userData.followee,
-        randomUsers: [],
+        randomUsers: state.randomUsers,
+      };
+    case START_GET_RANDOM_USER:
+      return {
+        loading: false,
+        error: null,
+        user: state.user,
+        followers: state.followers,
+        followees: state.followees,
+        randomUsers: {
+          loading: true,
+          error: null,
+          users: [],
+        },
       };
     case SUCCESS_GET_RANDOM_USER:
       return {
@@ -229,7 +269,24 @@ function userInfoReducer(
         user: state.user,
         followers: state.followers,
         followees: state.followees,
-        randomUsers: action.payload.randomUsers,
+        randomUsers: {
+          loading: false,
+          error: null,
+          users: action.payload.randomUsers,
+        },
+      };
+    case FAIL_GET_RANDOM_USER:
+      return {
+        loading: false,
+        error: null,
+        user: state.user,
+        followers: state.followers,
+        followees: state.followees,
+        randomUsers: {
+          loading: false,
+          error: action.payload,
+          users: [],
+        },
       };
     case START_FOLLOW_USER:
       return {

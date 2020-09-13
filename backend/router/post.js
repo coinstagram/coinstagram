@@ -477,7 +477,6 @@ router.get('/comment/like/:post_id', async (req, res) => {
 
       const [data] = await connection.query(sql, post_id);
       console.log(data);
-
       res.send({ post_id, comment: data.map((data) => data) });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
@@ -533,7 +532,7 @@ router.get('/bookmark/:user_id', async (req, res) => {
     try {
       sql = `select post_id from bookmark where user_id = ?;`;
       const [check] = await connection.query(sql, user_id);
-      res.send({ bookmark: check.map(({ post_id }) => post_id) });
+      res.send(check.map(({ post_id }) => post_id));
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();

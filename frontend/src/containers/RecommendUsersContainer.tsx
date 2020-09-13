@@ -1,22 +1,24 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getRandomUserInfoSaga } from '../redux/modules/userInfo';
 import RootState from '../type';
 
 // components
 import RecommendUsers from '../components/recommend/RecommendUsers';
 
 function RecommendUsersContainer() {
-  const { loading, error, user, randomUsers, followers } = useSelector(
-    (state: RootState) => state.userInfo,
-  );
+  const dispatch = useDispatch();
+  const { user, followers } = useSelector((state: RootState) => state.userInfo);
+
+  const getRandomUser = useCallback(() => {
+    dispatch(getRandomUserInfoSaga());
+  }, [dispatch]);
 
   return (
     <RecommendUsers
-      loading={loading}
-      error={error}
       user={user}
-      randomUsers={randomUsers}
       followers={followers.users}
+      getRandomUser={getRandomUser}
     />
   );
 }
