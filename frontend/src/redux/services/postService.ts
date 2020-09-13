@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { EachPostState } from '../../type';
 
-// const baseUrl = '/post'
+const baseUrl = '/post';
 
 interface IPostService {
   getRandomPosts: (token: string | null) => Promise<EachPostState[]>;
@@ -14,11 +14,12 @@ interface IPostService {
     token: string | null,
     post_id: number,
   ) => Promise<EachPostState>;
+  deletePost: (token: string | null, post_id: number) => void;
 }
 
 const PostService: IPostService = class {
   static async getRandomPosts(token: string | null) {
-    const res = await axios.get<EachPostState[]>('/posts', {
+    const res = await axios.get<EachPostState[]>(`${baseUrl}s`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -28,17 +29,20 @@ const PostService: IPostService = class {
   }
 
   static async getFollowersPosts(token: string | null) {
-    const res = await axios.get<EachPostState[]>('/user/relationship/post', {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const res = await axios.get<EachPostState[]>(
+      `/user/relationship${baseUrl}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
 
     return res.data;
   }
 
   static async getUserPosts(token: string | null, user_id: string) {
-    const res = await axios.get<EachPostState[]>(`/user/post/${user_id}`, {
+    const res = await axios.get<EachPostState[]>(`/user${baseUrl}/${user_id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -48,7 +52,7 @@ const PostService: IPostService = class {
   }
 
   static async getSelectedPost(token: string | null, post_id: number) {
-    const res = await axios.get<EachPostState>(`/post/${post_id}`, {
+    const res = await axios.get<EachPostState>(`${baseUrl}/${post_id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -57,9 +61,15 @@ const PostService: IPostService = class {
     return res.data;
   }
 
-  // static async getSelectedPosts()
+  static async deletePost(token: string | null, post_id: number) {
+    const res = await axios.delete(`${baseUrl}/${post_id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-  // static async deletePosts..
+    console.log(res.data);
+  }
 
   // static async patchPosts..
 };

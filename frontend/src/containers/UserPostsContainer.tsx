@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import RootState from '../type';
 import { useLocation } from 'react-router-dom';
 import { getAnotherUserSaga } from '../redux/modules/anotherUser';
-import { getUserPostsSaga, getSelectedPostSaga } from '../redux/modules/post';
+import {
+  getUserPostsSaga,
+  getSelectedPostSaga,
+  deletePostSaga,
+} from '../redux/modules/post';
 import { getPostComments, addPostComment } from '../redux/modules/comment';
 import {
   cancelFollowUserSaga,
@@ -38,10 +42,6 @@ function UserPostsContainer() {
     dispatch(getUserPostsSaga(selectedUserId));
   }, [dispatch, selectedUserId]);
 
-  // const getSelectedPost = useCallback(() => {
-  //   dispatch(getSelectedPostSaga(postId));
-  // }, [dispatch, postId]);
-
   const getCommentsPost = useCallback(() => {
     dispatch(getPostComments(selectedPostId));
   }, [dispatch, selectedPostId]);
@@ -63,6 +63,13 @@ function UserPostsContainer() {
     dispatch(cancelFollowUserSaga(selectedUserId));
   }, [dispatch, selectedUserId]);
 
+  const deletePost = useCallback(
+    (post_id: number) => {
+      dispatch(deletePostSaga(post_id));
+    },
+    [dispatch],
+  );
+
   return (
     <>
       <SelectedPost
@@ -74,6 +81,7 @@ function UserPostsContainer() {
         addCommentPost={addCommentPost}
         follow={follow}
         cancelFollow={cancelFollow}
+        deletePost={deletePost}
       />
       <AnotherPosts />
     </>

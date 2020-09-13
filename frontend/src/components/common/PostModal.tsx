@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import RootState, { AnotherUserState } from '../../type';
 
@@ -12,13 +12,14 @@ interface PostModalProps {
   postId: number;
   userId: string | null;
   userName?: string;
-  userProfile?: null | string;
+  userProfile: null | string;
   followers: AnotherUserState[];
   follow: (
     user_id: string,
     user_name: string,
     user_profile: null | string,
   ) => void;
+  deletePost: (post_id: number) => void;
 }
 
 function PostModal({
@@ -30,9 +31,11 @@ function PostModal({
   userProfile,
   followers,
   follow,
+  deletePost,
 }: PostModalProps) {
   const user = useSelector((state: RootState) => state.userInfo.user);
   const user_id = user && user.user_id;
+  const history = useHistory();
   const urlPost = +useLocation().pathname.split('/')[2];
 
   return (
@@ -47,7 +50,7 @@ function PostModal({
                 </button>
               </li>
               <li>
-                <button>
+                <button onClick={postDelete}>
                   <span tabIndex={-1}>삭제</span>
                 </button>
               </li>
@@ -86,6 +89,11 @@ function PostModal({
     </StyledBg>
   );
 
+  function postDelete() {
+    deletePost(postId);
+    history.push('/');
+  }
+
   function popCancelFollowModal(
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) {
@@ -96,7 +104,6 @@ function PostModal({
 
 PostModal.defaultProps = {
   userName: null,
-  userProfile: null,
 };
 
 export default PostModal;

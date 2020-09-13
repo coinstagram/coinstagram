@@ -6,11 +6,11 @@ export const StyledArticle = styled.article`
   & > div:nth-child(1) {
     float: left;
     width: 100%;
-    max-width: ${props => props.width > 1029 && 600};
+    max-width: ${props => props.width > 1000 && 600};
   }
 
   & > div:nth-child(2) {
-    overflow: ${props => props.width > 1029 && 'hidden'};
+    overflow: ${props => props.width > 1000 && 'hidden'};
   }
 `;
 
@@ -19,7 +19,7 @@ export const StyledDiv = styled.div`
   border-bottom: 1px solid rgb(239, 239, 239);
   overflow-y: auto;
   height: 100%;
-  max-height: ${props => (props.width > 1029 ? 351 : 300)};
+  max-height: ${props => (props.width > 1000 ? 351 : 300)};
   -ms-overflow-style: none;
   &::-webkit-scrollbar {
     display: none;

@@ -5,6 +5,7 @@ import {
   followUserSaga,
   cancelFollowUserSaga,
 } from '../redux/modules/userInfo';
+import { deletePostSaga } from '../redux/modules/post';
 import { ModalContext } from '../App';
 
 // components
@@ -81,6 +82,13 @@ function HomeMain() {
     dispatch(cancelFollowUserSaga(user_id));
   }, [dispatch, user_id]);
 
+  const deletePost = useCallback(
+    (post_id: number) => {
+      dispatch(deletePostSaga(post_id));
+    },
+    [dispatch],
+  );
+
   const setFollowInfo = useCallback(
     (
       user_id: string,
@@ -128,8 +136,10 @@ function HomeMain() {
           popFollowModal={popFollowModal}
           postId={postId}
           userId={user_id}
+          userProfile={user_profile}
           followers={users}
           follow={follow}
+          deletePost={deletePost}
         />
       )}
     </followContext.Provider>

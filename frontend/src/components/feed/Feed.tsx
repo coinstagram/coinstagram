@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import RootState, { EachPostState } from '../../type';
-import { useSelector } from 'react-redux';
+import { EachPostState } from '../../type';
 
 // styles
 import { StyledArticle } from './FeedStyle';
@@ -32,9 +31,6 @@ function Feed({
   getCommentsPost,
   addCommentPost,
 }: FeedProps) {
-  const followers = useSelector(
-    (state: RootState) => state.userInfo.followers.users,
-  );
   const lastItemRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver>();
 
@@ -79,7 +75,6 @@ function Feed({
             <h3 className="a11y-hidden">{post.user_id}의 게시물</h3>
             <FeedHeader
               userId={post.user_id}
-              userProfile={findProfile(post.user_id)}
               postId={post.id}
               location={post.post_location}
             />
@@ -98,17 +93,6 @@ function Feed({
       <div ref={lastItemRef}></div>
     </>
   );
-
-  function findProfile(userId: string) {
-    if (userId === myId) return myProfile;
-
-    const feedFollower = followers.find(
-      follower => follower.user_id === userId,
-    );
-    if (feedFollower === undefined) return null;
-
-    return feedFollower.user_profile;
-  }
 }
 
 export default React.memo(Feed);

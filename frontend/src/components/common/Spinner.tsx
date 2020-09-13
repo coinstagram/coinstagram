@@ -4,9 +4,13 @@ import FadeLoader from 'react-spinners/FadeLoader';
 // styles
 import { StyledDiv } from './SpinnerStyle';
 
-function Spinner() {
+interface SpinnerProps {
+  isheader?: boolean;
+}
+
+function Spinner({ isheader }: SpinnerProps) {
   return (
-    <StyledDiv>
+    <StyledDiv isheader={isheader}>
       <FadeLoader color={'grey'} loading={true} />
     </StyledDiv>
   );

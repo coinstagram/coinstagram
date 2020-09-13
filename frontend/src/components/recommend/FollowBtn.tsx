@@ -15,6 +15,7 @@ export interface FollowBtnProps {
   userName: string | null;
   userProfile: string | null;
   followers?: AnotherUserState[];
+  isheader?: boolean;
 }
 
 function FollowBtn({
@@ -23,6 +24,7 @@ function FollowBtn({
   userName,
   userProfile,
   followers = [],
+  isheader,
 }: FollowBtnProps) {
   const value = useContext(followContext);
   const { popFollowModal } = useContext(ModalContext);
@@ -34,15 +36,16 @@ function FollowBtn({
         userId={userId}
         userName={userName}
         userProfile={userProfile}
+        isheader={isheader}
       >
         {followers.some(follower => follower.user_id === userId) ? (
           <span tabIndex={-1} className="follow-cancel" onClick={cancelFollow}>
-            <Spinner />
+            <Spinner isheader={isheader} />
             <span>팔로잉</span>
           </span>
         ) : (
           <span tabIndex={-1} className="follow" onClick={postFollow}>
-            <Spinner />
+            <Spinner isheader={isheader} />
             <span>팔로우</span>
           </span>
         )}
@@ -66,6 +69,7 @@ function FollowBtn({
 
 FollowBtn.defaultProps = {
   followers: [],
+  isheader: false,
 };
 
 export default React.memo(FollowBtn);

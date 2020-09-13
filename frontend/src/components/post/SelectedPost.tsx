@@ -28,6 +28,7 @@ interface SelectedPostProps {
   addCommentPost: (post_id: number, comment_text: string) => void;
   follow: () => void;
   cancelFollow: () => void;
+  deletePost: (post_id: number) => void;
 }
 
 function SelectedPost({
@@ -39,6 +40,7 @@ function SelectedPost({
   addCommentPost,
   follow,
   cancelFollow,
+  deletePost,
 }: SelectedPostProps) {
   const { selectedPost } = useSelector((state: RootState) => state.posts);
   const { users } = useSelector((state: RootState) => state.userInfo.followers);
@@ -54,7 +56,7 @@ function SelectedPost({
     <>
       <StyledArticle width={width}>
         <div>
-          {width < 1030 && (
+          {width < 1000 && (
             <FeedHeader
               userId={selectedUserId}
               userProfile={selectedUserProfile}
@@ -64,8 +66,8 @@ function SelectedPost({
           )}
           <FeedBody />
         </div>
-        <div style={{ position: 'relative' }}>
-          {width > 1029 && (
+        <div>
+          {width > 1000 && (
             <FeedHeader
               userId={selectedUserId}
               userProfile={selectedUserProfile}
@@ -119,6 +121,7 @@ function SelectedPost({
           userProfile={selectedUserProfile}
           followers={users}
           follow={follow}
+          deletePost={deletePost}
         />
       )}
     </>
