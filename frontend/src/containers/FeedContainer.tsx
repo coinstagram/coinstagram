@@ -7,6 +7,7 @@ import { addPostLikeSaga, getPostLikesSaga } from '../redux/modules/like';
 
 // components
 import Feed from '../components/feed/Feed';
+import { addBookmarkSaga, getBookmarksSaga } from '../redux/modules/bookmark';
 
 function FeedContainer() {
   const dispatch = useDispatch();
@@ -49,6 +50,20 @@ function FeedContainer() {
     [dispatch],
   );
 
+  const getBookmarks = useCallback(
+    (user_id: string) => {
+      dispatch(getBookmarksSaga(user_id));
+    },
+    [dispatch],
+  );
+
+  const addBookmark = useCallback(
+    (post_id: number) => {
+      dispatch(addBookmarkSaga(post_id));
+    },
+    [dispatch],
+  );
+
   return (
     <Feed
       loading={loading}
@@ -60,6 +75,8 @@ function FeedContainer() {
       addCommentPost={addCommentPost}
       getPostLikes={getPostLikes}
       addPostLikes={addPostLikes}
+      getBookmarks={getBookmarks}
+      addBookmark={addBookmark}
     />
   );
 }

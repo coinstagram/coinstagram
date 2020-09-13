@@ -68,6 +68,11 @@ function preloadedState(token: string | null): RootState {
         userLikes: [],
       },
     },
+    bookmarks: {
+      loading: true,
+      error: null,
+      bookmarks: [],
+    },
   };
 }
 
