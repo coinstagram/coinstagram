@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import RootState from '../type';
 import { useLocation } from 'react-router-dom';
 import { getAnotherUserSaga } from '../redux/modules/anotherUser';
-import { getUserPostsSaga, getSelectedPostSaga } from '../redux/modules/post';
+import {
+  getUserPostsSaga,
+  getSelectedPostSaga,
+  deletePostSaga,
+} from '../redux/modules/post';
 import { getPostComments, addPostComment } from '../redux/modules/comment';
 import {
   cancelFollowUserSaga,
@@ -20,14 +24,14 @@ function UserPostsContainer() {
   const dispatch = useDispatch();
   const user_id = selectedPost.post && selectedPost.post.user_id;
 
-  const userId = user && user.user_id;
-  const userName = user && user.user_name;
-  const userProfile = user && user.user_profile;
-  const postId = +useLocation().pathname.split('/')[2];
+  const selectedUserId = user && user.user_id;
+  const selectedUserName = user && user.user_name;
+  const selectedUserProfile = user && user.user_profile;
+  const selectedPostId = +useLocation().pathname.split('/')[2];
 
   useEffect(() => {
-    dispatch(getSelectedPostSaga(postId));
-  }, [dispatch, postId]);
+    dispatch(getSelectedPostSaga(selectedPostId));
+  }, [dispatch, selectedPostId]);
 
   useEffect(() => {
     if (!user_id) return;
@@ -35,16 +39,12 @@ function UserPostsContainer() {
   }, [dispatch, user_id]);
 
   const getUserPosts = useCallback(() => {
-    dispatch(getUserPostsSaga(userId));
-  }, [dispatch, userId]);
-
-  // const getSelectedPost = useCallback(() => {
-  //   dispatch(getSelectedPostSaga(postId));
-  // }, [dispatch, postId]);
+    dispatch(getUserPostsSaga(selectedUserId));
+  }, [dispatch, selectedUserId]);
 
   const getCommentsPost = useCallback(() => {
-    dispatch(getPostComments(postId));
-  }, [dispatch, postId]);
+    dispatch(getPostComments(selectedPostId));
+  }, [dispatch, selectedPostId]);
 
   const addCommentPost = useCallback(
     (post_id: number, comment_text: string) => {
@@ -54,24 +54,34 @@ function UserPostsContainer() {
   );
 
   const follow = useCallback(() => {
-    dispatch(followUserSaga(userId, userName, userProfile));
-  }, [dispatch, userId, userName, userProfile]);
+    dispatch(
+      followUserSaga(selectedUserId, selectedUserName, selectedUserProfile),
+    );
+  }, [dispatch, selectedUserId, selectedUserName, selectedUserProfile]);
 
   const cancelFollow = useCallback(() => {
-    dispatch(cancelFollowUserSaga(userId));
-  }, [dispatch, userId]);
+    dispatch(cancelFollowUserSaga(selectedUserId));
+  }, [dispatch, selectedUserId]);
+
+  const deletePost = useCallback(
+    (post_id: number) => {
+      dispatch(deletePostSaga(post_id));
+    },
+    [dispatch],
+  );
 
   return (
     <>
       <SelectedPost
-        userId={userId}
-        userProfile={userProfile}
-        postId={postId}
+        selectedUserId={selectedUserId}
+        selectedUserProfile={selectedUserProfile}
+        selectedPostId={selectedPostId}
         getUserPosts={getUserPosts}
         getCommentsPost={getCommentsPost}
         addCommentPost={addCommentPost}
         follow={follow}
         cancelFollow={cancelFollow}
+        deletePost={deletePost}
       />
       <AnotherPosts />
     </>

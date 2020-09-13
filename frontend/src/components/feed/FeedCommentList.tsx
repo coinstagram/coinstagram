@@ -44,7 +44,7 @@ function FeedCommentList({
       <ul>
         {mergedComments.length < 3 &&
           !visual &&
-          currentPostMyComments.map(comment => (
+          mergedComments.map(comment => (
             <FeedCommentItem
               key={comment.id}
               commentId={comment.id}
@@ -120,6 +120,7 @@ function FeedCommentList({
 }
 
 FeedCommentList.defaultProps = {
+  visual: false,
   thumbnail: false,
 };
 

@@ -4,7 +4,7 @@ export const StyledDiv = styled.div`
   position: relative;
   div {
     position: absolute;
-    top: -6px;
+    top: -2px;
     left: -20px;
     width: 1px;
     height: 1px;
@@ -15,7 +15,7 @@ export const StyledDiv = styled.div`
       height: 7px;
     }
     div:nth-child(1) {
-      top: 15px;
+      top: ${props => (props.isheader ? 7 : 15)};
       left: 0;
     }
     div:nth-child(2) {

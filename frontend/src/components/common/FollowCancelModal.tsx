@@ -23,7 +23,7 @@ function FollowCancelModal({
   popFollowModal,
 }: FollowCancelModalProps) {
   return (
-    <StyledBg onClick={popFollowModal}>
+    <StyledBg className="modal-container" onClick={toggleFollowModal}>
       <StyledFollowModal>
         <StyledDiv>
           <Thumbnail size={90} imageUrl={user_profile} />
@@ -44,6 +44,19 @@ function FollowCancelModal({
       </StyledFollowModal>
     </StyledBg>
   );
+
+  function toggleFollowModal({
+    target,
+  }: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    console.log(target);
+    const clickEl = target as Element;
+    if (
+      !clickEl.matches('.modal-container') &&
+      !clickEl.matches('.modal-container li button > span')
+    )
+      return;
+    popFollowModal();
+  }
 
   function click() {
     cancelFollow();

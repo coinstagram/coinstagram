@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { EachPostState } from '../../type';
 
 // styles
@@ -14,8 +14,8 @@ interface FeedProps {
   loading: boolean;
   error: null | Error;
   feedPosts: EachPostState[];
-  userProfile: null | string;
-  userId: null | string;
+  myProfile: null | string;
+  myId: null | string;
   getFeedPosts: (user_id: string) => void;
   getCommentsPost: (post_id: number) => void;
   addCommentPost: (post_id: number, comment_text: string) => void;
@@ -25,16 +25,38 @@ function Feed({
   loading,
   error,
   feedPosts,
-  userProfile,
-  userId,
+  myProfile,
+  myId,
   getFeedPosts,
   getCommentsPost,
   addCommentPost,
 }: FeedProps) {
+  const lastItemRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<IntersectionObserver>();
+
   useEffect(() => {
-    if (!userId) return;
-    getFeedPosts(userId);
-  }, [getFeedPosts, userId]);
+    if (!myId) return;
+    getFeedPosts(myId);
+  }, [getFeedPosts, myId]);
+
+  useEffect(() => {
+    if (!observerRef.current) {
+      observerRef.current = new IntersectionObserver(
+        (entries: IntersectionObserverEntry[]) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              // getFeedPosts(userId);
+            }
+          });
+        },
+        {
+          threshold: 0.9,
+        },
+      );
+    }
+
+    lastItemRef.current && observerRef.current.observe(lastItemRef.current);
+  }, [getFeedPosts, myId]);
 
   return (
     <>
@@ -55,7 +77,6 @@ function Feed({
               userId={post.user_id}
               postId={post.id}
               location={post.post_location}
-              userProfile={userProfile}
             />
             <FeedBody />
             <FeedIcons postId={post.id} />
@@ -69,6 +90,7 @@ function Feed({
             />
           </StyledArticle>
         ))}
+      <div ref={lastItemRef}></div>
     </>
   );
 }

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import useWindowWidth from '../../hooks/useWindowWidth';
-import { AnotherUserState, UserState } from '../../type';
+import RootState, { AnotherUserState, UserState } from '../../type';
+import { useSelector } from 'react-redux';
 
 // styles
 import { StyledSection } from './RecommendUsersStyle';
@@ -10,21 +11,24 @@ import RecommendUsersHeader from './RecommendUsersHeader';
 import RecommendUsersBody from './RecommendUsersBody';
 
 interface RecommendUsersProps {
-  loading: boolean;
-  error: null | Error;
   user: null | UserState;
-  randomUsers: AnotherUserState[];
   followers: AnotherUserState[];
+  getRandomUser: () => void;
 }
 
 function RecommendUsers({
-  loading,
-  error,
   user,
-  randomUsers,
   followers,
+  getRandomUser,
 }: RecommendUsersProps) {
+  const { loading, error, users } = useSelector(
+    (state: RootState) => state.userInfo.randomUsers,
+  );
   const width = useWindowWidth();
+
+  useEffect(() => {
+    getRandomUser();
+  }, [getRandomUser]);
 
   if (width < 1000) return null;
 
@@ -35,7 +39,7 @@ function RecommendUsers({
       <RecommendUsersBody
         loading={loading}
         error={error}
-        randomUsers={randomUsers}
+        randomUsers={users}
         followers={followers}
       />
     </StyledSection>

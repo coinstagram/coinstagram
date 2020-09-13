@@ -89,7 +89,7 @@ export interface UserInfoState {
   user: null | UserState;
   followers: followState;
   followees: AnotherUserState[];
-  randomUsers: AnotherUserState[];
+  randomUsers: followState;
 }
 
 export interface AnotherUserInfoState {
