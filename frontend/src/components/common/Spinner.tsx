@@ -12,4 +12,8 @@ function Spinner() {
   );
 }
 
+Spinner.defaultProps = {
+  header: false,
+};
+
 export default Spinner;

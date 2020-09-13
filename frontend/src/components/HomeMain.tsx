@@ -1,6 +1,6 @@
 import React, { useCallback, createContext, useState, useContext } from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   followUserSaga,
   cancelFollowUserSaga,
@@ -13,6 +13,7 @@ import RecommendUsersContainer from '../containers/RecommendUsersContainer';
 import FeedContainer from '../containers/FeedContainer';
 import FollowCancelModal from './common/FollowCancelModal';
 import PostModal from './common/PostModal';
+import RootState from '../type';
 
 interface contextValue {
   follow: (
@@ -51,6 +52,7 @@ export interface ModalState {
 }
 
 function HomeMain() {
+  const { users } = useSelector((state: RootState) => state.userInfo.followers);
   const dispatch = useDispatch();
   const [followModalState, setFollowModalState] = useState<ModalState>({
     user_id: '',
@@ -126,6 +128,8 @@ function HomeMain() {
           popFollowModal={popFollowModal}
           postId={postId}
           userId={user_id}
+          followers={users}
+          follow={follow}
         />
       )}
     </followContext.Provider>

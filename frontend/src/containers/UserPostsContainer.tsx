@@ -20,14 +20,14 @@ function UserPostsContainer() {
   const dispatch = useDispatch();
   const user_id = selectedPost.post && selectedPost.post.user_id;
 
-  const userId = user && user.user_id;
-  const userName = user && user.user_name;
-  const userProfile = user && user.user_profile;
-  const postId = +useLocation().pathname.split('/')[2];
+  const selectedUserId = user && user.user_id;
+  const selectedUserName = user && user.user_name;
+  const selectedUserProfile = user && user.user_profile;
+  const selectedPostId = +useLocation().pathname.split('/')[2];
 
   useEffect(() => {
-    dispatch(getSelectedPostSaga(postId));
-  }, [dispatch, postId]);
+    dispatch(getSelectedPostSaga(selectedPostId));
+  }, [dispatch, selectedPostId]);
 
   useEffect(() => {
     if (!user_id) return;
@@ -35,16 +35,16 @@ function UserPostsContainer() {
   }, [dispatch, user_id]);
 
   const getUserPosts = useCallback(() => {
-    dispatch(getUserPostsSaga(userId));
-  }, [dispatch, userId]);
+    dispatch(getUserPostsSaga(selectedUserId));
+  }, [dispatch, selectedUserId]);
 
   // const getSelectedPost = useCallback(() => {
   //   dispatch(getSelectedPostSaga(postId));
   // }, [dispatch, postId]);
 
   const getCommentsPost = useCallback(() => {
-    dispatch(getPostComments(postId));
-  }, [dispatch, postId]);
+    dispatch(getPostComments(selectedPostId));
+  }, [dispatch, selectedPostId]);
 
   const addCommentPost = useCallback(
     (post_id: number, comment_text: string) => {
@@ -54,19 +54,21 @@ function UserPostsContainer() {
   );
 
   const follow = useCallback(() => {
-    dispatch(followUserSaga(userId, userName, userProfile));
-  }, [dispatch, userId, userName, userProfile]);
+    dispatch(
+      followUserSaga(selectedUserId, selectedUserName, selectedUserProfile),
+    );
+  }, [dispatch, selectedUserId, selectedUserName, selectedUserProfile]);
 
   const cancelFollow = useCallback(() => {
-    dispatch(cancelFollowUserSaga(userId));
-  }, [dispatch, userId]);
+    dispatch(cancelFollowUserSaga(selectedUserId));
+  }, [dispatch, selectedUserId]);
 
   return (
     <>
       <SelectedPost
-        userId={userId}
-        userProfile={userProfile}
-        postId={postId}
+        selectedUserId={selectedUserId}
+        selectedUserProfile={selectedUserProfile}
+        selectedPostId={selectedPostId}
         getUserPosts={getUserPosts}
         getCommentsPost={getCommentsPost}
         addCommentPost={addCommentPost}

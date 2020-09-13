@@ -2,9 +2,8 @@ import React, { useContext } from 'react';
 import { ModalContext } from '../../App';
 import { followContext } from '../HomeMain';
 import { Link, useHistory } from 'react-router-dom';
-
-// components
-import Thumbnail from '../common/Thumbnail';
+import { useSelector } from 'react-redux';
+import RootState from '../../type';
 
 // styles
 import {
@@ -14,24 +13,33 @@ import {
   StyledBtn,
 } from './FeedHeaderStyle';
 
+// components
+import Thumbnail from '../common/Thumbnail';
+
 interface FeedHeaderProps {
   userId: string;
+  userProfile: null | string;
   postId: number;
   location: null | string;
-  userProfile: null | string;
 }
 
 function FeedHeader({
   userId,
+  userProfile,
   postId,
   location,
-  userProfile,
 }: FeedHeaderProps) {
+  const { user, followers } = useSelector((state: RootState) => state.userInfo);
   const { popPostModal } = useContext(ModalContext);
   const value = useContext(followContext);
   const setFollowInfo = value && value.setFollowInfo;
   const changePostId = value && value.changePostId;
   const history = useHistory();
+
+  const user_id = user && user.user_id;
+  const followersInfo = followers.users;
+
+  console.log('feedheader');
 
   return (
     <StyledDiv>
@@ -48,6 +56,10 @@ function FeedHeader({
           <dd>{location}</dd>
         </LocationDiv>
       </Link>
+      {userId !== user_id &&
+        followersInfo.some(follower => follower.user_id === userId) && (
+          <span>팔로잉 중.</span>
+        )}
       <StyledBtn onClick={setModal}>
         <div tabIndex={-1}>
           <span></span>
@@ -70,4 +82,4 @@ function FeedHeader({
   }
 }
 
-export default FeedHeader;
+export default React.memo(FeedHeader);

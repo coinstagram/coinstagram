@@ -15,5 +15,6 @@ declare module 'react' {
     thumbnail?: boolean;
     createdTime?: string;
     viewTime?: boolean;
+    header?: boolean;
   }
 }

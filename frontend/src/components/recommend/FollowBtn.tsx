@@ -31,7 +31,6 @@ function FollowBtn({
     <>
       <StyledButton
         size={size}
-        followers={followers}
         userId={userId}
         userName={userName}
         userProfile={userProfile}

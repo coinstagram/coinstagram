@@ -46,6 +46,8 @@ function Home() {
         <button onClick={getFollowerPosts}>팔로워들 게시물</button>
         <button onClick={getRandom}>랜던 유저</button>
         <button onClick={getSelectedPost}>특정 게시물 정보</button>
+        <button onClick={postLike}>특정 게시물에 좋아요</button>
+        <button onClick={addBookmark}>특정 게시물에 북마크</button>
       </StyledDiv>
     </>
   );
@@ -54,6 +56,38 @@ function Home() {
 export default React.memo(Home);
 
 const token = localStorage.getItem('access_token');
+
+async function addBookmark() {
+  const res = await axios.post(
+    '/bookmark',
+    {
+      post_id: 2,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  console.log(res.data);
+}
+
+async function postLike() {
+  const res = await axios.post(
+    '/post/like',
+    {
+      post_id: 1,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  console.log(res);
+}
 
 async function getSelectedPost() {
   const res = await axios.get('/post/1', {
