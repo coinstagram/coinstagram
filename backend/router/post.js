@@ -29,7 +29,6 @@ router.post('/post', verifyToken, async (req, res) => {
     post_anotheruser = '',
     post_location = '',
   } = req.body;
-  console.log('testAPI');
   let sql = '';
   try {
     const connection = await pool.getConnection(async (conn) => conn);
@@ -44,7 +43,6 @@ router.post('/post', verifyToken, async (req, res) => {
       ]);
       sql = `select id from posts order by id desc limit 1; `;
       const [post_id] = await connection.query(sql);
-      console.log(post_id[0].id);
       res.send({ post_id: post_id[0].id });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
@@ -317,17 +315,59 @@ const upload = multer({
   // 단 이미지나 동영상은 백엔드를 거치지 않고
   // 프론트에서 바로 클라우드로 보내는게 좋다.
 });
-router.post('/images', verifyToken, upload.array('image'), async (req, res) => {
+router.post('/images', upload.array('image'), async (req, res) => {
   const file = req.files.map(({ path }) => {
     const change = path.split(' ');
-    const changePath = change[0];
-    const changeFilename = change[1].split('.')[0];
-    const changeFiletype = change[1].split('.')[1];
-    return { changePath, changeFilename, changeFiletype };
+    const image_path = change[0];
+    const image_name = change[1].split('.')[0];
+    const image_type = change[1].split('.')[1];
+    return { image_path, image_name, image_type };
   });
   console.log(file);
-  console.log(req.file);
-  res.json(req.files.map((v) => v.filename));
+  res.json(file);
+});
+
+/**
+ * {
+ *  post_id,
+ *  image_path,
+ *  image_name,
+ *  image_type
+ * }
+ */
+router.post('/post/image', async (req, res) => {
+  const { post_id, image } = req.body;
+  let sql = ``;
+  let sqls = [];
+  let params = [];
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      for (let imageData of image) {
+        sql = `insert into post_image(post_id, image_path, image_name, image_type) values(?, ?, ?, ?);`;
+        params = [
+          post_id,
+          imageData.image_path,
+          imageData.image_type,
+          imageData.image_type,
+        ];
+        sqls += mysql.format(sql, params);
+      }
+
+      console.log(await connection.query(sqls));
+
+      res.send({ success: true });
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      console.log(error);
+      res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
 });
 
 /**
@@ -355,9 +395,6 @@ router.post('/post/like', async (req, res) => {
 
       await connection.query(sql, [post_id, user_id]);
 
-      // sql =
-      //   'select user_id from users where user_id in (select user_id from post_like where post_id = ?)';
-      // const [check] = await connection.query(sql, post_id);
       res.send({ success: true });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
@@ -380,7 +417,7 @@ router.get('/post/like/:post_id', async (req, res) => {
         'select user_id from users where user_id in (select user_id from post_like where post_id = ?)';
 
       const [data] = await connection.query(sql, post_id);
-      res.send(data.map(({ user_id }) => user_id));
+      res.send([{ user_id: data.map(({ user_id }) => user_id), post_id }]);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
@@ -440,11 +477,11 @@ router.get('/comment/like/:post_id', async (req, res) => {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
       sql =
-        'select * from comment_like where post_id in(select post_id from comments where post_id = ?)';
+        'select user_id, comment_id from comment_like where post_id in(select post_id from comments where post_id = ?)';
 
       const [data] = await connection.query(sql, post_id);
       console.log(data);
-      res.send(data.map((data) => data));
+      res.send({ post_id, comment: data.map((data) => data) });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();

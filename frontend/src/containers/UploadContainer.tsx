@@ -7,7 +7,6 @@ import UploadDetails from '../components/upload/UploadDetails';
 import { StyledButton } from '../components/upload/UploadDetails.style';
 import { useDispatch, useSelector } from 'react-redux';
 import { add_post, addPostSaga, postData } from '../redux/modules/upload';
-import postReducer from '../redux/modules/upload';
 
 export interface contextValue {
   user_id: String;
@@ -15,6 +14,7 @@ export interface contextValue {
   post_anotheruser: String;
   post_location: String;
   tag: Array<String>;
+  image: Array<Object>;
 }
 
 const UploadContainer = () => {
@@ -24,12 +24,18 @@ const UploadContainer = () => {
     post_anotheruser: '',
     post_location: '',
     tag: [],
+    image: [],
   });
+  const image = (img: Array<Object>) => {
+    setData({
+      ...data,
+      image: img,
+    });
+  };
 
   const dispatch = useDispatch();
   const onchange = (e: any) => {
     const { id, value } = e.target;
-
     if (id === 'people') {
       setData({
         ...data,
@@ -56,7 +62,7 @@ const UploadContainer = () => {
   return (
     <>
       <UploadHeader />
-      <UploadInput change={onchange} />
+      <UploadInput image={image} />
       <UploadDetails change={onchange} />
       <StyledButton onClick={onsubmit}>계시하기</StyledButton>
     </>
