@@ -7,7 +7,6 @@ const uploadService = class {
     token =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSIsInVzZXJfbmFtZSI6IjEiLCJ1c2VyX2dlbmRlciI6bnVsbCwidXNlcl9pbnRyb2R1Y2UiOm51bGwsInVzZXJfcGhvbmUiOm51bGwsInVzZXJfZW1haWwiOiIxIiwidXNlcl9wcm9maWxlIjpudWxsLCJpYXQiOjE1OTk3Mzc1ODEsImV4cCI6MTYwMDM0MjM4MX0.9oZJejmDrnCOS6pcZftONRFKjqAIJlrtwxbdPHfqOOs';
 
-    console.log('testSaga', data, token);
     const res = await axios.post(
       `${getUrl}`,
       {
@@ -23,6 +22,7 @@ const uploadService = class {
     );
     return res.data;
   }
+  static async uploadImage(data: postData, token: String) {}
 };
 
 export default uploadService;

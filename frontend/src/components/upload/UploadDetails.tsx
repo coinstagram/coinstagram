@@ -4,7 +4,6 @@ import { StyledText, StyledDiv, StyledButton } from './UploadDetails.style';
 interface UploadDetailsProps {
   change: (event: React.ChangeEvent<HTMLButtonElement>) => void;
 }
-interface StyledTextProps {}
 
 const UploadDetails: React.FC<UploadDetailsProps> = ({ change }) => {
   return (
