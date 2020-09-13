@@ -125,11 +125,11 @@ export interface PostsState {
 
 interface RootState {
   auth: AuthState;
+  // signUpInfo: SignupState;
   userInfo: UserInfoState;
   anotherUserInfo: AnotherUserInfoState;
   posts: PostsState;
   comments: CommentsState;
-  singupInfo: SignupInfoState;
 }
 
 export default RootState;

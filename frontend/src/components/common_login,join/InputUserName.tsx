@@ -1,21 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import InputCommon from './InputCommon';
 
-export default function InputPhone() {
-  const [user_name, setUserName] = useState('');
-  const inputUserName = (text: string): void => {
-    setUserName(text);
-  };
-
+interface userNameProps {
+  userName: string;
+  onInputUserName: (text: string) => void;
+}
+export default function InputUserName({
+  userName,
+  onInputUserName,
+}: userNameProps) {
   return (
     <>
       <InputCommon
         type="text"
         name="user_name"
-        value={user_name}
-        onInput={inputUserName}
+        value={userName}
+        onInput={onInputUserName}
         placeholder="성명"
-        toggleIcon={user_name.length >= 6}
+        toggleIcon={userName.length >= 6}
         display="block"
       ></InputCommon>
     </>

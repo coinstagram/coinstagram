@@ -2,16 +2,17 @@ import React, { useState } from 'react';
 import InputCommon from './InputCommon';
 
 export interface passwordProps {
+  userPassword?: string | null;
+  onInputPassword?: (text: string) => void;
   style?: { marginBottom: string };
 }
 
-export default function InputPassword({ style }: passwordProps) {
-  const [user_password, setPassword] = useState('');
+export default function InputPassword({
+  userPassword,
+  onInputPassword,
+  style,
+}: passwordProps) {
   const [isPasswordShown, setPasswordShown] = useState(false);
-
-  const inputPassword = (text: string): void => {
-    setPassword(text);
-  };
 
   const toggleShowPassword = () => {
     setPasswordShown(!isPasswordShown);
@@ -21,15 +22,15 @@ export default function InputPassword({ style }: passwordProps) {
       <InputCommon
         type={isPasswordShown ? 'text' : 'password'}
         name="user_password"
-        value={user_password}
-        onInput={inputPassword}
+        value={userPassword}
+        onInput={onInputPassword}
         placeholder="비밀번호"
-        toggleIcon={user_password.length >= 6}
+        toggleIcon={userPassword.length >= 6}
         display="flex"
         style={style}
       >
         {' '}
-        {user_password !== '' && (
+        {userPassword !== '' && (
           <div>
             <button
               className="toggleBtn"

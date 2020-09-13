@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import auth from './auth';
-import signup from './signup';
+// import signup from './signup';
 import userInfo from './userInfo';
 import anotherUserInfo from './anotherUser';
 import posts from './post';
@@ -11,7 +11,7 @@ import postReducer from './upload';
 
 const rootReducer = (history: History) =>
   combineReducers({
-    signup,
+    // signup,
     auth,
     userInfo,
     anotherUserInfo,

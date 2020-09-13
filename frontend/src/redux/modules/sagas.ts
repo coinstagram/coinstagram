@@ -1,6 +1,6 @@
 import { all } from 'redux-saga/effects';
 import { authSaga } from './auth';
-import { signupSaga } from './signup';
+// import { signupSaga } from './signup';
 import { userInfoSaga } from './userInfo';
 import { anotherUserSaga } from './anotherUser';
 import { postsSaga } from './post';
@@ -10,7 +10,7 @@ import { uploadSaga } from './upload';
 function* rootSaga() {
   yield all([
     authSaga(),
-    signupSaga(),
+    // signupSaga(),
     userInfoSaga(),
     anotherUserSaga(),
     postsSaga(),
