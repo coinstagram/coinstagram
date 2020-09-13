@@ -1,5 +1,7 @@
 import React, { useRef, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 import { StyledDiv, StyledLabel } from './UploadInput.style';
+import { add_image, uploadImage } from '../../redux/modules/upload';
 
 interface UploadDetailsProps {
   change: (event: React.ChangeEvent<HTMLButtonElement>) => void;
@@ -7,17 +9,26 @@ interface UploadDetailsProps {
 
 const UploadInput: React.FC<UploadDetailsProps> = ({ change }) => {
   const imageInput = useRef<HTMLInputElement>(null);
+  const dispatch = useDispatch();
+
   const onClickImageUpload = useCallback(() => {
     imageInput.current.click();
   }, []);
 
-  const onChangeImages = useCallback(e => {
-    console.log('images', e.target.files);
-    const imageFormData = new FormData();
-    [].forEach.call(e.target.files, f => {
-      imageFormData.append('image', f);
-    });
-  }, []);
+  const onChangeImages = useCallback(
+    e => {
+      let imageData: uploadImage = { image: [] };
+      [].forEach.call(e.target.files, (f: File) => {
+        console.log(f);
+
+        imageData = { image: [...imageData.image, f] };
+      });
+      console.log(imageData);
+
+      dispatch(add_image(imageData));
+    },
+    [dispatch],
+  );
 
   return (
     <StyledDiv>
