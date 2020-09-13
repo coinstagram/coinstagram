@@ -80,6 +80,12 @@ export interface EachPostState {
   // likes:
 }
 
+export interface BookmarkState {
+  loading: boolean;
+  error: null | Error;
+  bookmarks: number[];
+}
+
 export interface SelectedPostState {
   loading: boolean;
   error: null | Error;
@@ -120,7 +126,6 @@ export interface PostsState {
   error: null | Error;
   FeedPosts: EachPostState[];
   selectedPost: SelectedPostState;
-  // bookmarkPosts: EachPostState[];
   // taggedPosts: EachPostState[];
 }
 
@@ -131,6 +136,7 @@ interface RootState {
   posts: PostsState;
   comments: CommentsState;
   likes: likeState;
+  bookmarks: BookmarkState;
 }
 
 export default RootState;

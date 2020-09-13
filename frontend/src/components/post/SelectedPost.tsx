@@ -31,6 +31,8 @@ interface SelectedPostProps {
   follow: () => void;
   cancelFollow: () => void;
   deletePost: (post_id: number) => void;
+  getBookmarks: (user_id: string) => void;
+  addBookmark: (post_id: number) => void;
 }
 
 function SelectedPost({
@@ -45,10 +47,13 @@ function SelectedPost({
   follow,
   cancelFollow,
   deletePost,
+  getBookmarks,
+  addBookmark,
 }: SelectedPostProps) {
   const { selectedPost } = useSelector((state: RootState) => state.posts);
   const { users } = useSelector((state: RootState) => state.userInfo.followers);
-  const { user_id } = useSelector((state: RootState) => state.userInfo.user);
+  const { user } = useSelector((state: RootState) => state.userInfo);
+  const user_id = user && user.user_id;
 
   const selectedPostInfo = selectedPost.post;
   const { postModal, followModal, popPostModal, popFollowModal } = useContext(
@@ -100,6 +105,8 @@ function SelectedPost({
             postId={selectedPostId}
             getPostLikes={getPostLikes}
             addPostLikes={addPostLikes}
+            getBookmarks={getBookmarks}
+            addBookmark={addBookmark}
           />
           <StyledPassedTimeDiv
             className={`${selectedPostId}-createdTime`}

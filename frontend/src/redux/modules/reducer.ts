@@ -8,6 +8,7 @@ import posts from './post';
 import comments from './comment';
 import postReducer from './upload';
 import likes from './like';
+import bookmarks from './bookmark';
 
 const rootReducer = (history: History) =>
   combineReducers({
@@ -18,6 +19,7 @@ const rootReducer = (history: History) =>
     postReducer,
     comments,
     likes,
+    bookmarks,
     router: connectRouter(history),
   });
 
