@@ -11,6 +11,14 @@ const START_ADD_POST_LIKE = 'coinstagram/like/START_ADD_POST_LIKE' as const;
 const SUCCESS_ADD_POST_LIKE = 'coinstagram/like/SUCCESS_ADD_POST_LIKE' as const;
 const FAIL_ADD_POST_LIKE = 'coinstagram/like/FAIL_ADD_POST_LIKE' as const;
 
+const START_GET_COMMENT_LIKES = 'coinstagram/like/START_GET_COMMENT_LIKES' as const;
+const SUCCESS_GET_COMMENT_LIKES = 'coinstagram/like/SUCCESS_GET_COMMENT_LIKES' as const;
+const FAIL_GET_COMMENT_LIKES = 'coinstagram/like/FAIL_GET_COMMENT_LIKES' as const;
+
+const START_ADD_COMMENT_LIKE = 'coinstagram/like/START_ADD_COMMENT_LIKE' as const;
+const SUCCESS_ADD_COMMENT_LIKE = 'coinstagram/like/SUCCESS_ADD_COMMENT_LIKE' as const;
+const FAIL_ADD_COMMENT_LIKE = 'coinstagram/like/FAIL_ADD_COMMENT_LIKE' as const;
+
 // action creator
 const startGetPostLikes = () => ({
   type: START_GET_POST_LIKES,
@@ -45,6 +53,30 @@ const failAddPostLike = (error: Error) => ({
   payload: error,
 });
 
+const startGetCommentLikes = () => ({
+  type: START_GET_COMMENT_LIKES,
+});
+
+const successGetCommentLikes = () => ({
+  type: SUCCESS_GET_COMMENT_LIKES,
+});
+
+const failGetCommentLikes = () => ({
+  type: FAIL_GET_COMMENT_LIKES,
+});
+
+const startAddCommentLikes = () => ({
+  type: START_ADD_COMMENT_LIKE,
+});
+
+const successAddCommentLikes = () => ({
+  type: SUCCESS_ADD_COMMENT_LIKE,
+});
+
+const failAddCommentLikes = () => ({
+  type: FAIL_ADD_COMMENT_LIKE,
+});
+
 type likeActios =
   | ReturnType<typeof startGetPostLikes>
   | ReturnType<typeof successGetPostLikes>
@@ -56,6 +88,8 @@ type likeActios =
 // saga action
 const GET_POST_LIKES_SAGA = 'GET_POST_LIKES_SAGA' as const;
 const ADD_POST_LIKE_SAGA = 'ADD_POST_LIKE_SAGA' as const;
+const GET_COMMENT_LIKES_SAGA = 'GET_COMMENT_LIKES_SAGA' as const;
+const ADD_COMMENT_LIKE_SAGA = 'ADD_COMMENT_LIKE_SAGA' as const;
 
 // saga action creator
 export const getPostLikesSaga = (post_id: number) => ({
@@ -70,6 +104,14 @@ export const addPostLikeSaga = (post_id: number) => ({
   payload: {
     post_id,
   },
+});
+
+export const getCommentLikesSaga = () => ({
+  type: GET_COMMENT_LIKES_SAGA,
+});
+
+export const addCommentLikeSaga = () => ({
+  type: ADD_COMMENT_LIKE_SAGA,
 });
 
 type getLikesSagaAction = ReturnType<typeof getPostLikesSaga>;
@@ -102,6 +144,10 @@ function* addPostLike(action: postLikeSagaAction) {
     yield put(failAddPostLike(error));
   }
 }
+
+function* getCommentLikes() {}
+
+function* addCommentLike() {}
 
 // saga register
 export function* likeSaga() {

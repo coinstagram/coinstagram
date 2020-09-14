@@ -3,14 +3,14 @@ import StyledMain from '../components/common/StyledMain';
 
 //containers
 import Header from '../components/header/Header';
-import ProfileMain from '../containers/ProfileMain';
+import ProfileContainer from '../containers/ProfileContainer';
 
 function Profile() {
   return (
     <>
       <Header />
       <StyledMain>
-        <ProfileMain />
+        <ProfileContainer />
       </StyledMain>
     </>
   );

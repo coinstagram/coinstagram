@@ -3,13 +3,13 @@ import styled from 'styled-components';
 export const StyledArticle = styled.article`
   border: 1px solid rgb(219, 219, 219);
 
-  & > div:nth-child(1) {
+  & > div:nth-of-type(1) {
     float: left;
     width: 100%;
     max-width: ${props => props.width > 1000 && 600};
   }
 
-  & > div:nth-child(2) {
+  & > div:nth-of-type(2) {
     overflow: ${props => props.width > 1000 && 'hidden'};
   }
 `;

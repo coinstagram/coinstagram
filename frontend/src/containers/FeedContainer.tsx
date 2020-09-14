@@ -12,7 +12,7 @@ import { addBookmarkSaga, getBookmarksSaga } from '../redux/modules/bookmark';
 function FeedContainer() {
   const dispatch = useDispatch();
   const { posts, userInfo } = useSelector((state: RootState) => state);
-  const { loading, error, FeedPosts } = posts;
+  const { feedPosts } = posts.feedPosts;
   const myId = userInfo.user && userInfo.user.user_id;
 
   const getFeedPosts = useCallback(
@@ -66,9 +66,7 @@ function FeedContainer() {
 
   return (
     <Feed
-      loading={loading}
-      error={error}
-      feedPosts={FeedPosts}
+      feedPosts={feedPosts}
       myId={myId}
       getFeedPosts={getFeedPosts}
       getCommentsPost={getCommentsPost}

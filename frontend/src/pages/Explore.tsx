@@ -1,12 +1,19 @@
 import React from 'react';
-import Header from '../components/header/Header';
+
+// styles
 import StyledMain from '../components/common/StyledMain';
+
+// components
+import Header from '../components/header/Header';
+import RandomPostsContainer from '../containers/RandomPostsContainer';
 
 function Explore() {
   return (
     <>
       <Header />
-      <StyledMain>Explore</StyledMain>
+      <StyledMain>
+        <RandomPostsContainer />
+      </StyledMain>
     </>
   );
 }

@@ -207,7 +207,7 @@ async function getPosts() {
 }
 
 async function getAnotherPosts() {
-  const res = await axios.get('/user/post/user3', {
+  const res = await axios.get('/user/post/user7', {
     headers: {
       Authorization: `Bearer ${token}`,
     },

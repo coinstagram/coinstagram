@@ -84,12 +84,31 @@ export interface BookmarkState {
   loading: boolean;
   error: null | Error;
   bookmarks: number[];
+  bookmarkPosts: BookmarkPostsState;
+}
+
+export interface BookmarkPostsState {
+  loading: boolean;
+  error: null | Error;
+  bookmarkPosts: EachPostState[];
 }
 
 export interface SelectedPostState {
   loading: boolean;
   error: null | Error;
-  post: null | EachPostState;
+  selectedPost: null | EachPostState;
+}
+
+export interface RandomPostsState {
+  loading: boolean;
+  error: null | Error;
+  randomPosts: EachPostState[];
+}
+
+export interface FeedPostsState {
+  loading: boolean;
+  error: null | Error;
+  feedPosts: EachPostState[];
 }
 
 export interface SignupState {
@@ -122,11 +141,18 @@ export interface AnotherUserInfoState {
 }
 
 export interface PostsState {
+  feedPosts: FeedPostsState;
+  selectedPost: SelectedPostState;
+  randomPosts: RandomPostsState;
+  // taggedPosts: EachPostState[];
+}
+
+export interface OtherPostState {
   loading: boolean;
   error: null | Error;
-  FeedPosts: EachPostState[];
-  selectedPost: SelectedPostState;
-  // taggedPosts: EachPostState[];
+  otherPosts: EachPostState[];
+  commentsCount: number;
+  likesCount: number;
 }
 
 interface RootState {
@@ -137,6 +163,7 @@ interface RootState {
   comments: CommentsState;
   likes: likeState;
   bookmarks: BookmarkState;
+  otherPosts: OtherPostState;
 }
 
 export default RootState;

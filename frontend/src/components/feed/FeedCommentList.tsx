@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import RootState from '../../type';
+import { Link } from 'react-router-dom';
 
 // styles
 import { StyledDiv } from './FeedCommentListStyle';
@@ -59,11 +60,11 @@ function FeedCommentList({
           <>
             {currentPostComments.length >= 3 && (
               <li>
-                <button className="comment-more">
+                <Link to={`/post/${postId}`} className="comment-more">
                   <span tabIndex={-1}>
                     댓글 {currentPostComments.length}개 모두 보기
                   </span>
-                </button>
+                </Link>
               </li>
             )}
             {currentPostComments[0] && (

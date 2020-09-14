@@ -55,7 +55,7 @@ function SelectedPost({
   const { user } = useSelector((state: RootState) => state.userInfo);
   const user_id = user && user.user_id;
 
-  const selectedPostInfo = selectedPost.post;
+  const selectedPostInfo = selectedPost.selectedPost;
   const { postModal, followModal, popPostModal, popFollowModal } = useContext(
     ModalContext,
   );
@@ -65,6 +65,9 @@ function SelectedPost({
   return (
     <>
       <StyledArticle width={width}>
+        <h3 className="a11y-hidden">
+          {selectedUserId}님의 게시물 {selectedPostId}
+        </h3>
         <div>
           {width < 1000 && (
             <FeedHeader

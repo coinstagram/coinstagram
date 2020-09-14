@@ -11,8 +11,6 @@ import FeedComment from './FeedComment';
 import FeedIcons from './FeedIcons';
 
 interface FeedProps {
-  loading: boolean;
-  error: null | Error;
   feedPosts: EachPostState[];
   myId: null | string;
   getFeedPosts: (user_id: string) => void;
@@ -25,8 +23,6 @@ interface FeedProps {
 }
 
 function Feed({
-  loading,
-  error,
   feedPosts,
   myId,
   getFeedPosts,
@@ -66,15 +62,6 @@ function Feed({
 
   return (
     <>
-      {feedPosts.length === 0 && loading === false && error === null && (
-        <div>팔로우 유저가 없습니다. 지금 바로 팔로우 해보세요!</div>
-      )}
-      {feedPosts.length === 0 && loading === true && (
-        <div>게시물 로딩 중...</div>
-      )}
-      {feedPosts.length === 0 && error !== null && (
-        <div>게시물을 불러오는 데 실패하였습니다.</div>
-      )}
       {feedPosts.length !== 0 &&
         feedPosts.map(post => (
           <StyledArticle key={post.id}>

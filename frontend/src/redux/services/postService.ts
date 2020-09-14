@@ -14,6 +14,10 @@ interface IPostService {
     token: string | null,
     post_id: number,
   ) => Promise<EachPostState>;
+  getSpecificPost: (
+    token: null | string,
+    post_id: number,
+  ) => Promise<EachPostState>;
   deletePost: (token: string | null, post_id: number) => void;
 }
 
@@ -57,6 +61,18 @@ const PostService: IPostService = class {
         Authorization: `Bearer ${token}`,
       },
     });
+
+    return res.data;
+  }
+
+  static async getSpecificPost(token: null | string, post_id: number) {
+    const res = await axios.get<EachPostState>(`${baseUrl}/${post_id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    console.log(res);
 
     return res.data;
   }

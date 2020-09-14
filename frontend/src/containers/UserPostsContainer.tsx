@@ -15,16 +15,18 @@ import {
 } from '../redux/modules/userInfo';
 import { addPostLikeSaga, getPostLikesSaga } from '../redux/modules/like';
 import { addBookmarkSaga, getBookmarksSaga } from '../redux/modules/bookmark';
+import { getOtherPostsSaga } from '../redux/modules/otherPost';
 
 // components
 import SelectedPost from '../components/post/SelectedPost';
-import AnotherPosts from '../components/post/AnotherPosts';
+import OtherPosts from '../components/post/OtherPosts';
 
 function UserPostsContainer() {
   const { selectedPost } = useSelector((state: RootState) => state.posts);
   const { user } = useSelector((state: RootState) => state.anotherUserInfo);
   const dispatch = useDispatch();
-  const user_id = selectedPost.post && selectedPost.post.user_id;
+  const user_id =
+    selectedPost.selectedPost && selectedPost.selectedPost.user_id;
 
   const selectedUserId = user && user.user_id;
   const selectedUserName = user && user.user_name;
@@ -100,6 +102,10 @@ function UserPostsContainer() {
     [dispatch],
   );
 
+  const getOtherPosts = useCallback(() => {
+    dispatch(getOtherPostsSaga(selectedUserId));
+  }, [dispatch, selectedUserId]);
+
   return (
     <>
       <SelectedPost
@@ -117,7 +123,10 @@ function UserPostsContainer() {
         getBookmarks={getBookmarks}
         addBookmark={addBookmark}
       />
-      <AnotherPosts />
+      <OtherPosts
+        selectedUserId={selectedUserId}
+        getOtherPosts={getOtherPosts}
+      />
     </>
   );
 }
