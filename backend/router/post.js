@@ -489,6 +489,8 @@ router.get('/comment/like/:post_id', async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
@@ -524,6 +526,8 @@ router.post('/bookmark', async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
@@ -544,6 +548,8 @@ router.get('/bookmark/:user_id', async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
@@ -578,6 +584,8 @@ router.delete('/post/:post_id', async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
