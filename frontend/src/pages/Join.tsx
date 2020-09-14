@@ -5,7 +5,6 @@ import JoinContainer from '../containers/JoinContainer';
 import JoinHeader from '../components/Join/JoinHeader';
 import JoinAppDownload from '../components/Join/JoinAppDownload';
 import JoinAskLogin from '../components/Join/JoinAskLogin';
-import JoinLoginButton from '../components/Join/JoinLoginButton';
 import JoinPolicy from '../components/Join/JoinPolicy';
 import { StyledDiv, StyledJoinWrapper } from '../components/Join/JoinStyle';
 
@@ -15,7 +14,7 @@ function Join() {
       <StyledJoinWrapper>
         <JoinHeader />
         <JoinContainer />
-        <JoinLoginButton content="가입" />
+        {/* <JoinLoginButton content="가입" /> */}
         <JoinPolicy />
       </StyledJoinWrapper>
       <Link to={'/login'}>

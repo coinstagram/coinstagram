@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import InputCommon from './InputCommon';
+import StyledPassword from './InputPasswordStyle';
 
 export interface passwordProps {
   userPassword?: string | null;
   onInputPassword?: (text: string) => void;
   style?: { marginBottom: string };
+  toggleShowPassword?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  isPasswordShown?: boolean;
 }
 
 export default function InputPassword({
@@ -30,8 +33,8 @@ export default function InputPassword({
         style={style}
       >
         {' '}
-        {userPassword !== '' && (
-          <div>
+        {userPassword.length >= 1 && (
+          <StyledPassword>
             <button
               className="toggleBtn"
               type="button"
@@ -39,7 +42,7 @@ export default function InputPassword({
             >
               {isPasswordShown ? '숨기기' : '비밀번호 표시'}
             </button>
-          </div>
+          </StyledPassword>
         )}
       </InputCommon>
     </>

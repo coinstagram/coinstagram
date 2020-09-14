@@ -75,7 +75,7 @@ export interface SignupState {
   loading: boolean;
   token: null | string;
   error: null | Error;
-  userData: SignupInfoState;
+  // userData: SignupInfoState;
 }
 
 export interface SignupInfoState {
@@ -89,7 +89,7 @@ export interface AuthState {
   loading: boolean;
   token: null | string;
   error: null | Error;
-  authData: AuthInfoState;
+  // authData: AuthInfoState;
 }
 
 export interface AuthInfoState {

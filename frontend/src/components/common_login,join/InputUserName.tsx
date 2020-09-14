@@ -17,7 +17,7 @@ export default function InputUserName({
         value={userName}
         onInput={onInputUserName}
         placeholder="성명"
-        toggleIcon={userName.length >= 6}
+        toggleIcon={userName.length >= 3}
         display="block"
       ></InputCommon>
     </>

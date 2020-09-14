@@ -4,9 +4,9 @@ import InputEmail from '../components/common_login,join/InputEmail';
 import InputUserName from '../components/common_login,join/InputUserName';
 import InputUserId from '../components/common_login,join/InputUserId';
 import InputPassword from '../components/common_login,join/InputPassword';
-import { useSelector, useDispatch } from 'react-redux';
-import { SignupState } from '../type';
-// import { signupRequestSaga, signupStart } from '../redux/modules/signup';
+import JoinLoginButton from '../components/common_login,join/JoinLoginButton';
+import { useDispatch } from 'react-redux';
+import { signupSagaActionCreator } from '../redux/modules/signup';
 
 const StyledForm = styled.form``;
 
@@ -28,17 +28,13 @@ export default function JoinContainer() {
   const onInputUserName = (text: string): void => {
     setUserName(text);
   };
+  const dispatch = useDispatch();
 
-  // const dispatch = useDispatch();
-  // const { loading, token, error, userData } = useSelector(
-  //   (state: SignupState) => state,
-  // );
-  // const { user_email, user_name, user_id, user_password } = userData;
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
-    // dispatch(signupRequestSaga(userData));
-    // dispatch(signupStart(userData));
+    dispatch(
+      signupSagaActionCreator(user_email, user_name, user_id, user_password),
+    );
   };
 
   return (
@@ -50,6 +46,7 @@ export default function JoinContainer() {
         userPassword={user_password}
         onInputPassword={onInputPassword}
       />
+      <JoinLoginButton content="가입" />
     </StyledForm>
   );
 }

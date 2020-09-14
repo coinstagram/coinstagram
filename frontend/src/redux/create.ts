@@ -16,10 +16,10 @@ function preloadedState(token: string | null): RootState {
       loading: false,
       error: null,
       token,
-      authData: {
-        user_id: null,
-        user_password: null,
-      },
+      // authData: {
+      //   user_id: null,
+      //   user_password: null,
+      // },
     },
     // signUpInfo: {
     //   loading: false,
