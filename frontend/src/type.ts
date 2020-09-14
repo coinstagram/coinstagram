@@ -4,6 +4,23 @@ export interface followState {
   users: AnotherUserState[];
 }
 
+export interface CountState {
+  loading: boolean;
+  error: null | Error;
+  counts: CountReduxState[];
+}
+
+export interface CountReduxState {
+  post_id: number;
+  commentCount: number;
+  likeCount: number;
+}
+
+export interface CountResponseState {
+  commentCount: number;
+  likeCount: number;
+}
+
 export interface UserResponseState {
   user: UserState;
   follower: AnotherUserState[];
@@ -151,8 +168,7 @@ export interface OtherPostState {
   loading: boolean;
   error: null | Error;
   otherPosts: EachPostState[];
-  commentsCount: number;
-  likesCount: number;
+  counts: CountState;
 }
 
 interface RootState {

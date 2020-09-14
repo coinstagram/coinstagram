@@ -9,8 +9,7 @@ interface ILikeService {
     post_id: number,
   ) => Promise<userLikesState[]>;
   addLikePost: (token: null | string, post_id: number) => void;
-  // getCommentLikes:
-  // addCommentLike:
+  deleteLikePost: (token: null | string, post_id: number) => void;
 }
 
 const LikeService: ILikeService = class {
@@ -39,6 +38,14 @@ const LikeService: ILikeService = class {
         },
       },
     );
+  }
+
+  static async deleteLikePost(token: null | string, post_id: number) {
+    await axios.delete(`/post${baseUrl}/${post_id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   }
 };
 

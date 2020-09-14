@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { EachPostState } from '../../type';
 const baseUrl = '/bookmark';
 
 interface IBookmarkService {
   getBookmarkedId: (token: null | string, user_id: string) => Promise<number[]>;
   addBookmarkPost: (token: null | string, post_id: number) => void;
+  deleteBookmarkPost: (token: null | string, post_id: number) => void;
 }
 
 const BookmarkService: IBookmarkService = class {
@@ -32,7 +32,13 @@ const BookmarkService: IBookmarkService = class {
     );
   }
 
-  // deltet bookmark
+  static async deleteBookmarkPost(token: null | string, post_id: number) {
+    await axios.delete(`${baseUrl}/${post_id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
 };
 
 export default BookmarkService;

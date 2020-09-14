@@ -10,9 +10,14 @@ import OtherPostList from './OtherPostList';
 interface AnotherPostsProps {
   selectedUserId: string;
   getOtherPosts: () => void;
+  getPostCounts: (post_id: number) => void;
 }
 
-function OtherPosts({ selectedUserId, getOtherPosts }: AnotherPostsProps) {
+function OtherPosts({
+  selectedUserId,
+  getOtherPosts,
+  getPostCounts,
+}: AnotherPostsProps) {
   useEffect(() => {
     getOtherPosts();
   }, [getOtherPosts, selectedUserId]);
@@ -27,7 +32,7 @@ function OtherPosts({ selectedUserId, getOtherPosts }: AnotherPostsProps) {
           <span>님의 게시물 더보기</span>
         </dd>
       </div>
-      <OtherPostList />
+      <OtherPostList getPostCounts={getPostCounts} />
     </StyledSection>
   );
 }

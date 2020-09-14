@@ -3,15 +3,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAnotherUserSaga } from '../redux/modules/anotherUser';
 import RootState from '../type';
 import { useLocation } from 'react-router-dom';
-
-// components;
-import ProfileHeader from '../components/profile/ProfileHeader';
-import ProfilePosts from '../components/profile/ProfilePosts';
-import { getOtherPostsSaga } from '../redux/modules/otherPost';
+import {
+  getOtherPostsSaga,
+  getPostCountsSaga,
+} from '../redux/modules/otherPost';
 import {
   getBookmarkPostsSaga,
   getBookmarksSaga,
 } from '../redux/modules/bookmark';
+
+// components;
+import ProfileHeader from '../components/profile/ProfileHeader';
+import ProfilePosts from '../components/profile/ProfilePosts';
 
 function ProfileContainer() {
   const profileId = useLocation().pathname.split('/')[1];
@@ -47,6 +50,13 @@ function ProfileContainer() {
     [dispatch],
   );
 
+  const getPostCounts = useCallback(
+    (post_id: number) => {
+      dispatch(getPostCountsSaga(post_id));
+    },
+    [dispatch],
+  );
+
   return (
     <>
       <ProfileHeader
@@ -61,6 +71,7 @@ function ProfileContainer() {
         myId={myId}
         bookmarkedId={bookmarkedId}
         getBookmarkPosts={getBookmarkPosts}
+        getPostCounts={getPostCounts}
       />
     </>
   );

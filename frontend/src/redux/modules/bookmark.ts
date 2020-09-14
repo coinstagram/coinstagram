@@ -12,6 +12,10 @@ const START_ADD_BOOKMARK = '/coinstagram/bookmark/START_ADD_BOOKMARK' as const;
 const SUCCESS_ADD_BOOKMARK = '/coinstagram/bookmark/SUCCESS_ADD_BOOKMARK' as const;
 const FAIL_ADD_BOOKMARK = '/coinstagram/bookmark/FAIL_ADD_BOOKMARK' as const;
 
+const START_DELETE_BOOKMARK = 'coinstagram/bookmark/START_DELETE_BOOKMARK' as const;
+const SUCCESS_DELETE_BOOKMARK = 'coinstagram/bookmark/SUCCESS_DELETE_BOOKMARK' as const;
+const FAIL_DELETE_BOOKMARK = 'coinstagram/bookmark/FAIL_DELETE_BOOKMARK' as const;
+
 const START_GET_BOOKMARK_POSTS = '/coinstagram/bookmark/START_GET_BOOKMARK_POSTS' as const;
 const SUCCESS_GET_BOOKMARK_POSTS = '/coinstagram/bookmark/SUCCESS_GET_BOOKMARK_POSTS' as const;
 const FAIL_GET_BOOKMARK_POSTS = '/coinstagram/bookmark/FAIL_GET_BOOKMARK_POSTS' as const;
@@ -65,6 +69,22 @@ const failGetBookmarkPosts = (error: Error) => ({
   payload: error,
 });
 
+const startDeleteBookmark = () => ({
+  type: START_DELETE_BOOKMARK,
+});
+
+const successDeleteBookmark = (post_id: number) => ({
+  type: SUCCESS_DELETE_BOOKMARK,
+  payload: {
+    post_id,
+  },
+});
+
+const failDeleteBookmark = (error: Error) => ({
+  type: FAIL_DELETE_BOOKMARK,
+  payload: error,
+});
+
 type BookmarkActions =
   | ReturnType<typeof startGetBookmarks>
   | ReturnType<typeof successGetBookmarks>
@@ -74,12 +94,16 @@ type BookmarkActions =
   | ReturnType<typeof failAddBookmark>
   | ReturnType<typeof startGetBookmarkPosts>
   | ReturnType<typeof successGetBookmarkPosts>
-  | ReturnType<typeof failGetBookmarkPosts>;
+  | ReturnType<typeof failGetBookmarkPosts>
+  | ReturnType<typeof startDeleteBookmark>
+  | ReturnType<typeof successDeleteBookmark>
+  | ReturnType<typeof failDeleteBookmark>;
 
 // saga action type
 const GET_BOOKMARKS_SAGA = 'GET_BOOKMARKS_SAGA' as const;
 const ADD_BOOKMARK_SAGA = 'ADD_BOOKMARK_SAGA' as const;
 const GET_BOOKMARK_POSTS_SAGA = 'GET_BOOKMARK_POSTS_SAGA' as const;
+const DELETE_BOOKMARK_SAGA = 'DELETE_BOOKMARK_SAGA' as const;
 
 // saga action creator
 export const getBookmarksSaga = (user_id: string) => ({
@@ -103,9 +127,17 @@ export const getBookmarkPostsSaga = (post_id: number) => ({
   },
 });
 
+export const deleteBookmarkSaga = (post_id: number) => ({
+  type: DELETE_BOOKMARK_SAGA,
+  payload: {
+    post_id,
+  },
+});
+
 type GetBookmarksAction = ReturnType<typeof getBookmarksSaga>;
 type AddBookmarkAction = ReturnType<typeof addBookmarkSaga>;
 type GetBookmarkPostsAction = ReturnType<typeof getBookmarkPostsSaga>;
+type DeleteBookmarkAction = ReturnType<typeof deleteBookmarkSaga>;
 
 // saga function
 function* getBookmarks(action: GetBookmarksAction) {
@@ -149,11 +181,27 @@ function* getBookmarkPosts(action: GetBookmarkPostsAction) {
   }
 }
 
+function* deleteBookmark(action: DeleteBookmarkAction) {
+  try {
+    const { token } = yield select((state: RootState) => state.auth);
+    yield put(startDeleteBookmark());
+    yield call(
+      BookmarkService.deleteBookmarkPost,
+      token,
+      action.payload.post_id,
+    );
+    yield put(successDeleteBookmark(action.payload.post_id));
+  } catch (error) {
+    yield put(failDeleteBookmark(error));
+  }
+}
+
 // saga register
 export function* bookmarkSaga() {
   yield takeEvery(GET_BOOKMARKS_SAGA, getBookmarks);
   yield takeEvery(ADD_BOOKMARK_SAGA, addBookmark);
   yield takeEvery(GET_BOOKMARK_POSTS_SAGA, getBookmarkPosts);
+  yield takeEvery(DELETE_BOOKMARK_SAGA, deleteBookmark);
 }
 
 // initial state
@@ -203,7 +251,7 @@ function bookmarkReducer(
         bookmarkPosts: {
           loading: false,
           error: null,
-          bookmarkPosts: null,
+          bookmarkPosts: state.bookmarkPosts.bookmarkPosts,
         },
       };
     case SUCCESS_GET_BOOKMARK_POSTS:
@@ -248,6 +296,27 @@ function bookmarkReducer(
     case FAIL_ADD_BOOKMARK:
       return {
         loading: false,
+        error: null,
+        bookmarks: state.bookmarks,
+        bookmarkPosts: state.bookmarkPosts,
+      };
+    case START_DELETE_BOOKMARK:
+      return {
+        loading: true,
+        error: null,
+        bookmarks: state.bookmarks,
+        bookmarkPosts: state.bookmarkPosts,
+      };
+    case SUCCESS_DELETE_BOOKMARK:
+      return {
+        loading: true,
+        error: null,
+        bookmarks: state.bookmarks.filter(id => id !== action.payload.post_id),
+        bookmarkPosts: state.bookmarkPosts,
+      };
+    case FAIL_DELETE_BOOKMARK:
+      return {
+        loading: true,
         error: null,
         bookmarks: state.bookmarks,
         bookmarkPosts: state.bookmarkPosts,

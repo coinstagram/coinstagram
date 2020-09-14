@@ -13,9 +13,20 @@ import {
   cancelFollowUserSaga,
   followUserSaga,
 } from '../redux/modules/userInfo';
-import { addPostLikeSaga, getPostLikesSaga } from '../redux/modules/like';
-import { addBookmarkSaga, getBookmarksSaga } from '../redux/modules/bookmark';
-import { getOtherPostsSaga } from '../redux/modules/otherPost';
+import {
+  addPostLikeSaga,
+  deletePostLikeSaga,
+  getPostLikesSaga,
+} from '../redux/modules/like';
+import {
+  addBookmarkSaga,
+  deleteBookmarkSaga,
+  getBookmarksSaga,
+} from '../redux/modules/bookmark';
+import {
+  getOtherPostsSaga,
+  getPostCountsSaga,
+} from '../redux/modules/otherPost';
 
 // components
 import SelectedPost from '../components/post/SelectedPost';
@@ -71,6 +82,13 @@ function UserPostsContainer() {
     [dispatch],
   );
 
+  const deletePostLike = useCallback(
+    (post_id: number) => {
+      dispatch(deletePostLikeSaga(post_id));
+    },
+    [dispatch],
+  );
+
   const follow = useCallback(() => {
     dispatch(
       followUserSaga(selectedUserId, selectedUserName, selectedUserProfile),
@@ -102,9 +120,23 @@ function UserPostsContainer() {
     [dispatch],
   );
 
+  const deleteBookmark = useCallback(
+    (post_id: number) => {
+      dispatch(deleteBookmarkSaga(post_id));
+    },
+    [dispatch],
+  );
+
   const getOtherPosts = useCallback(() => {
     dispatch(getOtherPostsSaga(selectedUserId));
   }, [dispatch, selectedUserId]);
+
+  const getPostCounts = useCallback(
+    (post_id: number) => {
+      dispatch(getPostCountsSaga(post_id));
+    },
+    [dispatch],
+  );
 
   return (
     <>
@@ -117,15 +149,18 @@ function UserPostsContainer() {
         addCommentPost={addCommentPost}
         getPostLikes={getPostLikes}
         addPostLikes={addPostLikes}
+        deletePostLike={deletePostLike}
         follow={follow}
         cancelFollow={cancelFollow}
         deletePost={deletePost}
         getBookmarks={getBookmarks}
         addBookmark={addBookmark}
+        deleteBookmark={deleteBookmark}
       />
       <OtherPosts
         selectedUserId={selectedUserId}
         getOtherPosts={getOtherPosts}
+        getPostCounts={getPostCounts}
       />
     </>
   );

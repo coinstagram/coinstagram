@@ -18,8 +18,10 @@ interface FeedProps {
   addCommentPost: (post_id: number, comment_text: string) => void;
   getPostLikes: (post_id: number) => void;
   addPostLikes: (post_id: number) => void;
+  deletePostLike: (post_id: number) => void;
   getBookmarks: (user_id: string) => void;
   addBookmark: (post_id: number) => void;
+  deleteBookmark: (post_id: number) => void;
 }
 
 function Feed({
@@ -30,8 +32,10 @@ function Feed({
   addCommentPost,
   getPostLikes,
   addPostLikes,
+  deletePostLike,
   getBookmarks,
   addBookmark,
+  deleteBookmark,
 }: FeedProps) {
   const lastItemRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver>();
@@ -77,8 +81,10 @@ function Feed({
               postId={post.id}
               getPostLikes={getPostLikes}
               addPostLikes={addPostLikes}
+              deletePostLike={deletePostLike}
               getBookmarks={getBookmarks}
               addBookmark={addBookmark}
+              deleteBookmark={deleteBookmark}
             />
             <FeedComment
               userId={post.user_id}

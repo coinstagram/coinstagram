@@ -89,8 +89,11 @@ function preloadedState(token: string | null): RootState {
       loading: false,
       error: null,
       otherPosts: [],
-      commentsCount: 0,
-      likesCount: 0,
+      counts: {
+        loading: false,
+        error: null,
+        counts: [],
+      },
     },
   };
 }

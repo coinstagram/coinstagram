@@ -3,11 +3,19 @@ import RootState from '../type';
 import { useSelector, useDispatch } from 'react-redux';
 import { getFeedPostsSaga } from '../redux/modules/post';
 import { getPostComments, addPostComment } from '../redux/modules/comment';
-import { addPostLikeSaga, getPostLikesSaga } from '../redux/modules/like';
+import {
+  addPostLikeSaga,
+  deletePostLikeSaga,
+  getPostLikesSaga,
+} from '../redux/modules/like';
+import {
+  addBookmarkSaga,
+  deleteBookmarkSaga,
+  getBookmarksSaga,
+} from '../redux/modules/bookmark';
 
 // components
 import Feed from '../components/feed/Feed';
-import { addBookmarkSaga, getBookmarksSaga } from '../redux/modules/bookmark';
 
 function FeedContainer() {
   const dispatch = useDispatch();
@@ -50,6 +58,13 @@ function FeedContainer() {
     [dispatch],
   );
 
+  const deletePostLike = useCallback(
+    (post_id: number) => {
+      dispatch(deletePostLikeSaga(post_id));
+    },
+    [dispatch],
+  );
+
   const getBookmarks = useCallback(
     (user_id: string) => {
       dispatch(getBookmarksSaga(user_id));
@@ -64,6 +79,13 @@ function FeedContainer() {
     [dispatch],
   );
 
+  const deleteBookmark = useCallback(
+    (post_id: number) => {
+      dispatch(deleteBookmarkSaga(post_id));
+    },
+    [dispatch],
+  );
+
   return (
     <Feed
       feedPosts={feedPosts}
@@ -73,8 +95,10 @@ function FeedContainer() {
       addCommentPost={addCommentPost}
       getPostLikes={getPostLikes}
       addPostLikes={addPostLikes}
+      deletePostLike={deletePostLike}
       getBookmarks={getBookmarks}
       addBookmark={addBookmark}
+      deleteBookmark={deleteBookmark}
     />
   );
 }
