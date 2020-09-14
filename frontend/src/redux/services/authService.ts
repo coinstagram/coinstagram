@@ -1,8 +1,3 @@
-// const {user_id, user_password} = AuthInfoState;
-// export const signin = async (({user_id, user_password}),AuthInfoState) => {
-//     const response = await axios.post('/login', {user_id, user_password});
-//     return {token:response.data.accessToken};
-// }
 import axios from 'axios';
 import { AuthState, AuthInfoState, SignupInfoState } from '../../type';
 
@@ -29,9 +24,6 @@ const authService: IAuthService = class {
     const { token } = res.data;
     localStorage.setItem('token', token);
     return token;
-    // 로컬스토리지에 저장->서비스에 담기
-    // 성공하면 라우팅() -> 사가에서 구현
-    // connetedRouter
   }
 
   static async signup(

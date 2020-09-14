@@ -9,7 +9,6 @@ import JoinLoginButton from '../components/common_login,join/JoinLoginButton';
 
 import { useDispatch } from 'react-redux';
 import { signInSagaActionCreator } from '../redux/modules/auth';
-import axios from 'axios';
 const StyledForm = styled.form``;
 
 function LoginContainer() {
@@ -24,7 +23,6 @@ function LoginContainer() {
   };
 
   const dispatch = useDispatch();
-  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     dispatch(signInSagaActionCreator(user_id, user_password));
@@ -36,15 +34,11 @@ function LoginContainer() {
   //     url: '/login',
   //     data: {
   //       user_id,
-  //       user_password, // 이렇게 정보 요청을 하고 token을 받아야 함
+  //       user_password,
   //     },
   //   });
   //   console.log('result', res);
   // return res.data; //  token
-  // 로컬스토리지에 저장->서비스에 담기
-  // 성공하면 라우팅() -> 사가에서 구현
-  // connetedRouter
-  // }
   return (
     <>
       {/* <button onClick={signin}>테스트용</button> */}
