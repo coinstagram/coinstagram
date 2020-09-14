@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
 import InputCommon from './InputCommon';
+import StyledPassword from './InputPasswordStyle';
 
 export interface passwordProps {
+  userPassword?: string | null;
+  onInputPassword?: (text: string) => void;
   style?: { marginBottom: string };
+  toggleShowPassword?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  isPasswordShown?: boolean;
 }
 
-export default function InputPassword({ style }: passwordProps) {
-  // export default function InputPassword() {
-  const [password, setPassword] = useState('');
+export default function InputPassword({
+  userPassword,
+  onInputPassword,
+  style,
+}: passwordProps) {
   const [isPasswordShown, setPasswordShown] = useState(false);
-
-  const inputPassword = (text: string): void => {
-    setPassword(text);
-  };
 
   const toggleShowPassword = () => {
     setPasswordShown(!isPasswordShown);
@@ -21,24 +24,26 @@ export default function InputPassword({ style }: passwordProps) {
     <>
       <InputCommon
         type={isPasswordShown ? 'text' : 'password'}
-        name="password"
-        value={password}
-        onInput={inputPassword}
+        name="user_password"
+        value={userPassword}
+        onInput={onInputPassword}
         placeholder="비밀번호"
-        toggleIcon={password.length >= 6}
+        toggleIcon={userPassword.length >= 6}
         display="flex"
         style={style}
       >
         {' '}
-        <div>
-          <button
-            className="toggleBtn"
-            type="button"
-            onClick={toggleShowPassword}
-          >
-            {isPasswordShown ? '숨기기' : '비밀번호 표시'}
-          </button>
-        </div>
+        {userPassword.length >= 1 && (
+          <StyledPassword>
+            <button
+              className="toggleBtn"
+              type="button"
+              onClick={toggleShowPassword}
+            >
+              {isPasswordShown ? '숨기기' : '비밀번호 표시'}
+            </button>
+          </StyledPassword>
+        )}
       </InputCommon>
     </>
   );

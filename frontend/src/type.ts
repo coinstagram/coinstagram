@@ -134,10 +134,22 @@ export interface SignupState {
   error: null | Error;
 }
 
+export interface SignupInfoState {
+  user_email: null | string;
+  user_name: null | string;
+  user_id: null | string;
+  user_password: null | string;
+}
+
 export interface AuthState {
   loading: boolean;
   token: null | string;
   error: null | Error;
+}
+
+export interface AuthInfoState {
+  user_id: null | string;
+  user_password: null | string;
 }
 
 export interface UserInfoState {
@@ -173,6 +185,7 @@ export interface OtherPostState {
 
 interface RootState {
   auth: AuthState;
+  // signUpInfo: SignupState;
   userInfo: UserInfoState;
   anotherUserInfo: AnotherUserInfoState;
   posts: PostsState;
