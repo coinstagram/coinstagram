@@ -27,7 +27,11 @@ function preloadedState(token: string | null): RootState {
         users: [],
       },
       followees: [],
-      randomUsers: [],
+      randomUsers: {
+        loading: false,
+        error: null,
+        users: [],
+      },
     },
     anotherUserInfo: {
       loading: false,
@@ -40,11 +44,34 @@ function preloadedState(token: string | null): RootState {
       loading: false,
       error: null,
       FeedPosts: [],
+      selectedPost: {
+        loading: false,
+        error: null,
+        post: null,
+      },
     },
     comments: {
       loading: false,
       error: null,
       postComments: [],
+      myComments: [],
+    },
+    likes: {
+      postLikes: {
+        loading: false,
+        error: null,
+        userLikes: [],
+      },
+      commentLikes: {
+        loading: false,
+        error: null,
+        userLikes: [],
+      },
+    },
+    bookmarks: {
+      loading: true,
+      error: null,
+      bookmarks: [],
     },
   };
 }

@@ -48,11 +48,27 @@ export interface CommentsState {
   loading: boolean;
   error: null | Error;
   postComments: EachCommentState[];
-  // likes: null | stringArray;
+  myComments: EachCommentState[];
+}
+
+export interface userLikesState {
+  post_id: number;
+  user_id: string[];
+}
+
+export interface EachLikeState {
+  loading: boolean;
+  error: null | Error;
+  userLikes: userLikesState[];
+}
+
+export interface likeState {
+  postLikes: EachLikeState;
+  commentLikes: EachLikeState;
 }
 
 export interface EachPostState {
-  id: null | string;
+  id: number;
   user_id: null | string;
   post_context: null | string;
   // post_images: null | string;
@@ -62,6 +78,18 @@ export interface EachPostState {
   created_at: null | string;
   // comments:
   // likes:
+}
+
+export interface BookmarkState {
+  loading: boolean;
+  error: null | Error;
+  bookmarks: number[];
+}
+
+export interface SelectedPostState {
+  loading: boolean;
+  error: null | Error;
+  post: null | EachPostState;
 }
 
 export interface SignupState {
@@ -82,7 +110,7 @@ export interface UserInfoState {
   user: null | UserState;
   followers: followState;
   followees: AnotherUserState[];
-  randomUsers: AnotherUserState[];
+  randomUsers: followState;
 }
 
 export interface AnotherUserInfoState {
@@ -97,7 +125,7 @@ export interface PostsState {
   loading: boolean;
   error: null | Error;
   FeedPosts: EachPostState[];
-  // bookmarkPosts: EachPostState[];
+  selectedPost: SelectedPostState;
   // taggedPosts: EachPostState[];
 }
 
@@ -107,6 +135,8 @@ interface RootState {
   anotherUserInfo: AnotherUserInfoState;
   posts: PostsState;
   comments: CommentsState;
+  likes: likeState;
+  bookmarks: BookmarkState;
 }
 
 export default RootState;

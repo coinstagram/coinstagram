@@ -3,8 +3,10 @@ import { authSaga } from './auth';
 import { userInfoSaga } from './userInfo';
 import { anotherUserSaga } from './anotherUser';
 import { postsSaga } from './post';
-import { commentSaga } from './comment';
 import { uploadSaga } from './upload';
+import { commentSaga } from './comment';
+import { likeSaga } from './like';
+import { bookmarkSaga } from './bookmark';
 
 function* rootSaga() {
   yield all([
@@ -12,8 +14,10 @@ function* rootSaga() {
     userInfoSaga(),
     anotherUserSaga(),
     postsSaga(),
-    commentSaga(),
     uploadSaga(),
+    commentSaga(),
+    likeSaga(),
+    bookmarkSaga(),
   ]);
 }
 

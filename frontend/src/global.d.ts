@@ -10,5 +10,12 @@ declare module 'react' {
     isAnother?: boolean;
     hasLocation?: string | null;
     comment?: string | null;
+    contextLength?: number;
+    marginLeft?: boolean;
+    thumbnail?: boolean;
+    createdTime?: string;
+    viewTime?: boolean;
+    header?: boolean;
+    isheader?: boolean;
   }
 }

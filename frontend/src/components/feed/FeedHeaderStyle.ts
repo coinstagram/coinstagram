@@ -11,6 +11,7 @@ export const StyledDiv = styled.div`
   position: relative;
   box-sizing: border-box;
   padding: 12px 5px 8px 16px;
+  border-bottom: 1px solid rgb(239, 239, 239);
 
   button {
     display: flex;
@@ -26,7 +27,7 @@ export const UsernameDiv = styled.div`
   position: absolute;
 
   dd {
-    &:hover {
+    &:active {
       color: rgb(142, 142, 142);
     }
   }
@@ -42,7 +43,7 @@ export const LocationDiv = styled.div`
   left: 63px;
 
   dd {
-    &:hover {
+    &:active {
       color: rgb(142, 142, 142);
     }
   }

@@ -8,7 +8,7 @@ import useWindowWidth from '../hooks/useWindowWidth';
 
 // components
 import Header from '../components/header/Header';
-import HomeMain from '../containers/HomeMain';
+import HomeMain from '../components/HomeMain';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -45,6 +45,13 @@ function Home() {
         <button onClick={getAnotherPosts}>다른유저 게시물</button>
         <button onClick={getFollowerPosts}>팔로워들 게시물</button>
         <button onClick={getRandom}>랜던 유저</button>
+        <button onClick={getSelectedPost}>특정 게시물 정보</button>
+        <button onClick={postLike}>특정 게시물에 좋아요</button>
+        <button onClick={getPostLikes}>특정 게시물에 좋아요 get</button>
+        <button onClick={addBookmark}>특정 게시물에 북마크</button>
+        <button onClick={getBookmark}>특정 유저의 북마크</button>
+        <button onClick={getCommnetlike}>특정 게시물의 댓글 좋아요</button>
+        <button onClick={addCommentLike}>댓글 좋아요 추가</button>
       </StyledDiv>
     </>
   );
@@ -53,6 +60,95 @@ function Home() {
 export default React.memo(Home);
 
 const token = localStorage.getItem('access_token');
+
+async function getBookmark() {
+  const res = await axios.get('/bookmark/user3', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  console.log(res.data);
+}
+
+async function addBookmark() {
+  const res = await axios.post(
+    '/bookmark',
+    {
+      post_id: 11,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  console.log(res.data);
+}
+
+async function getCommnetlike() {
+  const res = await axios.get('/comment/like/11', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  console.log(res);
+}
+
+async function addCommentLike() {
+  const res = await axios.post(
+    '/comment/like',
+    {
+      post_id: 11,
+      comment_id: 5,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  console.log(res.data);
+}
+
+async function getPostLikes() {
+  const res = await axios.get('/post/like/1', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  console.log(res.data);
+}
+
+async function postLike() {
+  const res = await axios.post(
+    '/post/like',
+    {
+      post_id: 5,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  console.log(res.data);
+}
+
+async function getSelectedPost() {
+  const res = await axios.get('/post/1', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  console.log(res.data);
+}
 
 async function addComments() {
   const res = await axios.post(
@@ -85,7 +181,8 @@ async function upload() {
   const res = await axios.post(
     '/post',
     {
-      post_context: '이야이야 게시물이다 재밌다.',
+      post_context:
+        '게시물 길게 써보기 ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁdddddddddddddddddddddddddddddddddddddㅁㄴ아리ㅓㄴ이런얄ㄷㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅂㅂㅂㅂㅂㅂㅂㅂㅂㅂㅂㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㄷㅈㅂ[갲ㅂㄷㄱ[ㅂㅈㄷㄱㅈㄷㄱㅈㄱㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ.',
       post_anotheruser: '태그 유저어어',
       post_location: '건대입구',
     },
@@ -131,7 +228,7 @@ async function getFollowerPosts() {
 
 async function login() {
   const res = await axios.post('/login', {
-    user_id: 'user7',
+    user_id: 'user3',
     user_password: 'asdf',
   });
 
