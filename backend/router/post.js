@@ -478,7 +478,7 @@ router.get('/comment/like/:post_id', async (req, res) => {
       const [data] = await connection.query(sql, post_id);
       console.log(data);
 
-      res.send({ post_id, comment: data.map((data) => data) });
+      res.send({ ...data.map((data) => data) });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
@@ -545,6 +545,40 @@ router.get('/bookmark/:user_id', async (req, res) => {
   }
 });
 
+router.delete('/bookmark/:post_id', async (req, res) => {
+  const { post_id } = req.params;
+  let sql = '';
+  let sqls = [];
+  let params = [];
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      sql = 'SET foreign_key_checks = 0;';
+      sqls += mysql.format(sql);
+      sql = 'delete from bookmark where post_id = ?;';
+      params = [post_id];
+      sqls += mysql.format(sql, params);
+      sql = 'SET foreign_key_checks = 1;';
+      sqls += mysql.format(sql);
+
+      const [test] = await connection.query(sqls);
+
+      if (test[1].affectedRows === 0) {
+        res.send({ success: false });
+      } else {
+        res.send({ success: true });
+      }
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      console.log(error);
+      res.status(500).json('SQL ERROR');
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
+});
+
 router.delete('/post/:post_id', async (req, res) => {
   const { post_id } = req.params;
   let sql = '';
@@ -573,6 +607,69 @@ router.delete('/post/:post_id', async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
+});
+
+router.delete('/post/comment/like/:comment_id', async (req, res) => {
+  const { comment_id } = req.params;
+  let sql = '';
+  let sqls = [];
+  let params = [];
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      sql = 'SET foreign_key_checks = 0;';
+      sqls += mysql.format(sql);
+      sql = 'delete from comments where id = ?;';
+      params = [comment_id];
+      sqls += mysql.format(sql, params);
+      sql = 'SET foreign_key_checks = 1;';
+      sqls += mysql.format(sql);
+
+      const [test] = await connection.query(sqls);
+
+      if (test[1].affectedRows === 0) {
+        res.send({ success: false });
+      } else {
+        res.send({ success: true });
+      }
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      console.log(error);
+      res.status(500).json('SQL ERROR');
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
+});
+
+router.get('/post/count/:post_id', verifyToken, async (req, res) => {
+  const { post_id } = req.params;
+  let sql = '';
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      sql = `SELECT COUNT(*) "like" FROM post_like where post_id = ?;`;
+      const [likeCount] = await connection.query(sql, +post_id);
+
+      sql = `select COUNT(*) "comment"  from comments where post_id = ?;`;
+      const [commentCount] = await connection.query(sql, +post_id);
+
+      res.send({
+        likeCount: likeCount[0].like,
+        commentCount: commentCount[0].comment,
+      });
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      console.log(error);
+      res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
