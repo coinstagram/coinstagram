@@ -12,4 +12,7 @@ export const StyledButton = styled.button`
   width: 100%;
   height: 30px;
   border-radius: 3px;
+  &.active {
+    background: #0095f6;
+  }
 `;

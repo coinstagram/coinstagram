@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { passwordProps } from './InputPassword';
 
-export interface InputProps extends passwordProps {
+export interface inputProps extends passwordProps {
   type: string;
   name: string;
   value: string;
@@ -52,14 +52,6 @@ export const IconWrapper = styled.div`
     }
     &.check {
       color: #d5d6d7;
-    }
-  }
-  div {
-    white-space: nowrap;
-    .toggleBtn {
-      font-weight: bold;
-      font-size: 1rem;
-      outline: none;
     }
   }
 `;
