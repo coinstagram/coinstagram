@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { EachPostState } from '../../type';
+import { CountState, EachPostState } from '../../type';
 
 const baseUrl = '/post';
 
@@ -14,7 +14,12 @@ interface IPostService {
     token: string | null,
     post_id: number,
   ) => Promise<EachPostState>;
+  getSpecificPost: (
+    token: null | string,
+    post_id: number,
+  ) => Promise<EachPostState>;
   deletePost: (token: string | null, post_id: number) => void;
+  getCountPost: (token: string | null, post_id: number) => Promise<CountState>;
 }
 
 const PostService: IPostService = class {
@@ -61,6 +66,16 @@ const PostService: IPostService = class {
     return res.data;
   }
 
+  static async getSpecificPost(token: null | string, post_id: number) {
+    const res = await axios.get<EachPostState>(`${baseUrl}/${post_id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return res.data;
+  }
+
   static async deletePost(token: string | null, post_id: number) {
     const res = await axios.delete(`${baseUrl}/${post_id}`, {
       headers: {
@@ -69,6 +84,16 @@ const PostService: IPostService = class {
     });
 
     console.log(res.data);
+  }
+
+  static async getCountPost(token: string | null, post_id: number) {
+    const res = await axios.get<CountState>(`${baseUrl}/count/${post_id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return res.data;
   }
 
   // static async patchPosts..

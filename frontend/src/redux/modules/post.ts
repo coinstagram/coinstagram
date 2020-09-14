@@ -3,28 +3,29 @@ import { takeLatest, put, select, call, takeLeading } from 'redux-saga/effects';
 import PostService from '../services/postService';
 
 // action type
-const START_GET_POSTS = 'coinstagram/post/START_GET_POSTS' as const;
-const SUCCESS_GET_POSTS_USER = 'coinstagram/post/SUCCESS_GET_POSTS_USER' as const;
+const START_GET_POSTS_FEED = 'coinstagram/post/START_GET_POSTS_FEED' as const;
 const SUCCESS_GET_POSTS_FEED = 'coinstagram/post/SUCCESS_GET_POSTS_FEED' as const;
-const SUCCESS_GET_POSTS_RANDOM = 'coinstagram/post/SUCCESS_GET_POSTS_RANDOM' as const;
-const FAIL_GET_POSTS = 'coinstagram/post/FAIL_GET_POSTS' as const;
+const FAIL_GET_POSTS_FEED = 'coinstagram/post/FAIL_GET_POSTS_FEED' as const;
+
+const START_GET_POSTS_USER = 'coinstagram/post/START_GET_POSTS_USER' as const;
+const SUCCESS_GET_POSTS_USER = 'coinstagram/post/SUCCESS_GET_POSTS_USER' as const;
+const FAIL_GET_POSTS_USER = 'coinstagram/post/FAIL_GET_POSTS_USER' as const;
 
 const START_GET_POST_SELECTED = 'coinstagram/post/START_GET_POST_SELECTED' as const;
 const SUCCESS_GET_POST_SELECTED = 'coinstagram/post/SUCCESS_GET_POST_SELECTED' as const;
 const FAIL_GET_POST_SELECTED = 'coinstagram/post/FAIL_GET_POST_SELECTED' as const;
+
+const START_GET_POSTS_RANDOM = 'coinstagram/post/START_GET_POSTS_RANDOM' as const;
+const SUCCESS_GET_POSTS_RANDOM = 'coinstagram/post/SUCCESS_GET_POSTS_RANDOM' as const;
+const FAIL_GET_POSTS_RANDOM = 'coinstagram/post/FAIL_GET_POSTS_RANDOM' as const;
 
 const START_DELETE_POST = '/coinstagram/post/START_DELETE_POST' as const;
 const SUCCESS_DELETE_POST = '/coinstagram/post/SUCCESS_DELETE_POST' as const;
 const FAIL_DELETE_POST = '/coinstagram/post/FAIL_DELETE_POST' as const;
 
 // action creator
-const startGetPosts = () => ({
-  type: START_GET_POSTS,
-});
-
-const successGetPostsUser = (userPosts: EachPostState[]) => ({
-  type: SUCCESS_GET_POSTS_USER,
-  payload: userPosts,
+const startGetPostsFeed = () => ({
+  type: START_GET_POSTS_FEED,
 });
 
 const successGetPostsFeed = (
@@ -36,17 +37,45 @@ const successGetPostsFeed = (
 
   return {
     type: SUCCESS_GET_POSTS_FEED,
-    payload: mergedPosts,
+    payload: {
+      mergedPosts,
+    },
   };
 };
+const failGetPostsFeed = (error: Error) => ({
+  type: FAIL_GET_POSTS_FEED,
+  payload: error,
+});
+
+const startGetPostsUser = () => ({
+  type: START_GET_POSTS_USER,
+});
+
+const successGetPostsUser = (userPosts: EachPostState[]) => ({
+  type: SUCCESS_GET_POSTS_USER,
+  payload: {
+    userPosts,
+  },
+});
+
+const failGetPostsUser = (error: Error) => ({
+  type: FAIL_GET_POSTS_USER,
+  payload: error,
+});
+
+const startGetPostsRandom = () => ({
+  type: START_GET_POSTS_RANDOM,
+});
 
 const successGetPostsRandom = (randomPosts: EachPostState[]) => ({
   type: SUCCESS_GET_POSTS_RANDOM,
-  payload: randomPosts,
+  payload: {
+    randomPosts,
+  },
 });
 
-const failGetPosts = (error: Error) => ({
-  type: FAIL_GET_POSTS,
+const failGetPostsRandom = (error: Error) => ({
+  type: FAIL_GET_POSTS_RANDOM,
   payload: error,
 });
 
@@ -83,11 +112,15 @@ const failDeletePost = (error: Error) => ({
 });
 
 type PostActions =
-  | ReturnType<typeof startGetPosts>
-  | ReturnType<typeof successGetPostsUser>
+  | ReturnType<typeof startGetPostsFeed>
   | ReturnType<typeof successGetPostsFeed>
+  | ReturnType<typeof failGetPostsFeed>
+  | ReturnType<typeof startGetPostsUser>
+  | ReturnType<typeof successGetPostsUser>
+  | ReturnType<typeof failGetPostsUser>
+  | ReturnType<typeof startGetPostsRandom>
   | ReturnType<typeof successGetPostsRandom>
-  | ReturnType<typeof failGetPosts>
+  | ReturnType<typeof failGetPostsRandom>
   | ReturnType<typeof startGetPostSelected>
   | ReturnType<typeof successGetPostSelected>
   | ReturnType<typeof failGetPostSelcted>
@@ -147,21 +180,21 @@ type onePostSagaAction =
 function* getRandomPosts() {
   try {
     const { token } = yield select((state: RootState) => state.auth);
-    yield put(startGetPosts());
+    yield put(startGetPostsRandom());
     const randomPosts: EachPostState[] = yield call(
       PostService.getRandomPosts,
       token,
     );
     yield put(successGetPostsRandom(randomPosts));
   } catch (error) {
-    yield put(failGetPosts(error));
+    yield put(failGetPostsRandom(error));
   }
 }
 
 function* getFeedPosts(action: PostSagaActions) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
-    yield put(startGetPosts());
+    yield put(startGetPostsFeed());
     const followersPosts: EachPostState[] = yield call(
       PostService.getFollowersPosts,
       token,
@@ -173,14 +206,14 @@ function* getFeedPosts(action: PostSagaActions) {
     );
     yield put(successGetPostsFeed(followersPosts, myPosts));
   } catch (error) {
-    yield put(failGetPosts(error));
+    yield put(failGetPostsFeed(error));
   }
 }
 
 function* getUserPosts(action: PostSagaActions) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
-    yield put(startGetPosts());
+    yield put(startGetPostsUser());
     const CertainUserPosts: EachPostState[] = yield call(
       PostService.getUserPosts,
       token,
@@ -188,7 +221,7 @@ function* getUserPosts(action: PostSagaActions) {
     );
     yield put(successGetPostsUser(CertainUserPosts));
   } catch (error) {
-    yield put(failGetPosts(error));
+    yield put(failGetPostsUser(error));
   }
 }
 
@@ -229,13 +262,20 @@ export function* postsSaga() {
 
 // initial state
 const initialState: PostsState = {
-  loading: false,
-  error: null,
-  FeedPosts: [],
+  feedPosts: {
+    loading: false,
+    error: null,
+    feedPosts: [],
+  },
   selectedPost: {
     loading: false,
     error: null,
-    post: null,
+    selectedPost: null,
+  },
+  randomPosts: {
+    loading: false,
+    error: null,
+    randomPosts: [],
   },
 };
 
@@ -245,96 +285,119 @@ function postReducer(
   action: PostActions,
 ): PostsState {
   switch (action.type) {
-    case START_GET_POSTS:
+    case START_GET_POSTS_FEED:
       return {
-        loading: true,
-        error: null,
-        FeedPosts: [],
+        feedPosts: {
+          loading: true,
+          error: null,
+          feedPosts: state.feedPosts.feedPosts,
+        },
         selectedPost: state.selectedPost,
+        randomPosts: state.randomPosts,
+      };
+    case START_GET_POSTS_RANDOM:
+      return {
+        feedPosts: state.feedPosts,
+        selectedPost: state.selectedPost,
+        randomPosts: {
+          loading: true,
+          error: null,
+          randomPosts: state.randomPosts.randomPosts,
+        },
       };
     case START_GET_POST_SELECTED:
       return {
-        loading: true,
-        error: null,
-        FeedPosts: state.FeedPosts,
+        feedPosts: state.feedPosts,
         selectedPost: {
           loading: true,
           error: null,
-          post: null,
+          selectedPost: null,
         },
+        randomPosts: state.randomPosts,
       };
     case START_DELETE_POST:
       return {
-        loading: true,
-        error: null,
-        FeedPosts: state.FeedPosts,
+        feedPosts: {
+          loading: true,
+          error: null,
+          feedPosts: state.feedPosts.feedPosts,
+        },
         selectedPost: state.selectedPost,
+        randomPosts: state.randomPosts,
       };
     case SUCCESS_GET_POSTS_RANDOM:
       return {
-        loading: false,
-        error: null,
-        FeedPosts: action.payload,
+        feedPosts: state.feedPosts,
         selectedPost: state.selectedPost,
+        randomPosts: {
+          loading: false,
+          error: null,
+          randomPosts: action.payload.randomPosts,
+        },
       };
-    case SUCCESS_GET_POSTS_USER:
-      return {
-        loading: false,
-        error: null,
-        FeedPosts: state.FeedPosts,
-        selectedPost: state.selectedPost,
-      };
+    // case SUCCESS_GET_POSTS_USER:
+    //   return {
+    //     feedPosts: state.feedPosts,
+    //     selectedPost: state.selectedPost,
+    //     randomPosts: state.randomPosts,
+    //   };
     case SUCCESS_GET_POSTS_FEED:
       return {
-        loading: false,
-        error: null,
-        FeedPosts: action.payload,
+        feedPosts: {
+          loading: false,
+          error: null,
+          feedPosts: action.payload.mergedPosts,
+        },
         selectedPost: state.selectedPost,
+        randomPosts: state.randomPosts,
       };
     case SUCCESS_GET_POST_SELECTED:
       return {
-        loading: false,
-        error: null,
-        FeedPosts: state.FeedPosts,
+        feedPosts: state.feedPosts,
         selectedPost: {
           loading: false,
           error: null,
-          post: action.payload.selectedPost,
+          selectedPost: action.payload.selectedPost,
         },
+        randomPosts: state.randomPosts,
       };
     case SUCCESS_DELETE_POST:
       return {
-        loading: false,
-        error: null,
-        FeedPosts: state.FeedPosts.filter(
-          post => post.id !== action.payload.post_id,
-        ),
+        feedPosts: {
+          loading: false,
+          error: null,
+          feedPosts: state.feedPosts.feedPosts.filter(
+            post => post.id !== action.payload.post_id,
+          ),
+        },
         selectedPost: state.selectedPost,
+        randomPosts: state.randomPosts,
       };
-    case FAIL_GET_POSTS:
+    case FAIL_GET_POSTS_FEED:
       return {
-        loading: false,
-        error: action.payload,
-        FeedPosts: state.FeedPosts,
+        feedPosts: {
+          loading: false,
+          error: action.payload,
+          feedPosts: [],
+        },
         selectedPost: state.selectedPost,
+        randomPosts: state.randomPosts,
       };
     case FAIL_GET_POST_SELECTED:
       return {
-        loading: false,
-        error: null,
-        FeedPosts: state.FeedPosts,
+        feedPosts: state.feedPosts,
         selectedPost: {
           loading: true,
           error: action.payload,
-          post: null,
+          selectedPost: null,
         },
+        randomPosts: state.randomPosts,
       };
     case FAIL_DELETE_POST:
       return {
-        loading: false,
-        error: null,
-        FeedPosts: state.FeedPosts,
+        feedPosts: state.feedPosts,
         selectedPost: state.selectedPost,
+        randomPosts: state.randomPosts,
       };
     default:
       return state;

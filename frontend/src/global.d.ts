@@ -17,5 +17,6 @@ declare module 'react' {
     viewTime?: boolean;
     header?: boolean;
     isheader?: boolean;
+    page?: string;
   }
 }

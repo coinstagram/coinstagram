@@ -41,13 +41,20 @@ function preloadedState(token: string | null): RootState {
       followees: [],
     },
     posts: {
-      loading: false,
-      error: null,
-      FeedPosts: [],
+      feedPosts: {
+        loading: false,
+        error: null,
+        feedPosts: [],
+      },
       selectedPost: {
         loading: false,
         error: null,
-        post: null,
+        selectedPost: null,
+      },
+      randomPosts: {
+        loading: false,
+        error: null,
+        randomPosts: [],
       },
     },
     comments: {
@@ -69,9 +76,24 @@ function preloadedState(token: string | null): RootState {
       },
     },
     bookmarks: {
-      loading: true,
+      loading: false,
       error: null,
       bookmarks: [],
+      bookmarkPosts: {
+        loading: false,
+        error: null,
+        bookmarkPosts: [],
+      },
+    },
+    otherPosts: {
+      loading: false,
+      error: null,
+      otherPosts: [],
+      counts: {
+        loading: false,
+        error: null,
+        counts: [],
+      },
     },
   };
 }

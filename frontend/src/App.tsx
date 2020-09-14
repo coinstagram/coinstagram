@@ -71,8 +71,8 @@ function App() {
             <Route path="/upload" component={Upload} />
             <Route path="/join" component={Join} />
             <Route path="/login" component={Login} />
-            <Route path="/account/:userid/tagged" component={Profile} />
-            <Route path="/account/:userid/saved" component={Profile} />
+            <Route path="/:userid/tagged" component={Profile} />
+            <Route path="/:userid/saved" component={Profile} />
             <Route path="/account/edit" component={Edit} />
             <Route path="/:userid" component={Profile} />
             <Route path="/" exact component={Home} />

@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from '../components/header/Header';
-import StyledMain, { WidthProps } from '../components/common/StyledMain';
+import StyledMain from '../components/common/StyledMain';
 import styled from 'styled-components';
 import useWindowWidth from '../hooks/useWindowWidth';
 
@@ -9,8 +9,7 @@ import UploadContainer from '../containers/UploadContainer';
 
 const UploadMain = styled(StyledMain)`
   max-width: 600px;
-  padding: ${(props: WidthProps) =>
-    props.width !== undefined && props.width < 655 && '55px 0 0'};
+  padding: ${props => props.width < 655 && '55px 0 0'};
 `;
 const StyledSection = styled.section`
   border: 1px solid rgb(219, 219, 219);
