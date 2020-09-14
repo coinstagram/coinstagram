@@ -5,12 +5,14 @@
 
 html {
   font-size: 14px;
+  color: rgb(50, 50, 50);
 }
 
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Open Sans', 'Lato',
     sans-serif !important;
+  background: #fafafa;
 }
 
 h1,
@@ -57,6 +59,10 @@ button {
   font-family: inherit;
 
   cursor: pointer;
+}
+
+dl {
+  margin: 0;
 }
 
 dd {

@@ -10,12 +10,76 @@ import { createBrowserHistory } from 'history';
 export const history = createBrowserHistory();
 const sagaMiddleWare = createSagaMiddleware();
 
-// const preloadedState: RootState = {}
+function preloadedState(token: string | null): RootState {
+  return {
+    auth: {
+      loading: false,
+      error: null,
+      token,
+    },
+    userInfo: {
+      loading: false,
+      error: null,
+      user: null,
+      followers: {
+        loading: false,
+        error: null,
+        users: [],
+      },
+      followees: [],
+      randomUsers: {
+        loading: false,
+        error: null,
+        users: [],
+      },
+    },
+    anotherUserInfo: {
+      loading: false,
+      error: null,
+      user: null,
+      followers: [],
+      followees: [],
+    },
+    posts: {
+      loading: false,
+      error: null,
+      FeedPosts: [],
+      selectedPost: {
+        loading: false,
+        error: null,
+        post: null,
+      },
+    },
+    comments: {
+      loading: false,
+      error: null,
+      postComments: [],
+      myComments: [],
+    },
+    likes: {
+      postLikes: {
+        loading: false,
+        error: null,
+        userLikes: [],
+      },
+      commentLikes: {
+        loading: false,
+        error: null,
+        userLikes: [],
+      },
+    },
+    bookmarks: {
+      loading: true,
+      error: null,
+      bookmarks: [],
+    },
+  };
+}
 
-function create(): Store<RootState> {
+function create(token: string | null): Store<RootState> {
   const store: Store<RootState> = createStore(
     rootReducer(history),
-    // preloadedState,
+    preloadedState(token),
     composeWithDevTools(
       applyMiddleware(routerMiddleware(history), sagaMiddleWare),
     ),
