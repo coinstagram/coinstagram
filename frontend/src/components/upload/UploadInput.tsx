@@ -6,26 +6,41 @@ import axios from 'axios';
 interface UploadDetailsProps {
   image: (img: Array<object>) => void;
 }
+interface resDataProps {
+  image_path: String;
+}
 
 const UploadInput: React.FC<UploadDetailsProps> = ({ image }) => {
   const imageInput = useRef<HTMLInputElement>(null);
+  const [imageURL, setImageURL] = useState<Object>({});
 
-  const isSelectedImg = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const isSelectedImg = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files !== null) {
       const fd = new FormData();
       [].forEach.call(event.target.files, (f: File) => {
         fd.append('image', f);
       });
-      axios
-        .post(`images`, fd)
-        .then(res => {
-          image(res.data);
-        })
-        .catch(error => {
-          console.log(error.response);
-        });
+      let token =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSIsInVzZXJfbmFtZSI6IjEiLCJ1c2VyX2dlbmRlciI6bnVsbCwidXNlcl9pbnRyb2R1Y2UiOm51bGwsInVzZXJfcGhvbmUiOm51bGwsInVzZXJfZW1haWwiOiIxIiwidXNlcl9wcm9maWxlIjpudWxsLCJpYXQiOjE2MDAwOTUyMzMsImV4cCI6MTYwMDcwMDAzM30.9-qcZA4LwwmgM8wwm4EcAPiA83frfsplRI7SHqnqeAE';
+
+      const res = await axios.post(`images`, fd, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      image(res.data);
+      console.log(res.data.map((data: resDataProps) => data.image_path));
+
+      setImageURL({
+        ...imageURL,
+        ...res.data.map((data: resDataProps) => data.image_path),
+      });
     }
   };
+
+  React.useEffect(() => {
+    console.log(imageURL);
+  }, [imageURL]);
 
   return (
     <StyledDiv>
