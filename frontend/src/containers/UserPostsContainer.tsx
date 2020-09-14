@@ -13,6 +13,8 @@ import {
   cancelFollowUserSaga,
   followUserSaga,
 } from '../redux/modules/userInfo';
+import { addPostLikeSaga, getPostLikesSaga } from '../redux/modules/like';
+import { addBookmarkSaga, getBookmarksSaga } from '../redux/modules/bookmark';
 
 // components
 import SelectedPost from '../components/post/SelectedPost';
@@ -53,6 +55,20 @@ function UserPostsContainer() {
     [dispatch],
   );
 
+  const getPostLikes = useCallback(
+    (post_id: number) => {
+      dispatch(getPostLikesSaga(post_id));
+    },
+    [dispatch],
+  );
+
+  const addPostLikes = useCallback(
+    (post_id: number) => {
+      dispatch(addPostLikeSaga(post_id));
+    },
+    [dispatch],
+  );
+
   const follow = useCallback(() => {
     dispatch(
       followUserSaga(selectedUserId, selectedUserName, selectedUserProfile),
@@ -70,6 +86,20 @@ function UserPostsContainer() {
     [dispatch],
   );
 
+  const getBookmarks = useCallback(
+    (user_id: string) => {
+      dispatch(getBookmarksSaga(user_id));
+    },
+    [dispatch],
+  );
+
+  const addBookmark = useCallback(
+    (post_id: number) => {
+      dispatch(addBookmarkSaga(post_id));
+    },
+    [dispatch],
+  );
+
   return (
     <>
       <SelectedPost
@@ -79,9 +109,13 @@ function UserPostsContainer() {
         getUserPosts={getUserPosts}
         getCommentsPost={getCommentsPost}
         addCommentPost={addCommentPost}
+        getPostLikes={getPostLikes}
+        addPostLikes={addPostLikes}
         follow={follow}
         cancelFollow={cancelFollow}
         deletePost={deletePost}
+        getBookmarks={getBookmarks}
+        addBookmark={addBookmark}
       />
       <AnotherPosts />
     </>

@@ -50,6 +50,8 @@ function Home() {
         <button onClick={getPostLikes}>특정 게시물에 좋아요 get</button>
         <button onClick={addBookmark}>특정 게시물에 북마크</button>
         <button onClick={getBookmark}>특정 유저의 북마크</button>
+        <button onClick={getCommnetlike}>특정 게시물의 댓글 좋아요</button>
+        <button onClick={addCommentLike}>댓글 좋아요 추가</button>
       </StyledDiv>
     </>
   );
@@ -60,7 +62,7 @@ export default React.memo(Home);
 const token = localStorage.getItem('access_token');
 
 async function getBookmark() {
-  const res = await axios.get('/bookmark/user7', {
+  const res = await axios.get('/bookmark/user3', {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -73,7 +75,34 @@ async function addBookmark() {
   const res = await axios.post(
     '/bookmark',
     {
-      post_id: 2,
+      post_id: 11,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  console.log(res.data);
+}
+
+async function getCommnetlike() {
+  const res = await axios.get('/comment/like/11', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  console.log(res);
+}
+
+async function addCommentLike() {
+  const res = await axios.post(
+    '/comment/like',
+    {
+      post_id: 11,
+      comment_id: 5,
     },
     {
       headers: {
@@ -99,7 +128,7 @@ async function postLike() {
   const res = await axios.post(
     '/post/like',
     {
-      post_id: 1,
+      post_id: 5,
     },
     {
       headers: {
@@ -199,7 +228,7 @@ async function getFollowerPosts() {
 
 async function login() {
   const res = await axios.post('/login', {
-    user_id: 'user7',
+    user_id: 'user3',
     user_password: 'asdf',
   });
 

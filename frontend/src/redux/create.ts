@@ -71,6 +71,23 @@ function preloadedState(token: string | null): RootState {
       postComments: [],
       myComments: [],
     },
+    likes: {
+      postLikes: {
+        loading: false,
+        error: null,
+        userLikes: [],
+      },
+      commentLikes: {
+        loading: false,
+        error: null,
+        userLikes: [],
+      },
+    },
+    bookmarks: {
+      loading: true,
+      error: null,
+      bookmarks: [],
+    },
   };
 }
 

@@ -49,7 +49,22 @@ export interface CommentsState {
   error: null | Error;
   postComments: EachCommentState[];
   myComments: EachCommentState[];
-  // likes: null | stringArray;
+}
+
+export interface userLikesState {
+  post_id: number;
+  user_id: string[];
+}
+
+export interface EachLikeState {
+  loading: boolean;
+  error: null | Error;
+  userLikes: userLikesState[];
+}
+
+export interface likeState {
+  postLikes: EachLikeState;
+  commentLikes: EachLikeState;
 }
 
 export interface EachPostState {
@@ -63,6 +78,12 @@ export interface EachPostState {
   created_at: null | string;
   // comments:
   // likes:
+}
+
+export interface BookmarkState {
+  loading: boolean;
+  error: null | Error;
+  bookmarks: number[];
 }
 
 export interface SelectedPostState {
@@ -119,7 +140,6 @@ export interface PostsState {
   error: null | Error;
   FeedPosts: EachPostState[];
   selectedPost: SelectedPostState;
-  // bookmarkPosts: EachPostState[];
   // taggedPosts: EachPostState[];
 }
 
@@ -130,6 +150,8 @@ interface RootState {
   anotherUserInfo: AnotherUserInfoState;
   posts: PostsState;
   comments: CommentsState;
+  likes: likeState;
+  bookmarks: BookmarkState;
 }
 
 export default RootState;
