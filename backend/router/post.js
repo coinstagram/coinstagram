@@ -344,19 +344,19 @@ router.post('/post/image', verifyToken, async (req, res) => {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
+      console.log(image);
       for (let imageData of image) {
         sql = `insert into post_image(post_id, image_path, image_name, image_type) values(?, ?, ?, ?);`;
         params = [
           post_id,
           imageData.image_path,
-          imageData.image_type,
+          imageData.image_name,
           imageData.image_type,
         ];
         sqls += mysql.format(sql, params);
       }
 
-      console.log(await connection.query(sqls));
-
+      await connection.query(sqls);
       res.send({ success: true });
     } catch (error) {
       await connection.rollback(); // ROLLBACK

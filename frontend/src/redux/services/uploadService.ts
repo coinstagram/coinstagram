@@ -4,9 +4,6 @@ const getUrl = '/post';
 
 const uploadService = class {
   static async uploadPost(data: postData, token: String) {
-    token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSIsInVzZXJfbmFtZSI6IjEiLCJ1c2VyX2dlbmRlciI6bnVsbCwidXNlcl9pbnRyb2R1Y2UiOm51bGwsInVzZXJfcGhvbmUiOm51bGwsInVzZXJfZW1haWwiOiIxIiwidXNlcl9wcm9maWxlIjpudWxsLCJpYXQiOjE2MDAwOTUyMzMsImV4cCI6MTYwMDcwMDAzM30.9-qcZA4LwwmgM8wwm4EcAPiA83frfsplRI7SHqnqeAE';
-
     const res = await axios.post(
       `${getUrl}`,
       {
@@ -21,9 +18,8 @@ const uploadService = class {
       },
     );
     const { post_id } = res.data;
-    console.log(post_id, data.image);
 
-    await axios.post(
+    const a = await axios.post(
       `${getUrl}/image`,
       {
         post_id,
@@ -35,6 +31,7 @@ const uploadService = class {
         },
       },
     );
+    console.log(a);
 
     return res.data;
   }

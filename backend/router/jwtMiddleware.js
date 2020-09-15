@@ -4,8 +4,8 @@ exports.verifyToken = (req, res, next) => {
   // 인증 완료
   try {
     // 요청 헤더에 저장된 토큰(req.headers.authorization)과 비밀키를 사용하여 토큰 반환
-    const token = req.headers.authorization.split('Bearer ')[1];
-    console.log(token);
+    let token = req.headers.authorization.split('Bearer ')[1];
+
     if (!token) {
       return next();
     }

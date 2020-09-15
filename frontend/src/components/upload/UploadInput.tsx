@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { StyledDiv, StyledLabel } from './UploadInput.style';
 import axios from 'axios';
+import UploadImageView from './UploadImageView';
 
 interface UploadDetailsProps {
   image: (img: Array<object>) => void;
@@ -20,16 +21,14 @@ const UploadInput: React.FC<UploadDetailsProps> = ({ image }) => {
       [].forEach.call(event.target.files, (f: File) => {
         fd.append('image', f);
       });
-      let token =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSIsInVzZXJfbmFtZSI6IjEiLCJ1c2VyX2dlbmRlciI6bnVsbCwidXNlcl9pbnRyb2R1Y2UiOm51bGwsInVzZXJfcGhvbmUiOm51bGwsInVzZXJfZW1haWwiOiIxIiwidXNlcl9wcm9maWxlIjpudWxsLCJpYXQiOjE2MDAwOTUyMzMsImV4cCI6MTYwMDcwMDAzM30.9-qcZA4LwwmgM8wwm4EcAPiA83frfsplRI7SHqnqeAE';
-
+      let token = 'test';
       const res = await axios.post(`images`, fd, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       image(res.data);
-      console.log(res.data.map((data: resDataProps) => data.image_path));
+      console.log(res.data[0].image_path);
 
       setImageURL({
         ...imageURL,
