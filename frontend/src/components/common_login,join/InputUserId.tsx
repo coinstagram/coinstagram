@@ -15,7 +15,7 @@ export default function InputUserId({ userId, onInputUserId }: userIdProps) {
         name="user_id"
         value={userId}
         onInput={onInputUserId}
-        placeholder="사용자 이름"
+        placeholder="사용자 ID"
         toggleIcon={idRegExp.test(userId)}
         display="block"
       ></InputCommon>

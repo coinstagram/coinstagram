@@ -21,8 +21,12 @@ const authService: IAuthService = class {
         user_password,
       },
     });
-    const { token } = res.data;
+    console.log('res', res);
+    const { success, token } = res.data;
+    if (!success) alert('사용자 정보와 일치하지 않습니다');
+    // if (token === undefined) alert('사용자 정보와 일치하지 않습니다');
     localStorage.setItem('token', token);
+    console.log('token', token);
     return token;
   }
 
@@ -44,7 +48,7 @@ const authService: IAuthService = class {
     });
     console.log('res', res);
     const { token } = res.data;
-    localStorage.setItem('token', token);
+    // localStorage.getItem('token');
     return token;
   }
 
