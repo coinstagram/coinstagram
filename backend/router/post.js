@@ -67,6 +67,22 @@ router.get('/posts', verifyToken, async (req, res) => {
     try {
       sql = 'select * from posts order by id desc limit 20 ;';
       const [check] = await connection.query(sql);
+      const post_id = check.map(({ id }) => +id);
+      let sqls = '';
+      let params = [];
+      sql = `select image_path from post_image where post_id = ?;`;
+
+      post_id.map((id) => {
+        params = [id];
+        sqls += mysql.format(sql, params);
+      });
+
+      const [image] = await connection.query(sqls);
+      for (let i = 0; i < image.length; i++) {
+        let imageitem = image[i].map(({ image_path }) => image_path);
+        check[i] = { ...check[i], image_path: imageitem };
+      }
+
       res.send(check);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
@@ -284,6 +300,21 @@ router.get('/user/post/:user_id', verifyToken, async (req, res) => {
     try {
       sql = `select * from posts where user_id = ? order by id desc`;
       const [check] = await connection.query(sql, user_id);
+      const post_id = check.map(({ id }) => id);
+      let sqls = '';
+      let params = [];
+      sql = `select image_path from post_image where post_id = ?;`;
+
+      post_id.map((id) => {
+        params = [id];
+        sqls += mysql.format(sql, params);
+      });
+      const [image] = await connection.query(sqls);
+      for (let i = 0; i < image.length; i++) {
+        let imageitem = image[i].map(({ image_path }) => image_path);
+        check[i] = { ...check[i], image_path: imageitem };
+      }
+
       res.send(check);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
@@ -315,7 +346,7 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
     try {
       sql = `select user_id from users where user_id in(select followee_id from users_relationship where follower_id = ?);`;
       const [followee_id] = await connection.query(sql, user.user_id);
-      sql = `select * from posts where user_id = ? order by id desc;`;
+      sql = `select * from posts where user_id = ?;`;
 
       let sqls = '';
       let params = [];
@@ -325,10 +356,40 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
         sqls += mysql.format(sql, params);
       });
       const [test] = await connection.query(sqls);
-      // console.log(test);
+
+      const post_id = test.map((foll) => {
+        if (foll.length === 0) {
+          return [];
+        } else {
+          return [...foll.map(({ id }) => id)];
+        }
+      });
+
+      sql = `select image_path from post_image where post_id = ?;`;
+      sqls = '';
+      post_id.map((id) => {
+        if (id.length === 0) {
+          return;
+        } else {
+          id.map((postId) => {
+            sqls += mysql.format(sql, postId);
+          });
+        }
+      });
+      console.log(sqls);
+
+      const [image] = await connection.query(sqls);
+      console.log(image);
+
       const arr = [];
       const result = test.filter((el) => el.length !== 0);
       result.forEach((res) => arr.push(...res));
+
+      for (let i = 0; i < image.length; i++) {
+        let imageitem = image[i].map(({ image_path }) => image_path);
+        arr[i] = { ...arr[i], image_path: imageitem };
+      }
+
       res.json(arr);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
