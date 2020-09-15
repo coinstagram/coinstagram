@@ -271,7 +271,6 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
         params = [user_id];
         sqls += mysql.format(sql, params);
       });
-      console.log(sqls);
       const [test] = await connection.query(sqls);
       // console.log(test);
       const arr = [];
@@ -524,7 +523,6 @@ router.get('/comment/like/:post_id', verifyToken, async (req, res) => {
         'select user_id, comment_id from comment_like where post_id in(select post_id from comments where post_id = ?)';
 
       const [data] = await connection.query(sql, post_id);
-      console.log(data);
       res.send({ post_id, comment: data.map((data) => data) });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
