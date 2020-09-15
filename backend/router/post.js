@@ -483,12 +483,7 @@ router.get('/comment/like/:post_id', async (req, res) => {
 
       const [data] = await connection.query(sql, post_id);
       console.log(data);
-<<<<<<< HEAD
-
-      res.send({ ...data.map((data) => data) });
-=======
       res.send({ post_id, comment: data.map((data) => data) });
->>>>>>> 2d46c99125c5826abf63d1b2e20eabb7fa928b5e
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
