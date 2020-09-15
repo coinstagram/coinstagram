@@ -22,18 +22,26 @@ router.post('/user/relationship', verifyToken, async (req, res) => {
   );
   const { followee_id } = req.body;
 
-  if (+followee_id === +user_id) {
+  if (followee_id + '' === user_id + '') {
     throw Error('나를 팔로워 할 수 없습니다.');
   }
   let sql = '';
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      sql = 'insert into users_relationship values (?, ?)';
-      await connection.query(sql, [user_id, followee_id]);
-      //   sql =  'select user_id, user_name from users where user_id in(select followee_id from users_relationship where id = ?);';
+      sql = 'select followee_id from users_relationship where follower_id = ?';
+      const [compareFollowee] = await connection.query(sql, user_id);
+      const [isFollwee] = compareFollowee.filter(
+        (id) => followee_id + '' === id.followee_id + '',
+      );
+      if (isFollwee !== undefined) {
+        res.send({ success: false });
+      } else {
+        sql = 'insert into users_relationship values (?, ?)';
+        await connection.query(sql, [user_id, followee_id]);
 
-      res.send({ success: true });
+        res.send({ success: true });
+      }
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
@@ -76,12 +84,13 @@ router.delete('/user/relationship/:user', verifyToken, async (req, res) => {
         return followee.followee_id === user;
       });
       if (!isFollowee) {
-        throw Error('해당 친구가 없습니다.');
+        res.send({ success: false });
+      } else {
+        sql =
+          'delete from users_relationship where follower_id = ? and followee_id = ?';
+        await connection.query(sql, [user_id, user]);
+        res.send({ success: true });
       }
-      sql =
-        'delete from users_relationship where follower_id = ? and followee_id = ?';
-      await connection.query(sql, [user_id, user]);
-      res.send({ success: true });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
