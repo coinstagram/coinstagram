@@ -80,8 +80,8 @@ async function upload() {
 
 async function login() {
   const res = await axios.post('/login', {
-    user_id: 'user3',
-    user_password: 'asdf',
+    user_id: '3',
+    user_password: '3',
   });
 
   const { token } = res.data;
