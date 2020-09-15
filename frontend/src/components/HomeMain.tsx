@@ -4,6 +4,7 @@ import React, {
   useState,
   useContext,
   useEffect,
+  useRef,
 } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
@@ -74,6 +75,7 @@ function HomeMain() {
   );
 
   const { user_id, user_profile, targetEl } = followModalState;
+  // const ref = useRef<string>('');
 
   useEffect(() => {
     dispatch(getUserInfoSaga());
