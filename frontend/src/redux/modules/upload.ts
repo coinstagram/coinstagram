@@ -109,9 +109,11 @@ function* addPostSagafun() {
     yield put(add_post_request());
     const { token }: AuthState = yield select((state: RootState) => state.auth);
     const { postReducer } = yield select((state: uploadState) => state);
+
     yield call(uploadService.uploadPost, postReducer.data, token);
 
     yield put(add_post_success());
+
     yield put(push('/'));
   } catch (error) {
     yield put(add_post_failure(error));

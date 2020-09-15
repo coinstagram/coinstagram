@@ -82,7 +82,7 @@ router.get('/posts', verifyToken, async (req, res) => {
 });
 /**
  * get post detail
- * /post/:post_id
+ * /
  */
 router.get('/post/:post_id', verifyToken, async (req, res) => {
   const { post_id } = req.params;
@@ -271,7 +271,6 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
         params = [user_id];
         sqls += mysql.format(sql, params);
       });
-      console.log(sqls);
       const [test] = await connection.query(sqls);
       // console.log(test);
       const arr = [];
@@ -315,14 +314,15 @@ const upload = multer({
   // 단 이미지나 동영상은 백엔드를 거치지 않고
   // 프론트에서 바로 클라우드로 보내는게 좋다.
 });
-router.post('/images', upload.array('image'), async (req, res) => {
-  const file = req.files.map(({ path }) => {
-    const change = path.split(' ');
-    const image_path = change[0];
-    const image_name = change[1].split('.')[0];
-    const image_type = change[1].split('.')[1];
-    return { image_path, image_name, image_type };
-  });
+router.post('/images', verifyToken, upload.array('image'), async (req, res) => {
+  console.log('images');
+  const file = req.files.map(
+    ({ path: image_path, mimetype: image_type, originalname: image_name }) => ({
+      image_path,
+      image_type,
+      image_name,
+    }),
+  );
   console.log(file);
   res.json(file);
 });
@@ -335,7 +335,7 @@ router.post('/images', upload.array('image'), async (req, res) => {
  *  image_type
  * }
  */
-router.post('/post/image', async (req, res) => {
+router.post('/post/image', verifyToken, async (req, res) => {
   const { post_id, image } = req.body;
   let sql = ``;
   let sqls = [];
@@ -343,19 +343,19 @@ router.post('/post/image', async (req, res) => {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
+      console.log(image);
       for (let imageData of image) {
         sql = `insert into post_image(post_id, image_path, image_name, image_type) values(?, ?, ?, ?);`;
         params = [
           post_id,
           imageData.image_path,
-          imageData.image_type,
+          imageData.image_name,
           imageData.image_type,
         ];
         sqls += mysql.format(sql, params);
       }
 
-      console.log(await connection.query(sqls));
-
+      await connection.query(sqls);
       res.send({ success: true });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
@@ -377,7 +377,7 @@ router.post('/post/image', async (req, res) => {
  *  post_id
  * }
  */
-router.post('/post/like', async (req, res) => {
+router.post('/post/like', verifyToken, async (req, res) => {
   const token = req.headers.authorization.split('Bearer ')[1];
   const userData = jwt.verify(
     token,
@@ -409,7 +409,7 @@ router.post('/post/like', async (req, res) => {
   }
 });
 
-router.get('/post/like/:post_id', async (req, res) => {
+router.get('/post/like/:post_id', verifyToken, async (req, res) => {
   const { post_id } = req.params;
   let sql = '';
   try {
@@ -482,7 +482,7 @@ router.delete('/post/like/:post_id', verifyToken, async (req, res) => {
  *  comment_id
  * }
  */
-router.post('/comment/like', async (req, res) => {
+router.post('/comment/like', verifyToken, async (req, res) => {
   const token = req.headers.authorization.split('Bearer ')[1];
   const userData = jwt.verify(
     token,
@@ -513,7 +513,7 @@ router.post('/comment/like', async (req, res) => {
   }
 });
 
-router.get('/comment/like/:post_id', async (req, res) => {
+router.get('/comment/like/:post_id', verifyToken, async (req, res) => {
   const { post_id } = req.params;
   let sql = '';
   try {
@@ -523,7 +523,6 @@ router.get('/comment/like/:post_id', async (req, res) => {
         'select user_id, comment_id from comment_like where post_id in(select post_id from comments where post_id = ?)';
 
       const [data] = await connection.query(sql, post_id);
-      console.log(data);
       res.send({ post_id, comment: data.map((data) => data) });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
@@ -544,7 +543,7 @@ router.get('/comment/like/:post_id', async (req, res) => {
  *  post_id
  * }
  */
-router.post('/bookmark', async (req, res) => {
+router.post('/bookmark', verifyToken, async (req, res) => {
   const token = req.headers.authorization.split('Bearer ')[1];
   const userData = jwt.verify(
     token,
@@ -575,7 +574,7 @@ router.post('/bookmark', async (req, res) => {
   }
 });
 
-router.get('/bookmark/:user_id', async (req, res) => {
+router.get('/bookmark/:user_id', verifyToken, async (req, res) => {
   const { user_id } = req.params;
   let sql = '';
   try {
@@ -597,7 +596,7 @@ router.get('/bookmark/:user_id', async (req, res) => {
   }
 });
 
-router.delete('/bookmark/:post_id', async (req, res) => {
+router.delete('/bookmark/:post_id', verifyToken, async (req, res) => {
   const { post_id } = req.params;
   let sql = '';
   let sqls = [];
@@ -631,7 +630,51 @@ router.delete('/bookmark/:post_id', async (req, res) => {
   }
 });
 
-router.delete('/post/:post_id', async (req, res) => {
+router.delete('/post/like/:post_id', verifyToken, async (req, res) => {
+  const { post_id } = req.params;
+  const token = req.headers.authorization.split('Bearer ')[1];
+  const userData = jwt.verify(
+    token,
+    // eslint-disable-next-line no-undef
+    process.env.JWT_SECRET,
+  );
+  const { user_id } = userData;
+
+  let sql = '';
+  let sqls = [];
+  let params = [];
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      sql = 'SET foreign_key_checks = 0;';
+      sqls += mysql.format(sql);
+      sql = 'delete from post_like where post_id = ? and user_id = ?;';
+      params = [post_id, user_id];
+      sqls += mysql.format(sql, params);
+      sql = 'SET foreign_key_checks = 1;';
+      sqls += mysql.format(sql);
+
+      const [test] = await connection.query(sqls);
+
+      if (test[1].affectedRows === 0) {
+        res.send({ success: false });
+      } else {
+        res.send({ success: true });
+      }
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      console.log(error);
+      res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
+});
+
+router.delete('/post/:post_id', verifyToken, async (req, res) => {
   const { post_id } = req.params;
   let sql = '';
   let sqls = [];
@@ -659,47 +702,49 @@ router.delete('/post/:post_id', async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
-    } finally {
-      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
   }
 });
 
-router.delete('/post/comment/like/:comment_id', async (req, res) => {
-  const { comment_id } = req.params;
-  let sql = '';
-  let sqls = [];
-  let params = [];
-  try {
-    const connection = await pool.getConnection(async (conn) => conn);
+router.delete(
+  '/post/comment/like/:comment_id',
+  verifyToken,
+  async (req, res) => {
+    const { comment_id } = req.params;
+    let sql = '';
+    let sqls = [];
+    let params = [];
     try {
-      sql = 'SET foreign_key_checks = 0;';
-      sqls += mysql.format(sql);
-      sql = 'delete from comments where id = ?;';
-      params = [comment_id];
-      sqls += mysql.format(sql, params);
-      sql = 'SET foreign_key_checks = 1;';
-      sqls += mysql.format(sql);
+      const connection = await pool.getConnection(async (conn) => conn);
+      try {
+        sql = 'SET foreign_key_checks = 0;';
+        sqls += mysql.format(sql);
+        sql = 'delete from comments where id = ?;';
+        params = [comment_id];
+        sqls += mysql.format(sql, params);
+        sql = 'SET foreign_key_checks = 1;';
+        sqls += mysql.format(sql);
 
-      const [test] = await connection.query(sqls);
+        const [test] = await connection.query(sqls);
 
-      if (test[1].affectedRows === 0) {
-        res.send({ success: false });
-      } else {
-        res.send({ success: true });
+        if (test[1].affectedRows === 0) {
+          res.send({ success: false });
+        } else {
+          res.send({ success: true });
+        }
+      } catch (error) {
+        await connection.rollback(); // ROLLBACK
+        await connection.release();
+        console.log(error);
+        res.status(500).json('SQL ERROR');
       }
     } catch (error) {
-      await connection.rollback(); // ROLLBACK
-      await connection.release();
-      console.log(error);
-      res.status(500).json('SQL ERROR');
+      res.status(500).json('DB CONNECT ERROR');
     }
-  } catch (error) {
-    res.status(500).json('DB CONNECT ERROR');
-  }
-});
+  },
+);
 
 router.get('/post/count/:post_id', verifyToken, async (req, res) => {
   const { post_id } = req.params;
