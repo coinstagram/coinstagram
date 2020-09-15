@@ -43,6 +43,7 @@ const PostService: IPostService = class {
       },
     );
 
+    console.log('follower posts', res.data);
     return res.data;
   }
 
@@ -53,6 +54,7 @@ const PostService: IPostService = class {
       },
     });
 
+    console.log('userPosts', res.data);
     return res.data;
   }
 

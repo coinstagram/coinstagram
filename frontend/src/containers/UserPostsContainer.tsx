@@ -38,6 +38,8 @@ function UserPostsContainer() {
   const dispatch = useDispatch();
   const user_id =
     selectedPost.selectedPost && selectedPost.selectedPost.user_id;
+  const selectedPostImages =
+    selectedPost.selectedPost && selectedPost.selectedPost.image_path;
 
   const selectedUserId = user && user.user_id;
   const selectedUserName = user && user.user_name;
@@ -144,6 +146,7 @@ function UserPostsContainer() {
         selectedUserId={selectedUserId}
         selectedUserProfile={selectedUserProfile}
         selectedPostId={selectedPostId}
+        selectedPostImages={selectedPostImages}
         getUserPosts={getUserPosts}
         getCommentsPost={getCommentsPost}
         addCommentPost={addCommentPost}

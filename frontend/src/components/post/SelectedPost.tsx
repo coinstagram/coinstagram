@@ -23,6 +23,7 @@ interface SelectedPostProps {
   selectedUserId: string;
   selectedUserProfile: string;
   selectedPostId: number;
+  selectedPostImages: string[];
   getUserPosts: () => void;
   getCommentsPost: () => void;
   addCommentPost: (post_id: number, comment_text: string) => void;
@@ -41,6 +42,7 @@ function SelectedPost({
   selectedUserId,
   selectedUserProfile,
   selectedPostId,
+  selectedPostImages,
   getUserPosts,
   getCommentsPost,
   addCommentPost,
@@ -81,7 +83,7 @@ function SelectedPost({
               location={selectedPostInfo && selectedPostInfo.post_location}
             />
           )}
-          <FeedBody />
+          <FeedBody imageUrl={selectedPostImages} />
         </div>
         <div>
           {width > 1000 && (

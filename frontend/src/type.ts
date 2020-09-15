@@ -88,7 +88,7 @@ export interface EachPostState {
   id: number;
   user_id: null | string;
   post_context: null | string;
-  // post_images: null | string;
+  image_path: string[];
   // post_tags: stringArray;
   post_anotheruser: null | string;
   post_location: null | string;

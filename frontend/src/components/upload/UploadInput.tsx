@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { StyledDiv, StyledLabel } from './UploadInput.style';
 import axios from 'axios';
 import FeedImgSlider from '../feed/FeedImgSlider';
@@ -18,7 +18,7 @@ const UploadInput: React.FC<UploadDetailsProps> = ({ image }) => {
       [].forEach.call(event.target.files, (f: File) => {
         fd.append('image', f);
       });
-      let token = localStorage.getItem('access_token');
+      let token = localStorage.getItem('token');
 
       const res = await axios.post(`images`, fd, {
         headers: {
@@ -53,7 +53,7 @@ const UploadInput: React.FC<UploadDetailsProps> = ({ image }) => {
         </StyledDiv>
       ) : (
         <>
-          <FeedImgSlider imageURL={imageURL}>
+          <FeedImgSlider imageUrl={imageURL}>
             <StyledLabel htmlFor="image" tabIndex={0}>
               <input
                 type="file"

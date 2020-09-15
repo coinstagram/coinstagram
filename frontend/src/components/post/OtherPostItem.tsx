@@ -12,14 +12,14 @@ import { StyledLi, StyledDiv } from './OtherPostItemStyle';
 interface OtherPostItemProps {
   postId: number;
   postOwnerId: string;
+  imageThumbnail: string[];
   getPostCounts: (post_id: number) => void;
-  imageUrl: string;
 }
 
 function OtherPostItem({
   postId,
   postOwnerId,
-  imageUrl,
+  imageThumbnail,
   getPostCounts,
 }: OtherPostItemProps) {
   const { counts } = useSelector((state: RootState) => state.otherPosts.counts);
@@ -35,7 +35,10 @@ function OtherPostItem({
   return (
     <StyledLi>
       <Link to={`/post/${postId}`}>
-        <img src={imageUrl} alt={`${postOwnerId}님의 게시물-${postId}}`} />
+        <img
+          src={`http://localhost:4000/${imageThumbnail[0]}`}
+          alt={`${postOwnerId}님의 게시물-${postId}}`}
+        />
         <StyledDiv>
           <div>
             <dt className="a11y-hidden">like count</dt>
