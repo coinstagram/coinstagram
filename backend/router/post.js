@@ -84,6 +84,49 @@ router.get('/posts', verifyToken, async (req, res) => {
  * get post detail
  * /
  */
+// router.get('/post/:post_id', verifyToken, async (req, res) => {
+//   const { post_id } = req.params;
+//   let sql = '';
+//   try {
+//     const connection = await pool.getConnection(async (conn) => conn);
+//     try {
+//       sql = `SELECT distinct a.id as id, a.user_id, a.post_context, a.post_anotheruser,a.created_at, a.post_location FROM
+//       (SELECT * FROM posts where id = ?) a left outer join post_tags b on a.id = b.post_id
+//       left outer join tag c on b.tag_id = c.id
+//       left outer join users d on a.user_id = d.user_id;`;
+//       const [check] = await connection.query(sql, [post_id, post_id, post_id]);
+//       sql = `select image_path from post_image where post_id = ?`;
+//       const [image] = await connection.query(sql, post_id);
+//       sql = `select * from comments where post_id = ?`;
+//       const [comment] = await connection.query(sql, post_id);
+//       sql = `select * from post_like where post_id = ?`;
+
+//       const [commentLike] = await connection.query(sql, post_id);
+//       sql = `select * from comment_like where post_id = ?`;
+//       const [postLike] = await connection.query(sql, post_id);
+//       console.log(commentLike);
+
+//       console.log({
+//         ...check[0],
+//         image: [...image.map(({ image_path }) => image_path)],
+//         comment: [
+//           ...comment.map(({ id, comment_text }) => ({ id, comment_text })),
+//         ],
+//         postLike: [...postLike.map(({ user_id }) => user_id)],
+//       });
+//       res.send(check[0]);
+//     } catch (error) {
+//       await connection.rollback(); // ROLLBACK
+//       await connection.release();
+//       console.log(error);
+//       res.status(500).json('SQL ERROR');
+//     } finally {
+//       await connection.release();
+//     }
+//   } catch (error) {
+//     res.status(500).json('DB CONNECT ERROR');
+//   }
+// });
 router.get('/post/:post_id', verifyToken, async (req, res) => {
   const { post_id } = req.params;
   let sql = '';
@@ -95,7 +138,16 @@ router.get('/post/:post_id', verifyToken, async (req, res) => {
       left outer join tag c on b.tag_id = c.id
       left outer join users d on a.user_id = d.user_id;`;
       const [check] = await connection.query(sql, [post_id, post_id]);
-      res.send(check[0]);
+
+      sql = `select image_path from post_image where post_id = ?`;
+      const [image] = await connection.query(sql, post_id);
+
+      const reqData = {
+        ...check[0],
+        image_path: [...image.map(({ image_path }) => image_path)],
+      };
+      console.log(reqData);
+      res.send(reqData);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
@@ -264,6 +316,7 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
       sql = `select user_id from users where user_id in(select followee_id from users_relationship where follower_id = ?);`;
       const [followee_id] = await connection.query(sql, user.user_id);
       sql = `select * from posts where user_id = ? order by id desc;`;
+
       let sqls = '';
       let params = [];
       if (followee_id.length === 0) return res.json(followee_id);
@@ -343,20 +396,25 @@ router.post('/post/image', verifyToken, async (req, res) => {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      console.log(image);
-      for (let imageData of image) {
-        sql = `insert into post_image(post_id, image_path, image_name, image_type) values(?, ?, ?, ?);`;
-        params = [
-          post_id,
-          imageData.image_path,
-          imageData.image_name,
-          imageData.image_type,
-        ];
-        sqls += mysql.format(sql, params);
-      }
+      if (image[0] === undefined) {
+        console.log('no image');
+        res.send({ success: false });
+      } else {
+        console.log('is image');
+        for (let imageData of image) {
+          sql = `insert into post_image(post_id, image_path, image_name, image_type) values(?, ?, ?, ?);`;
+          params = [
+            post_id,
+            imageData.image_path,
+            imageData.image_name,
+            imageData.image_type,
+          ];
+          sqls += mysql.format(sql, params);
+        }
 
-      await connection.query(sqls);
-      res.send({ success: true });
+        await connection.query(sqls);
+        res.send({ success: true });
+      }
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();

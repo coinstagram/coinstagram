@@ -18,6 +18,7 @@ const uploadService = class {
       },
     );
     const { post_id } = res.data;
+    console.log('test');
 
     const a = await axios.post(
       `${getUrl}/image`,

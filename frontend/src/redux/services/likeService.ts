@@ -18,7 +18,7 @@ const LikeService: ILikeService = class {
       `/post${baseUrl}/${post_id}`,
       {
         headers: {
-          Authrization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       },
     );

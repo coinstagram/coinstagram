@@ -140,7 +140,7 @@ router.get('/user', verifyToken, async (req, res) => {
  *  random user
  * /users/random
  */
-router.get('/users/random', async (req, res) => {
+router.get('/users/random', verifyToken, async (req, res) => {
   let sql = '';
   const token = req.headers.authorization.split('Bearer ')[1];
   const { user_id } = jwt.verify(
