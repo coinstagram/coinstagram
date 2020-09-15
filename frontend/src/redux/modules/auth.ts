@@ -1,8 +1,8 @@
-import { call, put, delay } from 'redux-saga/effects';
+import { call, put } from 'redux-saga/effects';
 // 로그인 관련 reducer file
 import { AxiosError } from 'axios';
 import { takeEvery } from 'redux-saga/effects';
-import { AuthState, AuthInfoState } from '../../type';
+import { AuthState } from '../../type';
 import authService from '../services/authService';
 import { push } from 'connected-react-router';
 

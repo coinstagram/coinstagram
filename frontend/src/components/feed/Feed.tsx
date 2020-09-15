@@ -11,8 +11,10 @@ import FeedComment from './FeedComment';
 import FeedIcons from './FeedIcons';
 
 interface FeedProps {
-  feedPosts: EachPostState[];
+  loading: boolean;
+  error: null | Error;
   myId: null | string;
+  feedPosts: EachPostState[];
   getFeedPosts: (user_id: string) => void;
   getCommentsPost: (post_id: number) => void;
   addCommentPost: (post_id: number, comment_text: string) => void;
@@ -25,8 +27,10 @@ interface FeedProps {
 }
 
 function Feed({
-  feedPosts,
+  loading,
+  error,
   myId,
+  feedPosts,
   getFeedPosts,
   getCommentsPost,
   addCommentPost,
@@ -66,6 +70,12 @@ function Feed({
 
   return (
     <>
+      {feedPosts.length === 0 && !loading && error === null && (
+        <div>지금 바로 내 게시물을 작성해 보세요!</div>
+      )}
+      {feedPosts.length === 0 && loading && error !== null && (
+        <div>게시물 정보를 받아오는 중입니다...</div>
+      )}
       {feedPosts.length !== 0 &&
         feedPosts.map(post => (
           <StyledArticle key={post.id}>
