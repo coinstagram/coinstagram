@@ -3,11 +3,13 @@ import InputCommon from './InputCommon';
 
 interface userNameProps {
   userName: string;
+  toggleIcon: boolean;
   onInputUserName: (text: string) => void;
 }
 export default function InputUserName({
   userName,
   onInputUserName,
+  toggleIcon,
 }: userNameProps) {
   return (
     <>
@@ -17,7 +19,7 @@ export default function InputUserName({
         value={userName}
         onInput={onInputUserName}
         placeholder="성명"
-        toggleIcon={userName.length >= 3}
+        toggleIcon={toggleIcon}
         display="block"
       ></InputCommon>
     </>
