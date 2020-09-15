@@ -213,6 +213,7 @@ function* getFeedPosts(action: PostSagaActions) {
 function* getUserPosts(action: PostSagaActions) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
+    console.log(token);
     yield put(startGetPostsUser());
     const CertainUserPosts: EachPostState[] = yield call(
       PostService.getUserPosts,

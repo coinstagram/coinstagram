@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { StyledDiv, StyledLabel } from './UploadInput.style';
 import axios from 'axios';
 import FeedImgSlider from '../feed/FeedImgSlider';
@@ -53,7 +53,7 @@ const UploadInput: React.FC<UploadDetailsProps> = ({ image }) => {
         </StyledDiv>
       ) : (
         <>
-          <FeedImgSlider imageURL={imageURL}>
+          <FeedImgSlider imageUrl={imageURL}>
             <StyledLabel htmlFor="image" tabIndex={0}>
               <input
                 type="file"

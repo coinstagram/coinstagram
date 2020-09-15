@@ -1,8 +1,11 @@
 import React from 'react';
 import Header from '../components/header/Header';
-import StyledMain from '../components/common/StyledMain';
 import styled from 'styled-components';
 import useWindowWidth from '../hooks/useWindowWidth';
+import useAuth from '../hooks/useAuth';
+
+// styles
+import StyledMain from '../components/common/StyledMain';
 
 // containers
 import UploadContainer from '../containers/UploadContainer';
@@ -17,6 +20,7 @@ const StyledSection = styled.section`
 
 function Upload() {
   const width = useWindowWidth();
+  useAuth();
 
   return (
     <>

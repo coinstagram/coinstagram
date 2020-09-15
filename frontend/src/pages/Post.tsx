@@ -1,13 +1,17 @@
 import React from 'react';
 import Header from '../components/header/Header';
-import StyledMain from '../components/common/StyledMain';
 import useWindowWidth from '../hooks/useWindowWidth';
+import useAuth from '../hooks/useAuth';
+
+// styles
+import StyledMain from '../components/common/StyledMain';
 
 // components
 import UserPostsContainer from '../containers/UserPostsContainer';
 
 function Post() {
   const width = useWindowWidth();
+  useAuth();
 
   return (
     <>

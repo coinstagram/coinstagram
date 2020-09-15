@@ -24,7 +24,7 @@ const authService: IAuthService = class {
     const { token, success } = res.data;
     if (token === undefined) alert('사용자 정보와 일치하지 않습니다');
     localStorage.setItem('access_token', token);
-    return success;
+    return token;
   }
 
   static async signup(

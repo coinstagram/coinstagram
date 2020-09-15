@@ -30,6 +30,7 @@ const PostService: IPostService = class {
       },
     });
 
+    console.log('random', res.data);
     return res.data;
   }
 
@@ -77,13 +78,11 @@ const PostService: IPostService = class {
   }
 
   static async deletePost(token: string | null, post_id: number) {
-    const res = await axios.delete(`${baseUrl}/${post_id}`, {
+    await axios.delete(`${baseUrl}/${post_id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-
-    console.log(res.data);
   }
 
   static async getCountPost(token: string | null, post_id: number) {

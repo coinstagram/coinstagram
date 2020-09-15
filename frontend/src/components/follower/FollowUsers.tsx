@@ -114,7 +114,7 @@ function FollowUsers({ followers, loading, error }: FoolowUsersProps) {
         <ul ref={ulRef}>
           {followers.length === 0 && (
             <p>
-              지금 바로{' '}
+              아직 팔로우한 계정이 없으시군요? 다른 유저들을{' '}
               <span style={{ color: 'rgb(0, 149, 246)' }}>follow</span> 해
               보세요!
             </p>

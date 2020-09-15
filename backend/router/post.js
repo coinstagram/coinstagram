@@ -304,17 +304,26 @@ router.get('/user/post/:user_id', verifyToken, async (req, res) => {
       let sqls = '';
       let params = [];
       sql = `select image_path from post_image where post_id = ?;`;
-
       post_id.map((id) => {
         params = [id];
         sqls += mysql.format(sql, params);
       });
-      const [image] = await connection.query(sqls);
-      for (let i = 0; i < image.length; i++) {
-        let imageitem = image[i].map(({ image_path }) => image_path);
-        check[i] = { ...check[i], image_path: imageitem };
+
+      if (sqls === '') {
+        res.send([]);
+        return;
       }
 
+      const [image] = await connection.query(sqls);
+      console.log(image.length);
+
+      if (image.length === 1) {
+      } else {
+        for (let i = 0; i < image.length; i++) {
+          let imageitem = image[i].map(({ image_path }) => image_path);
+          check[i] = { ...check[i], image_path: imageitem };
+        }
+      }
       res.send(check);
     } catch (error) {
       await connection.rollback(); // ROLLBACK

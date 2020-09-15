@@ -262,10 +262,15 @@ function bookmarkReducer(
         bookmarkPosts: {
           loading: false,
           error: null,
-          bookmarkPosts: [
-            ...state.bookmarkPosts.bookmarkPosts,
-            action.payload.postInfo,
-          ],
+          bookmarkPosts: state.bookmarkPosts.bookmarkPosts.some(
+            post => post.id === action.payload.postInfo.id,
+          )
+            ? state.bookmarkPosts.bookmarkPosts.map(post =>
+                post.id === action.payload.postInfo.id
+                  ? action.payload.postInfo
+                  : post,
+              )
+            : [...state.bookmarkPosts.bookmarkPosts, action.payload.postInfo],
         },
       };
     case FAIL_GET_BOOKMARK_POSTS:
@@ -312,7 +317,13 @@ function bookmarkReducer(
         loading: true,
         error: null,
         bookmarks: state.bookmarks.filter(id => id !== action.payload.post_id),
-        bookmarkPosts: state.bookmarkPosts,
+        bookmarkPosts: {
+          loading: false,
+          error: null,
+          bookmarkPosts: state.bookmarkPosts.bookmarkPosts.filter(
+            post => post.id !== action.payload.post_id,
+          ),
+        },
       };
     case FAIL_DELETE_BOOKMARK:
       return {

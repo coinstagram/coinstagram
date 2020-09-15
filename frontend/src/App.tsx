@@ -3,8 +3,9 @@ import { history } from './redux/create';
 import { Switch, Route } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ConnectedRouter } from 'connected-react-router';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getUserInfoSaga } from './redux/modules/userInfo';
+import RootState from './type';
 
 // styles
 import ModalGlobalStyle from './components/common/ModalGlobalStyle';
@@ -36,6 +37,7 @@ export const ModalContext = createContext<ModalType>({
 });
 
 function App() {
+  const { token } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   const [postModal, setPostModal] = useState<boolean>(false);
   const [followModal, setFollowModal] = useState<boolean>(false);
@@ -49,13 +51,9 @@ function App() {
   }, [postModal]);
 
   useEffect(() => {
+    if (token === null) return;
     dispatch(getUserInfoSaga());
-  }, [dispatch]);
-
-  // useEffect(() => {
-  //   if (!user_id) return;
-  //   dispatch(getFeedPostsSaga(user_id));
-  // }, [dispatch, user_id]);
+  }, [dispatch, token]);
 
   return (
     <ErrorBoundary FallbackComponent={FatalError}>
