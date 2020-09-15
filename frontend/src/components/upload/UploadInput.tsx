@@ -18,7 +18,7 @@ const UploadInput: React.FC<UploadDetailsProps> = ({ image }) => {
       [].forEach.call(event.target.files, (f: File) => {
         fd.append('image', f);
       });
-      let token = localStorage.getItem('token');
+      let token = localStorage.getItem('access_token');
 
       const res = await axios.post(`images`, fd, {
         headers: {

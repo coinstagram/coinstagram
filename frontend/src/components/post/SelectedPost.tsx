@@ -23,7 +23,6 @@ interface SelectedPostProps {
   selectedUserId: string;
   selectedUserProfile: string;
   selectedPostId: number;
-  selectedPostImages: string[];
   getUserPosts: () => void;
   getCommentsPost: () => void;
   addCommentPost: (post_id: number, comment_text: string) => void;
@@ -42,7 +41,6 @@ function SelectedPost({
   selectedUserId,
   selectedUserProfile,
   selectedPostId,
-  selectedPostImages,
   getUserPosts,
   getCommentsPost,
   addCommentPost,
@@ -62,6 +60,12 @@ function SelectedPost({
   const user_id = user && user.user_id;
 
   const selectedPostInfo = selectedPost.selectedPost;
+
+  const selectedPostImages =
+    selectedPost.selectedPost !== null
+      ? selectedPost.selectedPost.image_path
+      : [];
+
   const { postModal, followModal, popPostModal, popFollowModal } = useContext(
     ModalContext,
   );

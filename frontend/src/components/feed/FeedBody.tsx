@@ -4,7 +4,7 @@ import React from 'react';
 import FeedImgSlider from './FeedImgSlider';
 
 interface FeedBodyProps {
-  imageUrl: string[];
+  imageUrl?: string[];
 }
 
 function FeedBody({ imageUrl }: FeedBodyProps) {
@@ -14,5 +14,9 @@ function FeedBody({ imageUrl }: FeedBodyProps) {
     </div>
   );
 }
+
+FeedBody.defaultProps = {
+  imageUrl: ['1', '2'],
+};
 
 export default FeedBody;

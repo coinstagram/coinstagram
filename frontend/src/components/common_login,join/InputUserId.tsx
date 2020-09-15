@@ -4,10 +4,13 @@ import InputCommon from './InputCommon';
 export interface userIdProps {
   userId?: string | null;
   onInputUserId?: (text: string) => void;
+  toggleIcon: boolean;
 }
-export default function InputUserId({ userId, onInputUserId }: userIdProps) {
-  const idRegExp = /^[a-zA-Z0-9]{4,12}$/;
-
+export default function InputUserId({
+  userId,
+  onInputUserId,
+  toggleIcon,
+}: userIdProps) {
   return (
     <>
       <InputCommon
@@ -15,8 +18,8 @@ export default function InputUserId({ userId, onInputUserId }: userIdProps) {
         name="user_id"
         value={userId}
         onInput={onInputUserId}
-        placeholder="사용자 이름"
-        toggleIcon={idRegExp.test(userId)}
+        placeholder="사용자 ID (4자 이상 12자 이하)"
+        toggleIcon={toggleIcon}
         display="block"
       ></InputCommon>
     </>

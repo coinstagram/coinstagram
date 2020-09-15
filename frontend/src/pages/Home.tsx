@@ -40,25 +40,12 @@ function Home() {
       <StyledDiv>
         <button onClick={signupEmail}>회원가입</button>
         <button onClick={login}>로그인</button>
-        <button onClick={getPost}>게시물 정보</button>
       </StyledDiv>
     </>
   );
 }
 
 export default React.memo(Home);
-
-const token = localStorage.getItem('token');
-
-async function getPost() {
-  const res = await axios.get('/post/1', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  console.log(res.data);
-}
 
 async function login() {
   const res = await axios.post('/login', {

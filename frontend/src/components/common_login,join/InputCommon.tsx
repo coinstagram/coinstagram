@@ -13,9 +13,7 @@ export default function InputCommon({
   display,
   children,
   style,
-}: // toggleShowPassword,
-// isPasswordShown,
-inputProps) {
+}: inputProps) {
   function handleInput(e: React.ChangeEvent<HTMLInputElement>) {
     onInput(e.target.value);
   }
@@ -29,8 +27,6 @@ inputProps) {
           value={value}
           onChange={handleInput}
           placeholder={placeholder}
-          // toggleShowPassword={toggleShowPassword}
-          // isPasswordShown={isPasswordShown}
           required
         />
       </label>
