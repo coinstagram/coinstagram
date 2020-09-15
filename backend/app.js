@@ -20,6 +20,7 @@ app.use(signinRouter);
 app.use(loginRouter);
 app.use(postRouter);
 app.use(userRouter);
+app.use('/uploads', express.static('uploads'));
 
 app.listen(PORT, () => {
   console.log('서버 실행중');
