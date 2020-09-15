@@ -90,7 +90,7 @@ router.get('/post/:post_id', verifyToken, async (req, res) => {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      sql = `SELECT distinct a.id as post_id, a.user_id, a.post_context, a.post_anotheruser,a.created_at, a.post_location, GROUP_CONCAT(c.name) as hashtag, d.user_name, (SELECT COUNT(*) FROM post_like where post_id = ?) "like" FROM 
+      sql = `SELECT distinct a.id as id, a.user_id, a.post_context, a.post_anotheruser,a.created_at, a.post_location FROM 
       (SELECT * FROM posts where id = ?) a left outer join post_tags b on a.id = b.post_id
       left outer join tag c on b.tag_id = c.id
       left outer join users d on a.user_id = d.user_id;`;
@@ -433,6 +433,47 @@ router.get('/post/like/:post_id', async (req, res) => {
   }
 });
 
+router.delete('/post/like/:post_id', verifyToken, async (req, res) => {
+  const { post_id } = req.params;
+  const token = req.headers.authorization.split('Bearer ')[1];
+  const userData = jwt.verify(
+    token,
+    // eslint-disable-next-line no-undef
+    process.env.JWT_SECRET,
+  );
+  const { user_id } = userData;
+  let sql = '';
+  let sqls = [];
+  let params = [];
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      sql = 'SET foreign_key_checks = 0;';
+      sqls += mysql.format(sql);
+      sql = 'delete from post_like where post_id = ? and user_id = ?;';
+      params = [post_id, user_id];
+      sqls += mysql.format(sql, params);
+      sql = 'SET foreign_key_checks = 1;';
+      sqls += mysql.format(sql);
+      const [test] = await connection.query(sqls);
+      if (test[1].affectedRows === 0) {
+        res.send({ success: false });
+      } else {
+        res.send({ success: true });
+      }
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      console.log(error);
+      res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
+});
+
 /**
  * add comment like
  * /comment/like
@@ -489,6 +530,8 @@ router.get('/comment/like/:post_id', async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
@@ -524,6 +567,8 @@ router.post('/bookmark', async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
@@ -544,6 +589,8 @@ router.get('/bookmark/:user_id', async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
@@ -612,6 +659,8 @@ router.delete('/post/:post_id', async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');

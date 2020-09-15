@@ -13,18 +13,31 @@ import {
   cancelFollowUserSaga,
   followUserSaga,
 } from '../redux/modules/userInfo';
-import { addPostLikeSaga, getPostLikesSaga } from '../redux/modules/like';
-import { addBookmarkSaga, getBookmarksSaga } from '../redux/modules/bookmark';
+import {
+  addPostLikeSaga,
+  deletePostLikeSaga,
+  getPostLikesSaga,
+} from '../redux/modules/like';
+import {
+  addBookmarkSaga,
+  deleteBookmarkSaga,
+  getBookmarksSaga,
+} from '../redux/modules/bookmark';
+import {
+  getOtherPostsSaga,
+  getPostCountsSaga,
+} from '../redux/modules/otherPost';
 
 // components
 import SelectedPost from '../components/post/SelectedPost';
-import AnotherPosts from '../components/post/AnotherPosts';
+import OtherPosts from '../components/post/OtherPosts';
 
 function UserPostsContainer() {
   const { selectedPost } = useSelector((state: RootState) => state.posts);
   const { user } = useSelector((state: RootState) => state.anotherUserInfo);
   const dispatch = useDispatch();
-  const user_id = selectedPost.post && selectedPost.post.user_id;
+  const user_id =
+    selectedPost.selectedPost && selectedPost.selectedPost.user_id;
 
   const selectedUserId = user && user.user_id;
   const selectedUserName = user && user.user_name;
@@ -69,6 +82,13 @@ function UserPostsContainer() {
     [dispatch],
   );
 
+  const deletePostLike = useCallback(
+    (post_id: number) => {
+      dispatch(deletePostLikeSaga(post_id));
+    },
+    [dispatch],
+  );
+
   const follow = useCallback(() => {
     dispatch(
       followUserSaga(selectedUserId, selectedUserName, selectedUserProfile),
@@ -100,6 +120,24 @@ function UserPostsContainer() {
     [dispatch],
   );
 
+  const deleteBookmark = useCallback(
+    (post_id: number) => {
+      dispatch(deleteBookmarkSaga(post_id));
+    },
+    [dispatch],
+  );
+
+  const getOtherPosts = useCallback(() => {
+    dispatch(getOtherPostsSaga(selectedUserId));
+  }, [dispatch, selectedUserId]);
+
+  const getPostCounts = useCallback(
+    (post_id: number) => {
+      dispatch(getPostCountsSaga(post_id));
+    },
+    [dispatch],
+  );
+
   return (
     <>
       <SelectedPost
@@ -111,13 +149,19 @@ function UserPostsContainer() {
         addCommentPost={addCommentPost}
         getPostLikes={getPostLikes}
         addPostLikes={addPostLikes}
+        deletePostLike={deletePostLike}
         follow={follow}
         cancelFollow={cancelFollow}
         deletePost={deletePost}
         getBookmarks={getBookmarks}
         addBookmark={addBookmark}
+        deleteBookmark={deleteBookmark}
       />
-      <AnotherPosts />
+      <OtherPosts
+        selectedUserId={selectedUserId}
+        getOtherPosts={getOtherPosts}
+        getPostCounts={getPostCounts}
+      />
     </>
   );
 }

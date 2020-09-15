@@ -25,8 +25,10 @@ interface FeedIconsProps {
   postId: number;
   getPostLikes: (post_id: number) => void;
   addPostLikes: (post_id: number) => void;
+  deletePostLike: (post_id: number) => void;
   getBookmarks: (user_id: string) => void;
   addBookmark: (post_id: number) => void;
+  deleteBookmark: (post_id: number) => void;
 }
 
 function FeedIcons({
@@ -34,8 +36,10 @@ function FeedIcons({
   postId,
   getPostLikes,
   addPostLikes,
+  deletePostLike,
   getBookmarks,
   addBookmark,
+  deleteBookmark,
 }: FeedIconsProps) {
   const { userLikes } = useSelector(
     (state: RootState) => state.likes.postLikes,
@@ -113,7 +117,11 @@ function FeedIcons({
       favorite: !state.favorite,
     });
 
-    addBookmark(postId);
+    if (!state.favorite) {
+      addBookmark(postId);
+    } else {
+      deleteBookmark(postId);
+    }
   }
 
   function toggleLike() {
@@ -122,7 +130,11 @@ function FeedIcons({
       like: !state.like,
     });
 
-    addPostLikes(postId);
+    if (!state.like) {
+      addPostLikes(postId);
+    } else {
+      deletePostLike(postId);
+    }
   }
 }
 

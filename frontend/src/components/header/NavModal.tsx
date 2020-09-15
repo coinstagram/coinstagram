@@ -33,7 +33,7 @@ function NavModal({ top, left, favorite, profile, userId }: NavModalProps) {
                 </Link>
               </li>
               <li>
-                <Link to={`/account/${userId}/saved`}>
+                <Link to={`/${userId}/saved`}>
                   <BiBookmark />
                   <span>저장됨</span>
                 </Link>

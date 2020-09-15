@@ -2,15 +2,13 @@ import axios from 'axios';
 const baseUrl = '/bookmark';
 
 interface IBookmarkService {
-  getBookmarkPosts: (
-    token: null | string,
-    user_id: string,
-  ) => Promise<number[]>;
+  getBookmarkedId: (token: null | string, user_id: string) => Promise<number[]>;
   addBookmarkPost: (token: null | string, post_id: number) => void;
+  deleteBookmarkPost: (token: null | string, post_id: number) => void;
 }
 
 const BookmarkService: IBookmarkService = class {
-  static async getBookmarkPosts(token: null | string, user_id: string) {
+  static async getBookmarkedId(token: null | string, user_id: string) {
     const res = await axios.get<number[]>(`${baseUrl}/${user_id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -34,7 +32,13 @@ const BookmarkService: IBookmarkService = class {
     );
   }
 
-  // deltet bookmark
+  static async deleteBookmarkPost(token: null | string, post_id: number) {
+    await axios.delete(`${baseUrl}/${post_id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
 };
 
 export default BookmarkService;
