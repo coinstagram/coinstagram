@@ -83,7 +83,6 @@ type SagaActions = ReturnType<typeof signupSagaActionCreator>;
 
 function* signupRequestSaga(action: SagaActions) {
   const payload = action.payload;
-  console.log('payload', payload);
   yield put(signupStart());
   try {
     const result = yield call(
@@ -94,7 +93,7 @@ function* signupRequestSaga(action: SagaActions) {
       payload.user_password,
     );
     yield put(signupSuccess(result));
-    yield put(push('/'));
+    if (result) yield put(push('/login'));
   } catch (e) {
     yield put(signupFail(e));
   }

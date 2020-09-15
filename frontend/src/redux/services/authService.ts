@@ -21,13 +21,10 @@ const authService: IAuthService = class {
         user_password,
       },
     });
-    console.log('res', res);
-    const { success, token } = res.data;
-    if (!success) alert('사용자 정보와 일치하지 않습니다');
-    // if (token === undefined) alert('사용자 정보와 일치하지 않습니다');
+    const { token, success } = res.data;
+    if (token === undefined) alert('사용자 정보와 일치하지 않습니다');
     localStorage.setItem('access_token', token);
-    console.log('token', token);
-    return token;
+    return success;
   }
 
   static async signup(
@@ -46,10 +43,9 @@ const authService: IAuthService = class {
         user_password,
       },
     });
-    console.log('res', res);
-    const { token } = res.data;
-    // localStorage.getItem('token');
-    return token;
+    const { success } = res.data;
+    if (!success) alert('기존에 있는 사용자ID입니다. 다른 ID를 입력해주세요');
+    return success;
   }
 
   // static async logout() {

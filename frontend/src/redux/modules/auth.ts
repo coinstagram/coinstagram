@@ -89,7 +89,7 @@ function* signinRequestSaga(action: SagaActions) {
       payload.user_password,
     );
     yield put(signinSuccess(result));
-    yield put(push('/'));
+    if (result) yield put(push('/'));
   } catch (e) {
     yield put(signinFail(e));
   }

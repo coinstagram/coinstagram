@@ -8,12 +8,14 @@ export interface passwordProps {
   style?: { marginBottom: string };
   toggleShowPassword?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   isPasswordShown?: boolean;
+  toggleIcon: boolean;
 }
 
 export default function InputPassword({
   userPassword,
   onInputPassword,
   style,
+  toggleIcon,
 }: passwordProps) {
   const [isPasswordShown, setPasswordShown] = useState(false);
 
@@ -27,8 +29,8 @@ export default function InputPassword({
         name="user_password"
         value={userPassword}
         onInput={onInputPassword}
-        placeholder="비밀번호"
-        toggleIcon={userPassword.length >= 6}
+        placeholder="비밀번호 (6자 이상)"
+        toggleIcon={toggleIcon}
         display="flex"
         style={style}
       >

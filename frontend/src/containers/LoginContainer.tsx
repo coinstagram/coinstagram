@@ -9,7 +9,9 @@ import JoinLoginButton from '../components/common_login,join/JoinLoginButton';
 
 import { useDispatch } from 'react-redux';
 import { signInSagaActionCreator } from '../redux/modules/auth';
+
 const StyledForm = styled.form``;
+const idRegExp = /^[a-zA-Z0-9]{4,12}$/;
 
 function LoginContainer() {
   const [user_password, setPassword] = useState('');
@@ -22,36 +24,38 @@ function LoginContainer() {
     setUserId(text);
   };
 
+  const idCheck = idRegExp.test(user_id);
+  const passwordCheck = user_password.length >= 6;
+
   const dispatch = useDispatch();
   const handleSubmit = (e: any) => {
     e.preventDefault();
     dispatch(signInSagaActionCreator(user_id, user_password));
   };
 
-  // async function signin() {
-  //   const res = await axios({
-  //     method: 'POST',
-  //     url: '/login',
-  //     data: {
-  //       user_id,
-  //       user_password,
-  //     },
-  //   });
-  //   console.log('result', res);
-  // return res.data; //  token
   return (
     <>
-      {/* <button onClick={signin}>테스트용</button> */}
       <StyledLogin>
         <MainLogo style={{ marginBottom: '40px' }}>coInstagram</MainLogo>
         <StyledForm onSubmit={handleSubmit}>
-          <InputUserId userId={user_id} onInputUserId={onInputUserId} />
+          <InputUserId
+            userId={user_id}
+            onInputUserId={onInputUserId}
+            toggleIcon={idCheck}
+          />
           <InputPassword
             userPassword={user_password}
             onInputPassword={onInputPassword}
+            toggleIcon={passwordCheck}
             style={{ marginBottom: '20px' }}
           />
-          <JoinLoginButton content="로그인" />
+          <JoinLoginButton
+            content="로그인"
+            disabled={!idCheck && !passwordCheck}
+            className={['button', idCheck && passwordCheck && 'active'].join(
+              ' ',
+            )}
+          />
         </StyledForm>
       </StyledLogin>
     </>
