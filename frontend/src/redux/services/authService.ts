@@ -1,8 +1,3 @@
-// const {user_id, user_password} = AuthInfoState;
-// export const signin = async (({user_id, user_password}),AuthInfoState) => {
-//     const response = await axios.post('/login', {user_id, user_password});
-//     return {token:response.data.accessToken};
-// }
 import axios from 'axios';
 import { AuthState, AuthInfoState, SignupInfoState } from '../../type';
 
@@ -26,12 +21,10 @@ const authService: IAuthService = class {
         user_password,
       },
     });
-    const { token } = res.data;
-    localStorage.setItem('token', token);
-    return token;
-    // 로컬스토리지에 저장->서비스에 담기
-    // 성공하면 라우팅() -> 사가에서 구현
-    // connetedRouter
+    const { token, success } = res.data;
+    if (token === undefined) alert('사용자 정보와 일치하지 않습니다');
+    localStorage.setItem('access_token', token);
+    return success;
   }
 
   static async signup(
@@ -50,10 +43,9 @@ const authService: IAuthService = class {
         user_password,
       },
     });
-    console.log('res', res);
-    const { token } = res.data;
-    localStorage.setItem('token', token);
-    return token;
+    const { success } = res.data;
+    if (!success) alert('기존에 있는 사용자ID입니다. 다른 ID를 입력해주세요');
+    return success;
   }
 
   // static async logout() {
