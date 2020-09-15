@@ -18,7 +18,7 @@ const router = express.Router();
  */
 router.post('/login', async (req, res) => {
   const { user_id, user_password } = req.body;
-
+  console.log('서버 테스트', user_id, user_password);
   let sql = '';
   try {
     const connection = await pool.getConnection(async (conn) => conn);

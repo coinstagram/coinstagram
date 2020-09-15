@@ -11,8 +11,6 @@ import FeedComment from './FeedComment';
 import FeedIcons from './FeedIcons';
 
 interface FeedProps {
-  loading: boolean;
-  error: null | Error;
   feedPosts: EachPostState[];
   myId: null | string;
   getFeedPosts: (user_id: string) => void;
@@ -20,13 +18,13 @@ interface FeedProps {
   addCommentPost: (post_id: number, comment_text: string) => void;
   getPostLikes: (post_id: number) => void;
   addPostLikes: (post_id: number) => void;
+  deletePostLike: (post_id: number) => void;
   getBookmarks: (user_id: string) => void;
   addBookmark: (post_id: number) => void;
+  deleteBookmark: (post_id: number) => void;
 }
 
 function Feed({
-  loading,
-  error,
   feedPosts,
   myId,
   getFeedPosts,
@@ -34,8 +32,10 @@ function Feed({
   addCommentPost,
   getPostLikes,
   addPostLikes,
+  deletePostLike,
   getBookmarks,
   addBookmark,
+  deleteBookmark,
 }: FeedProps) {
   const lastItemRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver>();
@@ -66,15 +66,6 @@ function Feed({
 
   return (
     <>
-      {feedPosts.length === 0 && loading === false && error === null && (
-        <div>팔로우 유저가 없습니다. 지금 바로 팔로우 해보세요!</div>
-      )}
-      {feedPosts.length === 0 && loading === true && (
-        <div>게시물 로딩 중...</div>
-      )}
-      {feedPosts.length === 0 && error !== null && (
-        <div>게시물을 불러오는 데 실패하였습니다.</div>
-      )}
       {feedPosts.length !== 0 &&
         feedPosts.map(post => (
           <StyledArticle key={post.id}>
@@ -90,8 +81,10 @@ function Feed({
               postId={post.id}
               getPostLikes={getPostLikes}
               addPostLikes={addPostLikes}
+              deletePostLike={deletePostLike}
               getBookmarks={getBookmarks}
               addBookmark={addBookmark}
+              deleteBookmark={deleteBookmark}
             />
             <FeedComment
               userId={post.user_id}

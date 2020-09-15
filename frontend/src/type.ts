@@ -4,6 +4,23 @@ export interface followState {
   users: AnotherUserState[];
 }
 
+export interface CountState {
+  loading: boolean;
+  error: null | Error;
+  counts: CountReduxState[];
+}
+
+export interface CountReduxState {
+  post_id: number;
+  commentCount: number;
+  likeCount: number;
+}
+
+export interface CountResponseState {
+  commentCount: number;
+  likeCount: number;
+}
+
 export interface UserResponseState {
   user: UserState;
   follower: AnotherUserState[];
@@ -84,12 +101,31 @@ export interface BookmarkState {
   loading: boolean;
   error: null | Error;
   bookmarks: number[];
+  bookmarkPosts: BookmarkPostsState;
+}
+
+export interface BookmarkPostsState {
+  loading: boolean;
+  error: null | Error;
+  bookmarkPosts: EachPostState[];
 }
 
 export interface SelectedPostState {
   loading: boolean;
   error: null | Error;
-  post: null | EachPostState;
+  selectedPost: null | EachPostState;
+}
+
+export interface RandomPostsState {
+  loading: boolean;
+  error: null | Error;
+  randomPosts: EachPostState[];
+}
+
+export interface FeedPostsState {
+  loading: boolean;
+  error: null | Error;
+  feedPosts: EachPostState[];
 }
 
 export interface SignupState {
@@ -98,10 +134,22 @@ export interface SignupState {
   error: null | Error;
 }
 
+export interface SignupInfoState {
+  user_email: null | string;
+  user_name: null | string;
+  user_id: null | string;
+  user_password: null | string;
+}
+
 export interface AuthState {
   loading: boolean;
   token: null | string;
   error: null | Error;
+}
+
+export interface AuthInfoState {
+  user_id: null | string;
+  user_password: null | string;
 }
 
 export interface UserInfoState {
@@ -122,21 +170,29 @@ export interface AnotherUserInfoState {
 }
 
 export interface PostsState {
+  feedPosts: FeedPostsState;
+  selectedPost: SelectedPostState;
+  randomPosts: RandomPostsState;
+  // taggedPosts: EachPostState[];
+}
+
+export interface OtherPostState {
   loading: boolean;
   error: null | Error;
-  FeedPosts: EachPostState[];
-  selectedPost: SelectedPostState;
-  // taggedPosts: EachPostState[];
+  otherPosts: EachPostState[];
+  counts: CountState;
 }
 
 interface RootState {
   auth: AuthState;
+  // signUpInfo: SignupState;
   userInfo: UserInfoState;
   anotherUserInfo: AnotherUserInfoState;
   posts: PostsState;
   comments: CommentsState;
   likes: likeState;
   bookmarks: BookmarkState;
+  otherPosts: OtherPostState;
 }
 
 export default RootState;

@@ -434,6 +434,47 @@ router.get('/post/like/:post_id', verifyToken, async (req, res) => {
   }
 });
 
+router.delete('/post/like/:post_id', verifyToken, async (req, res) => {
+  const { post_id } = req.params;
+  const token = req.headers.authorization.split('Bearer ')[1];
+  const userData = jwt.verify(
+    token,
+    // eslint-disable-next-line no-undef
+    process.env.JWT_SECRET,
+  );
+  const { user_id } = userData;
+  let sql = '';
+  let sqls = [];
+  let params = [];
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      sql = 'SET foreign_key_checks = 0;';
+      sqls += mysql.format(sql);
+      sql = 'delete from post_like where post_id = ? and user_id = ?;';
+      params = [post_id, user_id];
+      sqls += mysql.format(sql, params);
+      sql = 'SET foreign_key_checks = 1;';
+      sqls += mysql.format(sql);
+      const [test] = await connection.query(sqls);
+      if (test[1].affectedRows === 0) {
+        res.send({ success: false });
+      } else {
+        res.send({ success: true });
+      }
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      console.log(error);
+      res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
+});
+
 /**
  * add comment like
  * /comment/like
@@ -484,13 +525,14 @@ router.get('/comment/like/:post_id', verifyToken, async (req, res) => {
 
       const [data] = await connection.query(sql, post_id);
       console.log(data);
-
-      res.send({ ...data.map((data) => data) });
+      res.send({ post_id, comment: data.map((data) => data) });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
@@ -526,6 +568,8 @@ router.post('/bookmark', verifyToken, async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
@@ -546,6 +590,8 @@ router.get('/bookmark/:user_id', verifyToken, async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
@@ -622,6 +668,8 @@ router.delete('/post/like/:post_id', verifyToken, async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
