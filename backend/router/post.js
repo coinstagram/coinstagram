@@ -264,6 +264,7 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
       sql = `select user_id from users where user_id in(select followee_id from users_relationship where follower_id = ?);`;
       const [followee_id] = await connection.query(sql, user.user_id);
       sql = `select * from posts where user_id = ? order by id desc;`;
+
       let sqls = '';
       let params = [];
       if (followee_id.length === 0) return res.json(followee_id);
@@ -343,20 +344,25 @@ router.post('/post/image', verifyToken, async (req, res) => {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      console.log(image);
-      for (let imageData of image) {
-        sql = `insert into post_image(post_id, image_path, image_name, image_type) values(?, ?, ?, ?);`;
-        params = [
-          post_id,
-          imageData.image_path,
-          imageData.image_name,
-          imageData.image_type,
-        ];
-        sqls += mysql.format(sql, params);
-      }
+      if (image[0] === undefined) {
+        console.log('no image');
+        res.send({ success: false });
+      } else {
+        console.log('is image');
+        for (let imageData of image) {
+          sql = `insert into post_image(post_id, image_path, image_name, image_type) values(?, ?, ?, ?);`;
+          params = [
+            post_id,
+            imageData.image_path,
+            imageData.image_name,
+            imageData.image_type,
+          ];
+          sqls += mysql.format(sql, params);
+        }
 
-      await connection.query(sqls);
-      res.send({ success: true });
+        await connection.query(sqls);
+        res.send({ success: true });
+      }
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
