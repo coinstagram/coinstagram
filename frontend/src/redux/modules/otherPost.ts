@@ -174,7 +174,13 @@ function otherPostReducer(
         counts: {
           loading: false,
           error: null,
-          counts: [...state.counts.counts, action.payload],
+          counts: state.counts.counts.some(
+            info => info.post_id === action.payload.post_id,
+          )
+            ? state.counts.counts.map(info =>
+                info.post_id === action.payload.post_id ? action.payload : info,
+              )
+            : [...state.counts.counts, action.payload],
         },
       };
     case FAIL_GET_POST_COUNTS:

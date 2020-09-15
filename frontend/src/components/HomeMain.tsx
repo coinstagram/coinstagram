@@ -4,7 +4,6 @@ import React, {
   useState,
   useContext,
   useEffect,
-  useRef,
 } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,6 +14,7 @@ import {
 } from '../redux/modules/userInfo';
 import { deletePostSaga } from '../redux/modules/post';
 import { ModalContext } from '../App';
+import { deleteBookmarkSaga } from '../redux/modules/bookmark';
 import RootState from '../type';
 
 // components
@@ -62,7 +62,8 @@ export interface ModalState {
 
 function HomeMain() {
   const { users } = useSelector((state: RootState) => state.userInfo.followers);
-  const { token } = useSelector((state: RootState) => state.auth);
+  const { user } = useSelector((state: RootState) => state.userInfo);
+  const myId = user && user.user_id;
   const dispatch = useDispatch();
   const [followModalState, setFollowModalState] = useState<ModalState>({
     user_id: '',
@@ -75,11 +76,11 @@ function HomeMain() {
   );
 
   const { user_id, user_profile, targetEl } = followModalState;
-  // const ref = useRef<string>('');
 
   useEffect(() => {
+    if (myId) return;
     dispatch(getUserInfoSaga());
-  }, [dispatch, token]);
+  }, [dispatch, myId]);
 
   const changePostId = useCallback((post_id: number) => {
     setPostId(post_id);
@@ -99,6 +100,13 @@ function HomeMain() {
   const deletePost = useCallback(
     (post_id: number) => {
       dispatch(deletePostSaga(post_id));
+    },
+    [dispatch],
+  );
+
+  const deleteBookmark = useCallback(
+    (post_id: number) => {
+      dispatch(deleteBookmarkSaga(post_id));
     },
     [dispatch],
   );
@@ -154,6 +162,7 @@ function HomeMain() {
           followers={users}
           follow={follow}
           deletePost={deletePost}
+          deleteBookmark={deleteBookmark}
         />
       )}
     </followContext.Provider>

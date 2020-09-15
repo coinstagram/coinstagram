@@ -20,6 +20,7 @@ interface PostModalProps {
     user_profile: null | string,
   ) => void;
   deletePost: (post_id: number) => void;
+  deleteBookmark: (post_id: number) => void;
 }
 
 function PostModal({
@@ -32,6 +33,7 @@ function PostModal({
   followers,
   follow,
   deletePost,
+  deleteBookmark,
 }: PostModalProps) {
   const user = useSelector((state: RootState) => state.userInfo.user);
   const user_id = user && user.user_id;
@@ -91,6 +93,7 @@ function PostModal({
 
   function postDelete() {
     deletePost(postId);
+    deleteBookmark(postId);
     history.push('/');
   }
 

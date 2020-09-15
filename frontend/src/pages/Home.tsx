@@ -40,6 +40,7 @@ function Home() {
         <button onClick={login}>로그인</button>
         <button onClick={upload}>업로드</button>
         <button onClick={count}>좋아요, 댓글 count</button>
+        <button onClick={getLike}>좋아요 가져오기</button>
       </StyledDiv>
     </>
   );
@@ -48,6 +49,16 @@ function Home() {
 export default React.memo(Home);
 
 const token = localStorage.getItem('access_token');
+
+async function getLike() {
+  const res = await axios.get('/post/like/1', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  console.log(res.data);
+}
 
 async function count() {
   const res = await axios.get('/post/count/11', {

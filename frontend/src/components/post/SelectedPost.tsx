@@ -148,6 +148,7 @@ function SelectedPost({
           followers={users}
           follow={follow}
           deletePost={deletePost}
+          deleteBookmark={deleteBookmark}
         />
       )}
     </>

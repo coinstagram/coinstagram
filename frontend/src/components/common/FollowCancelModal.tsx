@@ -27,7 +27,7 @@ function FollowCancelModal({
       <StyledFollowModal>
         <StyledDiv>
           <Thumbnail size={90} imageUrl={user_profile} />
-          <p>{user_id}님의 팔로우를 취소하시겠어요?</p>
+          <p>@{user_id}님의 팔로우를 취소하시겠어요?</p>
         </StyledDiv>
         <ul>
           <li>

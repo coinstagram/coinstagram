@@ -10,7 +10,7 @@ import Slider from 'react-slick';
 import NextBtn from '../common/NextBtn';
 import PrevBtn from '../common/PrevBtn';
 
-function PostImgSlider() {
+function FeedImgSlider() {
   const settings = {
     dots: true,
     infinite: true,
@@ -61,4 +61,4 @@ function PostImgSlider() {
   );
 }
 
-export default PostImgSlider;
+export default FeedImgSlider;

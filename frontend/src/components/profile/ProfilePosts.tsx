@@ -2,10 +2,12 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
 import RootState from '../../type';
-import OtherPostItem from '../post/OtherPostItem';
 
 // styles
 import { StyledSection } from './ProfilePostsStyle';
+
+// components
+import OtherPostItem from '../post/OtherPostItem';
 
 interface ProfilePostsProps {
   profileId: string;
@@ -32,19 +34,8 @@ function ProfilePosts({
     if (profileId !== myId) return;
     if (bookmarkedId.length === 0) return;
 
-    if (bookmarkPosts.length === 0) {
-      bookmarkedId.forEach(id => getBookmarkPosts(id));
-    }
-
-    // const addedBookmarkId = [];
-    // for (let i = 0; i < bookmarkedId.length; i++) {
-    //   if (bookmarkPosts.every(post => post.id !== bookmarkedId[i])) {
-    //     addedBookmarkId.push(bookmarkedId[i]);
-    //   }
-    // }
-
-    // addedBookmarkId.forEach(id => getBookmarkPosts(id));
-  }, [getBookmarkPosts, bookmarkedId, myId, profileId, bookmarkPosts.length]);
+    bookmarkedId.forEach(id => getBookmarkPosts(id));
+  }, [getBookmarkPosts, bookmarkedId, myId, profileId]);
 
   return (
     <StyledSection>
@@ -66,6 +57,9 @@ function ProfilePosts({
         </ul>
       </div>
       <div>
+        {pageName === undefined && otherPosts.length === 0 && (
+          <div>@{profileId}님이 업로드하신 게시물이 없습니다.</div>
+        )}
         {pageName === undefined && (
           <ul>
             {otherPosts.map(post => (
