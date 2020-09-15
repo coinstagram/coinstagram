@@ -1,8 +1,7 @@
 import React, { useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { StyledDiv, StyledLabel } from './UploadInput.style';
 import axios from 'axios';
-import UploadImageView from './UploadImageView';
+import FeedImgSlider from '../feed/FeedImgSlider';
 
 interface UploadDetailsProps {
   image: (img: Array<object>) => void;
@@ -12,9 +11,7 @@ interface resDataProps {
 }
 
 const UploadInput: React.FC<UploadDetailsProps> = ({ image }) => {
-  const imageInput = useRef<HTMLInputElement>(null);
-  const [imageURL, setImageURL] = useState<Object>({});
-
+  const [imageURL, setImageURL] = useState<Array<string>>(['']);
   const isSelectedImg = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files !== null) {
       const fd = new FormData();
@@ -29,38 +26,50 @@ const UploadInput: React.FC<UploadDetailsProps> = ({ image }) => {
         },
       });
       image(res.data);
-      console.log(res.data[0].image_path);
 
-      setImageURL({
-        ...imageURL,
-        ...res.data.map((data: resDataProps) => data.image_path),
-      });
+      setImageURL([...res.data.map((data: resDataProps) => data.image_path)]);
     }
   };
-
   React.useEffect(() => {
-    console.log(imageURL);
+    console.log(`http://localhost:4000/${imageURL[0]}`);
   }, [imageURL]);
 
   return (
-    <StyledDiv>
-      <StyledLabel htmlFor="image" tabIndex={0}>
-        <button tabIndex={-1}>
-          <p>사진을 업로드 해보세요</p>
-        </button>
-      </StyledLabel>
-      <input
-        type="file"
-        id="image"
-        name="image"
-        className="a11y-hidden"
-        tabIndex={-1}
-        multiple
-        ref={imageInput}
-        onChange={isSelectedImg}
-        accept="image/png, image/jpeg"
-      />
-    </StyledDiv>
+    <>
+      {imageURL[0] === '' ? (
+        <StyledDiv>
+          <StyledLabel htmlFor="image" tabIndex={0}>
+            <input
+              type="file"
+              id="image"
+              name="image"
+              className="a11y-hidden"
+              tabIndex={-1}
+              multiple
+              onChange={isSelectedImg}
+              accept="image/png, image/jpeg"
+            />
+          </StyledLabel>
+        </StyledDiv>
+      ) : (
+        <>
+          <FeedImgSlider imageURL={imageURL}>
+            <StyledLabel htmlFor="image" tabIndex={0}>
+              <input
+                type="file"
+                id="image"
+                name="image"
+                className="a11y-hidden"
+                tabIndex={-1}
+                multiple
+                onChange={isSelectedImg}
+                accept="image/png, image/jpeg"
+              />
+            </StyledLabel>
+          </FeedImgSlider>
+        </>
+      )}
+    </>
   );
 };
 
