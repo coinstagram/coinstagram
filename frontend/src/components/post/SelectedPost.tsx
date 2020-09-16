@@ -60,6 +60,12 @@ function SelectedPost({
   const user_id = user && user.user_id;
 
   const selectedPostInfo = selectedPost.selectedPost;
+
+  const selectedPostImages =
+    selectedPost.selectedPost !== null
+      ? selectedPost.selectedPost.image_path
+      : [];
+
   const { postModal, followModal, popPostModal, popFollowModal } = useContext(
     ModalContext,
   );
@@ -81,7 +87,7 @@ function SelectedPost({
               location={selectedPostInfo && selectedPostInfo.post_location}
             />
           )}
-          <FeedBody />
+          <FeedBody imageUrl={selectedPostImages} />
         </div>
         <div>
           {width > 1000 && (
@@ -148,6 +154,7 @@ function SelectedPost({
           followers={users}
           follow={follow}
           deletePost={deletePost}
+          deleteBookmark={deleteBookmark}
         />
       )}
     </>

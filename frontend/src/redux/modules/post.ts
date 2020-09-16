@@ -204,6 +204,8 @@ function* getFeedPosts(action: PostSagaActions) {
       token,
       action.payload.user_id,
     );
+    console.log('followersPosts', followersPosts);
+    console.log('myPosts', myPosts);
     yield put(successGetPostsFeed(followersPosts, myPosts));
   } catch (error) {
     yield put(failGetPostsFeed(error));
@@ -213,6 +215,7 @@ function* getFeedPosts(action: PostSagaActions) {
 function* getUserPosts(action: PostSagaActions) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
+    console.log(token);
     yield put(startGetPostsUser());
     const CertainUserPosts: EachPostState[] = yield call(
       PostService.getUserPosts,

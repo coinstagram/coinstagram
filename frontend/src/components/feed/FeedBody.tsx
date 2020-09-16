@@ -1,14 +1,22 @@
 import React from 'react';
 
 // components
-import PostImgSlider from './FeedImgSlider';
+import FeedImgSlider from './FeedImgSlider';
 
-function FeedBody() {
+interface FeedBodyProps {
+  imageUrl?: string[];
+}
+
+function FeedBody({ imageUrl }: FeedBodyProps) {
   return (
     <div>
-      <PostImgSlider />
+      <FeedImgSlider imageUrl={imageUrl} />
     </div>
   );
 }
+
+FeedBody.defaultProps = {
+  imageUrl: [],
+};
 
 export default FeedBody;

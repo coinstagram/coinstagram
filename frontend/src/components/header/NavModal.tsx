@@ -4,7 +4,7 @@ import React from 'react';
 import { StyledDivBg, StyledModal } from './NavModalStyle';
 
 // icons
-import { RiSettings3Line } from 'react-icons/ri';
+import { IoIosSettings } from 'react-icons/io';
 import { CgProfile } from 'react-icons/cg';
 import { BiBookmark } from 'react-icons/bi';
 
@@ -40,7 +40,7 @@ function NavModal({ top, left, favorite, profile, userId }: NavModalProps) {
               </li>
               <li>
                 <Link to="/account/edit">
-                  <RiSettings3Line />
+                  <IoIosSettings />
                   <span>설정</span>
                 </Link>
               </li>
