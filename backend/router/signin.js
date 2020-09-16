@@ -1,9 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const pool = require('../config/database');
-
 const router = express.Router();
-
 /**
  * signin(email)
  * /user
@@ -17,9 +15,7 @@ const router = express.Router();
  */
 router.post('/signin/email', async (req, res) => {
   const { user_id, user_password, user_name, user_email } = req.body;
-
   const hashedPassword = await bcrypt.hash(user_password + '', 2);
-
   let sql = '';
   try {
     const connection = await pool.getConnection(async (conn) => conn);
@@ -39,7 +35,7 @@ router.post('/signin/email', async (req, res) => {
       await connection.rollback(); // ROLLBACK
       await connection.release();
       console.log(error);
-      res.send({ success: false });
+      res.status(500).json({ error: error.toString() });
     } finally {
       await connection.release();
     }
@@ -47,7 +43,6 @@ router.post('/signin/email', async (req, res) => {
     res.status(500).json('DB CONNECT ERROR');
   }
 });
-
 /**
  * signin(phone)
  * /user
@@ -63,7 +58,6 @@ router.post('/signin/phone', async (req, res) => {
   const { user_id, user_password, user_name, user_phone } = req.body;
   let sql = '';
   const hashedPassword = await bcrypt.hash(user_password + '', 2);
-
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
@@ -82,11 +76,10 @@ router.post('/signin/phone', async (req, res) => {
       await connection.rollback(); // ROLLBACK
       await connection.release();
       console.log(error);
-      res.send({ success: false });
+      res.status(500).json({ error: error.toString() });
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
   }
 });
-
 module.exports = router;

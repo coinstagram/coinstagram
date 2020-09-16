@@ -3,9 +3,7 @@ const express = require('express');
 const pool = require('../config/database');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
 const router = express.Router();
-
 /**
  * login
  * /login
@@ -24,23 +22,26 @@ router.post('/login', async (req, res) => {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
       sql = 'SELECT * FROM users where user_id = ?';
-      const [isuser] = await connection.query(sql, user_id);
-
       // id 확인
-      if (isuser[0] === undefined) {
-        res.send({ user_id: '' });
-        throw Error('유저가 없습니다.');
-      }
+      const [isuser] = await connection.query(sql, user_id);
       // 비밀번호 확인
       const isPassword = await bcrypt.compare(
         user_password + '',
         isuser[0].user_password,
       );
-      if (!isPassword) {
-        res.send({ user_password: '' });
-        throw Error('비밀번호가 틀렸습니다.');
+      if (!isPassword || isuser[0] === undefined) {
+        try {
+          throw new Error(
+            '사용자 정보와 일치하지 않습니다. 다시 입력해주세요.',
+          );
+        } catch (error) {
+          await connection.rollback(); // ROLLBACK
+          await connection.release();
+          console.log('로그인 에러: ', error);
+          res.status(500).json({ error: error.toString() });
+          return error;
+        }
       }
-      console.log(isuser[0]);
       // 토큰 발급
       const token = jwt.sign(
         {
@@ -60,7 +61,6 @@ router.post('/login', async (req, res) => {
       );
       console.log(token);
       res.cookie('access_token', token, { httpOnly: true });
-
       connection.commit();
       await connection.release();
       res.send({ success: true, token });
@@ -69,13 +69,11 @@ router.post('/login', async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json(error);
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
-  } finally {
-    const connection = await pool.getConnection(async (conn) => conn);
-    await connection.release();
   }
 });
-
 module.exports = router;
