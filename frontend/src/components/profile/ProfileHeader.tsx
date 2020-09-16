@@ -57,19 +57,24 @@ function ProfileHeader({
             <span tabIndex={-1}>프로필 편집</span>
           </Link>
         )}
-        <ProfileCountInfo followers={followers} followees={followees} />
         {width >= 750 && (
+          <>
+            <ProfileCountInfo followers={followers} followees={followees} />
+            <ProfileNameAndInroduce
+              profileName={profileName}
+              profileIntro={profileIntro}
+            />
+          </>
+        )}
+      </div>
+      {width < 750 && (
+        <>
           <ProfileNameAndInroduce
             profileName={profileName}
             profileIntro={profileIntro}
           />
-        )}
-      </div>
-      {width < 750 && (
-        <ProfileNameAndInroduce
-          profileName={profileName}
-          profileIntro={profileIntro}
-        />
+          <ProfileCountInfo followers={followers} followees={followees} />
+        </>
       )}
     </StyledSection>
   );
