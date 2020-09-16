@@ -21,10 +21,6 @@ router.post('/login', async (req, res) => {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
       sql = 'SELECT * FROM users where user_id = ?';
-<<<<<<< HEAD
-      // id 확인
-      const [isuser] = await connection.query(sql, user_id);
-=======
 
       // id 확인
       const [isuser] = await connection.query(sql, user_id);
@@ -41,7 +37,6 @@ router.post('/login', async (req, res) => {
           return;
         }
       }
->>>>>>> 590ab1f40cdb886d6570b1ec4b2d5cd65191e09d
       // 비밀번호 확인
       const isPassword = await bcrypt.compare(
         user_password + '',
