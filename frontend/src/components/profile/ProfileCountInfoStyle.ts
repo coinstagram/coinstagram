@@ -38,5 +38,9 @@ export const StyledDiv = styled.div`
       display: flex;
       justify-content: space-around;
       border-top: 1px solid rgb(219, 219, 219);
+
+      & button:active {
+        color: rgb(173, 181, 189);
+      }
     `}
 `;

@@ -20,7 +20,7 @@ function OtherPosts({
 }: AnotherPostsProps) {
   useEffect(() => {
     getOtherPosts();
-  }, [getOtherPosts, selectedUserId]);
+  }, [getOtherPosts]);
 
   return (
     <StyledSection>

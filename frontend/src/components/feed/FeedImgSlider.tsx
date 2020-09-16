@@ -9,7 +9,6 @@ import { StyledUl } from './FeedImgSliderStyle';
 import Slider from 'react-slick';
 import NextBtn from '../common/NextBtn';
 import PrevBtn from '../common/PrevBtn';
-import { RiCreativeCommonsZeroLine } from 'react-icons/ri';
 
 interface FeedImgSliderProps {
   imageUrl: string[];

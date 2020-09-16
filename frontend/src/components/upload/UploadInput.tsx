@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { StyledDiv, StyledLabel } from './UploadInput.style';
-import axios from 'axios';
 import FeedImgSlider from '../feed/FeedImgSlider';
 import uploadService from '../../redux/services/uploadService';
 

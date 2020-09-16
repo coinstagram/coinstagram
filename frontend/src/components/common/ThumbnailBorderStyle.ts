@@ -6,7 +6,7 @@ const borderStyle = (offset: number) => css`
     border: 2px solid rgb(255, 255, 255);
   }
 
-  .thumbnail::after {
+  .thumbnail::before {
     content: '';
     position: absolute;
     top: ${-offset}px;
@@ -22,7 +22,7 @@ const borderStyle = (offset: number) => css`
     );
   }
 
-  &.selected .thumbnail::after {
+  &.selected .thumbnail::before {
     background: linear-gradient(
       to bottom left,
       rgb(174, 0, 255),
