@@ -404,7 +404,9 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
         if (result.length === 1) {
           arr.push(result[0]);
         } else {
-          result.map((res) => arr.push(...res));
+          result.map((res) => {
+            arr.push(res);
+          });
         }
 
         try {
@@ -460,6 +462,7 @@ const upload = multer({
 });
 router.post('/images', verifyToken, upload.array('image'), async (req, res) => {
   console.log('images');
+  console.log(req.files);
   const file = req.files.map(
     ({ path: image_path, mimetype: image_type, originalname: image_name }) => ({
       image_path,
