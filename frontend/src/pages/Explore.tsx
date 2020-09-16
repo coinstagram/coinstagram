@@ -1,4 +1,5 @@
 import React from 'react';
+import useAuth from '../hooks/useAuth';
 
 // styles
 import StyledMain from '../components/common/StyledMain';
@@ -8,6 +9,8 @@ import Header from '../components/header/Header';
 import RandomPostsContainer from '../containers/RandomPostsContainer';
 
 function Explore() {
+  useAuth();
+
   return (
     <>
       <Header />

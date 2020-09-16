@@ -305,7 +305,6 @@ router.get('/user/post/:user_id', verifyToken, async (req, res) => {
       let sqls = '';
       let params = [];
       sql = `select image_path from post_image where post_id = ?;`;
-
       post_id.map((id) => {
         params = [id];
         sqls += mysql.format(sql, params);

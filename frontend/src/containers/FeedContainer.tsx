@@ -21,6 +21,7 @@ function FeedContainer() {
   const dispatch = useDispatch();
   const { posts, userInfo } = useSelector((state: RootState) => state);
   const { feedPosts } = posts.feedPosts;
+  const { loading, error } = posts.feedPosts;
   const myId = userInfo.user && userInfo.user.user_id;
 
   const getFeedPosts = useCallback(
@@ -88,8 +89,10 @@ function FeedContainer() {
 
   return (
     <Feed
-      feedPosts={feedPosts}
+      loading={loading}
+      error={error}
       myId={myId}
+      feedPosts={feedPosts}
       getFeedPosts={getFeedPosts}
       getCommentsPost={getCommentsPost}
       addCommentPost={addCommentPost}

@@ -2,17 +2,23 @@ import React, { useEffect, useRef } from 'react';
 import { EachPostState } from '../../type';
 
 // styles
-import { StyledArticle } from './FeedStyle';
+import { StyledArticle, StyledPreviewDiv } from './FeedStyle';
+
+// icons
+import { BsPlusCircle } from 'react-icons/bs';
 
 // components
 import FeedHeader from './FeedHeader';
 import FeedBody from './FeedBody';
 import FeedComment from './FeedComment';
 import FeedIcons from './FeedIcons';
+import { Link } from 'react-router-dom';
 
 interface FeedProps {
-  feedPosts: EachPostState[];
+  loading: boolean;
+  error: null | Error;
   myId: null | string;
+  feedPosts: EachPostState[];
   getFeedPosts: (user_id: string) => void;
   getCommentsPost: (post_id: number) => void;
   addCommentPost: (post_id: number, comment_text: string) => void;
@@ -25,8 +31,10 @@ interface FeedProps {
 }
 
 function Feed({
-  feedPosts,
+  loading,
+  error,
   myId,
+  feedPosts,
   getFeedPosts,
   getCommentsPost,
   addCommentPost,
@@ -66,6 +74,19 @@ function Feed({
 
   return (
     <>
+      {feedPosts.length === 0 && !loading && error === null && (
+        <StyledPreviewDiv>
+          <div>
+            <p>지금 당신의 추억을 공유해 보세요</p>
+            <Link to="/upload">
+              <BsPlusCircle />
+            </Link>
+          </div>
+        </StyledPreviewDiv>
+      )}
+      {feedPosts.length === 0 && loading && error !== null && (
+        <div>게시물 정보를 받아오는 중입니다...</div>
+      )}
       {feedPosts.length !== 0 &&
         feedPosts.map(post => (
           <StyledArticle key={post.id}>
@@ -75,7 +96,7 @@ function Feed({
               postId={post.id}
               location={post.post_location}
             />
-            <FeedBody />
+            <FeedBody imageUrl={post.image_path} />
             <FeedIcons
               myId={myId}
               postId={post.id}

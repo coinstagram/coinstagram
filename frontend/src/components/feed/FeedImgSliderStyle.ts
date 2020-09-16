@@ -1,6 +1,12 @@
 import styled from 'styled-components';
 
 export const StyledUl = styled.ul`
+  li > img {
+    width: 100%;
+    max-width: 612px;
+    height: auto;
+  }
+
   .next-btn,
   .prev-btn {
     top: calc(50% - 16px);
@@ -27,13 +33,8 @@ export const StyledUl = styled.ul`
       button::before {
         width: 12px;
         height: 12px;
-        color: rgb(168, 168, 168);
+        color: rgb(51, 154, 240);
       }
-    }
-
-    li.slick-active button::before {
-      color: rgba(255, 255, 255, 0.8);
-      opacity: 1;
     }
   }
 `;

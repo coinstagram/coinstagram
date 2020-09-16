@@ -4,6 +4,7 @@ const getUrl = '/post';
 
 const uploadService = class {
   static async uploadPost(data: postData, token: String) {
+    console.log(token);
     const res = await axios.post(
       `${getUrl}`,
       {

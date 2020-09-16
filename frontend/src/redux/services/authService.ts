@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AuthState, AuthInfoState, SignupInfoState } from '../../type';
+import { AuthInfoState, SignupInfoState } from '../../type';
 
 interface IAuthService {
   signin: (user_email: string, user_password: string) => Promise<AuthInfoState>;
@@ -21,10 +21,10 @@ const authService: IAuthService = class {
         user_password,
       },
     });
-    const { token, success } = res.data;
+    const { token } = res.data;
     if (token === undefined) alert('사용자 정보와 일치하지 않습니다');
     localStorage.setItem('access_token', token);
-    return success;
+    return token;
   }
 
   static async signup(

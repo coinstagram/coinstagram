@@ -2,10 +2,12 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
 import RootState from '../../type';
-import OtherPostItem from '../post/OtherPostItem';
 
 // styles
 import { StyledSection } from './ProfilePostsStyle';
+
+// components
+import OtherPostItem from '../post/OtherPostItem';
 
 interface ProfilePostsProps {
   profileId: string;
@@ -32,19 +34,8 @@ function ProfilePosts({
     if (profileId !== myId) return;
     if (bookmarkedId.length === 0) return;
 
-    if (bookmarkPosts.length === 0) {
-      bookmarkedId.forEach(id => getBookmarkPosts(id));
-    }
-
-    // const addedBookmarkId = [];
-    // for (let i = 0; i < bookmarkedId.length; i++) {
-    //   if (bookmarkPosts.every(post => post.id !== bookmarkedId[i])) {
-    //     addedBookmarkId.push(bookmarkedId[i]);
-    //   }
-    // }
-
-    // addedBookmarkId.forEach(id => getBookmarkPosts(id));
-  }, [getBookmarkPosts, bookmarkedId, myId, profileId, bookmarkPosts.length]);
+    bookmarkedId.forEach(id => getBookmarkPosts(id));
+  }, [getBookmarkPosts, bookmarkedId, myId, profileId]);
 
   return (
     <StyledSection>
@@ -66,6 +57,9 @@ function ProfilePosts({
         </ul>
       </div>
       <div>
+        {pageName === undefined && otherPosts.length === 0 && (
+          <div>@{profileId}님이 업로드하신 게시물이 없습니다.</div>
+        )}
         {pageName === undefined && (
           <ul>
             {otherPosts.map(post => (
@@ -74,7 +68,7 @@ function ProfilePosts({
                 postId={post.id}
                 postOwnerId={post.user_id}
                 getPostCounts={getPostCounts}
-                imageUrl="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-15/sh0.08/e35/s640x640/118216363_304413394169573_8108378978856811545_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_cat=105&_nc_ohc=_nLTaop65HIAX9hnkWl&oh=01db5a23bd1862d9a1d814c843b39d96&oe=5F870209"
+                imageThumbnail={post.image_path}
               />
             ))}
           </ul>
@@ -87,7 +81,7 @@ function ProfilePosts({
                 postId={post.id}
                 postOwnerId={post.user_id}
                 getPostCounts={getPostCounts}
-                imageUrl="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-15/sh0.08/e35/s640x640/119227495_2812132312354934_7941606087414372365_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_cat=102&_nc_ohc=BHJtVbbnNLUAX_JNgMU&oh=a9c12fbf4899e197869f2ca2b133523c&oe=5F8794F7"
+                imageThumbnail={post.image_path}
               />
             ))}
           </ul>
