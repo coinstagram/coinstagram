@@ -381,11 +381,10 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
           return [foll.id];
         }
       });
-      console.log(post_id.length);
       if (post_id.length === 0) {
         res.json([]);
       } else {
-        sql = `select image_path from post_image where post_id = ?;`;
+        sql = `select image_path, post_id from post_image where post_id = ?;`;
         sqls = '';
         post_id.map((id) => {
           if (id.length === 0) {
@@ -396,22 +395,24 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
             });
           }
         });
-
         const [image] = await connection.query(sqls);
-
+        let result = [];
         let arr = [];
-        const result = test.filter((el) => el.length !== 0);
+        test.forEach((data) => {
+          result = [...result, ...data];
+        });
+
         if (result.length === 1) {
-          arr.push(result[0]);
+          arr = [...arr, ...result[0]];
         } else {
           result.map((res) => {
-            arr.push(res);
+            arr = [...arr, res];
           });
         }
 
         try {
           if (image !== undefined) {
-            for (let i = 0; i < image.length; i++) {
+            for (let i = 0; i < arr.length; i++) {
               let imageitem = image[i].map(({ image_path }) => image_path);
               arr[i] = { ...arr[i], image_path: imageitem };
             }
@@ -420,7 +421,6 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
           let imageitem = image[0].image_path;
           arr[0] = { ...arr[0], image_path: [imageitem] };
         }
-        console.log(arr);
         res.json(arr);
       }
     } catch (error) {
