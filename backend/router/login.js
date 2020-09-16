@@ -16,20 +16,20 @@ const router = express.Router();
  */
 router.post('/login', async (req, res) => {
   const { user_id, user_password } = req.body;
-  console.log('서버 테스트', user_id, user_password);
   let sql = '';
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
       sql = 'SELECT * FROM users where user_id = ?';
+<<<<<<< HEAD
       // id 확인
       const [isuser] = await connection.query(sql, user_id);
-      // 비밀번호 확인
-      const isPassword = await bcrypt.compare(
-        user_password + '',
-        isuser[0].user_password,
-      );
-      if (!isPassword || isuser[0] === undefined) {
+=======
+
+      // id 확인
+      const [isuser] = await connection.query(sql, user_id);
+
+      if (isuser[0] === undefined) {
         try {
           throw new Error(
             '사용자 정보와 일치하지 않습니다. 다시 입력해주세요.',
@@ -37,11 +37,30 @@ router.post('/login', async (req, res) => {
         } catch (error) {
           await connection.rollback(); // ROLLBACK
           await connection.release();
-          console.log('로그인 에러: ', error);
-          res.status(500).json({ error: error.toString() });
-          return error;
+          res.status(503).json({ error: error.toString() });
+          return;
         }
       }
+>>>>>>> 590ab1f40cdb886d6570b1ec4b2d5cd65191e09d
+      // 비밀번호 확인
+      const isPassword = await bcrypt.compare(
+        user_password + '',
+        isuser[0].user_password,
+      );
+
+      if (!isPassword) {
+        try {
+          throw new Error(
+            '사용자 정보와 일치하지 않습니다. 다시 입력해주세요.',
+          );
+        } catch (error) {
+          await connection.rollback(); // ROLLBACK
+          await connection.release();
+          res.status(503).json({ error: error.toString() });
+          return;
+        }
+      }
+
       // 토큰 발급
       const token = jwt.sign(
         {

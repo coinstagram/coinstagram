@@ -39,7 +39,6 @@ router.post('/user/relationship', verifyToken, async (req, res) => {
       } else {
         sql = 'insert into users_relationship values (?, ?)';
         await connection.query(sql, [user_id, followee_id]);
-
         res.send({ success: true });
       }
     } catch (error) {
@@ -70,7 +69,6 @@ router.delete('/user/relationship/:user', verifyToken, async (req, res) => {
     process.env.JWT_SECRET,
   );
   const { user } = req.params;
-  console.log(user);
   if (user === user_id) {
     throw Error('나를 팔로우 취소 할 수 없습니다.');
   }
@@ -166,7 +164,6 @@ router.get('/users/random', verifyToken, async (req, res) => {
         ...followee_id.map(({ user_id }) => `"${user_id}"`),
         `"${user_id}"`,
       ]}) ORDER BY RAND() LIMIT 5;`;
-      console.log(sql);
       const [check] = await connection.query(sql);
       res.send(check);
     } catch (error) {
