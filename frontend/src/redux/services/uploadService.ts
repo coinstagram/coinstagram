@@ -18,9 +18,8 @@ const uploadService = class {
       },
     );
     const { post_id } = res.data;
-    console.log('test');
 
-    const a = await axios.post(
+    await axios.post(
       `${getUrl}/image`,
       {
         post_id,
@@ -32,7 +31,6 @@ const uploadService = class {
         },
       },
     );
-    console.log(a);
 
     return res.data;
   }

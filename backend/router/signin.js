@@ -17,9 +17,7 @@ const router = express.Router();
  */
 router.post('/signin/email', async (req, res) => {
   const { user_id, user_password, user_name, user_email } = req.body;
-
   const hashedPassword = await bcrypt.hash(user_password + '', 2);
-
   let sql = '';
   try {
     const connection = await pool.getConnection(async (conn) => conn);
@@ -39,7 +37,7 @@ router.post('/signin/email', async (req, res) => {
       await connection.rollback(); // ROLLBACK
       await connection.release();
       console.log(error);
-      res.send({ success: false });
+      res.status(500).json({ error: error.toString() });
     } finally {
       await connection.release();
     }
@@ -82,7 +80,7 @@ router.post('/signin/phone', async (req, res) => {
       await connection.rollback(); // ROLLBACK
       await connection.release();
       console.log(error);
-      res.send({ success: false });
+      res.status(500).json({ error: error.toString() });
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');

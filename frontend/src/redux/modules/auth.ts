@@ -91,6 +91,8 @@ function* signinRequestSaga(action: SagaActions) {
     yield put(signinSuccess(result));
     if (result) yield put(push('/'));
   } catch (e) {
+    yield console.log(e.message);
+
     yield put(signinFail(e));
   }
 }

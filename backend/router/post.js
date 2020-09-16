@@ -82,7 +82,6 @@ router.get('/posts', verifyToken, async (req, res) => {
         let imageitem = image[i].map(({ image_path }) => image_path);
         check[i] = { ...check[i], image_path: imageitem };
       }
-
       res.send(check);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
@@ -143,6 +142,7 @@ router.get('/posts', verifyToken, async (req, res) => {
 //     res.status(500).json('DB CONNECT ERROR');
 //   }
 // });
+
 router.get('/post/:post_id', verifyToken, async (req, res) => {
   const { post_id } = req.params;
   let sql = '';
@@ -162,7 +162,6 @@ router.get('/post/:post_id', verifyToken, async (req, res) => {
         ...check[0],
         image_path: [...image.map(({ image_path }) => image_path)],
       };
-      console.log(reqData);
       res.send(reqData);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
@@ -250,6 +249,7 @@ router.post('/comment/child', async (req, res) => {
       await connection.query(sql, [post_id, user_id, comment_text, parent]);
       sql = 'SELECT * FROM comments where id = ? or parent = ?';
       const [newComment] = await connection.query(sql, [parent, parent]);
+
       res.send(newComment);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
@@ -275,6 +275,7 @@ router.get('/comment/post/:post_id', verifyToken, async (req, res) => {
     try {
       sql = `SELECT * FROM comments where post_id = ?`;
       const [check] = await connection.query(sql, post_id);
+
       res.send(check);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
@@ -309,12 +310,18 @@ router.get('/user/post/:user_id', verifyToken, async (req, res) => {
         params = [id];
         sqls += mysql.format(sql, params);
       });
-      const [image] = await connection.query(sqls);
-      for (let i = 0; i < image.length; i++) {
-        let imageitem = image[i].map(({ image_path }) => image_path);
-        check[i] = { ...check[i], image_path: imageitem };
+      if (sqls.length !== 0) {
+        const [image] = await connection.query(sqls);
+        try {
+          for (let i = 0; i < image.length; i++) {
+            let imageitem = image[i].map(({ image_path }) => image_path);
+            check[i] = { ...check[i], image_path: imageitem };
+          }
+        } catch (err) {
+          let imageitem = image.map(({ image_path }) => image_path);
+          check[0] = { ...check[0], image_path: imageitem };
+        }
       }
-
       res.send(check);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
@@ -350,7 +357,10 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
 
       let sqls = '';
       let params = [];
+      console.log(followee_id);
+
       if (followee_id.length === 0) return res.json(followee_id);
+
       followee_id.map(({ user_id }) => {
         params = [user_id];
         sqls += mysql.format(sql, params);
@@ -364,7 +374,6 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
           return [...foll.map(({ id }) => id)];
         }
       });
-
       sql = `select image_path from post_image where post_id = ?;`;
       sqls = '';
       post_id.map((id) => {
@@ -376,18 +385,22 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
           });
         }
       });
-      console.log(sqls);
 
       const [image] = await connection.query(sqls);
-      console.log(image);
 
-      const arr = [];
+      let arr = [];
       const result = test.filter((el) => el.length !== 0);
       result.forEach((res) => arr.push(...res));
 
-      for (let i = 0; i < image.length; i++) {
-        let imageitem = image[i].map(({ image_path }) => image_path);
-        arr[i] = { ...arr[i], image_path: imageitem };
+      try {
+        for (let i = 0; i < image.length; i++) {
+          let imageitem = image[i].map(({ image_path }) => image_path);
+          arr[i] = { ...arr[i], image_path: imageitem };
+        }
+      } catch (err) {
+        let imageitem = image.map();
+        console.log(imageitem);
+        arr = { ...arr, image_path: imageitem };
       }
 
       res.json(arr);
@@ -437,7 +450,6 @@ router.post('/images', verifyToken, upload.array('image'), async (req, res) => {
       image_name,
     }),
   );
-  console.log(file);
   res.json(file);
 });
 
