@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { computePassedTime } from '../feed/FeedComment';
 import RootState from '../../type';
 import { useSelector } from 'react-redux';
@@ -23,7 +23,7 @@ interface SelectedPostProps {
   selectedUserId: string;
   selectedUserProfile: string;
   selectedPostId: number;
-  getUserPosts: () => void;
+  getSelectedPostInfo: () => void;
   getCommentsPost: () => void;
   addCommentPost: (post_id: number, comment_text: string) => void;
   getPostLikes: (post_id: number) => void;
@@ -41,7 +41,7 @@ function SelectedPost({
   selectedUserId,
   selectedUserProfile,
   selectedPostId,
-  getUserPosts,
+  getSelectedPostInfo,
   getCommentsPost,
   addCommentPost,
   getPostLikes,
@@ -71,6 +71,10 @@ function SelectedPost({
   );
 
   const width = useWindowWidth();
+
+  useEffect(() => {
+    getSelectedPostInfo();
+  }, [getSelectedPostInfo]);
 
   return (
     <>

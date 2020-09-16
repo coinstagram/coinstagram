@@ -18,5 +18,6 @@ declare module 'react' {
     header?: boolean;
     isheader?: boolean;
     page?: string;
+    modal?: boolean;
   }
 }

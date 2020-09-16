@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 // components;
 import UploadHeader from '../components/upload/UploadHeader';
 import UploadInput from '../components/upload/UploadInput';
 import UploadDetails from '../components/upload/UploadDetails';
 import { StyledButton } from '../components/upload/UploadDetails.style';
-import { useDispatch, useSelector } from 'react-redux';
-import { add_post, addPostSaga, postData } from '../redux/modules/upload';
+import { useDispatch } from 'react-redux';
+import { add_post, addPostSaga } from '../redux/modules/upload';
 
 export interface contextValue {
   user_id: String;
@@ -26,12 +26,12 @@ const UploadContainer = () => {
     tag: [],
     image: [],
   });
-  const image = (img: Array<Object>) => {
-    setData({
+  const image = useCallback((img: Array<Object>) => {
+    setData(data => ({
       ...data,
       image: img,
-    });
-  };
+    }));
+  }, []);
 
   const dispatch = useDispatch();
   const onchange = (e: any) => {
