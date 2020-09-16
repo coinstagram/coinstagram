@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AuthState, AuthInfoState, SignupInfoState } from '../../type';
+import { AuthInfoState, SignupInfoState } from '../../type';
 
 interface IAuthService {
   signin: (user_email: string, user_password: string) => Promise<AuthInfoState>;
@@ -21,10 +21,9 @@ const authService: IAuthService = class {
         user_password,
       },
     });
-    const { token, success } = res.data;
-    if (token === undefined) alert('사용자 정보와 일치하지 않습니다');
+    const { token } = res.data;
     localStorage.setItem('access_token', token);
-    return success;
+    return token;
   }
 
   static async signup(
@@ -44,7 +43,6 @@ const authService: IAuthService = class {
       },
     });
     const { success } = res.data;
-    if (!success) alert('기존에 있는 사용자ID입니다. 다른 ID를 입력해주세요');
     return success;
   }
 

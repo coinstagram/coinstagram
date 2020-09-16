@@ -1,8 +1,8 @@
-import { call, put, delay } from 'redux-saga/effects';
+import { call, put } from 'redux-saga/effects';
 // 로그인 관련 reducer file
 import { AxiosError } from 'axios';
 import { takeEvery } from 'redux-saga/effects';
-import { AuthState, AuthInfoState } from '../../type';
+import { AuthState } from '../../type';
 import authService from '../services/authService';
 import { push } from 'connected-react-router';
 
@@ -83,15 +83,16 @@ function* signinRequestSaga(action: SagaActions) {
   const payload = action.payload;
   yield put(signinStart());
   try {
-    const result = yield call(
+    const token = yield call(
       authService.signin,
       payload.user_id,
       payload.user_password,
     );
-    yield put(signinSuccess(result));
-    if (result) yield put(push('/'));
+    yield put(signinSuccess(token));
+    if (token) yield put(push('/'));
   } catch (e) {
     yield put(signinFail(e));
+    alert('사용자 정보와 일치하지 않습니다');
   }
 }
 

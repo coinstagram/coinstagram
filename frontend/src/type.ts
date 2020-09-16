@@ -130,7 +130,6 @@ export interface FeedPostsState {
 
 export interface SignupState {
   loading: boolean;
-  token: null | string;
   error: null | Error;
 }
 
