@@ -4,7 +4,6 @@ const getUrl = '/post';
 
 const uploadService = class {
   static async uploadPost(data: postData, token: String) {
-    console.log(token);
     const res = await axios.post(
       `${getUrl}`,
       {
@@ -34,6 +33,25 @@ const uploadService = class {
     );
 
     return res.data;
+  }
+
+  static async uploadImageView(files: FileList, token: String) {
+    console.log(files);
+
+    if (files !== null) {
+      const fd = new FormData();
+      [].forEach.call(files, (f: File) => {
+        fd.append('image', f);
+      });
+      let token = localStorage.getItem('access_token');
+
+      const res = await axios.post(`images`, fd, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return res.data;
+    }
   }
 };
 
