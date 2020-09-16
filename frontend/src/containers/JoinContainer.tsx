@@ -42,9 +42,10 @@ export default function JoinContainer() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    dispatch(
-      signupSagaActionCreator(user_email, user_name, user_id, user_password),
-    );
+    if (phoneEmailCheck && nameCheck && idCheck && passwordCheck)
+      dispatch(
+        signupSagaActionCreator(user_email, user_name, user_id, user_password),
+      );
   };
 
   return (

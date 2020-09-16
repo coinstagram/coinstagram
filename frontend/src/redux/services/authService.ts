@@ -22,7 +22,6 @@ const authService: IAuthService = class {
       },
     });
     const { token } = res.data;
-    if (token === undefined) alert('사용자 정보와 일치하지 않습니다');
     localStorage.setItem('access_token', token);
     return token;
   }
@@ -44,7 +43,6 @@ const authService: IAuthService = class {
       },
     });
     const { success } = res.data;
-    if (!success) alert('기존에 있는 사용자ID입니다. 다른 ID를 입력해주세요');
     return success;
   }
 
