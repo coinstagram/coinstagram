@@ -1,15 +1,18 @@
 import styled, { css } from 'styled-components';
 
 export const StyledSection = styled.section`
+  position: relative;
   display: flex;
+  flex-flow: row wrap;
+  padding-bottom: 45px;
 
   .info-container {
-    flex-grow: 2;
     margin-left: 30px;
 
     ${props =>
       props.width < 750 &&
       css`
+        flex-basis: calc(100% - 107px);
         & > a {
           display: block;
           font-weight: bold;
@@ -29,11 +32,10 @@ export const StyledSection = styled.section`
           }
         }
       `}
-
     .id-container {
       display: flex;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: ${props => (props.width < 750 ? 10 : 20)};
 
       dd {
         font-size: 28px;

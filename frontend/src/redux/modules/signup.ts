@@ -15,9 +15,8 @@ const SIGNUP_FAIL = 'coinstagram/signup/SIGNUP_FAIL' as const;
 export const signupStart = () => ({
   type: SIGNUP_START,
 });
-const signupSuccess = (data: string) => ({
+const signupSuccess = () => ({
   type: SIGNUP_SUCCESS,
-  data,
 });
 const signupFail = (error: AxiosError) => ({
   type: SIGNUP_FAIL,
@@ -42,17 +41,17 @@ function signupReducer(
   switch (action.type) {
     case SIGNUP_START:
       return {
-        ...state,
         loading: true,
+        error: null,
       };
     case SIGNUP_SUCCESS:
       return {
-        ...state,
         loading: false,
+        error: null,
       };
     case SIGNUP_FAIL:
       return {
-        ...state,
+        loading: false,
         error: action.error,
       };
     default:
@@ -88,7 +87,7 @@ function* signupRequestSaga(action: SagaActions) {
       payload.user_id,
       payload.user_password,
     );
-    yield put(signupSuccess(result));
+    yield put(signupSuccess());
     if (result) yield put(push('/login'));
   } catch (e) {
     yield put(signupFail(e));
