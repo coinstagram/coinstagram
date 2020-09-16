@@ -18,29 +18,46 @@ const router = express.Router();
  */
 router.post('/login', async (req, res) => {
   const { user_id, user_password } = req.body;
-  console.log('서버 테스트', user_id, user_password);
   let sql = '';
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
       sql = 'SELECT * FROM users where user_id = ?';
-      const [isuser] = await connection.query(sql, user_id);
 
       // id 확인
+      const [isuser] = await connection.query(sql, user_id);
+
       if (isuser[0] === undefined) {
-        res.send({ user_id: '' });
-        throw Error('유저가 없습니다.');
+        try {
+          throw new Error(
+            '사용자 정보와 일치하지 않습니다. 다시 입력해주세요.',
+          );
+        } catch (error) {
+          await connection.rollback(); // ROLLBACK
+          await connection.release();
+          res.status(503).json({ error: error.toString() });
+          return;
+        }
       }
       // 비밀번호 확인
       const isPassword = await bcrypt.compare(
         user_password + '',
         isuser[0].user_password,
       );
+
       if (!isPassword) {
-        res.send({ user_password: '' });
-        throw Error('비밀번호가 틀렸습니다.');
+        try {
+          throw new Error(
+            '사용자 정보와 일치하지 않습니다. 다시 입력해주세요.',
+          );
+        } catch (error) {
+          await connection.rollback(); // ROLLBACK
+          await connection.release();
+          res.status(503).json({ error: error.toString() });
+          return;
+        }
       }
-      console.log(isuser[0]);
+
       // 토큰 발급
       const token = jwt.sign(
         {
@@ -69,12 +86,11 @@ router.post('/login', async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json(error);
+    } finally {
+      await connection.release();
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');
-  } finally {
-    const connection = await pool.getConnection(async (conn) => conn);
-    await connection.release();
   }
 });
 

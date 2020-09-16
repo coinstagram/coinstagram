@@ -91,6 +91,8 @@ function* signinRequestSaga(action: SagaActions) {
     yield put(signinSuccess(token));
     if (token) yield put(push('/'));
   } catch (e) {
+    yield console.log(e.message);
+
     yield put(signinFail(e));
     alert('사용자 정보와 일치하지 않습니다');
   }
