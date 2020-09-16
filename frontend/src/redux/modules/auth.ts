@@ -83,13 +83,13 @@ function* signinRequestSaga(action: SagaActions) {
   const payload = action.payload;
   yield put(signinStart());
   try {
-    const result = yield call(
+    const token = yield call(
       authService.signin,
       payload.user_id,
       payload.user_password,
     );
-    yield put(signinSuccess(result));
-    if (result) yield put(push('/'));
+    yield put(signinSuccess(token));
+    if (token) yield put(push('/'));
   } catch (e) {
     yield put(signinFail(e));
   }

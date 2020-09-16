@@ -16,7 +16,7 @@ function FeedBody({ imageUrl }: FeedBodyProps) {
 }
 
 FeedBody.defaultProps = {
-  imageUrl: ['1', '2'],
+  imageUrl: [],
 };
 
 export default FeedBody;

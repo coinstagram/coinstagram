@@ -1,6 +1,12 @@
 import styled from 'styled-components';
 
 export const StyledUl = styled.ul`
+  li > img {
+    width: 100%;
+    max-width: 612px;
+    height: auto;
+  }
+
   .next-btn,
   .prev-btn {
     top: calc(50% - 16px);

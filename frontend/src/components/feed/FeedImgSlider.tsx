@@ -11,7 +11,7 @@ import NextBtn from '../common/NextBtn';
 import PrevBtn from '../common/PrevBtn';
 
 interface FeedImgSliderProps {
-  imageUrl?: string[];
+  imageUrl: string[];
 }
 
 const FeedImgSlider: React.FC<FeedImgSliderProps> = ({
@@ -35,21 +35,13 @@ const FeedImgSlider: React.FC<FeedImgSliderProps> = ({
       <Slider {...settings}>
         {imageUrl.map(image => (
           <li key={image}>
-            <img
-              src={`http://localhost:4000/${image}`}
-              alt="이미지1"
-              width="100%"
-            />
+            <img src={`http://localhost:4000/${image}`} alt="이미지1" />
           </li>
         ))}
         {children}
       </Slider>
     </StyledUl>
   );
-};
-
-FeedImgSlider.defaultProps = {
-  imageUrl: ['1', '2'],
 };
 
 export default FeedImgSlider;
