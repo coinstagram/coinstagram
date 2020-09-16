@@ -204,6 +204,8 @@ function* getFeedPosts(action: PostSagaActions) {
       token,
       action.payload.user_id,
     );
+    console.log('followersPosts', followersPosts);
+    console.log('myPosts', myPosts);
     yield put(successGetPostsFeed(followersPosts, myPosts));
   } catch (error) {
     yield put(failGetPostsFeed(error));

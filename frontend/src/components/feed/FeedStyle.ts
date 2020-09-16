@@ -16,12 +16,6 @@ export const StyledPreviewDiv = styled.div`
   height: 500px;
   border: 1px solid rgb(219, 219, 219);
 
-  div {
-    /* position: absolute;
-    left: 0;
-    top: 0; */
-  }
-
   p {
     float: left;
     margin: 13px 40px 0 0;

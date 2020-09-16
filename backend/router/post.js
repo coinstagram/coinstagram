@@ -308,20 +308,16 @@ router.get('/user/post/:user_id', verifyToken, async (req, res) => {
         params = [id];
         sqls += mysql.format(sql, params);
       });
-
-      if (sqls === '') {
-        res.send([]);
-        return;
-      }
-
-      const [image] = await connection.query(sqls);
-      console.log(image.length);
-
-      if (image.length === 1) {
-      } else {
-        for (let i = 0; i < image.length; i++) {
-          let imageitem = image[i].map(({ image_path }) => image_path);
-          check[i] = { ...check[i], image_path: imageitem };
+      if (sqls.length !== 0) {
+        const [image] = await connection.query(sqls);
+        try {
+          for (let i = 0; i < image.length; i++) {
+            let imageitem = image[i].map(({ image_path }) => image_path);
+            check[i] = { ...check[i], image_path: imageitem };
+          }
+        } catch (err) {
+          let imageitem = image.map(({ image_path }) => image_path);
+          check[0] = { ...check[0], image_path: imageitem };
         }
       }
       res.send(check);
