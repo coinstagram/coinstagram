@@ -1,9 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const pool = require('../config/database');
-
 const router = express.Router();
-
 /**
  * signin(email)
  * /user
@@ -45,7 +43,6 @@ router.post('/signin/email', async (req, res) => {
     res.status(500).json('DB CONNECT ERROR');
   }
 });
-
 /**
  * signin(phone)
  * /user
@@ -61,7 +58,6 @@ router.post('/signin/phone', async (req, res) => {
   const { user_id, user_password, user_name, user_phone } = req.body;
   let sql = '';
   const hashedPassword = await bcrypt.hash(user_password + '', 2);
-
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
@@ -86,5 +82,4 @@ router.post('/signin/phone', async (req, res) => {
     res.status(500).json('DB CONNECT ERROR');
   }
 });
-
 module.exports = router;
