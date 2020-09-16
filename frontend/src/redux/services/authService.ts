@@ -46,12 +46,12 @@ const authService: IAuthService = class {
     return success;
   }
 
-  // static async logout() {
-  //   const { data } = await axios({
-  //     method: 'POST',
-  //     //   url:
-  //   });
-  //   return data;
-  // }
+  static async logout() {
+    const { data } = await axios({
+      method: 'POST',
+      //   url:
+    });
+    return data;
+  }
 };
 export default authService;
