@@ -61,6 +61,7 @@ router.post('/post', verifyToken, async (req, res) => {
  * /posts
  */
 router.get('/posts', verifyToken, async (req, res) => {
+  console.log('/posts');
   let sql = '';
   try {
     const connection = await pool.getConnection(async (conn) => conn);
@@ -144,6 +145,7 @@ router.get('/posts', verifyToken, async (req, res) => {
 // });
 
 router.get('/post/:post_id', verifyToken, async (req, res) => {
+  console.log('/post/:post_id');
   const { post_id } = req.params;
   let sql = '';
   try {
@@ -268,6 +270,7 @@ router.post('/comment/child', async (req, res) => {
  * /comment/post/:id
  */
 router.get('/comment/post/:post_id', verifyToken, async (req, res) => {
+  console.log('/comment/post/:post_id');
   const { post_id } = req.params;
   let sql = '';
   try {
@@ -294,6 +297,7 @@ router.get('/comment/post/:post_id', verifyToken, async (req, res) => {
  * /user/post/:user_id
  */
 router.get('/user/post/:user_id', verifyToken, async (req, res) => {
+  console.log('/user/post/:user_id');
   const { user_id } = req.params;
   let sql = ``;
   try {
@@ -339,6 +343,7 @@ router.get('/user/post/:user_id', verifyToken, async (req, res) => {
  * /user/relationship/post
  */
 router.get('/user/relationship/post', verifyToken, async (req, res) => {
+  console.log('/user/relationship/post');
   const token = req.headers.authorization.split('Bearer ')[1];
   const userData = jwt.verify(
     token,
@@ -356,7 +361,6 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
 
       let sqls = '';
       let params = [];
-      console.log(followee_id);
 
       if (followee_id.length === 0) return res.json(followee_id);
 
@@ -367,42 +371,56 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
       const [test] = await connection.query(sqls);
 
       const post_id = test.map((foll) => {
-        if (foll.length === 0) {
-          return [];
-        } else {
-          return [...foll.map(({ id }) => id)];
+        try {
+          if (foll.length === 0) {
+            return [];
+          } else {
+            return [...foll.map(({ id }) => id)];
+          }
+        } catch (err) {
+          return [foll.id];
         }
       });
-      sql = `select image_path from post_image where post_id = ?;`;
-      sqls = '';
-      post_id.map((id) => {
-        if (id.length === 0) {
-          return;
+      console.log(post_id.length);
+      if (post_id.length === 0) {
+        res.json([]);
+      } else {
+        sql = `select image_path from post_image where post_id = ?;`;
+        sqls = '';
+        post_id.map((id) => {
+          if (id.length === 0) {
+            return;
+          } else {
+            id.map((postId) => {
+              sqls += mysql.format(sql, postId);
+            });
+          }
+        });
+
+        const [image] = await connection.query(sqls);
+
+        let arr = [];
+        const result = test.filter((el) => el.length !== 0);
+        if (result.length === 1) {
+          arr.push(result[0]);
         } else {
-          id.map((postId) => {
-            sqls += mysql.format(sql, postId);
-          });
+          result.map((res) => arr.push(...res));
         }
-      });
 
-      const [image] = await connection.query(sqls);
-
-      let arr = [];
-      const result = test.filter((el) => el.length !== 0);
-      result.forEach((res) => arr.push(...res));
-
-      try {
-        for (let i = 0; i < image.length; i++) {
-          let imageitem = image[i].map(({ image_path }) => image_path);
-          arr[i] = { ...arr[i], image_path: imageitem };
+        try {
+          if (image !== undefined) {
+            for (let i = 0; i < image.length; i++) {
+              let imageitem = image[i].map(({ image_path }) => image_path);
+              arr[i] = { ...arr[i], image_path: imageitem };
+            }
+          }
+        } catch (err) {
+          let imageitem = image[0].image_path;
+          arr[0] = { ...arr[0], image_path: [imageitem] };
         }
-      } catch (err) {
-        let imageitem = image.map();
-        console.log(imageitem);
-        arr = { ...arr, image_path: imageitem };
+        console.log(arr);
+        res.json(arr);
       }
-
-      res.json(arr);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
