@@ -1,23 +1,23 @@
-import { call, put, delay } from 'redux-saga/effects';
+import { call, put } from 'redux-saga/effects';
 // 로그인 관련 reducer file
 import { AxiosError } from 'axios';
 import { takeEvery } from 'redux-saga/effects';
-import { SignupState, SignupInfoState } from '../../type';
+import { SignupState } from '../../type';
 import authService from '../services/authService';
 import { push } from 'connected-react-router';
 
 // action type
-const SIGNUP_START = 'coinstagram/auth/SIGNUP_START' as const;
-const SIGNUP_SUCCESS = 'coinstagram/auth/SIGNUP_SUCCESS' as const;
-const SIGNUP_FAIL = 'coinstagram/auth/SIGNUP_FAIL' as const;
+const SIGNUP_START = 'coinstagram/signup/SIGNUP_START' as const;
+const SIGNUP_SUCCESS = 'coinstagram/signup/SIGNUP_SUCCESS' as const;
+const SIGNUP_FAIL = 'coinstagram/signup/SIGNUP_FAIL' as const;
 
 // action creator
 export const signupStart = () => ({
   type: SIGNUP_START,
 });
-const signupSuccess = (token: string) => ({
+const signupSuccess = (data: string) => ({
   type: SIGNUP_SUCCESS,
-  payload: token,
+  data,
 });
 const signupFail = (error: AxiosError) => ({
   type: SIGNUP_FAIL,
@@ -32,7 +32,6 @@ type SignupActions =
 const initialState: SignupState = {
   loading: false,
   error: null,
-  token: null,
 };
 
 // reducer
@@ -50,14 +49,11 @@ function signupReducer(
       return {
         ...state,
         loading: false,
-        token: action.payload,
       };
     case SIGNUP_FAIL:
       return {
         ...state,
-        loading: false,
         error: action.error,
-        token: null,
       };
     default:
       return state;
@@ -96,6 +92,7 @@ function* signupRequestSaga(action: SagaActions) {
     if (result) yield put(push('/login'));
   } catch (e) {
     yield put(signupFail(e));
+    alert('기존에 있는 사용자ID입니다. 다른 ID를 입력해주세요');
   }
 }
 

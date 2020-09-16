@@ -30,7 +30,8 @@ function LoginContainer() {
   const dispatch = useDispatch();
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    dispatch(signInSagaActionCreator(user_id, user_password));
+    if (idCheck && passwordCheck)
+      dispatch(signInSagaActionCreator(user_id, user_password));
   };
 
   return (
