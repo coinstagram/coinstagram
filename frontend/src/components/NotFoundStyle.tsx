@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-// import notFound from '../resource/image/notFound.gif';
+import notFound from '../resource/image/notFound.gif';
 import { Link } from 'react-router-dom';
 import useWindowWidth from '../hooks/useWindowWidth';
 
@@ -45,9 +45,9 @@ const StyledH1 = styled.h1`
 function StyledNotFound() {
   const width = useWindowWidth();
   return (
-    <StyledBody>
+    <StyledBody width={width}>
       <StyledDiv>
-        <img alt="notFound"></img>
+        <img src={notFound} alt="notFound"></img>
         <TextWrapper>
           <StyledH1>
             요청하신 페이지를 <strong>찾을 수 없습니다.</strong>

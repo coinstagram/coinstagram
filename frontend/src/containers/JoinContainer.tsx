@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { SignupState } from '../type';
+// import { SignupState } from '../type';
 import InputEmail from '../components/common_login,join/InputEmail';
 import InputUserName from '../components/common_login,join/InputUserName';
 import InputUserId from '../components/common_login,join/InputUserId';
