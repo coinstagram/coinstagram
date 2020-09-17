@@ -17,7 +17,7 @@ import ProfileHeader from '../components/profile/ProfileHeader';
 import ProfilePosts from '../components/profile/ProfilePosts';
 
 function ProfileContainer() {
-  const profileId = useLocation().pathname.split('/')[1];
+  const profileId = useLocation().pathname.split('/')[2];
 
   const dispatch = useDispatch();
   const bookmarkedId = useSelector(
