@@ -27,19 +27,19 @@ function NavModal({ top, left, favorite, profile, userId }: NavModalProps) {
           {profile && (
             <>
               <li>
-                <Link to={`/${userId}`}>
+                <Link to={`/account/${userId}`}>
                   <CgProfile />
                   <span>프로필</span>
                 </Link>
               </li>
               <li>
-                <Link to={`/${userId}/saved`}>
+                <Link to={`/account/${userId}/saved`}>
                   <BiBookmark />
                   <span>저장됨</span>
                 </Link>
               </li>
               <li>
-                <Link to="/account/edit">
+                <Link to="/edit">
                   <IoIosSettings />
                   <span>설정</span>
                 </Link>

@@ -28,7 +28,7 @@ function OtherPosts({
       <div>
         <dt className="a11y-hidden">user id</dt>
         <dd>
-          <Link to={`/${selectedUserId}`}>{selectedUserId}</Link>{' '}
+          <Link to={`/account/${selectedUserId}`}>{selectedUserId}</Link>{' '}
           <span>님의 게시물 더보기</span>
         </dd>
       </div>

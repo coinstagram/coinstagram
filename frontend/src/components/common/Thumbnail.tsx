@@ -11,10 +11,10 @@ export interface ThumbnailProps {
 function Thumbnail({ imageUrl, size }: ThumbnailProps) {
   return (
     <StyledSpan
+      className="thumbnail thumbnail-click"
       tabIndex={-1}
       imageUrl={imageUrl}
       size={size}
-      className="thumbnail"
     />
   );
 }

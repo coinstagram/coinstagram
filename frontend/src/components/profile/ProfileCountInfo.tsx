@@ -9,7 +9,11 @@ import { StyledDiv } from './ProfileCountInfoStyle';
 interface ProfileCountInfo {
   followers: AnotherUserState[];
   followees: AnotherUserState[];
-  toggleModal: (content?: string) => void;
+  toggleModal: (
+    content?: string,
+    target?: EventTarget,
+    curTarget?: EventTarget,
+  ) => void;
 }
 
 function ProfileCountInfo({
@@ -25,12 +29,12 @@ function ProfileCountInfo({
       <span>
         게시물 <span>{otherPosts.length}</span>
       </span>
-      <button onClick={e => toggleModal('팔로워')}>
+      <button onClick={e => toggleModal('팔로워', e.target, e.currentTarget)}>
         <span tabIndex={-1}>
           팔로워 <span>{followees.length}</span>
         </span>
       </button>
-      <button onClick={e => toggleModal('팔로우')}>
+      <button onClick={e => toggleModal('팔로우', e.target, e.currentTarget)}>
         <span tabIndex={-1}>
           팔로우 <span>{followers.length}</span>
         </span>

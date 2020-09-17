@@ -39,6 +39,7 @@ function RecommendUsersBody({
           userName={user.user_name}
           userProfile={user.user_profile}
           followers={followers}
+          isRecommend={true}
         />
       ))}
     </StyledDiv>
