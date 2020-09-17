@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useWindowWidth from '../../hooks/useWindowWidth';
 import { AnotherUserState } from '../../type';
@@ -13,6 +13,7 @@ import { StyledSection } from './ProfileHeaderStyle';
 import ProfileThumbnail from './ProfileThumbnail';
 import ProfileCountInfo from './ProfileCountInfo';
 import ProfileNameAndInroduce from './ProfileNameAndIntroduce';
+import FollowListModal from './FollowListModal';
 
 interface ProfileHeaderProps {
   profileId: string;
@@ -29,54 +30,83 @@ function ProfileHeader({
   followers,
   followees,
 }: ProfileHeaderProps) {
+  const [state, setState] = useState({
+    modal: false,
+    content: '',
+  });
   const width = useWindowWidth();
 
+  const toggleModal = useCallback(
+    (content?: string) => {
+      setState({
+        modal: !state.modal,
+        content,
+      });
+    },
+    [state],
+  );
+
   return (
-    <StyledSection width={width}>
-      <h3 className="a11y-hidden">{profileId}의 프로필</h3>
-      <ProfileThumbnail />
-      <div className="info-container">
-        <div className="id-container">
-          <div>
-            <dt className="a11y-hidden">user id</dt>
-            <dd>{profileId}</dd>
+    <>
+      <StyledSection width={width}>
+        <h3 className="a11y-hidden">{profileId}의 프로필</h3>
+        <ProfileThumbnail />
+        <div className="info-container">
+          <div className="id-container">
+            <div>
+              <dt className="a11y-hidden">user id</dt>
+              <dd>{profileId}</dd>
+            </div>
+            {width >= 750 && (
+              <Link to="/account/edit">
+                <span tabIndex={-1}>프로필 편집</span>
+              </Link>
+            )}
+            <button>
+              <span tabIndex={-1}>
+                <IoIosSettings />
+              </span>
+            </button>
           </div>
-          {width >= 750 && (
+          {width < 750 && (
             <Link to="/account/edit">
               <span tabIndex={-1}>프로필 편집</span>
             </Link>
           )}
-          <button>
-            <span tabIndex={-1}>
-              <IoIosSettings />
-            </span>
-          </button>
+          {width >= 750 && (
+            <>
+              <ProfileCountInfo
+                followers={followers}
+                followees={followees}
+                toggleModal={toggleModal}
+              />
+              <ProfileNameAndInroduce
+                profileName={profileName}
+                profileIntro={profileIntro}
+              />
+            </>
+          )}
         </div>
         {width < 750 && (
-          <Link to="/account/edit">
-            <span tabIndex={-1}>프로필 편집</span>
-          </Link>
-        )}
-        {width >= 750 && (
           <>
-            <ProfileCountInfo followers={followers} followees={followees} />
             <ProfileNameAndInroduce
               profileName={profileName}
               profileIntro={profileIntro}
             />
+            <ProfileCountInfo
+              followers={followers}
+              followees={followees}
+              toggleModal={toggleModal}
+            />
           </>
         )}
-      </div>
-      {width < 750 && (
-        <>
-          <ProfileNameAndInroduce
-            profileName={profileName}
-            profileIntro={profileIntro}
-          />
-          <ProfileCountInfo followers={followers} followees={followees} />
-        </>
-      )}
-    </StyledSection>
+      </StyledSection>
+      <FollowListModal
+        modal={state.modal}
+        content={state.content}
+        toggleModal={toggleModal}
+      />
+    </>
   );
 }
 

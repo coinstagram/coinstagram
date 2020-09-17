@@ -10,8 +10,7 @@ export const StyledNav = styled.nav`
     align-items: center;
   }
   li + li {
-    margin-left: ${(props: StyledNavProps) =>
-      props.width < 600 ? '15px' : '22px'};
+    margin-left: 22px;
   }
   li {
     height: 25px;

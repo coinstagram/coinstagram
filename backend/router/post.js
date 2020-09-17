@@ -370,10 +370,10 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
       });
       const [test] = await connection.query(sqls);
 
-      const post_id = test.map((foll) => {
+      let post_id = test.map((foll) => {
         try {
           if (foll.length === 0) {
-            return [];
+            return undefined;
           } else {
             return [...foll.map(({ id }) => id)];
           }
@@ -381,11 +381,12 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
           return [foll.id];
         }
       });
-      console.log(post_id.length);
+      post_id = post_id.filter((id) => id !== undefined);
+
       if (post_id.length === 0) {
-        res.json([]);
+        return res.json([]);
       } else {
-        sql = `select image_path from post_image where post_id = ?;`;
+        sql = `select image_path, post_id from post_image where post_id = ?;`;
         sqls = '';
         post_id.map((id) => {
           if (id.length === 0) {
@@ -398,18 +399,23 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
         });
 
         const [image] = await connection.query(sqls);
-
+        let result = [];
         let arr = [];
-        const result = test.filter((el) => el.length !== 0);
+        test.forEach((data) => {
+          result = [...result, ...data];
+        });
+
         if (result.length === 1) {
-          arr.push(result[0]);
+          arr = [...arr, result[0]];
         } else {
-          result.map((res) => arr.push(...res));
+          result.map((res) => {
+            arr = [...arr, res];
+          });
         }
 
         try {
           if (image !== undefined) {
-            for (let i = 0; i < image.length; i++) {
+            for (let i = 0; i < arr.length; i++) {
               let imageitem = image[i].map(({ image_path }) => image_path);
               arr[i] = { ...arr[i], image_path: imageitem };
             }
@@ -418,7 +424,6 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
           let imageitem = image[0].image_path;
           arr[0] = { ...arr[0], image_path: [imageitem] };
         }
-        console.log(arr);
         res.json(arr);
       }
     } catch (error) {
@@ -460,6 +465,7 @@ const upload = multer({
 });
 router.post('/images', verifyToken, upload.array('image'), async (req, res) => {
   console.log('images');
+  console.log(req.files);
   const file = req.files.map(
     ({ path: image_path, mimetype: image_type, originalname: image_name }) => ({
       image_path,

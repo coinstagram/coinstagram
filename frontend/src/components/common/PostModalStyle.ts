@@ -8,7 +8,8 @@ export const StyledBg = styled(StyledDivBg)`
 
 export const StyledModal = styled.div`
   position: absolute;
-  top: calc(50% - 150px);
+  z-index: -1;
+  top: calc(50% - 180px);
   left: calc(50% - 200px);
   background-color: rgb(255, 255, 255);
   border-radius: 12px;
