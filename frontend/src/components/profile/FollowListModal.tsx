@@ -14,17 +14,21 @@ import RecommendUsersInfo from '../recommend/RecommendUsersInfo';
 interface FollowListModalProps {
   modal: boolean;
   content: string;
+  isList?: boolean;
   toggleModal: (
     content?: string,
     target?: EventTarget,
     curTarget?: EventTarget,
   ) => void;
+  popModal: () => void;
 }
 
 function FollowListModal({
   modal,
   content,
+  isList,
   toggleModal,
+  popModal,
 }: FollowListModalProps) {
   const { followers, followees } = useSelector(
     (state: RootState) => state.anotherUserInfo,
@@ -38,41 +42,61 @@ function FollowListModal({
       modal={modal}
       onClick={e => toggleModal('', e.target, e.currentTarget)}
     >
-      <StyledDiv onClick={click} className="followList-modal">
-        <div className="list-header">{content}</div>
-        <div className="list-body">
-          {content === '팔로우' &&
-            followers.map(follower => (
-              <div key={follower.user_id}>
-                <RecommendUsersInfo
-                  size={40}
-                  isAnother={follower.user_id !== myId}
-                  userId={follower.user_id}
-                  userName={follower.user_name}
-                  userProfile={follower.user_profile}
-                  followers={myFollowers}
-                />
-              </div>
-            ))}
-          {content === '팔로워' &&
-            followees.map(followee => (
-              <div key={followee.user_id}>
-                <RecommendUsersInfo
-                  size={40}
-                  isAnother={followee.user_id !== myId}
-                  userId={followee.user_id}
-                  userName={followee.user_name}
-                  userProfile={followee.user_profile}
-                  followers={myFollowers}
-                />
-              </div>
-            ))}
-        </div>
-        <StyledBtn onClick={e => toggleModal('', e.target, e.currentTarget)}>
-          <span tabIndex={-1}>
-            <ImCancelCircle />
-          </span>
-        </StyledBtn>
+      <StyledDiv isList={isList} onClick={click} className="followList-modal">
+        {isList && (
+          <>
+            <div className="list-header">{content}</div>
+            <div className="list-body">
+              {content === '팔로우' &&
+                followers.map(follower => (
+                  <div key={follower.user_id}>
+                    <RecommendUsersInfo
+                      size={40}
+                      isAnother={follower.user_id !== myId}
+                      userId={follower.user_id}
+                      userName={follower.user_name}
+                      userProfile={follower.user_profile}
+                      followers={myFollowers}
+                    />
+                  </div>
+                ))}
+              {content === '팔로워' &&
+                followees.map(followee => (
+                  <div key={followee.user_id}>
+                    <RecommendUsersInfo
+                      size={40}
+                      isAnother={followee.user_id !== myId}
+                      userId={followee.user_id}
+                      userName={followee.user_name}
+                      userProfile={followee.user_profile}
+                      followers={myFollowers}
+                    />
+                  </div>
+                ))}
+            </div>
+            <StyledBtn
+              onClick={e => toggleModal('', e.target, e.currentTarget)}
+            >
+              <span tabIndex={-1}>
+                <ImCancelCircle />
+              </span>
+            </StyledBtn>
+          </>
+        )}
+        {!isList && (
+          <ul onClick={popModal}>
+            <li>
+              <button>
+                <span tabIndex={-1}>로그 아웃</span>
+              </button>
+            </li>
+            <li>
+              <button>
+                <span tabIndex={-1}>닫기</span>
+              </button>
+            </li>
+          </ul>
+        )}
       </StyledDiv>
     </StyledBackground>
   );
@@ -82,5 +106,9 @@ function FollowListModal({
     toggleModal('', e.target, e.currentTarget);
   }
 }
+
+FollowListModal.defaultProps = {
+  isList: false,
+};
 
 export default FollowListModal;
