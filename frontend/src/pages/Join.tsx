@@ -17,7 +17,6 @@ function Join() {
       <StyledJoinWrapper>
         <JoinHeader />
         <JoinContainer />
-        {/* <JoinLoginButton content="가입" /> */}
         <JoinPolicy />
       </StyledJoinWrapper>
       <Link to={'/login'}>
