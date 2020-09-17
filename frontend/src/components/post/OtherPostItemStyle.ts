@@ -10,7 +10,10 @@ export const StyledLi = styled.li`
   }
 
   img {
+    display: inline-block;
     width: 100%;
+    height: 100%;
+    max-height: 309px;
     max-width: 309px;
   }
 `;
