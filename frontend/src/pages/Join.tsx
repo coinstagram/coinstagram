@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import JoinContainer from '../containers/JoinContainer';
 import JoinHeader from '../components/Join/JoinHeader';
 import JoinAppDownload from '../components/Join/JoinAppDownload';
-import JoinAskLogin from '../components/Join/JoinAskLogin';
+import JoinAskLogin from '../components/common_login,join/JoinAskLogin';
 import JoinPolicy from '../components/Join/JoinPolicy';
 import { StyledDiv, StyledJoinWrapper } from '../components/Join/JoinStyle';
 
@@ -14,7 +14,6 @@ function Join() {
       <StyledJoinWrapper>
         <JoinHeader />
         <JoinContainer />
-        {/* <JoinLoginButton content="가입" /> */}
         <JoinPolicy />
       </StyledJoinWrapper>
       <Link to={'/login'}>

@@ -43,18 +43,18 @@ function authReducer(
   switch (action.type) {
     case SIGNIN_START:
       return {
-        ...state,
         loading: true,
+        error: null,
+        token: null,
       };
     case SIGNIN_SUCCESS:
       return {
-        ...state,
         loading: false,
+        error: null,
         token: action.payload,
       };
     case SIGNIN_FAIL:
       return {
-        ...state,
         loading: false,
         error: action.error,
         token: null,
@@ -92,9 +92,8 @@ function* signinRequestSaga(action: SagaActions) {
     if (token) yield put(push('/'));
   } catch (e) {
     yield console.log(e.message);
-
     yield put(signinFail(e));
-    alert('사용자 정보와 일치하지 않습니다');
+    // alert('사용자 정보와 일치하지 않습니다');
   }
 }
 

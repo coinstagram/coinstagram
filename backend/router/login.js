@@ -3,9 +3,7 @@ const express = require('express');
 const pool = require('../config/database');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
 const router = express.Router();
-
 /**
  * login
  * /login
@@ -77,7 +75,6 @@ router.post('/login', async (req, res) => {
       );
       console.log(token);
       res.cookie('access_token', token, { httpOnly: true });
-
       connection.commit();
       await connection.release();
       res.send({ success: true, token });
@@ -93,5 +90,4 @@ router.post('/login', async (req, res) => {
     res.status(500).json('DB CONNECT ERROR');
   }
 });
-
 module.exports = router;

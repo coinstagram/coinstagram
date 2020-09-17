@@ -51,7 +51,7 @@ export const IconWrapper = styled.div`
       color: #4794d9;
     }
     &.check {
-      color: #d5d6d7;
+      color: #0095f6;
     }
   }
 `;

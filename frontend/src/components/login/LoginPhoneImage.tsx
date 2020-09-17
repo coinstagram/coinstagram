@@ -13,6 +13,7 @@ export default function LoginPhoneImage() {
     } else {
       setInterval(setIndex(0), 5000);
     }
+    console.log(index);
     return function cleanup() {
       clearInterval(rotateId);
     };
