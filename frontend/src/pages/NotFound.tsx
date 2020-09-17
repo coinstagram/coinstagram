@@ -1,12 +1,8 @@
 import React from 'react';
-import notFound from '../resource/image/notFound.gif';
+import StyledNotFound from '../components/NotFoundStyle';
 
 function NotFound() {
-  return (
-    <>
-      <img src={notFound} alt="notFound"></img>
-    </>
-  );
+  return <StyledNotFound />;
 }
 
 export default NotFound;
