@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import InputEmail from '../components/common_login,join/InputEmail';
 import InputUserName from '../components/common_login,join/InputUserName';
 import InputUserId from '../components/common_login,join/InputUserId';
 import InputPassword from '../components/common_login,join/InputPassword';
 import JoinLoginButton from '../components/common_login,join/JoinLoginButton';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { signupSagaActionCreator } from '../redux/modules/signup';
+import { SignupState } from '../type';
 
 const StyledForm = styled.form``;
 
