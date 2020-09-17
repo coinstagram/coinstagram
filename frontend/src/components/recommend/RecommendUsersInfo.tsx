@@ -17,6 +17,7 @@ export interface RecommendUserInfoProps {
   userName: null | string;
   userProfile: null | string;
   followers?: AnotherUserState[];
+  isRecommend?: boolean;
 }
 
 function RecommendUsersInfo({
@@ -26,6 +27,7 @@ function RecommendUsersInfo({
   userName,
   userProfile,
   followers,
+  isRecommend,
 }: RecommendUserInfoProps) {
   const history = useHistory();
 
@@ -42,7 +44,7 @@ function RecommendUsersInfo({
         <Thumbnail size={size} imageUrl={userProfile} />
         <div tabIndex={-1}>
           <dt className="a11y-hidden">user id</dt>
-          <dd>{userId}</dd>
+          <dd className="thumbnail-click">{userId}</dd>
         </div>
       </button>
       <StyledDivUsername
@@ -58,11 +60,13 @@ function RecommendUsersInfo({
       </StyledDivUsername>
       {isAnother && (
         <FollowBtn
-          size={size}
+          top={10}
+          right={10}
           userId={userId}
           userName={userName}
           userProfile={userProfile}
           followers={followers}
+          isRecommend={isRecommend}
         />
       )}
     </StyledDiv>
@@ -74,7 +78,7 @@ function RecommendUsersInfo({
   ) {
     rotate(e);
     setTimeout(() => {
-      history.push(`/${user_id}`);
+      history.push(`/account/${user_id}`);
     }, 1500);
   }
 }
@@ -82,6 +86,7 @@ function RecommendUsersInfo({
 RecommendUsersInfo.defaultProps = {
   isAnother: false,
   followers: [],
+  isRecommend: false,
 };
 
 export default React.memo(RecommendUsersInfo);

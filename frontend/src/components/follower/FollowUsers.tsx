@@ -145,7 +145,7 @@ function FollowUsers({ followers, loading, error }: FoolowUsersProps) {
   ) {
     rotate(e);
     setTimeout(() => {
-      history.push(`/${user_id}`);
+      history.push(`/account/${user_id}`);
     }, 1500);
   }
 }
