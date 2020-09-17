@@ -11,6 +11,9 @@ import { BiBookmark } from 'react-icons/bi';
 // components
 import { Link } from 'react-router-dom';
 
+import { logout } from '../../redux/modules/auth';
+import { useDispatch } from 'react-redux';
+
 export interface NavModalProps {
   top: number;
   left: number;
@@ -20,6 +23,12 @@ export interface NavModalProps {
 }
 
 function NavModal({ top, left, favorite, profile, userId }: NavModalProps) {
+  const dispatch = useDispatch();
+  const onLogout = () => {
+    dispatch(logout());
+    localStorage.removeItem('access_token');
+  };
+
   return (
     <StyledDivBg>
       <StyledModal top={top} left={left}>
@@ -44,7 +53,7 @@ function NavModal({ top, left, favorite, profile, userId }: NavModalProps) {
                   <span>설정</span>
                 </Link>
               </li>
-              <li>
+              <li onClick={onLogout}>
                 <Link to="/">로그아웃</Link>
               </li>
             </>
