@@ -2,7 +2,8 @@ import styled from 'styled-components';
 
 export const StyledDiv = styled.div`
   width: 350px;
-  margin: 0 auto;
+  margin: 10vh auto 0;
+  margin-top: 100px;
 `;
 export const StyledJoinWrapper = styled.div`
   width: 100%;

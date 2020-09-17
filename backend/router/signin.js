@@ -35,7 +35,7 @@ router.post('/signin/email', async (req, res) => {
       await connection.rollback(); // ROLLBACK
       await connection.release();
       console.log(error);
-      res.status(500).json({ error: error.toString() });
+      res.status(503).json({ error: error.toString() });
     } finally {
       await connection.release();
     }
@@ -76,7 +76,7 @@ router.post('/signin/phone', async (req, res) => {
       await connection.rollback(); // ROLLBACK
       await connection.release();
       console.log(error);
-      res.status(500).json({ error: error.toString() });
+      res.status(503).json({ error: error.toString() });
     }
   } catch (error) {
     res.status(500).json('DB CONNECT ERROR');

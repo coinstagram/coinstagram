@@ -91,7 +91,7 @@ function* signupRequestSaga(action: SagaActions) {
     if (result) yield put(push('/login'));
   } catch (e) {
     yield put(signupFail(e));
-    alert('기존에 있는 사용자ID입니다. 다른 ID를 입력해주세요');
+    // alert('기존에 있는 사용자ID입니다. 다른 ID를 입력해주세요');
   }
 }
 
