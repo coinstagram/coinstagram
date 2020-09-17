@@ -10,6 +10,7 @@ import { push } from 'connected-react-router';
 const SIGNIN_START = 'coinstagram/auth/SIGNIN_START' as const;
 const SIGNIN_SUCCESS = 'coinstagram/auth/SIGNIN_SUCCESS' as const;
 const SIGNIN_FAIL = 'coinstagram/auth/SIGNIN_FAIL' as const;
+const LOG_OUT = 'coinstagram/auth/LOG_OUT' as const;
 
 // action creator
 export const signinStart = () => ({
@@ -23,11 +24,15 @@ const signinFail = (error: AxiosError) => ({
   type: SIGNIN_FAIL,
   error,
 });
+export const logout = () => ({
+  type: LOG_OUT,
+});
 
 type AuthActions =
   | ReturnType<typeof signinStart>
   | ReturnType<typeof signinSuccess>
-  | ReturnType<typeof signinFail>;
+  | ReturnType<typeof signinFail>
+  | ReturnType<typeof logout>;
 
 const initialState: AuthState = {
   loading: false,
@@ -43,22 +48,24 @@ function authReducer(
   switch (action.type) {
     case SIGNIN_START:
       return {
-        ...state,
         loading: true,
+        error: null,
+        token: null,
       };
     case SIGNIN_SUCCESS:
       return {
-        ...state,
         loading: false,
+        error: null,
         token: action.payload,
       };
     case SIGNIN_FAIL:
       return {
-        ...state,
         loading: false,
         error: action.error,
         token: null,
       };
+    case LOG_OUT:
+      return initialState;
     default:
       return state;
   }
@@ -92,9 +99,7 @@ function* signinRequestSaga(action: SagaActions) {
     if (token) yield put(push('/'));
   } catch (e) {
     yield console.log(e.message);
-
     yield put(signinFail(e));
-    alert('사용자 정보와 일치하지 않습니다');
   }
 }
 

@@ -9,10 +9,7 @@ import Thumbnail from '../common/Thumbnail';
 import uploadService from '../../redux/services/uploadService';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import RootState from '../../type';
-import {
-  changeUserProfile,
-  CHANGE_USER_PROFILE,
-} from '../../redux/modules/userInfo';
+import { changeUserProfile } from '../../redux/modules/userInfo';
 
 function ProfileThumbnail() {
   const width = useWindowWidth();

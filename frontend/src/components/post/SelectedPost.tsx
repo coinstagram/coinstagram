@@ -16,7 +16,6 @@ import FeedIcons from '../feed/FeedIcons';
 import FeedCommentOwner from '../feed/FeedCommentOwner';
 import FeedCommentList from '../feed/FeedCommentList';
 import FeedAddComment from '../feed/FeedAddComment';
-import FollowCancelModal from '../common/FollowCancelModal';
 import PostModal from '../common/PostModal';
 
 interface SelectedPostProps {
@@ -66,9 +65,7 @@ function SelectedPost({
       ? selectedPost.selectedPost.image_path
       : [];
 
-  const { postModal, followModal, popPostModal, popFollowModal } = useContext(
-    ModalContext,
-  );
+  const { postModal, popPostModal, popFollowModal } = useContext(ModalContext);
 
   const width = useWindowWidth();
 
@@ -140,14 +137,6 @@ function SelectedPost({
           />
         </div>
       </StyledArticle>
-      {followModal && (
-        <FollowCancelModal
-          user_id={selectedUserId}
-          user_profile={selectedUserProfile}
-          cancelFollow={cancelFollow}
-          popFollowModal={popFollowModal}
-        />
-      )}
       {postModal && (
         <PostModal
           popPostModal={popPostModal}

@@ -1,10 +1,9 @@
 import styled from 'styled-components';
-import { FollowBtnProps } from './FollowBtn';
 
 export const StyledButton = styled.button`
   position: absolute;
-  right: ${props => (props.isheader ? 50 : 10)};
-  top: ${({ size }: FollowBtnProps) => `${size / 5}`};
+  right: ${props => props.right};
+  top: ${props => props.top};
 
   color: rgb(0, 149, 246);
   font-weight: bold;

@@ -48,7 +48,6 @@ function FollowCancelModal({
   function toggleFollowModal({
     target,
   }: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    console.log(target);
     const clickEl = target as Element;
     if (
       !clickEl.matches('.modal-container') &&

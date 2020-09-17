@@ -40,3 +40,14 @@ export const StyledDiv = styled(StyledModal)`
     }
   }
 `;
+
+export const StyledBtn = styled.button`
+  position: absolute;
+  padding: 3px;
+  top: 12px;
+  right: 15px;
+  span {
+    outline: none;
+    font-size: 20px;
+  }
+`;

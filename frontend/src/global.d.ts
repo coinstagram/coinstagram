@@ -16,8 +16,10 @@ declare module 'react' {
     createdTime?: string;
     viewTime?: boolean;
     header?: boolean;
-    isheader?: boolean;
     page?: string;
     modal?: boolean;
+    isRecommend?: boolean;
+    top?: number;
+    right?: number;
   }
 }

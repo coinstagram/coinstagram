@@ -5,12 +5,12 @@ import FadeLoader from 'react-spinners/FadeLoader';
 import { StyledDiv } from './SpinnerStyle';
 
 interface SpinnerProps {
-  isheader?: boolean;
+  isRecommend?: boolean;
 }
 
-function Spinner({ isheader }: SpinnerProps) {
+function Spinner({ isRecommend }: SpinnerProps) {
   return (
-    <StyledDiv isheader={isheader}>
+    <StyledDiv isRecommend={isRecommend}>
       <FadeLoader color={'grey'} loading={true} />
     </StyledDiv>
   );
