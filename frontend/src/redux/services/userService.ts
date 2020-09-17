@@ -22,7 +22,6 @@ const UserService: IUserService = class {
         Authorization: `Bearer ${token}`,
       },
     });
-
     return res.data;
   }
 

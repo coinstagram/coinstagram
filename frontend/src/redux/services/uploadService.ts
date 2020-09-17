@@ -36,14 +36,11 @@ const uploadService = class {
   }
 
   static async uploadImageView(files: FileList, token: String) {
-    console.log(files);
-
     if (files !== null) {
       const fd = new FormData();
       [].forEach.call(files, (f: File) => {
         fd.append('image', f);
       });
-      let token = localStorage.getItem('access_token');
 
       const res = await axios.post(`images`, fd, {
         headers: {
@@ -52,6 +49,24 @@ const uploadService = class {
       });
       return res.data;
     }
+  }
+
+  static async UserProFile(file: File, token: string | null) {
+    const fd = new FormData();
+    fd.append('user-profile', file);
+    const res = await axios.post(`image`, fd, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    await axios.patch(`user/image`, [{ image: res.data.image_path }], {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return res.data.image_path;
   }
 };
 

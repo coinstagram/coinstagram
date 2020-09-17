@@ -9,6 +9,10 @@ export interface ThumbnailProps {
 }
 
 function Thumbnail({ imageUrl, size }: ThumbnailProps) {
+  if (imageUrl !== null) {
+    imageUrl = imageUrl.split('\\')[1];
+  }
+
   return (
     <StyledSpan
       tabIndex={-1}

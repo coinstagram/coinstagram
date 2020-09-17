@@ -18,6 +18,7 @@ import ProfilePosts from '../components/profile/ProfilePosts';
 
 function ProfileContainer() {
   const profileId = useLocation().pathname.split('/')[1];
+
   const dispatch = useDispatch();
   const bookmarkedId = useSelector(
     (state: RootState) => state.bookmarks.bookmarks,
