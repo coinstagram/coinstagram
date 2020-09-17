@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import useWindowWidth from '../../hooks/useWindowWidth';
 
 // styles
 import { StyledButton, StyledNav } from './NavigationStyle';
@@ -32,7 +31,6 @@ interface NavigationProps {
 }
 
 function Navigation({ imageUrl, userId }: NavigationProps) {
-  const width = useWindowWidth();
   const page = useLocation().pathname.split('/')[1];
   const [state, setState] = useState<State>({
     favorite: false,
@@ -42,7 +40,7 @@ function Navigation({ imageUrl, userId }: NavigationProps) {
   const left = useRef<number>(0);
 
   return (
-    <StyledNav width={width}>
+    <StyledNav>
       <h2 id="nav-heading" className="a11y-hidden">
         메인 메뉴
       </h2>

@@ -43,7 +43,6 @@ const PostService: IPostService = class {
       },
     );
 
-    console.log('getFollowersPosts', res.data);
     return res.data;
   }
 
@@ -54,7 +53,6 @@ const PostService: IPostService = class {
       },
     });
 
-    console.log('getUserPosts', res.data);
     return res.data;
   }
 

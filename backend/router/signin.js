@@ -69,6 +69,7 @@ router.post('/signin/phone', async (req, res) => {
         user_name,
         user_phone,
       ]);
+
       connection.commit();
       await connection.release();
       res.send({ success: true });

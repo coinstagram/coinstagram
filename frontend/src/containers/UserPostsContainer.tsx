@@ -3,11 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import RootState from '../type';
 import { useLocation } from 'react-router-dom';
 import { getAnotherUserSaga } from '../redux/modules/anotherUser';
-import {
-  getUserPostsSaga,
-  getSelectedPostSaga,
-  deletePostSaga,
-} from '../redux/modules/post';
+import { getSelectedPostSaga, deletePostSaga } from '../redux/modules/post';
 import { getPostComments, addPostComment } from '../redux/modules/comment';
 import {
   cancelFollowUserSaga,
@@ -44,7 +40,7 @@ function UserPostsContainer() {
   const selectedUserProfile = user && user.user_profile;
   const selectedPostId = +useLocation().pathname.split('/')[2];
 
-  useEffect(() => {
+  const getSelectedPostInfo = useCallback(() => {
     dispatch(getSelectedPostSaga(selectedPostId));
   }, [dispatch, selectedPostId]);
 
@@ -52,10 +48,6 @@ function UserPostsContainer() {
     if (!user_id) return;
     dispatch(getAnotherUserSaga(user_id));
   }, [dispatch, user_id]);
-
-  const getUserPosts = useCallback(() => {
-    dispatch(getUserPostsSaga(selectedUserId));
-  }, [dispatch, selectedUserId]);
 
   const getCommentsPost = useCallback(() => {
     dispatch(getPostComments(selectedPostId));
@@ -144,7 +136,7 @@ function UserPostsContainer() {
         selectedUserId={selectedUserId}
         selectedUserProfile={selectedUserProfile}
         selectedPostId={selectedPostId}
-        getUserPosts={getUserPosts}
+        getSelectedPostInfo={getSelectedPostInfo}
         getCommentsPost={getCommentsPost}
         addCommentPost={addCommentPost}
         getPostLikes={getPostLikes}
