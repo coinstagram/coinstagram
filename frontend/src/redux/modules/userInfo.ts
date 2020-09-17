@@ -83,6 +83,16 @@ const failFollowUser = (error: Error) => ({
   payload: error,
 });
 
+//test -------------------------------------------------------------------
+export const CHANGE_USER_PROFILE = 'CHANGE_USER_PROFILE' as const;
+export const changeUserProfile = (user_profile: string | null) => ({
+  type: CHANGE_USER_PROFILE,
+  payload: {
+    user_profile,
+  },
+});
+//testEnd -------------------------------------------------------------------
+
 type UserActions =
   | ReturnType<typeof startGetUserInfo>
   | ReturnType<typeof successGetUserInfo>
@@ -93,7 +103,8 @@ type UserActions =
   | ReturnType<typeof startFollowUser>
   | ReturnType<typeof followUser>
   | ReturnType<typeof cancelFollowUser>
-  | ReturnType<typeof failFollowUser>;
+  | ReturnType<typeof failFollowUser>
+  | ReturnType<typeof changeUserProfile>;
 
 // saga action type
 const GET_USERINFO_SAGA = 'GET_USERINFO_SAGA' as const;
@@ -223,6 +234,22 @@ function userInfoReducer(
   action: UserActions,
 ): UserInfoState {
   switch (action.type) {
+    case CHANGE_USER_PROFILE:
+      return {
+        loading: true,
+        error: null,
+        user: {
+          ...state.user,
+          ...action.payload,
+        },
+        followers: {
+          loading: true,
+          error: null,
+          users: [],
+        },
+        followees: [],
+        randomUsers: state.randomUsers,
+      };
     case START_GET_USERINFO:
       return {
         loading: true,

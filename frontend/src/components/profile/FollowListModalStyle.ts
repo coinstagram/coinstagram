@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { StyledBg, StyledModal } from '../common/PostModalStyle';
 
 export const StyledBackground = styled(StyledBg)`
@@ -7,13 +7,8 @@ export const StyledBackground = styled(StyledBg)`
 
 export const StyledDiv = styled(StyledModal)`
   width: 400px;
-
-  ${props =>
-    props.isList &&
-    css`
-      height: 300px;
-      box-sizing: border-box;
-    `}
+  height: 300px;
+  box-sizing: border-box;
 
   .list-header {
     padding: 15px;

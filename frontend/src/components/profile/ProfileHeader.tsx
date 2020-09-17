@@ -32,7 +32,6 @@ function ProfileHeader({
 }: ProfileHeaderProps) {
   const [state, setState] = useState({
     modal: false,
-    isList: true,
     content: '',
   });
   const width = useWindowWidth();
@@ -48,7 +47,6 @@ function ProfileHeader({
       ) {
         setTimeout(() => {
           setState({
-            ...state,
             modal: false,
             content,
           });
@@ -60,7 +58,6 @@ function ProfileHeader({
 
       setState({
         modal: !state.modal,
-        isList: true,
         content,
       });
     },
@@ -84,7 +81,7 @@ function ProfileHeader({
               </Link>
             )}
             <button>
-              <span tabIndex={-1} onClick={popModal}>
+              <span tabIndex={-1}>
                 <IoIosSettings />
               </span>
             </button>
@@ -125,20 +122,10 @@ function ProfileHeader({
       <FollowListModal
         modal={state.modal}
         content={state.content}
-        isList={state.isList}
         toggleModal={toggleModal}
-        popModal={popModal}
       />
     </>
   );
-
-  function popModal() {
-    setState({
-      ...state,
-      modal: !state.modal,
-      isList: false,
-    });
-  }
 }
 
 export default ProfileHeader;
