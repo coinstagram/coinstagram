@@ -7,11 +7,8 @@ import JoinAppDownload from '../components/Join/JoinAppDownload';
 import JoinAskLogin from '../components/Join/JoinAskLogin';
 import JoinPolicy from '../components/Join/JoinPolicy';
 import { StyledDiv, StyledJoinWrapper } from '../components/Join/JoinStyle';
-import useAuth from '../hooks/useAuth';
 
 function Join() {
-  // useAuth();
-
   return (
     <StyledDiv>
       <StyledJoinWrapper>

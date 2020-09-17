@@ -2,6 +2,10 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
 import RootState from '../../type';
+import useWindowWidth from '../../hooks/useWindowWidth';
+
+// icons
+import { BsCardImage, BsTag, BsBookmarks } from 'react-icons/bs';
 
 // styles
 import { StyledSection } from './ProfilePostsStyle';
@@ -29,6 +33,7 @@ function ProfilePosts({
   const { bookmarkPosts } = useSelector(
     (state: RootState) => state.bookmarks.bookmarkPosts,
   );
+  const width = useWindowWidth();
 
   useEffect(() => {
     if (profileId !== myId) return;
@@ -38,21 +43,25 @@ function ProfilePosts({
   }, [getBookmarkPosts, bookmarkedId, myId, profileId]);
 
   return (
-    <StyledSection>
+    <StyledSection width={width}>
       <div>
         <ul>
           <li>
             <NavLink to={`/${profileId}`} exact>
-              게시물
+              {width < 750 ? <BsCardImage /> : '게시물'}
             </NavLink>
           </li>
           {profileId === myId && (
             <li>
-              <NavLink to={`/${profileId}/saved`}>저장됨</NavLink>
+              <NavLink to={`/${profileId}/saved`}>
+                {width < 750 ? <BsBookmarks /> : '저장됨'}
+              </NavLink>
             </li>
           )}
           <li>
-            <NavLink to={`/${profileId}/tagged`}>태그됨</NavLink>
+            <NavLink to={`/${profileId}/tagged`}>
+              {width < 750 ? <BsTag /> : '태그됨'}
+            </NavLink>
           </li>
         </ul>
       </div>

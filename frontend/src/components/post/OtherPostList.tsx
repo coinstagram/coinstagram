@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import useWindowWidth from '../../hooks/useWindowWidth';
 import RootState from '../../type';
+import { useLocation } from 'react-router-dom';
 
 // styles
 import { StyledDiv } from './OtherPostListStyle';
@@ -16,10 +17,12 @@ interface OtherPostListProps {
 function OtherPostList({ getPostCounts }: OtherPostListProps) {
   const width = useWindowWidth();
   const { otherPosts } = useSelector((state: RootState) => state.otherPosts);
+  const selectedPostId = +useLocation().pathname.split('/')[2];
+  const exceptThisPosts = otherPosts.filter(post => post.id !== selectedPostId);
   return (
     <StyledDiv width={width}>
       <ul>
-        {otherPosts.map(post => (
+        {exceptThisPosts.map(post => (
           <OtherPostItem
             key={post.id}
             postId={post.id}

@@ -1,10 +1,8 @@
 import { createReducer, createAction, ActionType } from 'typesafe-actions';
-import { AuthState, imageState } from '../../type';
-import { select, put, call, takeEvery, getContext } from 'redux-saga/effects';
+import { AuthState } from '../../type';
+import { select, put, call, takeEvery } from 'redux-saga/effects';
 import RootState from '../../type';
-import axios from 'axios';
 import uploadService from '../services/uploadService';
-import { history } from '../create';
 import { push } from 'connected-react-router';
 
 // 타입설정

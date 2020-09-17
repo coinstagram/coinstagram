@@ -1,4 +1,4 @@
-import styled, { ThemedStyledFunction } from 'styled-components';
+import styled from 'styled-components';
 
 interface ITest {
   change: (event: React.ChangeEvent<HTMLButtonElement>) => void;

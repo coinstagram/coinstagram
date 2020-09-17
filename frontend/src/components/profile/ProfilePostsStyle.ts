@@ -1,28 +1,43 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const StyledSection = styled.section`
-  margin-top: 45px;
   border-top: 1px solid rgb(219, 219, 219);
 
-  .active::before {
-    content: '';
-    display: block;
-    height: 1px;
-    background-color: rgb(0, 0, 0);
+  .active {
+    color: rgb(50, 50, 50);
+
+    ${props =>
+      props.width >= 750 &&
+      css`
+        &::before {
+          content: '';
+          display: block;
+          height: 1.5px;
+          background-color: rgb(50, 50, 50);
+        }
+      `}
   }
 
   div {
     text-align: center;
     ul {
-      display: inline-flex;
-
+      margin: 0 auto;
+      display: flex;
+      width: ${props => (props.width < 750 ? 100 : 50)}%;
+      justify-content: space-around;
       a {
         line-height: 52px;
-      }
-    }
+        color: rgb(142, 142, 142);
 
-    li + li {
-      margin-left: 60px;
+        svg {
+          height: 52px;
+          font-size: 30px;
+        }
+
+        &.active svg {
+          color: rgb(34, 139, 230);
+        }
+      }
     }
   }
 `;

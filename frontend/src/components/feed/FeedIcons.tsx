@@ -64,22 +64,19 @@ function FeedIcons({
   useEffect(() => {
     const isBookmarked = bookmarks.some(post => post === postId);
 
-    if (!isBookmarked) return;
-
     setState(st => ({
       ...st,
-      favorite: true,
+      favorite: isBookmarked,
     }));
   }, [bookmarks, postId]);
 
   useEffect(() => {
     const isLiked =
       postLikesInfo && postLikesInfo.user_id.some(userId => userId === myId);
-    if (!isLiked) return;
 
     setState(st => ({
       ...st,
-      like: true,
+      like: isLiked,
     }));
   }, [postLikesInfo, myId]);
 
