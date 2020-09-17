@@ -370,10 +370,10 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
       });
       const [test] = await connection.query(sqls);
 
-      const post_id = test.map((foll) => {
+      let post_id = test.map((foll) => {
         try {
           if (foll.length === 0) {
-            return [];
+            return undefined;
           } else {
             return [...foll.map(({ id }) => id)];
           }
@@ -381,8 +381,10 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
           return [foll.id];
         }
       });
+      post_id = post_id.filter((id) => id !== undefined);
+
       if (post_id.length === 0) {
-        res.json([]);
+        return res.json([]);
       } else {
         sql = `select image_path, post_id from post_image where post_id = ?;`;
         sqls = '';
@@ -395,6 +397,7 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
             });
           }
         });
+
         const [image] = await connection.query(sqls);
         let result = [];
         let arr = [];
@@ -403,7 +406,7 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
         });
 
         if (result.length === 1) {
-          arr = [...arr, ...result[0]];
+          arr = [...arr, result[0]];
         } else {
           result.map((res) => {
             arr = [...arr, res];
