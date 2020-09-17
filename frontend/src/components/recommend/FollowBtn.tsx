@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { AnotherUserState } from '../../type';
-import { followContext } from '../HomeMain';
+import { followContext } from '../../App';
 import { ModalContext } from '../../App';
 
 // styles
@@ -10,42 +10,38 @@ import { StyledButton } from './FollowBtnStyle';
 import Spinner from '../common/Spinner';
 
 export interface FollowBtnProps {
-  size: number;
+  top?: number;
+  right?: number;
   userId: string | null;
   userName: string | null;
   userProfile: string | null;
   followers?: AnotherUserState[];
-  isheader?: boolean;
+  isRecommend?: boolean;
 }
 
 function FollowBtn({
-  size,
+  top,
+  right,
   userId,
   userName,
   userProfile,
   followers = [],
-  isheader,
+  isRecommend,
 }: FollowBtnProps) {
   const value = useContext(followContext);
   const { popFollowModal } = useContext(ModalContext);
 
   return (
     <>
-      <StyledButton
-        size={size}
-        userId={userId}
-        userName={userName}
-        userProfile={userProfile}
-        isheader={isheader}
-      >
+      <StyledButton top={top} right={right} isRecommend={isRecommend}>
         {followers.some(follower => follower.user_id === userId) ? (
           <span tabIndex={-1} className="follow-cancel" onClick={cancelFollow}>
-            <Spinner isheader={isheader} />
+            <Spinner isRecommend={isRecommend} />
             <span>팔로잉</span>
           </span>
         ) : (
           <span tabIndex={-1} className="follow" onClick={postFollow}>
-            <Spinner isheader={isheader} />
+            <Spinner isRecommend={isRecommend} />
             <span>팔로우</span>
           </span>
         )}

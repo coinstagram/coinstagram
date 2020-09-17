@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import { ModalContext } from '../../App';
-import { followContext } from '../HomeMain';
+import { followContext } from '../../App';
 import { Link, useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import RootState from '../../type';
@@ -75,12 +75,12 @@ function FeedHeader({
       </Link>
       {userId !== myId && (
         <FollowBtn
-          size={120}
+          top={23}
+          right={50}
           userId={userId}
           userName={undefined}
           userProfile={profileRef.current}
           followers={followersInfo}
-          isheader={true}
         />
       )}
       <StyledBtn onClick={setModal}>
@@ -93,7 +93,7 @@ function FeedHeader({
 
   function pageMove() {
     setTimeout(() => {
-      history.push(`/${userId}`);
+      history.push(`/account/${userId}`);
     }, 1000);
   }
 
@@ -106,9 +106,5 @@ function FeedHeader({
     setFollowInfo(userId, profile, null);
   }
 }
-
-FeedHeader.defaultProps = {
-  // userProfile:
-};
 
 export default React.memo(FeedHeader);

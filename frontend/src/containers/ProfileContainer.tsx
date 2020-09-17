@@ -17,7 +17,7 @@ import ProfileHeader from '../components/profile/ProfileHeader';
 import ProfilePosts from '../components/profile/ProfilePosts';
 
 function ProfileContainer() {
-  const profileId = useLocation().pathname.split('/')[1];
+  const profileId = useLocation().pathname.split('/')[2];
   const dispatch = useDispatch();
   const bookmarkedId = useSelector(
     (state: RootState) => state.bookmarks.bookmarks,
@@ -25,8 +25,10 @@ function ProfileContainer() {
   const { user, followers, followees } = useSelector(
     (state: RootState) => state.anotherUserInfo,
   );
-  const myInfo = useSelector((state: RootState) => state.userInfo.user);
-  const myId = myInfo && myInfo.user_id;
+  const { userInfo } = useSelector((state: RootState) => state);
+  const myId = userInfo.user && userInfo.user.user_id;
+  const myFollowers = userInfo.followers.users;
+  const myFollowees = userInfo.followees;
   const profileName = user && user.user_name;
   const profileIntro = user && user.user_introduce;
 
@@ -63,8 +65,8 @@ function ProfileContainer() {
         profileId={profileId}
         profileName={profileName}
         profileIntro={profileIntro}
-        followers={followers}
-        followees={followees}
+        followers={myId === profileId ? myFollowers : followers}
+        followees={myId === profileId ? myFollowees : followees}
       />
       <ProfilePosts
         profileId={profileId}

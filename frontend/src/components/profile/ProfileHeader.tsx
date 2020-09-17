@@ -37,7 +37,25 @@ function ProfileHeader({
   const width = useWindowWidth();
 
   const toggleModal = useCallback(
-    (content?: string) => {
+    (content?: string, target?: EventTarget, curTarget?: EventTarget) => {
+      const targetEl = target as Element;
+      const curTargetEl = curTarget as Element;
+
+      if (
+        targetEl.classList.contains('thumbnail-click') &&
+        curTargetEl.classList.contains('followList-modal')
+      ) {
+        setTimeout(() => {
+          setState({
+            modal: false,
+            content,
+          });
+        }, 1400);
+        return;
+      }
+
+      if (curTargetEl.classList.contains('followList-modal')) return;
+
       setState({
         modal: !state.modal,
         content,
@@ -58,7 +76,7 @@ function ProfileHeader({
               <dd>{profileId}</dd>
             </div>
             {width >= 750 && (
-              <Link to="/account/edit">
+              <Link to="/edit">
                 <span tabIndex={-1}>프로필 편집</span>
               </Link>
             )}
@@ -69,7 +87,7 @@ function ProfileHeader({
             </button>
           </div>
           {width < 750 && (
-            <Link to="/account/edit">
+            <Link to="/edit">
               <span tabIndex={-1}>프로필 편집</span>
             </Link>
           )}
