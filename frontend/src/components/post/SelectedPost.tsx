@@ -60,10 +60,9 @@ function SelectedPost({
 
   const selectedPostInfo = selectedPost.selectedPost;
 
-  const selectedPostImages =
-    selectedPost.selectedPost !== null
-      ? selectedPost.selectedPost.image_path
-      : [];
+  const selectedPostImages = selectedPost.selectedPost !== null ? selectedPost.selectedPost.image_path : [];
+
+  console.log(selectedPostImages);
 
   const { postModal, popPostModal, popFollowModal } = useContext(ModalContext);
 
@@ -106,13 +105,7 @@ function SelectedPost({
               createdTime={selectedPostInfo && selectedPostInfo.created_at}
               thumbnail={true}
             />
-            <FeedCommentList
-              postId={selectedPostId}
-              getCommentsPost={getCommentsPost}
-              visual={true}
-              viewTime={true}
-              thumbnail={true}
-            />
+            <FeedCommentList postId={selectedPostId} getCommentsPost={getCommentsPost} visual={true} viewTime={true} thumbnail={true} />
           </StyledDiv>
           <FeedIcons
             myId={user_id}
@@ -124,17 +117,10 @@ function SelectedPost({
             addBookmark={addBookmark}
             deleteBookmark={deleteBookmark}
           />
-          <StyledPassedTimeDiv
-            className={`${selectedPostId}-createdTime`}
-            marginLeft={true}
-          >
+          <StyledPassedTimeDiv className={`${selectedPostId}-createdTime`} marginLeft={true}>
             {computePassedTime(selectedPostInfo && selectedPostInfo.created_at)}
           </StyledPassedTimeDiv>
-          <FeedAddComment
-            userId={selectedUserId}
-            postId={selectedPostId}
-            addCommentPost={addCommentPost}
-          />
+          <FeedAddComment userId={selectedUserId} postId={selectedPostId} addCommentPost={addCommentPost} />
         </div>
       </StyledArticle>
       {postModal && (

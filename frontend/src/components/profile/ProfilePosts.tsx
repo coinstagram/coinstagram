@@ -8,7 +8,8 @@ import useWindowWidth from '../../hooks/useWindowWidth';
 import { BsCardImage, BsTag, BsBookmarks } from 'react-icons/bs';
 
 // styles
-import { StyledSection } from './ProfilePostsStyle';
+import { StyledSection, StyledNavDiv } from './ProfilePostsStyle';
+import { StyledDiv } from '../post/OtherPostListStyle';
 
 // components
 import OtherPostItem from '../post/OtherPostItem';
@@ -21,18 +22,10 @@ interface ProfilePostsProps {
   getPostCounts: (post_id: number) => void;
 }
 
-function ProfilePosts({
-  profileId,
-  myId,
-  bookmarkedId,
-  getPostCounts,
-  getBookmarkPosts,
-}: ProfilePostsProps) {
+function ProfilePosts({ profileId, myId, bookmarkedId, getPostCounts, getBookmarkPosts }: ProfilePostsProps) {
   const pageName = useLocation().pathname.split('/')[3];
   const { otherPosts } = useSelector((state: RootState) => state.otherPosts);
-  const { bookmarkPosts } = useSelector(
-    (state: RootState) => state.bookmarks.bookmarkPosts,
-  );
+  const { bookmarkPosts } = useSelector((state: RootState) => state.bookmarks.bookmarkPosts);
   const width = useWindowWidth();
 
   useEffect(() => {
@@ -44,7 +37,7 @@ function ProfilePosts({
 
   return (
     <StyledSection width={width}>
-      <div>
+      <StyledNavDiv width={width}>
         <ul>
           <li>
             <NavLink to={`/account/${profileId}`} exact>
@@ -53,22 +46,16 @@ function ProfilePosts({
           </li>
           {profileId === myId && (
             <li>
-              <NavLink to={`/account/${profileId}/saved`}>
-                {width < 750 ? <BsBookmarks /> : '저장됨'}
-              </NavLink>
+              <NavLink to={`/account/${profileId}/saved`}>{width < 750 ? <BsBookmarks /> : '저장됨'}</NavLink>
             </li>
           )}
           <li>
-            <NavLink to={`/account/${profileId}/tagged`}>
-              {width < 750 ? <BsTag /> : '태그됨'}
-            </NavLink>
+            <NavLink to={`/account/${profileId}/tagged`}>{width < 750 ? <BsTag /> : '태그됨'}</NavLink>
           </li>
         </ul>
-      </div>
-      <div>
-        {pageName === undefined && otherPosts.length === 0 && (
-          <div>@{profileId}님이 업로드하신 게시물이 없습니다.</div>
-        )}
+      </StyledNavDiv>
+      <StyledDiv width={width}>
+        {pageName === undefined && otherPosts.length === 0 && <div>@{profileId}님이 업로드하신 게시물이 없습니다.</div>}
         {pageName === undefined && (
           <ul>
             {otherPosts.map(post => (
@@ -96,7 +83,7 @@ function ProfilePosts({
           </ul>
         )}
         {pageName === 'tagged' && '태그된 게시물 뷰'}
-      </div>
+      </StyledDiv>
     </StyledSection>
   );
 }

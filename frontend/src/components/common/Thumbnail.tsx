@@ -9,7 +9,7 @@ export interface ThumbnailProps {
 }
 
 function Thumbnail({ imageUrl, size }: ThumbnailProps) {
-  if (imageUrl !== null) {
+  if (imageUrl !== null && imageUrl !== undefined) {
     if (imageUrl.split('\\')[1] !== undefined) {
       imageUrl = imageUrl.split('\\')[1];
     } else if (imageUrl.split('/')[1] !== undefined) {
@@ -17,14 +17,7 @@ function Thumbnail({ imageUrl, size }: ThumbnailProps) {
     }
   }
 
-  return (
-    <StyledSpan
-      className="thumbnail thumbnail-click"
-      tabIndex={-1}
-      imageUrl={imageUrl}
-      size={size}
-    />
-  );
+  return <StyledSpan className="thumbnail thumbnail-click" tabIndex={-1} imageUrl={imageUrl} size={size} />;
 }
 
 export default React.memo(Thumbnail);

@@ -19,17 +19,13 @@ function OtherPostList({ getPostCounts }: OtherPostListProps) {
   const { otherPosts } = useSelector((state: RootState) => state.otherPosts);
   const selectedPostId = +useLocation().pathname.split('/')[2];
   const exceptThisPosts = otherPosts.filter(post => post.id !== selectedPostId);
+  const latestSixPosts = exceptThisPosts.filter((_, i) => i < 6);
+
   return (
     <StyledDiv width={width}>
       <ul>
-        {exceptThisPosts.map(post => (
-          <OtherPostItem
-            key={post.id}
-            postId={post.id}
-            postOwnerId={post.user_id}
-            imageThumbnail={post.image_path}
-            getPostCounts={getPostCounts}
-          />
+        {latestSixPosts.map(post => (
+          <OtherPostItem key={post.id} postId={post.id} postOwnerId={post.user_id} imageThumbnail={post.image_path} getPostCounts={getPostCounts} />
         ))}
       </ul>
     </StyledDiv>

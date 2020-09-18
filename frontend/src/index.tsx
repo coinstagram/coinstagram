@@ -5,8 +5,9 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import create from './redux/create';
+import TokenService from './redux/services/tokenService';
 
-const token = localStorage.getItem('access_token');
+const token = TokenService.get();
 const store = create(token);
 
 ReactDOM.render(

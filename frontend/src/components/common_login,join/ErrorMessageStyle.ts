@@ -6,6 +6,9 @@ export const StyledDiv = styled.div`
   position: relative;
   border-radius: 5px;
   padding: 3px 0;
+  max-width: 400px;
+  margin: auto;
+  margin-top: 20px;
   &::before {
     content: '';
     position: absolute;

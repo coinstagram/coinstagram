@@ -23,6 +23,15 @@ export const StyledDiv = styled.div`
   max-height: ${props => (props.width > 1000 ? 251 : 300)};
   -ms-overflow-style: none;
   &::-webkit-scrollbar {
-    display: none;
+    width: 5px;
+    border-radius: 12px;
+  }
+  &::-webkit-scrollbar-button:end {
+    width: 0px;
+    height: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgb(219, 219, 219);
+    border-radius: 12px;
   }
 `;

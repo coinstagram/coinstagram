@@ -16,22 +16,19 @@ import ProfileNameAndInroduce from './ProfileNameAndIntroduce';
 import FollowListModal from './FollowListModal';
 
 interface ProfileHeaderProps {
+  myId: string;
   profileId: string;
   profileName: string;
   profileIntro: string;
+  profileImage: null | string;
   followers: AnotherUserState[];
   followees: AnotherUserState[];
 }
 
-function ProfileHeader({
-  profileId,
-  profileName,
-  profileIntro,
-  followers,
-  followees,
-}: ProfileHeaderProps) {
+function ProfileHeader({ myId, profileId, profileName, profileIntro, profileImage, followers, followees }: ProfileHeaderProps) {
   const [state, setState] = useState({
     modal: false,
+    isList: true,
     content: '',
   });
   const width = useWindowWidth();
@@ -41,12 +38,10 @@ function ProfileHeader({
       const targetEl = target as Element;
       const curTargetEl = curTarget as Element;
 
-      if (
-        targetEl.classList.contains('thumbnail-click') &&
-        curTargetEl.classList.contains('followList-modal')
-      ) {
+      if (targetEl.classList.contains('thumbnail-click') && curTargetEl.classList.contains('followList-modal')) {
         setTimeout(() => {
           setState({
+            ...state,
             modal: false,
             content,
           });
@@ -58,6 +53,7 @@ function ProfileHeader({
 
       setState({
         modal: !state.modal,
+        isList: true,
         content,
       });
     },
@@ -68,64 +64,56 @@ function ProfileHeader({
     <>
       <StyledSection width={width}>
         <h3 className="a11y-hidden">{profileId}의 프로필</h3>
-        <ProfileThumbnail />
+        <ProfileThumbnail myId={myId} profileId={profileId} profileImage={profileImage} />
         <div className="info-container">
           <div className="id-container">
             <div>
               <dt className="a11y-hidden">user id</dt>
               <dd>{profileId}</dd>
             </div>
-            {width >= 750 && (
+            {myId === profileId && width >= 750 && (
               <Link to="/edit">
                 <span tabIndex={-1}>프로필 편집</span>
               </Link>
             )}
-            <button>
-              <span tabIndex={-1}>
-                <IoIosSettings />
-              </span>
-            </button>
+            {myId === profileId && (
+              <button>
+                <span tabIndex={-1} onClick={popModal}>
+                  <IoIosSettings />
+                </span>
+              </button>
+            )}
           </div>
-          {width < 750 && (
+          {myId === profileId && width < 750 && (
             <Link to="/edit">
               <span tabIndex={-1}>프로필 편집</span>
             </Link>
           )}
           {width >= 750 && (
             <>
-              <ProfileCountInfo
-                followers={followers}
-                followees={followees}
-                toggleModal={toggleModal}
-              />
-              <ProfileNameAndInroduce
-                profileName={profileName}
-                profileIntro={profileIntro}
-              />
+              <ProfileCountInfo followers={followers} followees={followees} toggleModal={toggleModal} />
+              <ProfileNameAndInroduce profileName={profileName} profileIntro={profileIntro} />
             </>
           )}
         </div>
         {width < 750 && (
           <>
-            <ProfileNameAndInroduce
-              profileName={profileName}
-              profileIntro={profileIntro}
-            />
-            <ProfileCountInfo
-              followers={followers}
-              followees={followees}
-              toggleModal={toggleModal}
-            />
+            <ProfileNameAndInroduce profileName={profileName} profileIntro={profileIntro} />
+            <ProfileCountInfo followers={followers} followees={followees} toggleModal={toggleModal} />
           </>
         )}
       </StyledSection>
-      <FollowListModal
-        modal={state.modal}
-        content={state.content}
-        toggleModal={toggleModal}
-      />
+      <FollowListModal modal={state.modal} content={state.content} isList={state.isList} toggleModal={toggleModal} popModal={popModal} />
     </>
   );
+
+  function popModal() {
+    setState({
+      ...state,
+      modal: !state.modal,
+      isList: false,
+    });
+  }
 }
 
 export default ProfileHeader;

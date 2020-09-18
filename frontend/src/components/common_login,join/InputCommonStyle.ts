@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { passwordProps } from './InputPassword';
 
 export interface inputProps extends passwordProps {
@@ -21,6 +21,13 @@ export const StyledDiv = styled.div`
   border-radius: 3px;
   background: #fafafa;
   font-size: 0.9em;
+  ${props =>
+    props.width <= 750 &&
+    css`
+      width: 100%;
+      max-width: 400px;
+      height: 44px;
+    `}
 
   label {
     width: 100%;
@@ -33,6 +40,12 @@ export const StyledDiv = styled.div`
       width: 100%;
       height: 36px;
       outline: none;
+      ${props =>
+        props.width <= 750 &&
+        css`
+          height: 40px;
+          font-size: 1.1rem;
+        `}
     }
   }
 `;

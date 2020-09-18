@@ -1,4 +1,6 @@
 import React from 'react';
+import { logout } from '../../redux/modules/auth';
+import { useDispatch } from 'react-redux';
 
 // styles
 import { StyledDivBg, StyledModal } from './NavModalStyle';
@@ -10,9 +12,7 @@ import { BiBookmark } from 'react-icons/bi';
 
 // components
 import { Link } from 'react-router-dom';
-
-import { logout } from '../../redux/modules/auth';
-import { useDispatch } from 'react-redux';
+import TokenService from '../../redux/services/tokenService';
 
 export interface NavModalProps {
   top: number;
@@ -26,7 +26,7 @@ function NavModal({ top, left, favorite, profile, userId }: NavModalProps) {
   const dispatch = useDispatch();
   const onLogout = () => {
     dispatch(logout());
-    localStorage.removeItem('access_token');
+    TokenService.remove();
   };
 
   return (

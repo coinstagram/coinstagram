@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export interface ContentProps {
   content?: string;
@@ -19,4 +19,11 @@ export const StyledButton = styled.button`
     background: #0095f6;
     cursor: pointer;
   }
+  ${props =>
+    props.width < 750 &&
+    css`
+      height: 40px;
+      font-size: 1.2rem;
+      max-width: 400px;
+    `}
 `;
