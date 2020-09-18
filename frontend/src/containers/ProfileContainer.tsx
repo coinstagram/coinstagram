@@ -3,14 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAnotherUserSaga } from '../redux/modules/anotherUser';
 import RootState from '../type';
 import { useLocation } from 'react-router-dom';
-import {
-  getOtherPostsSaga,
-  getPostCountsSaga,
-} from '../redux/modules/otherPost';
-import {
-  getBookmarkPostsSaga,
-  getBookmarksSaga,
-} from '../redux/modules/bookmark';
+import { getOtherPostsSaga, getPostCountsSaga } from '../redux/modules/otherPost';
+import { getBookmarkPostsSaga, getBookmarksSaga } from '../redux/modules/bookmark';
 
 // components;
 import ProfileHeader from '../components/profile/ProfileHeader';
@@ -20,12 +14,8 @@ function ProfileContainer() {
   const profileId = useLocation().pathname.split('/')[2];
 
   const dispatch = useDispatch();
-  const bookmarkedId = useSelector(
-    (state: RootState) => state.bookmarks.bookmarks,
-  );
-  const { user, followers, followees } = useSelector(
-    (state: RootState) => state.anotherUserInfo,
-  );
+  const bookmarkedId = useSelector((state: RootState) => state.bookmarks.bookmarks);
+  const { user, followers, followees } = useSelector((state: RootState) => state.anotherUserInfo);
   const { userInfo } = useSelector((state: RootState) => state);
   const myId = userInfo.user && userInfo.user.user_id;
   const myFollowers = userInfo.followers.users;
@@ -72,13 +62,7 @@ function ProfileContainer() {
         followers={myId === profileId ? myFollowers : followers}
         followees={myId === profileId ? myFollowees : followees}
       />
-      <ProfilePosts
-        profileId={profileId}
-        myId={myId}
-        bookmarkedId={bookmarkedId}
-        getBookmarkPosts={getBookmarkPosts}
-        getPostCounts={getPostCounts}
-      />
+      <ProfilePosts profileId={profileId} myId={myId} bookmarkedId={bookmarkedId} getBookmarkPosts={getBookmarkPosts} getPostCounts={getPostCounts} />
     </>
   );
 }

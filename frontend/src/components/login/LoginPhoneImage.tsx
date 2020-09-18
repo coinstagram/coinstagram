@@ -9,10 +9,7 @@ export default function LoginPhoneImage() {
   const width = useWindowWidth();
 
   useEffect(() => {
-    const rotateId = setInterval(
-      () => setIndex(index < imgArray.length - 1 ? index + 1 : 0),
-      5000,
-    );
+    const rotateId = setInterval(() => setIndex(index < imgArray.length - 1 ? index + 1 : 0), 5000);
 
     return function cleanup() {
       clearInterval(rotateId);
@@ -23,11 +20,7 @@ export default function LoginPhoneImage() {
     <>
       {width >= 750 && (
         <StyledDiv>
-          <img
-            src={login_phone_image}
-            alt="login_phone_image"
-            className="phoneImage"
-          />
+          <img src={login_phone_image} alt="login_phone_image" className="phoneImage" />
           <img src={selectedImg} alt="randomImage" className="randomImage" />
         </StyledDiv>
       )}

@@ -14,10 +14,7 @@ interface FeedImgSliderProps {
   imageUrl: string[];
 }
 
-const FeedImgSlider: React.FC<FeedImgSliderProps> = ({
-  imageUrl,
-  children,
-}) => {
+const FeedImgSlider: React.FC<FeedImgSliderProps> = ({ imageUrl, children }) => {
   const settings = {
     dots: true,
     infinite: true,
@@ -32,10 +29,7 @@ const FeedImgSlider: React.FC<FeedImgSliderProps> = ({
       <Slider {...settings}>
         {imageUrl.map(image => (
           <li key={image}>
-            <img
-              src={`http://localhost:4000/${image}`}
-              alt={`이미지${image}`}
-            />
+            <img src={`http://localhost:4000/${image}`} alt={`이미지${image}`} />
           </li>
         ))}
         {children}
