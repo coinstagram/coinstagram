@@ -30,9 +30,13 @@ function ProfileThumbnail() {
     setImageURL(res);
   };
   useEffect(() => {
+    console.log('dispatch');
+
     dispatch(changeUserProfile(imageURL));
   }, [dispatch, imageURL]);
   useEffect(() => {
+    console.log('imageUrl');
+
     setImageURL(myProfile && myProfile.user_profile);
   }, [myProfile]);
 
