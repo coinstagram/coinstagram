@@ -404,19 +404,32 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
           }
         });
         const [image] = await connection.query(sqls);
-
         const arr = post_list.map((list, index) => {
           if (post_list.length === 0 || image.length === 0) return [];
-          for (let i = 0; i < list.length; i++) {
-            list[i] = {
-              ...list[i],
+          if (list.length === undefined) {
+            list = {
+              ...list,
               image_path: image[index].map(({ image_path }) => image_path),
             };
+          } else {
+            for (let i = 0; i < list.length; i++) {
+              list[i] = {
+                ...list[i],
+                image_path: image[index].map(({ image_path }) => image_path),
+              };
+            }
           }
+
           return list;
         });
+        console.log(arr);
         let result = [];
-        result = arr.reduce((acc, it) => [...acc, ...it], []);
+        try {
+          result = arr.reduce((acc, it) => [...acc, ...it], []);
+        } catch (err) {
+          result = arr;
+        }
+
         res.json(result);
       }
     } catch (error) {

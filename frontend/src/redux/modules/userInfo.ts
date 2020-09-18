@@ -235,7 +235,6 @@ function userInfoReducer(
 ): UserInfoState {
   switch (action.type) {
     case CHANGE_USER_PROFILE:
-      console.log(action.payload);
       return {
         loading: true,
         error: null,

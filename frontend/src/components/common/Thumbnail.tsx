@@ -9,7 +9,7 @@ export interface ThumbnailProps {
 }
 
 function Thumbnail({ imageUrl, size }: ThumbnailProps) {
-  if (!!imageUrl) {
+  if (imageUrl !== null) {
     if (imageUrl.split('\\')[1] !== undefined) {
       imageUrl = imageUrl.split('\\')[1];
     } else if (imageUrl.split('/')[1] !== undefined) {

@@ -5,6 +5,7 @@ export const StyledArticle = styled.article`
 
   & > div:nth-of-type(1) {
     float: left;
+    height: auto;
     width: 100%;
     max-width: ${props => props.width > 1000 && 600};
   }
@@ -19,7 +20,7 @@ export const StyledDiv = styled.div`
   border-bottom: 1px solid rgb(239, 239, 239);
   overflow-y: auto;
   height: 100%;
-  max-height: ${props => (props.width > 1000 ? 351 : 300)};
+  max-height: ${props => (props.width > 1000 ? 251 : 300)};
   -ms-overflow-style: none;
   &::-webkit-scrollbar {
     display: none;
