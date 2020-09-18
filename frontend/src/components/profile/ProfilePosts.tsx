@@ -45,7 +45,7 @@ function ProfilePosts({
 
   return (
     <StyledSection width={width}>
-      <StyledNavDiv>
+      <StyledNavDiv width={width}>
         <ul>
           <li>
             <NavLink to={`/account/${profileId}`} exact>
