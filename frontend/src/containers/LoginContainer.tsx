@@ -1,18 +1,25 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import RootState from '../type';
 
-import { MainLogo } from '../components/Join/JoinHeaderStyle';
 import InputUserId from '../components/common_login,join/InputUserId';
 import InputPassword from '../components/common_login,join/InputPassword';
 import { StyledLogin } from '../components/login/LoginStyle';
 import JoinLoginButton from '../components/common_login,join/JoinLoginButton';
-
+import ImageLogo from '../components/common_login,join/ImageLogo';
 import { useDispatch, useSelector } from 'react-redux';
 import { signInSagaActionCreator } from '../redux/modules/auth';
 import ErrorMessage from '../components/common_login,join/ErrorMessage';
+import useWindowWidth from '../hooks/useWindowWidth';
 
-const StyledForm = styled.form``;
+const StyledForm = styled.form`
+  ${props =>
+    props.width <= 750 &&
+    css`
+      margin: auto;
+      max-width: 400px;
+    `}
+`;
 const idRegExp = /^[a-zA-Z0-9]{4,12}$/;
 
 function LoginContainer() {
@@ -39,11 +46,13 @@ function LoginContainer() {
   const { auth } = useSelector((state: RootState) => state);
   const { error } = auth;
 
+  const width = useWindowWidth();
+
   return (
     <>
-      <StyledLogin>
-        <MainLogo style={{ marginBottom: '40px' }}>coInstagram</MainLogo>
-        <StyledForm onSubmit={handleSubmit}>
+      <StyledLogin width={width}>
+        <ImageLogo width={width} />
+        <StyledForm onSubmit={handleSubmit} width={width}>
           <InputUserId
             userId={user_id}
             onInputUserId={onInputUserId}
