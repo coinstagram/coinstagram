@@ -29,11 +29,14 @@ function ProfileThumbnail() {
     );
     setImageURL(res);
   };
+
   useEffect(() => {
     dispatch(changeUserProfile(imageURL));
   }, [dispatch, imageURL]);
   useEffect(() => {
-    setImageURL(myProfile && myProfile.user_profile);
+    if (myProfile && myProfile.user_profile) {
+      setImageURL(myProfile.user_profile);
+    }
   }, [myProfile]);
 
   return (
