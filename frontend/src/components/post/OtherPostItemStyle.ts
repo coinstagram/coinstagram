@@ -9,16 +9,28 @@ export const StyledLi = styled.li`
     align-items: center;
   }
 
-  img {
+  a {
     display: inline-block;
+    position: relative;
     width: 100%;
-    height: 100%;
-    max-height: 309px;
-    max-width: 309px;
+    padding-bottom: 100%;
+    img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 3px;
+    }
+    svg {
+      position: absolute;
+      font-size: 20px;
+      color: rgb(255, 255, 255);
+      top: 10px;
+      right: 10px;
+    }
   }
 `;
 
-export const StyledDiv = styled.div`
+export const StyledCountDiv = styled.div`
   display: none;
   position: absolute;
   top: 0;
@@ -33,6 +45,7 @@ export const StyledDiv = styled.div`
 
       svg {
         vertical-align: middle;
+        position: static;
       }
       span {
         display: inline-block;

@@ -9,6 +9,14 @@ export interface ThumbnailProps {
 }
 
 function Thumbnail({ imageUrl, size }: ThumbnailProps) {
+  if (imageUrl !== null && imageUrl !== undefined) {
+    if (imageUrl.split('\\')[1] !== undefined) {
+      imageUrl = imageUrl.split('\\')[1];
+    } else if (imageUrl.split('/')[1] !== undefined) {
+      imageUrl = imageUrl.split('/')[1];
+    }
+  }
+
   return (
     <StyledSpan
       className="thumbnail thumbnail-click"

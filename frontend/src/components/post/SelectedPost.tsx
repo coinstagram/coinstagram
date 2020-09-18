@@ -65,6 +65,8 @@ function SelectedPost({
       ? selectedPost.selectedPost.image_path
       : [];
 
+  console.log(selectedPostImages);
+
   const { postModal, popPostModal, popFollowModal } = useContext(ModalContext);
 
   const width = useWindowWidth();

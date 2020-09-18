@@ -18,6 +18,7 @@ import ProfilePosts from '../components/profile/ProfilePosts';
 
 function ProfileContainer() {
   const profileId = useLocation().pathname.split('/')[2];
+
   const dispatch = useDispatch();
   const bookmarkedId = useSelector(
     (state: RootState) => state.bookmarks.bookmarks,
@@ -31,6 +32,7 @@ function ProfileContainer() {
   const myFollowees = userInfo.followees;
   const profileName = user && user.user_name;
   const profileIntro = user && user.user_introduce;
+  const profileImage = user && user.user_profile;
 
   useEffect(() => {
     dispatch(getAnotherUserSaga(profileId));
@@ -62,9 +64,11 @@ function ProfileContainer() {
   return (
     <>
       <ProfileHeader
+        myId={myId}
         profileId={profileId}
         profileName={profileName}
         profileIntro={profileIntro}
+        profileImage={profileImage}
         followers={myId === profileId ? myFollowers : followers}
         followees={myId === profileId ? myFollowees : followees}
       />

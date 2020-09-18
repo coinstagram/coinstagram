@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 import RootState from '../../type';
 
 // icons
-import { FaComment, FaHeart } from 'react-icons/fa';
+import { FaComment, FaHeart, FaClone } from 'react-icons/fa';
 
 // styles
-import { StyledLi, StyledDiv } from './OtherPostItemStyle';
+import { StyledCountDiv, StyledLi } from './OtherPostItemStyle';
 
 interface OtherPostItemProps {
   postId: number;
@@ -36,10 +36,13 @@ function OtherPostItem({
     <StyledLi>
       <Link to={`/post/${postId}`}>
         <img
-          src={`http://localhost:4000/${imageThumbnail[0]}`}
+          src={`http://localhost:4000/${
+            imageThumbnail[imageThumbnail.length - 1]
+          }`}
           alt={`${postOwnerId}님의 게시물-${postId}}`}
         />
-        <StyledDiv>
+        {imageThumbnail.length > 1 && <FaClone />}
+        <StyledCountDiv>
           <div>
             <dt className="a11y-hidden">like count</dt>
             <dd>
@@ -54,7 +57,7 @@ function OtherPostItem({
               <span>{commentCounts}</span>
             </dd>
           </div>
-        </StyledDiv>
+        </StyledCountDiv>
       </Link>
     </StyledLi>
   );

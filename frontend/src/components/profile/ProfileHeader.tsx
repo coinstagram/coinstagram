@@ -16,17 +16,21 @@ import ProfileNameAndInroduce from './ProfileNameAndIntroduce';
 import FollowListModal from './FollowListModal';
 
 interface ProfileHeaderProps {
+  myId: string;
   profileId: string;
   profileName: string;
   profileIntro: string;
+  profileImage: null | string;
   followers: AnotherUserState[];
   followees: AnotherUserState[];
 }
 
 function ProfileHeader({
+  myId,
   profileId,
   profileName,
   profileIntro,
+  profileImage,
   followers,
   followees,
 }: ProfileHeaderProps) {
@@ -71,25 +75,31 @@ function ProfileHeader({
     <>
       <StyledSection width={width}>
         <h3 className="a11y-hidden">{profileId}의 프로필</h3>
-        <ProfileThumbnail />
+        <ProfileThumbnail
+          myId={myId}
+          profileId={profileId}
+          profileImage={profileImage}
+        />
         <div className="info-container">
           <div className="id-container">
             <div>
               <dt className="a11y-hidden">user id</dt>
               <dd>{profileId}</dd>
             </div>
-            {width >= 750 && (
+            {myId === profileId && width >= 750 && (
               <Link to="/edit">
                 <span tabIndex={-1}>프로필 편집</span>
               </Link>
             )}
-            <button>
-              <span tabIndex={-1} onClick={popModal}>
-                <IoIosSettings />
-              </span>
-            </button>
+            {myId === profileId && (
+              <button>
+                <span tabIndex={-1} onClick={popModal}>
+                  <IoIosSettings />
+                </span>
+              </button>
+            )}
           </div>
-          {width < 750 && (
+          {myId === profileId && width < 750 && (
             <Link to="/edit">
               <span tabIndex={-1}>프로필 편집</span>
             </Link>

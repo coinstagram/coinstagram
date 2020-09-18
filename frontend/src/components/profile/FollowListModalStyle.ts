@@ -7,14 +7,12 @@ export const StyledBackground = styled(StyledBg)`
 
 export const StyledDiv = styled(StyledModal)`
   width: 400px;
-
   ${props =>
     props.isList &&
     css`
       height: 300px;
       box-sizing: border-box;
     `}
-
   .list-header {
     padding: 15px;
     text-align: center;
@@ -22,7 +20,6 @@ export const StyledDiv = styled(StyledModal)`
     font-weight: bold;
     border-bottom: 1px solid rgb(219, 219, 219);
   }
-
   .list-body {
     padding: 8px 15px 0;
     height: 240px;
