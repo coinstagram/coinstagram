@@ -476,6 +476,23 @@ router.post('/images', verifyToken, upload.array('image'), async (req, res) => {
   res.json(file);
 });
 
+router.post(
+  '/image',
+  verifyToken,
+  upload.single('user-profile'),
+  async (req, res) => {
+    console.log('image');
+    const {
+      path: image_path,
+      mimetype: image_type,
+      originalname: image_name,
+    } = req.file;
+
+    const file = { image_path, image_type, image_name };
+    res.json(file);
+  },
+);
+
 /**
  * {
  *  post_id,

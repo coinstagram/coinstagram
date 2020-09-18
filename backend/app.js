@@ -16,10 +16,10 @@ app.use('/', express.static(path.join(__dirname, 'uploads')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+app.use(userRouter);
 app.use(signinRouter);
 app.use(loginRouter);
 app.use(postRouter);
-app.use(userRouter);
 app.use('/uploads', express.static('uploads'));
 
 app.listen(PORT, () => {

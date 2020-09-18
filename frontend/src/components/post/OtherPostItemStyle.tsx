@@ -11,7 +11,6 @@ export const StyledLi = styled.li`
 
   img {
     width: 100%;
-    height: auto;
     max-width: 309px;
   }
 `;

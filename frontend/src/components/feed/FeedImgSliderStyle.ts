@@ -2,9 +2,10 @@ import styled from 'styled-components';
 
 export const StyledUl = styled.ul`
   li > img {
+    height: 100%;
+    max-height: 500px;
     width: 100%;
     max-width: 612px;
-    height: auto;
   }
 
   .next-btn,

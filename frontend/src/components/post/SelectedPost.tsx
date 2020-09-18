@@ -16,7 +16,6 @@ import FeedIcons from '../feed/FeedIcons';
 import FeedCommentOwner from '../feed/FeedCommentOwner';
 import FeedCommentList from '../feed/FeedCommentList';
 import FeedAddComment from '../feed/FeedAddComment';
-import FollowCancelModal from '../common/FollowCancelModal';
 import PostModal from '../common/PostModal';
 
 interface SelectedPostProps {

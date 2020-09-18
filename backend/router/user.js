@@ -109,26 +109,29 @@ router.delete('/user/relationship/:user', verifyToken, async (req, res) => {
 router.get('/user', verifyToken, async (req, res) => {
   const token = req.headers.authorization.split('Bearer ')[1];
   let data = {};
-  const userData = jwt.verify(
+  const { user_id, iat, exp } = jwt.verify(
     token,
     // eslint-disable-next-line no-undef
     process.env.JWT_SECRET,
   );
-  const user = userData;
+
   let sql = '';
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
+      sql = `select user_id, user_name, user_gender, user_introduce, user_phone, user_email, user_profile  from users where user_id = ?;`;
+      const [user] = await connection.query(sql, user_id);
+      const my = { ...user, iat, exp };
       sql = `select user_id, user_name, user_profile from users where user_id in(select followee_id from users_relationship where follower_id = ?);`;
-      const [followee_id] = await connection.query(sql, user.user_id);
+      const [followee_id] = await connection.query(sql, user_id);
       const follower = followee_id.map((user) => user);
 
       sql = `select user_id, user_name, user_profile from users where user_id in(select follower_id from users_relationship where followee_id = ?);`;
-      const [follower_id] = await connection.query(sql, user.user_id);
+      const [follower_id] = await connection.query(sql, user_id);
       const followee = follower_id.map((user) => user);
 
-      data = { user, follower, followee };
-
+      data = { user: { ...my[0] }, follower, followee };
+      console.log(data);
       res.send(data);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
@@ -209,6 +212,36 @@ router.get('/user/:user_id', verifyToken, async (req, res) => {
 
       data = { user, follower, followee };
       res.json(data);
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      console.log(error);
+      res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
+});
+
+router.patch('/user/image', verifyToken, async (req, res) => {
+  console.log('/user/image');
+
+  const token = req.headers.authorization.split('Bearer ')[1];
+  const userData = jwt.verify(
+    token,
+    // eslint-disable-next-line no-undef
+    process.env.JWT_SECRET,
+  );
+  const { user_id } = userData;
+  let sql = ``;
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      sql = `update users set user_profile = ? where user_id = ?`;
+      await connection.query(sql, [req.body[0].image, user_id]);
+      res.json({ success: true });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();

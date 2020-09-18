@@ -21,5 +21,6 @@ declare module 'react' {
     isRecommend?: boolean;
     top?: number;
     right?: number;
+    isList?: boolean;
   }
 }
