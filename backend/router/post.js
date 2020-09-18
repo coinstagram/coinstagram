@@ -358,31 +358,27 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
       sql = `select user_id from users where user_id in(select followee_id from users_relationship where follower_id = ?);`;
       const [followee_id] = await connection.query(sql, user.user_id);
       sql = `select * from posts where user_id = ?;`;
-
       let sqls = '';
       let params = [];
-
       if (followee_id.length === 0) return res.json(followee_id);
-
       followee_id.map(({ user_id }) => {
         params = [user_id];
         sqls += mysql.format(sql, params);
       });
       const [test] = await connection.query(sqls);
-
+      console.log('369', test);
       let post_id = test.map((foll) => {
         try {
           if (foll.length === 0) {
             return undefined;
           } else {
-            return [...foll.map(({ id }) => id)];
+            return console.log('return', [...foll.map(({ id }) => id)]);
           }
         } catch (err) {
           return [foll.id];
         }
       });
       post_id = post_id.filter((id) => id !== undefined);
-
       if (post_id.length === 0) {
         return res.json([]);
       } else {
@@ -397,14 +393,10 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
             });
           }
         });
-
         const [image] = await connection.query(sqls);
         let result = [];
         let arr = [];
-        test.forEach((data) => {
-          result = [...result, ...data];
-        });
-
+        result = [...result, ...test];
         if (result.length === 1) {
           arr = [...arr, result[0]];
         } else {
@@ -412,7 +404,6 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
             arr = [...arr, res];
           });
         }
-
         try {
           if (image !== undefined) {
             for (let i = 0; i < arr.length; i++) {
