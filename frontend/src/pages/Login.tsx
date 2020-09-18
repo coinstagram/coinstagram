@@ -6,17 +6,19 @@ import LoginContainer from '../containers/LoginContainer';
 
 import { StyledDiv, LoginWrapper } from '../components/login/LoginStyle';
 import { Link } from 'react-router-dom';
+import useWindowWidth from '../hooks/useWindowWidth';
 
 function Login() {
+  const width = useWindowWidth();
   return (
-    <StyledDiv>
+    <StyledDiv width={width}>
       <LoginPhoneImage />
-      <LoginWrapper>
+      <LoginWrapper width={width}>
         <LoginContainer />
         <Link to={'/join'}>
           <JoinAskLogin askContent="계정이 없으신가요?" content="가입하기" />
         </Link>
-        <JoinAppDownload />
+        {width > 750 && <JoinAppDownload />}
       </LoginWrapper>
     </StyledDiv>
   );
