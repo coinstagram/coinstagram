@@ -25,15 +25,7 @@ interface ProfileHeaderProps {
   followees: AnotherUserState[];
 }
 
-function ProfileHeader({
-  myId,
-  profileId,
-  profileName,
-  profileIntro,
-  profileImage,
-  followers,
-  followees,
-}: ProfileHeaderProps) {
+function ProfileHeader({ myId, profileId, profileName, profileIntro, profileImage, followers, followees }: ProfileHeaderProps) {
   const [state, setState] = useState({
     modal: false,
     isList: true,
@@ -46,10 +38,7 @@ function ProfileHeader({
       const targetEl = target as Element;
       const curTargetEl = curTarget as Element;
 
-      if (
-        targetEl.classList.contains('thumbnail-click') &&
-        curTargetEl.classList.contains('followList-modal')
-      ) {
+      if (targetEl.classList.contains('thumbnail-click') && curTargetEl.classList.contains('followList-modal')) {
         setTimeout(() => {
           setState({
             ...state,
@@ -75,11 +64,7 @@ function ProfileHeader({
     <>
       <StyledSection width={width}>
         <h3 className="a11y-hidden">{profileId}의 프로필</h3>
-        <ProfileThumbnail
-          myId={myId}
-          profileId={profileId}
-          profileImage={profileImage}
-        />
+        <ProfileThumbnail myId={myId} profileId={profileId} profileImage={profileImage} />
         <div className="info-container">
           <div className="id-container">
             <div>
@@ -106,39 +91,19 @@ function ProfileHeader({
           )}
           {width >= 750 && (
             <>
-              <ProfileCountInfo
-                followers={followers}
-                followees={followees}
-                toggleModal={toggleModal}
-              />
-              <ProfileNameAndInroduce
-                profileName={profileName}
-                profileIntro={profileIntro}
-              />
+              <ProfileCountInfo followers={followers} followees={followees} toggleModal={toggleModal} />
+              <ProfileNameAndInroduce profileName={profileName} profileIntro={profileIntro} />
             </>
           )}
         </div>
         {width < 750 && (
           <>
-            <ProfileNameAndInroduce
-              profileName={profileName}
-              profileIntro={profileIntro}
-            />
-            <ProfileCountInfo
-              followers={followers}
-              followees={followees}
-              toggleModal={toggleModal}
-            />
+            <ProfileNameAndInroduce profileName={profileName} profileIntro={profileIntro} />
+            <ProfileCountInfo followers={followers} followees={followees} toggleModal={toggleModal} />
           </>
         )}
       </StyledSection>
-      <FollowListModal
-        modal={state.modal}
-        content={state.content}
-        isList={state.isList}
-        toggleModal={toggleModal}
-        popModal={popModal}
-      />
+      <FollowListModal modal={state.modal} content={state.content} isList={state.isList} toggleModal={toggleModal} popModal={popModal} />
     </>
   );
 

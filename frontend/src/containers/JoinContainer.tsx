@@ -32,8 +32,7 @@ function JoinContainer() {
   const onInputUserName = (text: string): void => {
     setUserName(text);
   };
-  const phoneEmailCheck =
-    phoneRegExp.test(user_email) || emailRegExp.test(user_email);
+  const phoneEmailCheck = phoneRegExp.test(user_email) || emailRegExp.test(user_email);
   const nameCheck = user_name.length >= 2;
   const idCheck = idRegExp.test(user_id);
   const passwordCheck = user_password.length >= 6;
@@ -42,10 +41,7 @@ function JoinContainer() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    if (phoneEmailCheck && nameCheck && idCheck && passwordCheck)
-      dispatch(
-        signupSagaActionCreator(user_email, user_name, user_id, user_password),
-      );
+    if (phoneEmailCheck && nameCheck && idCheck && passwordCheck) dispatch(signupSagaActionCreator(user_email, user_name, user_id, user_password));
   };
 
   // 회원가입 실패 시
@@ -58,39 +54,14 @@ function JoinContainer() {
   return (
     <>
       <StyledForm onSubmit={handleSubmit} width={width}>
-        <InputEmail
-          userEmail={user_email}
-          onInputEmail={onInputEmail}
-          toggleIcon={phoneEmailCheck}
-        />
-        <InputUserName
-          userName={user_name}
-          onInputUserName={onInputUserName}
-          toggleIcon={nameCheck}
-        />
-        <InputUserId
-          userId={user_id}
-          onInputUserId={onInputUserId}
-          toggleIcon={idCheck}
-        />
-        <InputPassword
-          userPassword={user_password}
-          onInputPassword={onInputPassword}
-          toggleIcon={passwordCheck}
-        />
+        <InputEmail userEmail={user_email} onInputEmail={onInputEmail} toggleIcon={phoneEmailCheck} />
+        <InputUserName userName={user_name} onInputUserName={onInputUserName} toggleIcon={nameCheck} />
+        <InputUserId userId={user_id} onInputUserId={onInputUserId} toggleIcon={idCheck} />
+        <InputPassword userPassword={user_password} onInputPassword={onInputPassword} toggleIcon={passwordCheck} />
         <JoinLoginButton
           content="가입"
-          disabled={
-            !phoneEmailCheck && !nameCheck && !idCheck && !passwordCheck
-          }
-          className={[
-            'button',
-            phoneEmailCheck &&
-              nameCheck &&
-              idCheck &&
-              passwordCheck &&
-              'active',
-          ].join(' ')}
+          disabled={!phoneEmailCheck && !nameCheck && !idCheck && !passwordCheck}
+          className={['button', phoneEmailCheck && nameCheck && idCheck && passwordCheck && 'active'].join(' ')}
         />
       </StyledForm>
       <ErrorMessage error={error}>

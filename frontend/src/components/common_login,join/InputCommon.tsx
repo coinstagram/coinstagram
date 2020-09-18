@@ -4,17 +4,7 @@ import { BiCheckCircle } from 'react-icons/bi';
 import { RiCloseCircleLine } from 'react-icons/ri';
 import useWindowWidth from '../../hooks/useWindowWidth';
 
-export default function InputCommon({
-  type,
-  name,
-  value,
-  onInput,
-  placeholder,
-  toggleIcon,
-  display,
-  children,
-  style,
-}: inputProps) {
+export default function InputCommon({ type, name, value, onInput, placeholder, toggleIcon, display, children, style }: inputProps) {
   function handleInput(e: React.ChangeEvent<HTMLInputElement>) {
     onInput(e.target.value);
   }
@@ -22,22 +12,11 @@ export default function InputCommon({
   return (
     <StyledDiv style={style} width={width}>
       <label>
-        <input
-          type={type}
-          name={name}
-          value={value}
-          onChange={handleInput}
-          placeholder={placeholder}
-          required
-        />
+        <input type={type} name={name} value={value} onChange={handleInput} placeholder={placeholder} required />
       </label>
       {children}
       <IconWrapper style={{ display: value ? display : 'none' }}>
-        {toggleIcon ? (
-          <BiCheckCircle className="icon check" />
-        ) : (
-          <RiCloseCircleLine className="icon close" />
-        )}
+        {toggleIcon ? <BiCheckCircle className="icon check" /> : <RiCloseCircleLine className="icon close" />}
       </IconWrapper>
     </StyledDiv>
   );

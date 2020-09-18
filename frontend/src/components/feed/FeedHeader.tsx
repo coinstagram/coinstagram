@@ -6,12 +6,7 @@ import { useSelector } from 'react-redux';
 import RootState from '../../type';
 
 // styles
-import {
-  StyledDiv,
-  UsernameDiv,
-  LocationDiv,
-  StyledBtn,
-} from './FeedHeaderStyle';
+import { StyledDiv, UsernameDiv, LocationDiv, StyledBtn } from './FeedHeaderStyle';
 
 // components
 import Thumbnail from '../common/Thumbnail';
@@ -42,9 +37,7 @@ function FeedHeader({ userId, postId, location }: FeedHeaderProps) {
     if (userId === myId) {
       setProfile(myProfile);
     } else {
-      const feedFollower = followersInfo.find(
-        follower => follower.user_id === userId,
-      );
+      const feedFollower = followersInfo.find(follower => follower.user_id === userId);
 
       setProfile(feedFollower && feedFollower.user_profile);
       if (feedFollower !== undefined) {
@@ -56,10 +49,7 @@ function FeedHeader({ userId, postId, location }: FeedHeaderProps) {
   return (
     <StyledDiv>
       <button onClick={pageMove}>
-        <Thumbnail
-          size={35}
-          imageUrl={profile === undefined ? profileRef.current : profile}
-        />
+        <Thumbnail size={35} imageUrl={profile === undefined ? profileRef.current : profile} />
         <UsernameDiv tabIndex={-1} hasLocation={location}>
           <dt className="a11y-hidden">user id</dt>
           <dd>{userId}</dd>
@@ -99,8 +89,7 @@ function FeedHeader({ userId, postId, location }: FeedHeaderProps) {
     popPostModal();
     if (!changePostId || !setFollowInfo) return;
     changePostId(postId);
-    const followerProfile =
-      profile === undefined ? profileRef.current : profile;
+    const followerProfile = profile === undefined ? profileRef.current : profile;
     setFollowInfo(userId, followerProfile, null);
   }
 }

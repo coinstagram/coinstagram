@@ -17,14 +17,7 @@ function Thumbnail({ imageUrl, size }: ThumbnailProps) {
     }
   }
 
-  return (
-    <StyledSpan
-      className="thumbnail thumbnail-click"
-      tabIndex={-1}
-      imageUrl={imageUrl}
-      size={size}
-    />
-  );
+  return <StyledSpan className="thumbnail thumbnail-click" tabIndex={-1} imageUrl={imageUrl} size={size} />;
 }
 
 export default React.memo(Thumbnail);
