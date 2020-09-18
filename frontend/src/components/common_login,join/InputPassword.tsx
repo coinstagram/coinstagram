@@ -29,7 +29,7 @@ export default function InputPassword({
         name="user_password"
         value={userPassword}
         onInput={onInputPassword}
-        placeholder="비밀번호 (6자 이상)"
+        placeholder="비밀번호 (6 글자 이상)"
         toggleIcon={toggleIcon}
         display="flex"
         style={style}

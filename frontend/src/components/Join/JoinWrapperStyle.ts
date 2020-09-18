@@ -13,12 +13,11 @@ export const StyledJoinWrapper = styled.div`
   width: 100%;
   height: 542px;
   background: #ffffff;
-  /* border: 1px solid #dbdbdb;
-  margin: ${props =>
-    props.width > 750 ? '30px 0 10px 0' : '0'}; */
+  border: 1px solid #dbdbdb;
+  margin: 30px 0 10px 0;
   padding: 0 40px;
   box-sizing: border-box;
-  ${props =>
+  /* ${props =>
     props.width > 750
       ? css`
           border: 1px solid #dbdbdb;
@@ -27,5 +26,22 @@ export const StyledJoinWrapper = styled.div`
       : css`
           border: none;
           margin: 0;
-        `}
+        `} */
+
+  ${props =>
+    props.width <= 750 &&
+    css`
+      border: none;
+      margin: 0;
+      height: 100%;
+    `}
+`;
+export const StyledForm = styled.form`
+  ${props =>
+    props.width <= 750 &&
+    css`
+      max-width: 400;
+      margin: auto;
+      margin-top: 50px;
+    `}
 `;
