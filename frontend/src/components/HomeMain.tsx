@@ -48,10 +48,10 @@ function HomeMain() {
     user_profile,
   } = useContext(ModalContext);
 
-  useEffect(() => {
-    if (myId) return;
-    dispatch(getUserInfoSaga());
-  }, [dispatch, myId]);
+  // useEffect(() => {
+  //   if (myId) return;
+  //   dispatch(getUserInfoSaga());
+  // }, [dispatch, myId]);
 
   const deletePost = useCallback(
     (post_id: number) => {

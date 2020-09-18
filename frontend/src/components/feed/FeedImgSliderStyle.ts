@@ -1,11 +1,17 @@
 import styled from 'styled-components';
 
 export const StyledUl = styled.ul`
-  li > img {
-    height: 100%;
-    max-height: 500px;
+  li {
+    display: inline-block;
+    position: relative;
     width: 100%;
-    max-width: 612px;
+    padding-bottom: 80%;
+  }
+
+  img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
   }
 
   .next-btn,
@@ -25,6 +31,7 @@ export const StyledUl = styled.ul`
       width: 12px;
       height: 12px;
       margin: 1px;
+      padding-bottom: 0;
 
       button {
         width: 12px;
@@ -34,7 +41,7 @@ export const StyledUl = styled.ul`
       button::before {
         width: 12px;
         height: 12px;
-        color: rgb(51, 154, 240);
+        color: rgb(28, 126, 214);
       }
     }
   }

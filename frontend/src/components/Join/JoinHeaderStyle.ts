@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-
 export const Header = styled.div`
   height: 120px;
   margin-bottom: 20px;
