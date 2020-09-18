@@ -1,16 +1,27 @@
 import React from 'react';
-import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import useWindowWidth from '../../hooks/useWindowWidth';
 
-const StyledJoinWrapper = styled.div`
-  width: 100%;
-  height: 542px;
-  background: #ffffff;
-  border: 1px solid #dbdbdb;
-  margin: 30px 0 10px 0;
-  padding: 0 40px;
-  box-sizing: border-box;
-`;
+import JoinContainer from '../../containers/JoinContainer';
+import JoinHeader from '../../components/Join/JoinHeader';
+import JoinAppDownload from '../../components/Join/JoinAppDownload';
+import JoinAskLogin from '../../components/common_login,join/JoinAskLogin';
+import JoinPolicy from '../../components/Join/JoinPolicy';
+import { StyledDiv, StyledJoinWrapper } from './JoinWrapperStyle';
 
 export default function JoinWrapper() {
-  return <StyledJoinWrapper />;
+  const width = useWindowWidth();
+  return (
+    <StyledDiv width={width}>
+      <StyledJoinWrapper width={width}>
+        <JoinHeader />
+        <JoinContainer />
+        <JoinPolicy />
+      </StyledJoinWrapper>
+      <Link to={'/login'}>
+        <JoinAskLogin askContent="계정이 있으신가요?" content="로그인" />
+      </Link>
+      {width > 750 && <JoinAppDownload />}
+    </StyledDiv>
+  );
 }
