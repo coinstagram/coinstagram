@@ -84,7 +84,7 @@ const failFollowUser = (error: Error) => ({
 });
 
 //test -------------------------------------------------------------------
-export const CHANGE_USER_PROFILE = 'CHANGE_USER_PROFILE' as const;
+export const CHANGE_USER_PROFILE = '/constagram/userInfo/CHANGE_USER_PROFILE' as const;
 export const changeUserProfile = (user_profile: string | null) => ({
   type: CHANGE_USER_PROFILE,
   payload: {
@@ -236,18 +236,14 @@ function userInfoReducer(
   switch (action.type) {
     case CHANGE_USER_PROFILE:
       return {
-        loading: true,
+        loading: false,
         error: null,
         user: {
           ...state.user,
           ...action.payload,
         },
-        followers: {
-          loading: true,
-          error: null,
-          users: [],
-        },
-        followees: [],
+        followers: state.followers,
+        followees: state.followees,
         randomUsers: state.randomUsers,
       };
     case START_GET_USERINFO:

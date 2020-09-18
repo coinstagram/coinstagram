@@ -5,6 +5,7 @@ import { takeEvery } from 'redux-saga/effects';
 import { AuthState } from '../../type';
 import authService from '../services/authService';
 import { push } from 'connected-react-router';
+import TokenService from '../services/tokenService';
 
 // action type
 const SIGNIN_START = 'coinstagram/auth/SIGNIN_START' as const;
@@ -95,6 +96,7 @@ function* signinRequestSaga(action: SagaActions) {
       payload.user_id,
       payload.user_password,
     );
+    yield call(TokenService.save, token);
     yield put(signinSuccess(token));
     if (token) yield put(push('/'));
   } catch (e) {

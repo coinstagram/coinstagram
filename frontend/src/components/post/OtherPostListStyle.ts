@@ -1,14 +1,37 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const StyledDiv = styled.div`
-  margin-top: 20px;
+  & li {
+    display: inline-block;
 
-  ul {
-    display: flex;
-    flex-flow: row wrap;
+    ${props =>
+      props.width > 1000
+        ? css`
+            width: 30%;
+            margin-left: 3.5%;
+            margin-top: 3.5%;
+          `
+        : css`
+            width: 33%;
+            margin-left: 0.5%;
+            margin-top: 0.5%;
+          `}
 
-    li + li {
-      margin-left: ${props => (props.width < 1000 ? 3 : 24)};
+    a {
+      display: inline-block;
+      position: relative;
+      width: 100%;
+      padding-bottom: 100%;
     }
+
+    img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  & li:nth-of-type(3n + 1) {
+    margin-left: 0;
   }
 `;

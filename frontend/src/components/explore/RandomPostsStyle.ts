@@ -1,29 +1,45 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const StyledSection = styled.section`
-  ul {
-    li {
-      display: inline-block;
-      margin-top: 22px;
-      margin-right: 24px;
-    }
+  li {
+    display: inline-block;
+    box-sizing: border-box;
+    ${props =>
+      props.width >= 750
+        ? css`
+            width: 30%;
+            margin-top: 5%;
+            margin-left: 5%;
+          `
+        : css`
+            width: 33%;
+            margin-top: 0.5%;
+            margin-left: 0.5%;
+          `}
+  }
 
-    li:nth-of-type(1) {
-      margin-top: 0;
-    }
+  li:nth-of-type(12n + 1) {
+    margin-left: 0;
+  }
 
-    li:nth-of-type(3n + 6) {
-      margin-right: 0;
-    }
+  li:nth-of-type(12n + 3) {
+    margin-left: 0;
+  }
 
-    li:nth-of-type(9n + 2) {
-      float: right;
-      margin-top: 0;
-      margin-right: 0;
-      img {
-        max-width: 640px;
-        width: 100%;
-      }
-    }
+  li:nth-of-type(12n + 4) {
+    margin-left: 0;
+  }
+
+  li:nth-of-type(12n + 7) {
+    margin-left: 0;
+  }
+
+  li:nth-of-type(12n + 10) {
+    margin-left: 0;
+  }
+
+  li:nth-of-type(12n + 2) {
+    float: right;
+    width: ${props => (props.width >= 750 ? 65 : 66.5)}%;
   }
 `;

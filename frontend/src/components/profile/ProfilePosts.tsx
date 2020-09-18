@@ -8,7 +8,8 @@ import useWindowWidth from '../../hooks/useWindowWidth';
 import { BsCardImage, BsTag, BsBookmarks } from 'react-icons/bs';
 
 // styles
-import { StyledSection } from './ProfilePostsStyle';
+import { StyledSection, StyledNavDiv } from './ProfilePostsStyle';
+import { StyledDiv } from '../post/OtherPostListStyle';
 
 // components
 import OtherPostItem from '../post/OtherPostItem';
@@ -44,7 +45,7 @@ function ProfilePosts({
 
   return (
     <StyledSection width={width}>
-      <div>
+      <StyledNavDiv width={width}>
         <ul>
           <li>
             <NavLink to={`/account/${profileId}`} exact>
@@ -64,8 +65,8 @@ function ProfilePosts({
             </NavLink>
           </li>
         </ul>
-      </div>
-      <div>
+      </StyledNavDiv>
+      <StyledDiv width={width}>
         {pageName === undefined && otherPosts.length === 0 && (
           <div>@{profileId}님이 업로드하신 게시물이 없습니다.</div>
         )}
@@ -96,7 +97,7 @@ function ProfilePosts({
           </ul>
         )}
         {pageName === 'tagged' && '태그된 게시물 뷰'}
-      </div>
+      </StyledDiv>
     </StyledSection>
   );
 }

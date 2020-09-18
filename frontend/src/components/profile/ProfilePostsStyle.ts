@@ -17,26 +17,26 @@ export const StyledSection = styled.section`
         }
       `}
   }
+`;
 
-  div {
-    text-align: center;
-    ul {
-      margin: 0 auto;
-      display: flex;
-      width: ${props => (props.width < 750 ? 100 : 50)}%;
-      justify-content: space-around;
-      a {
-        line-height: 52px;
-        color: rgb(142, 142, 142);
+export const StyledNavDiv = styled.div`
+  text-align: center;
+  ul {
+    margin: 0 auto;
+    display: flex;
+    width: ${props => (props.width < 750 ? 100 : 50)}%;
+    justify-content: space-around;
+    a {
+      line-height: 52px;
+      color: rgb(142, 142, 142);
 
-        svg {
-          height: 52px;
-          font-size: 30px;
-        }
+      svg {
+        height: 52px;
+        font-size: 30px;
+      }
 
-        &.active svg {
-          color: rgb(34, 139, 230);
-        }
+      &.active svg {
+        color: rgb(34, 139, 230);
       }
     }
   }

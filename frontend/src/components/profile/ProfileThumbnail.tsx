@@ -11,16 +11,35 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import RootState from '../../type';
 import { changeUserProfile } from '../../redux/modules/userInfo';
 
-function ProfileThumbnail() {
+interface ProfileThumbnailProps {
+  myId: string;
+  profileId: string;
+  profileImage: null | string;
+}
+
+function ProfileThumbnail({
+  myId,
+  profileId,
+  profileImage,
+}: ProfileThumbnailProps) {
   const width = useWindowWidth();
   const dispatch = useDispatch();
-
-  const [imageURL, setImageURL] = useState<string | null>(null);
-
-  const myProfile = useSelector(
+  const myInfo = useSelector(
     (state: RootState) => state.userInfo.user,
     shallowEqual,
   );
+
+  const [imageURL, setImageURL] = useState<string | null>(null);
+
+  useEffect(() => {
+    dispatch(changeUserProfile(imageURL));
+  }, [dispatch, imageURL]);
+
+  useEffect(() => {
+    if (myInfo && myInfo.user_profile) {
+      setImageURL(myInfo.user_profile);
+    }
+  }, [myInfo]);
 
   const isSelectedImg = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const res = await uploadService.UserProFile(
@@ -29,16 +48,10 @@ function ProfileThumbnail() {
     );
     setImageURL(res);
   };
-  useEffect(() => {
-    dispatch(changeUserProfile(imageURL));
-  }, [dispatch, imageURL]);
-  useEffect(() => {
-    setImageURL(myProfile && myProfile.user_profile);
-  }, [myProfile]);
 
   return (
     <>
-      {imageURL === null ? (
+      {myId === profileId ? (
         <StyledDiv width={width}>
           <input
             id="user-profile"
@@ -50,25 +63,18 @@ function ProfileThumbnail() {
           />
 
           <label htmlFor="user-profile">
-            {width < 750 && <Thumbnail size={77} imageUrl={null} />}
-            {width >= 750 && <Thumbnail size={150} imageUrl={null} />}
+            {width < 750 && (
+              <Thumbnail size={77} imageUrl={myInfo.user_profile} />
+            )}
+            {width >= 750 && (
+              <Thumbnail size={150} imageUrl={myInfo.user_profile} />
+            )}
           </label>
         </StyledDiv>
       ) : (
         <StyledDiv width={width}>
-          <input
-            id="user-profile"
-            name="user-profile"
-            className="a11y-hidden"
-            type="file"
-            accept="image/png, image/jpeg"
-            onChange={isSelectedImg}
-          />
-
-          <label htmlFor="user-profile">
-            {width < 750 && <Thumbnail size={77} imageUrl={imageURL} />}
-            {width >= 750 && <Thumbnail size={150} imageUrl={imageURL} />}
-          </label>
+          {width < 750 && <Thumbnail size={77} imageUrl={profileImage} />}
+          {width >= 750 && <Thumbnail size={150} imageUrl={profileImage} />}
         </StyledDiv>
       )}
     </>

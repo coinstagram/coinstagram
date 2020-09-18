@@ -22,7 +22,6 @@ const authService: IAuthService = class {
       },
     });
     const { token } = res.data;
-    localStorage.setItem('access_token', token);
     return token;
   }
 
