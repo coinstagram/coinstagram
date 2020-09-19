@@ -357,36 +357,46 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
     try {
       sql = `select user_id from users where user_id in(select followee_id from users_relationship where follower_id = ?);`;
       const [followee_id] = await connection.query(sql, user.user_id);
+
       sql = `select * from posts where user_id = ?;`;
       let sqls = '';
       let params = [];
       if (followee_id.length === 0) return res.json(followee_id);
+
       followee_id.map(({ user_id }) => {
         params = [user_id];
         sqls += mysql.format(sql, params);
       });
-      const [test] = await connection.query(sqls);
-      console.log('369', test);
-      let post_id = test.map((foll) => {
+
+      const [post_list] = await connection.query(sqls);
+
+      let post_id = post_list.map((foll) => {
         try {
           if (foll.length === 0) {
             return undefined;
           } else {
-            return console.log('return', [...foll.map(({ id }) => id)]);
+            return [...foll.map(({ id }) => id)];
           }
         } catch (err) {
           return [foll.id];
         }
       });
-      post_id = post_id.filter((id) => id !== undefined);
+
+      post_id = post_id.map((id) => {
+        if (id === undefined) {
+          return [];
+        }
+        return id;
+      });
+
       if (post_id.length === 0) {
         return res.json([]);
       } else {
-        sql = `select image_path, post_id from post_image where post_id = ?;`;
+        sql = `select image_path from post_image where post_id = ?;`;
         sqls = '';
         post_id.map((id) => {
           if (id.length === 0) {
-            return;
+            return [];
           } else {
             id.map((postId) => {
               sqls += mysql.format(sql, postId);
@@ -394,28 +404,33 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
           }
         });
         const [image] = await connection.query(sqls);
-        let result = [];
-        let arr = [];
-        result = [...result, ...test];
-        if (result.length === 1) {
-          arr = [...arr, result[0]];
-        } else {
-          result.map((res) => {
-            arr = [...arr, res];
-          });
-        }
-        try {
-          if (image !== undefined) {
-            for (let i = 0; i < arr.length; i++) {
-              let imageitem = image[i].map(({ image_path }) => image_path);
-              arr[i] = { ...arr[i], image_path: imageitem };
+        const arr = post_list.map((list, index) => {
+          if (post_list.length === 0 || image.length === 0) return [];
+          if (list.length === undefined) {
+            list = {
+              ...list,
+              image_path: image[index].map(({ image_path }) => image_path),
+            };
+          } else {
+            for (let i = 0; i < list.length; i++) {
+              list[i] = {
+                ...list[i],
+                image_path: image[index].map(({ image_path }) => image_path),
+              };
             }
           }
+
+          return list;
+        });
+        console.log(arr);
+        let result = [];
+        try {
+          result = arr.reduce((acc, it) => [...acc, ...it], []);
         } catch (err) {
-          let imageitem = image[0].image_path;
-          arr[0] = { ...arr[0], image_path: [imageitem] };
+          result = arr;
         }
-        res.json(arr);
+
+        res.json(result);
       }
     } catch (error) {
       await connection.rollback(); // ROLLBACK
@@ -456,7 +471,6 @@ const upload = multer({
 });
 router.post('/images', verifyToken, upload.array('image'), async (req, res) => {
   console.log('images');
-  console.log(req.files);
   const file = req.files.map(
     ({ path: image_path, mimetype: image_type, originalname: image_name }) => ({
       image_path,
