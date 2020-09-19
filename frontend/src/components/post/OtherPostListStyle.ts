@@ -1,6 +1,8 @@
 import styled, { css } from 'styled-components';
 
 export const StyledDiv = styled.div`
+  position: relative;
+  min-height: 162px;
   & li {
     display: inline-block;
 
@@ -34,4 +36,10 @@ export const StyledDiv = styled.div`
   & li:nth-of-type(3n + 1) {
     margin-left: 0;
   }
+`;
+
+export const StyledSpinnerDiv = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
 `;

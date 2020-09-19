@@ -184,7 +184,6 @@ export interface OtherPostState {
 
 interface RootState {
   auth: AuthState;
-  // signUpInfo: SignupState;
   userInfo: UserInfoState;
   anotherUserInfo: AnotherUserInfoState;
   posts: PostsState;

@@ -40,6 +40,20 @@ export const StyledSection = styled.section`
 
   li:nth-of-type(12n + 2) {
     float: right;
-    width: ${props => (props.width >= 750 ? 65 : 66.5)}%;
+    width: ${props => (props.width >= 750 ? 65 : 66.48)}%;
+  }
+`;
+
+export const StyledDiv = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+`;
+
+export const StyledErrorDiv = styled.div`
+  margin-top: 30%;
+  p {
+    text-align: center;
+    font-size: 30px;
   }
 `;

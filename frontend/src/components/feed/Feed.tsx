@@ -1,8 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import { EachPostState } from '../../type';
+import { Link } from 'react-router-dom';
 
 // styles
-import { StyledArticle, StyledPreviewDiv } from './FeedStyle';
+import {
+  StyledArticle,
+  StyledPreviewDiv,
+  StyledSpinnerDiv,
+  StyledDiv,
+} from './FeedStyle';
 
 // icons
 import { BsPlusCircle } from 'react-icons/bs';
@@ -12,7 +18,7 @@ import FeedHeader from './FeedHeader';
 import FeedBody from './FeedBody';
 import FeedComment from './FeedComment';
 import FeedIcons from './FeedIcons';
-import { Link } from 'react-router-dom';
+import Spinner from '../common/Spinner';
 
 interface FeedProps {
   loading: boolean;
@@ -73,7 +79,7 @@ function Feed({
   }, [getFeedPosts, myId]);
 
   return (
-    <>
+    <StyledDiv>
       {feedPosts.length === 0 && !loading && error === null && (
         <StyledPreviewDiv>
           <div>
@@ -84,8 +90,10 @@ function Feed({
           </div>
         </StyledPreviewDiv>
       )}
-      {feedPosts.length === 0 && loading && error !== null && (
-        <div>게시물 정보를 받아오는 중입니다...</div>
+      {loading && (
+        <StyledSpinnerDiv>
+          <Spinner />
+        </StyledSpinnerDiv>
       )}
       {feedPosts.length !== 0 &&
         feedPosts.map(post => (
@@ -118,7 +126,7 @@ function Feed({
           </StyledArticle>
         ))}
       <div ref={lastItemRef}></div>
-    </>
+    </StyledDiv>
   );
 }
 

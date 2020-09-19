@@ -1,5 +1,10 @@
 import styled from 'styled-components';
 
+export const StyledDiv = styled.div`
+  position: relative;
+  min-height: 500px;
+`;
+
 export const StyledArticle = styled.article`
   border: 1px solid rgb(219, 219, 219);
   border-radius: 3px;
@@ -31,4 +36,10 @@ export const StyledPreviewDiv = styled.div`
     font-size: 60px;
     color: rgb(51, 154, 240);
   }
+`;
+
+export const StyledSpinnerDiv = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
 `;

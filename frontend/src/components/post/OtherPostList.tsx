@@ -5,10 +5,11 @@ import RootState from '../../type';
 import { useLocation } from 'react-router-dom';
 
 // styles
-import { StyledDiv } from './OtherPostListStyle';
+import { StyledDiv, StyledSpinnerDiv } from './OtherPostListStyle';
 
 // components
 import OtherPostItem from './OtherPostItem';
+import Spinner from '../common/Spinner';
 
 interface OtherPostListProps {
   getPostCounts: (post_id: number) => void;
@@ -16,13 +17,21 @@ interface OtherPostListProps {
 
 function OtherPostList({ getPostCounts }: OtherPostListProps) {
   const width = useWindowWidth();
-  const { otherPosts } = useSelector((state: RootState) => state.otherPosts);
+  const { loading, error, otherPosts } = useSelector(
+    (state: RootState) => state.otherPosts,
+  );
   const selectedPostId = +useLocation().pathname.split('/')[2];
   const exceptThisPosts = otherPosts.filter(post => post.id !== selectedPostId);
   const latestSixPosts = exceptThisPosts.filter((_, i) => i < 6);
 
   return (
     <StyledDiv width={width}>
+      {loading && (
+        <StyledSpinnerDiv>
+          <Spinner />
+        </StyledSpinnerDiv>
+      )}
+      {!loading && error !== null}
       <ul>
         {latestSixPosts.map(post => (
           <OtherPostItem

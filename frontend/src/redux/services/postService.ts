@@ -54,6 +54,7 @@ const PostService: IPostService = class {
       },
     });
 
+    console.log('getUserPosts', res.data);
     return res.data;
   }
 

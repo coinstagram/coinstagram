@@ -335,12 +335,6 @@ function postReducer(
           randomPosts: action.payload.randomPosts,
         },
       };
-    // case SUCCESS_GET_POSTS_USER:
-    //   return {
-    //     feedPosts: state.feedPosts,
-    //     selectedPost: state.selectedPost,
-    //     randomPosts: state.randomPosts,
-    //   };
     case SUCCESS_GET_POSTS_FEED:
       return {
         feedPosts: {
@@ -392,6 +386,16 @@ function postReducer(
           selectedPost: null,
         },
         randomPosts: state.randomPosts,
+      };
+    case FAIL_GET_POSTS_RANDOM:
+      return {
+        feedPosts: state.feedPosts,
+        selectedPost: state.selectedPost,
+        randomPosts: {
+          loading: false,
+          error: action.payload,
+          randomPosts: [],
+        },
       };
     case FAIL_DELETE_POST:
       return {

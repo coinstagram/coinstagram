@@ -8,11 +8,16 @@ import useWindowWidth from '../../hooks/useWindowWidth';
 import { BsCardImage, BsTag, BsBookmarks } from 'react-icons/bs';
 
 // styles
-import { StyledSection, StyledNavDiv } from './ProfilePostsStyle';
+import {
+  StyledSection,
+  StyledNavDiv,
+  StyledSpinnerDiv,
+} from './ProfilePostsStyle';
 import { StyledDiv } from '../post/OtherPostListStyle';
 
 // components
 import OtherPostItem from '../post/OtherPostItem';
+import Spinner from '../common/Spinner';
 
 interface ProfilePostsProps {
   profileId: string;
@@ -30,7 +35,9 @@ function ProfilePosts({
   getBookmarkPosts,
 }: ProfilePostsProps) {
   const pageName = useLocation().pathname.split('/')[3];
-  const { otherPosts } = useSelector((state: RootState) => state.otherPosts);
+  const { loading, error, otherPosts } = useSelector(
+    (state: RootState) => state.otherPosts,
+  );
   const { bookmarkPosts } = useSelector(
     (state: RootState) => state.bookmarks.bookmarkPosts,
   );
@@ -67,6 +74,11 @@ function ProfilePosts({
         </ul>
       </StyledNavDiv>
       <StyledDiv width={width}>
+        {loading && (
+          <StyledSpinnerDiv>
+            <Spinner />
+          </StyledSpinnerDiv>
+        )}
         {pageName === undefined && otherPosts.length === 0 && (
           <div>@{profileId}님이 업로드하신 게시물이 없습니다.</div>
         )}
