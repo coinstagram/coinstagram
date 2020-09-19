@@ -13,5 +13,7 @@ export const StyledSection = styled.section`
   dd {
     color: rgb(134, 142, 150);
     font-weight: bold;
+    margin-bottom: 15px;
+    margin-left: 5px;
   }
 `;

@@ -5,9 +5,10 @@ export const StyledArticle = styled.article`
 
   & > div:nth-of-type(1) {
     float: left;
-    height: auto;
     width: 100%;
-    max-width: ${props => props.width > 1000 && 600};
+    height: 100%;
+    max-height: 500px;
+    max-width: 1000px;
   }
 
   & > div:nth-of-type(2) {

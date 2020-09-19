@@ -155,11 +155,7 @@ function* getPostLikes(action: getLikesSagaAction) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
     yield put(startGetPostLikes());
-    const userLikes = yield call(
-      LikeService.getLikesPost,
-      token,
-      action.payload.post_id,
-    );
+    const userLikes = yield call(LikeService.getLikesPost, token, action.payload.post_id);
     yield put(successGetPostLikes(userLikes));
   } catch (error) {
     yield put(failGetPostLikes(error));
@@ -218,7 +214,7 @@ function likeReducer(state: likeState = initialState, action: likeActios) {
         postLikes: {
           loading: true,
           error: null,
-          userLikes: [],
+          userLikes: state.postLikes.userLikes,
         },
         commentLikes: state.commentLikes,
       };
@@ -227,10 +223,7 @@ function likeReducer(state: likeState = initialState, action: likeActios) {
         postLikes: {
           loading: false,
           error: null,
-          userLikes: [
-            ...state.postLikes.userLikes,
-            ...action.payload.postLikes,
-          ],
+          userLikes: [...state.postLikes.userLikes, ...action.payload.postLikes],
         },
         commentLikes: state.commentLikes,
       };
@@ -295,9 +288,7 @@ function likeReducer(state: likeState = initialState, action: likeActios) {
             +like.post_id === action.payload.post_id
               ? {
                   post_id: like.post_id,
-                  user_id: like.user_id.filter(
-                    id => id !== action.payload.user_id,
-                  ),
+                  user_id: like.user_id.filter(id => id !== action.payload.user_id),
                 }
               : like,
           ),

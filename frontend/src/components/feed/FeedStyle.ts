@@ -2,18 +2,37 @@ import styled, { css } from 'styled-components';
 
 export const StyledDiv = styled.div`
   position: relative;
+  min-height: 170px;
 `;
 
 export const StyledArticle = styled.article`
-  border: 1px solid rgb(219, 219, 219);
-  border-radius: 10px;
-  margin-top: 50px;
-  transition: transform 0.5s, box-shadow 0.5s;
-
-  &.selected {
-    transform: translateY(-5px);
-    box-shadow: 5px 5px 1px rgb(219, 219, 219);
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+    }
   }
+  background-color: rgb(250, 250, 250);
+  border-radius: 10px;
+  animation: fadeIn 1s;
+  transition: transform 0.3s;
+
+  ${props =>
+    props.width < 655
+      ? css`
+          margin-top: 20px;
+          border: 1px solid rgb(219, 219, 219);
+        `
+      : css`
+          box-shadow: 5px 5px 10px rgb(219, 219, 219);
+          margin-top: 50px;
+          &.selected {
+            transform: translateY(-10px);
+          }
+        `}
 
   ${props =>
     props.width > 1000
@@ -21,7 +40,7 @@ export const StyledArticle = styled.article`
           display: inline-block;
           box-sizing: border-box;
           width: 32%;
-          & + & {
+          & {
             margin-left: 2%;
           }
           &:nth-of-type(3n + 1) {
@@ -29,7 +48,7 @@ export const StyledArticle = styled.article`
           }
         `
       : css`
-          & + & {
+          & {
             margin-left: 0;
           }
         `}

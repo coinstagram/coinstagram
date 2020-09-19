@@ -26,7 +26,10 @@ interface ProfilePostsProps {
 function ProfilePosts({ profileId, myId, bookmarkedId, getPostCounts, getBookmarkPosts }: ProfilePostsProps) {
   const pageName = useLocation().pathname.split('/')[3];
   const { loading, error, otherPosts } = useSelector((state: RootState) => state.otherPosts);
-  const { bookmarkPosts } = useSelector((state: RootState) => state.bookmarks.bookmarkPosts);
+  const { bookmarkPosts } = useSelector((state: RootState) => state.bookmarks);
+  const bookmarkLoading = bookmarkPosts.loading;
+  const bookmarkError = bookmarkPosts.error;
+  const bookmarkedPosts = bookmarkPosts.bookmarkPosts;
   const width = useWindowWidth();
 
   useEffect(() => {
@@ -61,7 +64,7 @@ function ProfilePosts({ profileId, myId, bookmarkedId, getPostCounts, getBookmar
             <Spinner />
           </StyledSpinnerDiv>
         )}
-        {pageName === undefined && otherPosts.length === 0 && <div>@{profileId}님이 업로드하신 게시물이 없습니다.</div>}
+        {pageName === undefined && otherPosts.length === 0 && <div>@{profileId}님이 업로드하신 게시물이 없어요.</div>}
         {pageName === undefined && (
           <ul>
             {otherPosts.map(post => (
@@ -75,9 +78,15 @@ function ProfilePosts({ profileId, myId, bookmarkedId, getPostCounts, getBookmar
             ))}
           </ul>
         )}
+        {bookmarkLoading && (
+          <StyledSpinnerDiv>
+            <Spinner />
+          </StyledSpinnerDiv>
+        )}
+        {pageName === 'saved' && bookmarkedPosts.length === 0 && <div> 아직 찜한 게시물이 없어요.</div>}
         {pageName === 'saved' && (
           <ul>
-            {bookmarkPosts.map(post => (
+            {bookmarkedPosts.map(post => (
               <OtherPostItem
                 key={post.id}
                 postId={post.id}

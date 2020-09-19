@@ -5,7 +5,7 @@ export const StyledUl = styled.ul`
     display: inline-block;
     position: relative;
     width: 100%;
-    padding-bottom: 80%;
+    padding-bottom: 100%;
   }
 
   img {

@@ -7,9 +7,10 @@ export const StyledSection = styled.section`
     ${props =>
       props.width >= 750
         ? css`
-            width: 30%;
-            margin-top: 5%;
-            margin-left: 5%;
+            width: 18%;
+            margin-top: 2.5%;
+            margin-left: 2.5%;
+            box-shadow: 5px 5px 10px rgb(219, 219, 219);
           `
         : css`
             width: 33%;
@@ -18,29 +19,25 @@ export const StyledSection = styled.section`
           `}
   }
 
-  li:nth-of-type(12n + 1) {
+  li:nth-of-type(17n + 1) {
     margin-left: 0;
   }
 
-  li:nth-of-type(12n + 3) {
+  li:nth-of-type(17n + 5) {
     margin-left: 0;
   }
 
-  li:nth-of-type(12n + 4) {
+  li:nth-of-type(17n + 8) {
     margin-left: 0;
   }
 
-  li:nth-of-type(12n + 7) {
+  li:nth-of-type(17n + 13) {
     margin-left: 0;
   }
 
-  li:nth-of-type(12n + 10) {
-    margin-left: 0;
-  }
-
-  li:nth-of-type(12n + 2) {
+  li:nth-of-type(17n + 4) {
     float: right;
-    width: ${props => (props.width >= 750 ? 65 : 66.48)}%;
+    width: ${props => (props.width >= 750 ? 38.48 : 66.48)}%;
   }
 `;
 

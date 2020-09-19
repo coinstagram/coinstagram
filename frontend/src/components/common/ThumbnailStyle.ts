@@ -16,6 +16,8 @@ export const StyledSpan = styled.span`
       width: ${size}px;
       height: ${size}px;
     `}
+
+  background-color: rgb(255, 255, 255);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: 50% 50%;

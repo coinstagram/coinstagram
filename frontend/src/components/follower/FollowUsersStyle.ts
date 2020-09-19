@@ -1,13 +1,23 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import borderStyle from '../common/ThumbnailBorderStyle';
 
 export const StyledSection = styled.section`
   height: 84px;
   padding: 16px 40px 10px 33px;
-  border: 1px solid rgb(219, 219, 219);
   border-radius: 3px;
   overflow: hidden;
   position: relative;
+  width: ${props => props.width > 1520 && 50}%;
+  margin: 0 auto;
+
+  ${props =>
+    props.width < 655
+      ? css`
+          border: 1px solid rgb(219, 219, 219);
+        `
+      : css`
+          box-shadow: 5px 5px 10px rgb(219, 219, 219);
+        `}
 
   .hidden-container {
     overflow: hidden;

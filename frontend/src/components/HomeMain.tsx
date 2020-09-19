@@ -16,7 +16,7 @@ const StyledDiv = styled.div`
   position: relative;
 
   .list-container {
-    max-width: 1350px;
+    max-width: 1150px;
   }
 
   .recommend-container {
@@ -36,11 +36,6 @@ function HomeMain() {
   const { users } = useSelector((state: RootState) => state.userInfo.followers);
   const dispatch = useDispatch();
   const { follow, popFollowModal, popPostModal, postId, postModal, user_id, user_profile } = useContext(ModalContext);
-
-  // useEffect(() => {
-  //   if (myId) return;
-  //   dispatch(getUserInfoSaga());
-  // }, [dispatch, myId]);
 
   const deletePost = useCallback(
     (post_id: number) => {

@@ -20,7 +20,7 @@ function OtherPostList({ getPostCounts }: OtherPostListProps) {
   const { loading, error, otherPosts } = useSelector((state: RootState) => state.otherPosts);
   const selectedPostId = +useLocation().pathname.split('/')[2];
   const exceptThisPosts = otherPosts.filter(post => post.id !== selectedPostId);
-  const latestSixPosts = exceptThisPosts.filter((_, i) => i < 6);
+  const latestSixPosts = exceptThisPosts.filter((_, i) => i < 8);
 
   return (
     <StyledDiv width={width}>

@@ -11,6 +11,7 @@ export const StyledDivBg = styled.div`
 
 export const StyledModal = styled.div`
   position: absolute;
+  color: rgb(50, 50, 50);
   top: ${({ top }: NavModalProps) => top + 13};
   left: ${({ left }: NavModalProps) => left - 200};
   width: 230px;

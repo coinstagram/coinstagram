@@ -4,7 +4,7 @@ import RootState from '../../type';
 import { Link } from 'react-router-dom';
 
 // styles
-import { StyledDiv, StyledNoCommentDiv } from './FeedCommentListStyle';
+import { StyledDiv } from './FeedCommentListStyle';
 
 // components
 import FeedCommentItem from './FeedCommentItem';
@@ -30,7 +30,6 @@ function FeedCommentList({ postId, visual, getCommentsPost, viewTime, thumbnail 
 
   return (
     <StyledDiv>
-      {mergedComments.length === 0 && <StyledNoCommentDiv />}
       <ul>
         {mergedComments.length < 3 &&
           !visual &&

@@ -28,10 +28,7 @@ const startGetPostsFeed = () => ({
   type: START_GET_POSTS_FEED,
 });
 
-const successGetPostsFeed = (
-  followersPosts: EachPostState[],
-  myPosts: EachPostState[],
-) => {
+const successGetPostsFeed = (followersPosts: EachPostState[], myPosts: EachPostState[]) => {
   const mergedPosts = [...followersPosts, ...myPosts];
   mergedPosts.sort((a, b) => (a['id'] < b['id'] ? 1 : -1));
 
@@ -168,23 +165,16 @@ export const deletePostSaga = (post_id: number) => ({
   },
 });
 
-type PostSagaActions =
-  | ReturnType<typeof getUserPostsSaga>
-  | ReturnType<typeof getFeedPostsSaga>;
+type PostSagaActions = ReturnType<typeof getUserPostsSaga> | ReturnType<typeof getFeedPostsSaga>;
 
-type onePostSagaAction =
-  | ReturnType<typeof getSelectedPostSaga>
-  | ReturnType<typeof deletePostSaga>;
+type onePostSagaAction = ReturnType<typeof getSelectedPostSaga> | ReturnType<typeof deletePostSaga>;
 
 // saga function
 function* getRandomPosts() {
   try {
     const { token } = yield select((state: RootState) => state.auth);
     yield put(startGetPostsRandom());
-    const randomPosts: EachPostState[] = yield call(
-      PostService.getRandomPosts,
-      token,
-    );
+    const randomPosts: EachPostState[] = yield call(PostService.getRandomPosts, token);
     yield put(successGetPostsRandom(randomPosts));
   } catch (error) {
     yield put(failGetPostsRandom(error));
@@ -195,15 +185,8 @@ function* getFeedPosts(action: PostSagaActions) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
     yield put(startGetPostsFeed());
-    const followersPosts: EachPostState[] = yield call(
-      PostService.getFollowersPosts,
-      token,
-    );
-    const myPosts: EachPostState[] = yield call(
-      PostService.getUserPosts,
-      token,
-      action.payload.user_id,
-    );
+    const followersPosts: EachPostState[] = yield call(PostService.getFollowersPosts, token);
+    const myPosts: EachPostState[] = yield call(PostService.getUserPosts, token, action.payload.user_id);
     yield put(successGetPostsFeed(followersPosts, myPosts));
   } catch (error) {
     yield put(failGetPostsFeed(error));
@@ -214,11 +197,7 @@ function* getUserPosts(action: PostSagaActions) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
     yield put(startGetPostsUser());
-    const CertainUserPosts: EachPostState[] = yield call(
-      PostService.getUserPosts,
-      token,
-      action.payload.user_id,
-    );
+    const CertainUserPosts: EachPostState[] = yield call(PostService.getUserPosts, token, action.payload.user_id);
     yield put(successGetPostsUser(CertainUserPosts));
   } catch (error) {
     yield put(failGetPostsUser(error));
@@ -229,11 +208,7 @@ function* getSelectedPost(action: onePostSagaAction) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
     yield put(startGetPostSelected());
-    const selectedPost = yield call(
-      PostService.getSelectedPost,
-      token,
-      action.payload.post_id,
-    );
+    const selectedPost = yield call(PostService.getSelectedPost, token, action.payload.post_id);
     yield put(successGetPostSelected(selectedPost));
   } catch (error) {
     yield put(failGetPostSelcted(error));
@@ -280,17 +255,14 @@ const initialState: PostsState = {
 };
 
 // reducer
-function postReducer(
-  state: PostsState = initialState,
-  action: PostActions,
-): PostsState {
+function postReducer(state: PostsState = initialState, action: PostActions): PostsState {
   switch (action.type) {
     case START_GET_POSTS_FEED:
       return {
         feedPosts: {
           loading: true,
           error: null,
-          feedPosts: state.feedPosts.feedPosts,
+          feedPosts: [],
         },
         selectedPost: state.selectedPost,
         randomPosts: state.randomPosts,
@@ -360,9 +332,7 @@ function postReducer(
         feedPosts: {
           loading: false,
           error: null,
-          feedPosts: state.feedPosts.feedPosts.filter(
-            post => post.id !== action.payload.post_id,
-          ),
+          feedPosts: state.feedPosts.feedPosts.filter(post => post.id !== action.payload.post_id),
         },
         selectedPost: state.selectedPost,
         randomPosts: state.randomPosts,

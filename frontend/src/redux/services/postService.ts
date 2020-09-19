@@ -31,6 +31,7 @@ const PostService: IPostService = class {
       },
     });
 
+    console.log('getFollowersPosts', res.data);
     return res.data;
   }
 

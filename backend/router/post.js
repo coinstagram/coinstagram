@@ -389,29 +389,41 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
         sql = `select image_path from post_image where post_id = ?;`;
         sqls = '';
         post_id.map((id) => {
-          if (id.length === 0) {
-            return [];
-          } else {
-            id.map((postId) => {
-              sqls += mysql.format(sql, postId);
-            });
+          try {
+            if (id.length === 0) {
+              return [];
+            } else {
+              id.map((postId) => {
+                sqls += mysql.format(sql, postId);
+              });
+            }
+          } catch (err) {
+            sqls += mysql.format(sql, id[0]);
           }
         });
         const [image] = await connection.query(sqls);
         const arr = post_list.map((list, index) => {
           if (post_list.length === 0 || image.length === 0) return [];
-          if (list.length === undefined) {
-            list = {
-              ...list,
-              image_path: image[index].map(({ image_path }) => image_path),
-            };
-          } else {
-            for (let i = 0; i < list.length; i++) {
-              list[i] = {
-                ...list[i],
+          try {
+            if (list.length === undefined) {
+              list = {
+                ...list,
                 image_path: image[index].map(({ image_path }) => image_path),
               };
+            } else {
+              for (let i = 0; i < list.length; i++) {
+                list[i] = {
+                  ...list[i],
+                  image_path: image[index].map(({ image_path }) => image_path),
+                };
+              }
             }
+          } catch (err) {
+            list = {
+              ...list,
+              image_path: [image[0].image_path],
+            };
+            // list = [list];
           }
           return list;
         });
@@ -421,7 +433,7 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
         } catch (err) {
           result = arr;
         }
-        console.log(arr);
+        console.log(result);
         res.json(result);
       }
     } catch (error) {

@@ -16,32 +16,21 @@ interface RecommendUsersProps {
   getRandomUser: () => void;
 }
 
-function RecommendUsers({
-  user,
-  followers,
-  getRandomUser,
-}: RecommendUsersProps) {
-  const { loading, error, users } = useSelector(
-    (state: RootState) => state.userInfo.randomUsers,
-  );
+function RecommendUsers({ user, followers, getRandomUser }: RecommendUsersProps) {
+  const { loading, error, users } = useSelector((state: RootState) => state.userInfo.randomUsers);
   const width = useWindowWidth();
 
   useEffect(() => {
     getRandomUser();
   }, [getRandomUser]);
 
-  if (width < 1000) return null;
+  if (width < 1520) return null;
 
   return (
     <StyledSection>
       <h3 className="a11y-hidden">추천 계정</h3>
       <RecommendUsersHeader user={user} />
-      <RecommendUsersBody
-        loading={loading}
-        error={error}
-        randomUsers={users}
-        followers={followers}
-      />
+      <RecommendUsersBody loading={loading} error={error} randomUsers={users} followers={followers} />
     </StyledSection>
   );
 }

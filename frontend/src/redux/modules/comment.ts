@@ -80,11 +80,7 @@ function* getComments(action: commentSagaActions) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
     yield put(startGetComments());
-    const postComments: EachCommentState[] = yield call(
-      CommentService.getComment,
-      token,
-      action.payload.post_id,
-    );
+    const postComments: EachCommentState[] = yield call(CommentService.getComment, token, action.payload.post_id);
     yield put(successGetComments(postComments));
   } catch (error) {
     yield put(failGetComments(error));
@@ -95,12 +91,7 @@ function* addComment(action: commentSagaActions) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
     yield put(startAddComment());
-    const addComment = yield call(
-      CommentService.addComment,
-      token,
-      action.payload.post_id,
-      action.payload.comment_text,
-    );
+    const addComment = yield call(CommentService.addComment, token, action.payload.post_id, action.payload.comment_text);
     yield put(successAddComment(addComment));
   } catch (error) {
     yield put(failAddComment(error));
@@ -122,16 +113,13 @@ const initialState: CommentsState = {
 };
 
 // reducer
-function commentReducer(
-  state: CommentsState = initialState,
-  action: CommentActions,
-) {
+function commentReducer(state: CommentsState = initialState, action: CommentActions) {
   switch (action.type) {
     case START_GET_COMMENTS:
       return {
         loading: true,
         error: null,
-        postComments: [],
+        postComments: state.postComments,
         myComments: [],
       };
     case SUCCESS_GET_COMMENTS:
