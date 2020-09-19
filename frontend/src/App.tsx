@@ -4,11 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ConnectedRouter } from 'connected-react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  cancelFollowUserSaga,
-  followUserSaga,
-  getUserInfoSaga,
-} from './redux/modules/userInfo';
+import { cancelFollowUserSaga, followUserSaga, getUserInfoSaga } from './redux/modules/userInfo';
 import RootState from './type';
 
 // styles
@@ -30,16 +26,8 @@ import NotFound from './pages/NotFound';
 import FollowCancelModal from './components/common/FollowCancelModal';
 
 interface contextValue {
-  follow: (
-    user_id: string,
-    user_name: string,
-    user_profile: null | string,
-  ) => void;
-  setFollowInfo: (
-    user_id: string,
-    user_profile: null | string,
-    targetEl: null | HTMLSpanElement,
-  ) => void;
+  follow: (user_id: string, user_name: string, user_profile: null | string) => void;
+  setFollowInfo: (user_id: string, user_profile: null | string, targetEl: null | HTMLSpanElement) => void;
   changePostId: (post_id: number) => void;
 }
 
@@ -53,11 +41,7 @@ interface ModalType {
   postId: number;
   user_id: string;
   user_profile: null | string;
-  follow: (
-    user_id: string,
-    user_name: string,
-    user_profile: null | string,
-  ) => void;
+  follow: (user_id: string, user_name: string, user_profile: null | string) => void;
 }
 
 export interface ModalState {
@@ -114,20 +98,13 @@ function App() {
     dispatch(cancelFollowUserSaga(user_id));
   }, [dispatch, user_id]);
 
-  const setFollowInfo = useCallback(
-    (
-      user_id: string,
-      user_profile: null | string,
-      targetEl: null | HTMLSpanElement,
-    ) => {
-      setFollowModalState({
-        user_id,
-        user_profile,
-        targetEl,
-      });
-    },
-    [],
-  );
+  const setFollowInfo = useCallback((user_id: string, user_profile: null | string, targetEl: null | HTMLSpanElement) => {
+    setFollowModalState({
+      user_id,
+      user_profile,
+      targetEl,
+    });
+  }, []);
 
   const value = {
     follow,

@@ -1,7 +1,8 @@
 import React from 'react';
+import StyledFatalError from '../components/FatalErrorStyle';
 
 function FatalError() {
-  return <div>FatalError</div>;
+  return <StyledFatalError />;
 }
 
 export default FatalError;
