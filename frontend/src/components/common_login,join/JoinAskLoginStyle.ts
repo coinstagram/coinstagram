@@ -18,7 +18,7 @@ export const StyledAskLogin = styled.div`
           width: 100%;
           margin: 0;
           padding: 1vh;
-          height: 10vh;
+          height: 7vh;
           border: none;
           border-top: 1px solid #dbdbdb;
         `
@@ -27,8 +27,10 @@ export const StyledAskLogin = styled.div`
           padding: 10px 0;
           height: 70px;
         `};
-
-  .login {
-    color: #0095f6;
+  p {
+    margin-top: ${props => props.width <= 750 && '5px'};
+    .login {
+      color: #0095f6;
+    }
   }
 `;
