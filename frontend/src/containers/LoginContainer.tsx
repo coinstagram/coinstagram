@@ -4,22 +4,15 @@ import RootState from '../type';
 
 import InputUserId from '../components/common_login,join/InputUserId';
 import InputPassword from '../components/common_login,join/InputPassword';
-import { StyledLogin } from '../components/login/LoginStyle';
+import { StyledLogin, StyledForm } from '../components/login/LoginStyle';
 import JoinLoginButton from '../components/common_login,join/JoinLoginButton';
 import ImageLogo from '../components/common_login,join/ImageLogo';
 import { useDispatch, useSelector } from 'react-redux';
 import { signInSagaActionCreator } from '../redux/modules/auth';
 import ErrorMessage from '../components/common_login,join/ErrorMessage';
 import useWindowWidth from '../hooks/useWindowWidth';
+import LoadingSpinner from '../components/common_login,join/LoadingSpinner';
 
-const StyledForm = styled.form`
-  ${props =>
-    props.width <= 750 &&
-    css`
-      margin: auto;
-      max-width: 400px;
-    `}
-`;
 const idRegExp = /^[a-zA-Z0-9]{4,12}$/;
 
 function LoginContainer() {
@@ -43,7 +36,7 @@ function LoginContainer() {
   };
   // 로그인 실패 시
   const { auth } = useSelector((state: RootState) => state);
-  const { error } = auth;
+  const { error, loading } = auth;
 
   const width = useWindowWidth();
 
@@ -59,6 +52,8 @@ function LoginContainer() {
             disabled={!idCheck && !passwordCheck}
             className={['button', idCheck && passwordCheck && 'active'].join(' ')}
           />
+          {/* <LoadingSpinner /> */}
+          {loading && <LoadingSpinner />}
         </StyledForm>
         <ErrorMessage error={error}>
           사용자 정보가 일치하지 않습니다.

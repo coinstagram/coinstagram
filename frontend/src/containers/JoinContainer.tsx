@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signupSagaActionCreator } from '../redux/modules/signup';
 import ErrorMessage from '../components/common_login,join/ErrorMessage';
 import { StyledForm } from '../components/Join/JoinWrapperStyle';
+import LoadingSpinner from '../components/common_login,join/LoadingSpinner';
 import useWindowWidth from '../hooks/useWindowWidth';
 
 const emailRegExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
@@ -47,7 +48,7 @@ function JoinContainer() {
   // 회원가입 실패 시
 
   const { signup } = useSelector((state: any) => state);
-  const { error } = signup;
+  const { error, loading } = signup;
 
   useEffect(() => {}, [error]);
   const width = useWindowWidth();
@@ -63,7 +64,10 @@ function JoinContainer() {
           disabled={!phoneEmailCheck && !nameCheck && !idCheck && !passwordCheck}
           className={['button', phoneEmailCheck && nameCheck && idCheck && passwordCheck && 'active'].join(' ')}
         />
+
+        {loading && <LoadingSpinner />}
       </StyledForm>
+
       <ErrorMessage error={error}>
         기존에 있는 사용자 ID입니다.
         <p>다른 ID를 입력해주세요</p>

@@ -8,7 +8,7 @@ export const StyledDiv = styled.div`
   padding: 3px 0;
   max-width: 400px;
   margin: auto;
-  margin-top: 20px;
+  /* margin-top: 20px; */
   &::before {
     content: '';
     position: absolute;
