@@ -17,16 +17,6 @@ export const StyledJoinWrapper = styled.div`
   margin: 30px 0 10px 0;
   padding: 0 40px;
   box-sizing: border-box;
-  /* ${props =>
-    props.width > 750
-      ? css`
-          border: 1px solid #dbdbdb;
-          margin: 30px 0 10px 0;
-        `
-      : css`
-          border: none;
-          margin: 0;
-        `} */
 
   ${props =>
     props.width <= 750 &&
@@ -36,7 +26,10 @@ export const StyledJoinWrapper = styled.div`
       height: 100%;
     `}
 `;
+
 export const StyledForm = styled.form`
+  position: relative;
+  padding-bottom: 10px;
   ${props =>
     props.width <= 750 &&
     css`
