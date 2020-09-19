@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import styled, { css } from 'styled-components';
 import RootState from '../type';
 
 import InputUserId from '../components/common_login,join/InputUserId';
