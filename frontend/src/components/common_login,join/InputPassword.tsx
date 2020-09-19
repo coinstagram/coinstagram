@@ -11,12 +11,7 @@ export interface passwordProps {
   toggleIcon: boolean;
 }
 
-export default function InputPassword({
-  userPassword,
-  onInputPassword,
-  style,
-  toggleIcon,
-}: passwordProps) {
+export default function InputPassword({ userPassword, onInputPassword, style, toggleIcon }: passwordProps) {
   const [isPasswordShown, setPasswordShown] = useState(false);
 
   const toggleShowPassword = () => {
@@ -29,7 +24,7 @@ export default function InputPassword({
         name="user_password"
         value={userPassword}
         onInput={onInputPassword}
-        placeholder="비밀번호 (6자 이상)"
+        placeholder="비밀번호 (6 글자 이상)"
         toggleIcon={toggleIcon}
         display="flex"
         style={style}
@@ -37,11 +32,7 @@ export default function InputPassword({
         {' '}
         {userPassword.length >= 1 && (
           <StyledPassword>
-            <button
-              className="toggleBtn"
-              type="button"
-              onClick={toggleShowPassword}
-            >
+            <button className="toggleBtn" type="button" onClick={toggleShowPassword}>
               {isPasswordShown ? '숨기기' : '비밀번호 표시'}
             </button>
           </StyledPassword>

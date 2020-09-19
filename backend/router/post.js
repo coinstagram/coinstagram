@@ -365,28 +365,32 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
         params = [user_id];
         sqls += mysql.format(sql, params);
       });
-      const [test] = await connection.query(sqls);
-      console.log('369', test);
-      let post_id = test.map((foll) => {
+      const [post_list] = await connection.query(sqls);
+      let post_id = post_list.map((foll) => {
         try {
           if (foll.length === 0) {
             return undefined;
           } else {
-            return console.log('return', [...foll.map(({ id }) => id)]);
+            return [...foll.map(({ id }) => id)];
           }
         } catch (err) {
           return [foll.id];
         }
       });
-      post_id = post_id.filter((id) => id !== undefined);
+      post_id = post_id.map((id) => {
+        if (id === undefined) {
+          return [];
+        }
+        return id;
+      });
       if (post_id.length === 0) {
         return res.json([]);
       } else {
-        sql = `select image_path, post_id from post_image where post_id = ?;`;
+        sql = `select image_path from post_image where post_id = ?;`;
         sqls = '';
         post_id.map((id) => {
           if (id.length === 0) {
-            return;
+            return [];
           } else {
             id.map((postId) => {
               sqls += mysql.format(sql, postId);
@@ -394,29 +398,31 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
           }
         });
         const [image] = await connection.query(sqls);
-        let result = [];
-        let arr = [];
-        result = [...result, ...test];
-        if (result.length === 1) {
-          arr = [...arr, result[0]];
-        } else {
-          result.map((res) => {
-            arr = [...arr, res];
-          });
-        }
-        try {
-          if (image !== undefined) {
-            for (let i = 0; i < arr.length; i++) {
-              let imageitem = image[i].map(({ image_path }) => image_path);
-              arr[i] = { ...arr[i], image_path: imageitem };
+        const arr = post_list.map((list, index) => {
+          if (post_list.length === 0 || image.length === 0) return [];
+          if (list.length === undefined) {
+            list = {
+              ...list,
+              image_path: image[index].map(({ image_path }) => image_path),
+            };
+          } else {
+            for (let i = 0; i < list.length; i++) {
+              list[i] = {
+                ...list[i],
+                image_path: image[index].map(({ image_path }) => image_path),
+              };
             }
           }
+          return list;
+        });
+        let result = [];
+        try {
+          result = arr.reduce((acc, it) => [...acc, ...it], []);
         } catch (err) {
-          let imageitem = image[0].image_path;
-          arr[0] = { ...arr[0], image_path: [imageitem] };
-          console.log('arr', arr);
+          result = arr;
         }
-        res.json(arr);
+        console.log(arr);
+        res.json(result);
       }
     } catch (error) {
       await connection.rollback(); // ROLLBACK

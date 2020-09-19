@@ -17,24 +17,12 @@ interface FollowListModalProps {
   modal: boolean;
   content: string;
   isList?: boolean;
-  toggleModal: (
-    content?: string,
-    target?: EventTarget,
-    curTarget?: EventTarget,
-  ) => void;
+  toggleModal: (content?: string, target?: EventTarget, curTarget?: EventTarget) => void;
   popModal: () => void;
 }
 
-function FollowListModal({
-  modal,
-  content,
-  isList,
-  toggleModal,
-  popModal,
-}: FollowListModalProps) {
-  const { followers, followees } = useSelector(
-    (state: RootState) => state.anotherUserInfo,
-  );
+function FollowListModal({ modal, content, isList, toggleModal, popModal }: FollowListModalProps) {
+  const { followers, followees } = useSelector((state: RootState) => state.anotherUserInfo);
   const { userInfo } = useSelector((state: RootState) => state);
   const myId = userInfo.user && userInfo.user.user_id;
   const myFollowers = userInfo.followers.users;
@@ -45,10 +33,7 @@ function FollowListModal({
   };
 
   return (
-    <StyledBackground
-      modal={modal}
-      onClick={e => toggleModal('', e.target, e.currentTarget)}
-    >
+    <StyledBackground modal={modal} onClick={e => toggleModal('', e.target, e.currentTarget)}>
       <StyledDiv isList={isList} onClick={click} className="followList-modal">
         {isList && (
           <>
@@ -81,9 +66,7 @@ function FollowListModal({
                   </div>
                 ))}
             </div>
-            <StyledBtn
-              onClick={e => toggleModal('', e.target, e.currentTarget)}
-            >
+            <StyledBtn onClick={e => toggleModal('', e.target, e.currentTarget)}>
               <span tabIndex={-1}>
                 <ImCancelCircle />
               </span>

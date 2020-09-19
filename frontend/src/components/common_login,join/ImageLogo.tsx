@@ -22,13 +22,19 @@ export const MainLogo = styled(StyledH1)`
     css`
       margin-top: 20px;
       margin-bottom: 20px;
-    `}
+    `};
+  &.joinLogo {
+    margin-bottom: 20px;
+    margin-left: 10px;
+    ${props => props.width}
+  }
 `;
 
 export interface logoProps {
   width?: number;
+  logoStyle?: string;
 }
-export default function ImageLogo({ width }: logoProps) {
+export default function ImageLogo({ width, logoStyle }: logoProps) {
   return (
     <>
       {width <= 750 && (
@@ -36,7 +42,9 @@ export default function ImageLogo({ width }: logoProps) {
           <img src={imageLogo} alt="instagram_logo" />
         </StyledDiv>
       )}
-      <MainLogo width={width}>coinstagram</MainLogo>
+      <MainLogo width={width} className={logoStyle}>
+        coinstagram
+      </MainLogo>
     </>
   );
 }

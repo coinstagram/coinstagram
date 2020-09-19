@@ -1,17 +1,38 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const StyledDiv = styled.div`
   position: relative;
-  min-height: 500px;
 `;
 
 export const StyledArticle = styled.article`
   border: 1px solid rgb(219, 219, 219);
-  border-radius: 3px;
+  border-radius: 10px;
+  margin-top: 50px;
+  transition: transform 0.5s, box-shadow 0.5s;
 
-  & + & {
-    margin-top: 60px;
+  &.selected {
+    transform: translateY(-5px);
+    box-shadow: 5px 5px 1px rgb(219, 219, 219);
   }
+
+  ${props =>
+    props.width > 1000
+      ? css`
+          display: inline-block;
+          box-sizing: border-box;
+          width: 32%;
+          & + & {
+            margin-left: 2%;
+          }
+          &:nth-of-type(3n + 1) {
+            margin-left: 0;
+          }
+        `
+      : css`
+          & + & {
+            margin-left: 0;
+          }
+        `}
 `;
 
 export const StyledPreviewDiv = styled.div`
@@ -33,7 +54,7 @@ export const StyledPreviewDiv = styled.div`
   }
 
   a {
-    font-size: 60px;
+    font-size: 40px;
     color: rgb(51, 154, 240);
   }
 `;

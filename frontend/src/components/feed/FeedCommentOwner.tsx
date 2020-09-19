@@ -14,13 +14,7 @@ interface FeedComponentOwnerProps {
   thumbnail?: boolean;
 }
 
-function FeedCommentOwner({
-  userId,
-  userProfile,
-  context,
-  thumbnail,
-  createdTime,
-}: FeedComponentOwnerProps) {
+function FeedCommentOwner({ userId, userProfile, context, thumbnail, createdTime }: FeedComponentOwnerProps) {
   return (
     <StyledDiv thumbnail={thumbnail}>
       <span className="owner-comment">
@@ -32,7 +26,7 @@ function FeedCommentOwner({
           </Link>
         </dd>
       </span>
-      <span>{context}</span>
+      <span className="owner-context">{context}</span>
       <time>{computePassedTime(createdTime)}</time>
     </StyledDiv>
   );

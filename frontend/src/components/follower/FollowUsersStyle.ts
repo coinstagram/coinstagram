@@ -6,7 +6,6 @@ export const StyledSection = styled.section`
   padding: 16px 40px 10px 33px;
   border: 1px solid rgb(219, 219, 219);
   border-radius: 3px;
-  margin-bottom: 24px;
   overflow: hidden;
   position: relative;
 

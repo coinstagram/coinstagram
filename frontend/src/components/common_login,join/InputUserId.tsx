@@ -6,11 +6,7 @@ export interface userIdProps {
   onInputUserId?: (text: string) => void;
   toggleIcon: boolean;
 }
-export default function InputUserId({
-  userId,
-  onInputUserId,
-  toggleIcon,
-}: userIdProps) {
+export default function InputUserId({ userId, onInputUserId, toggleIcon }: userIdProps) {
   return (
     <>
       <InputCommon
@@ -18,7 +14,7 @@ export default function InputUserId({
         name="user_id"
         value={userId}
         onInput={onInputUserId}
-        placeholder="사용자 ID (4자 이상 12자 이하)"
+        placeholder="사용자 ID (4~12 글자)"
         toggleIcon={toggleIcon}
         display="block"
       ></InputCommon>

@@ -4,23 +4,12 @@ import { EachCommentState } from '../../type';
 const baseUrl = '/comment';
 
 interface ICommentService {
-  addComment: (
-    token: string | null,
-    post_id: number,
-    comment_text: string,
-  ) => Promise<EachCommentState>;
-  getComment: (
-    token: string | null,
-    post_id: number,
-  ) => Promise<EachCommentState[]>;
+  addComment: (token: string | null, post_id: number, comment_text: string) => Promise<EachCommentState>;
+  getComment: (token: string | null, post_id: number) => Promise<EachCommentState[]>;
 }
 
 const CommentService: ICommentService = class {
-  static async addComment(
-    token: string | null,
-    post_id: number,
-    comment_text: string,
-  ) {
+  static async addComment(token: string | null, post_id: number, comment_text: string) {
     const res = await axios.post<EachCommentState>(
       baseUrl,
       {
@@ -38,14 +27,13 @@ const CommentService: ICommentService = class {
   }
 
   static async getComment(token: string | null, post_id: number) {
-    const res = await axios.get<EachCommentState[]>(
-      `${baseUrl}/post/${post_id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    const res = await axios.get<EachCommentState[]>(`${baseUrl}/post/${post_id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    );
+    });
+
+    console.log(res.data);
 
     return res.data;
   }

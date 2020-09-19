@@ -8,11 +8,7 @@ import useWindowWidth from '../../hooks/useWindowWidth';
 import { BsCardImage, BsTag, BsBookmarks } from 'react-icons/bs';
 
 // styles
-import {
-  StyledSection,
-  StyledNavDiv,
-  StyledSpinnerDiv,
-} from './ProfilePostsStyle';
+import { StyledSection, StyledNavDiv, StyledSpinnerDiv } from './ProfilePostsStyle';
 import { StyledDiv } from '../post/OtherPostListStyle';
 
 // components
@@ -27,20 +23,10 @@ interface ProfilePostsProps {
   getPostCounts: (post_id: number) => void;
 }
 
-function ProfilePosts({
-  profileId,
-  myId,
-  bookmarkedId,
-  getPostCounts,
-  getBookmarkPosts,
-}: ProfilePostsProps) {
+function ProfilePosts({ profileId, myId, bookmarkedId, getPostCounts, getBookmarkPosts }: ProfilePostsProps) {
   const pageName = useLocation().pathname.split('/')[3];
-  const { loading, error, otherPosts } = useSelector(
-    (state: RootState) => state.otherPosts,
-  );
-  const { bookmarkPosts } = useSelector(
-    (state: RootState) => state.bookmarks.bookmarkPosts,
-  );
+  const { loading, error, otherPosts } = useSelector((state: RootState) => state.otherPosts);
+  const { bookmarkPosts } = useSelector((state: RootState) => state.bookmarks.bookmarkPosts);
   const width = useWindowWidth();
 
   useEffect(() => {
@@ -61,15 +47,11 @@ function ProfilePosts({
           </li>
           {profileId === myId && (
             <li>
-              <NavLink to={`/account/${profileId}/saved`}>
-                {width < 750 ? <BsBookmarks /> : '저장됨'}
-              </NavLink>
+              <NavLink to={`/account/${profileId}/saved`}>{width < 750 ? <BsBookmarks /> : '저장됨'}</NavLink>
             </li>
           )}
           <li>
-            <NavLink to={`/account/${profileId}/tagged`}>
-              {width < 750 ? <BsTag /> : '태그됨'}
-            </NavLink>
+            <NavLink to={`/account/${profileId}/tagged`}>{width < 750 ? <BsTag /> : '태그됨'}</NavLink>
           </li>
         </ul>
       </StyledNavDiv>
@@ -79,9 +61,7 @@ function ProfilePosts({
             <Spinner />
           </StyledSpinnerDiv>
         )}
-        {pageName === undefined && otherPosts.length === 0 && (
-          <div>@{profileId}님이 업로드하신 게시물이 없습니다.</div>
-        )}
+        {pageName === undefined && otherPosts.length === 0 && <div>@{profileId}님이 업로드하신 게시물이 없습니다.</div>}
         {pageName === undefined && (
           <ul>
             {otherPosts.map(post => (

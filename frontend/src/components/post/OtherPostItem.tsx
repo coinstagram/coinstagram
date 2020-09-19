@@ -16,12 +16,7 @@ interface OtherPostItemProps {
   getPostCounts: (post_id: number) => void;
 }
 
-function OtherPostItem({
-  postId,
-  postOwnerId,
-  imageThumbnail,
-  getPostCounts,
-}: OtherPostItemProps) {
+function OtherPostItem({ postId, postOwnerId, imageThumbnail, getPostCounts }: OtherPostItemProps) {
   const { counts } = useSelector((state: RootState) => state.otherPosts.counts);
 
   const thisPostCounts = counts.find(info => info.post_id === postId);
@@ -35,12 +30,7 @@ function OtherPostItem({
   return (
     <StyledLi>
       <Link to={`/post/${postId}`}>
-        <img
-          src={`http://localhost:4000/${
-            imageThumbnail[imageThumbnail.length - 1]
-          }`}
-          alt={`${postOwnerId}님의 게시물-${postId}}`}
-        />
+        <img src={`http://localhost:4000/${imageThumbnail[imageThumbnail.length - 1]}`} alt={`${postOwnerId}님의 게시물-${postId}}`} />
         {imageThumbnail.length > 1 && <FaClone />}
         <StyledCountDiv>
           <div>

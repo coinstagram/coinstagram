@@ -1,14 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { EachPostState } from '../../type';
 import { Link } from 'react-router-dom';
+import useWindowWidth from '../../hooks/useWindowWidth';
 
 // styles
-import {
-  StyledArticle,
-  StyledPreviewDiv,
-  StyledSpinnerDiv,
-  StyledDiv,
-} from './FeedStyle';
+import { StyledArticle, StyledPreviewDiv, StyledSpinnerDiv, StyledDiv } from './FeedStyle';
 
 // icons
 import { BsPlusCircle } from 'react-icons/bs';
@@ -51,6 +47,7 @@ function Feed({
   addBookmark,
   deleteBookmark,
 }: FeedProps) {
+  const width = useWindowWidth();
   const lastItemRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver>();
 
@@ -97,13 +94,9 @@ function Feed({
       )}
       {feedPosts.length !== 0 &&
         feedPosts.map(post => (
-          <StyledArticle key={post.id}>
+          <StyledArticle key={post.id} width={width} onFocus={toggleClass} onBlur={toggleClass}>
             <h3 className="a11y-hidden">{post.user_id}의 게시물</h3>
-            <FeedHeader
-              userId={post.user_id}
-              postId={post.id}
-              location={post.post_location}
-            />
+            <FeedHeader userId={post.user_id} postId={post.id} location={post.post_location} />
             <FeedBody imageUrl={post.image_path} />
             <FeedIcons
               myId={myId}
@@ -128,6 +121,10 @@ function Feed({
       <div ref={lastItemRef}></div>
     </StyledDiv>
   );
+
+  function toggleClass(e: React.FocusEvent<HTMLElement>) {
+    (e.currentTarget as Element).classList.toggle('selected');
+  }
 }
 
 export default React.memo(Feed);

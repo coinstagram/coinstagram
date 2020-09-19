@@ -14,9 +14,7 @@ interface RandomPostsProps {
 }
 
 function RandomPosts({ getRandomPosts, getPostCounts }: RandomPostsProps) {
-  const { loading, error, randomPosts } = useSelector(
-    (state: RootState) => state.posts.randomPosts,
-  );
+  const { loading, error, randomPosts } = useSelector((state: RootState) => state.posts.randomPosts);
   const width = useWindowWidth();
 
   useEffect(() => {
@@ -41,13 +39,7 @@ function RandomPosts({ getRandomPosts, getPostCounts }: RandomPostsProps) {
       {!loading && error === null && (
         <ul>
           {randomPosts.map(post => (
-            <OtherPostItem
-              key={post.id}
-              postId={post.id}
-              postOwnerId={post.user_id}
-              getPostCounts={getPostCounts}
-              imageThumbnail={post.image_path}
-            />
+            <OtherPostItem key={post.id} postId={post.id} postOwnerId={post.user_id} getPostCounts={getPostCounts} imageThumbnail={post.image_path} />
           ))}
         </ul>
       )}

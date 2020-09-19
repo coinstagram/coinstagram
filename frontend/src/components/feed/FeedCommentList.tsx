@@ -4,7 +4,7 @@ import RootState from '../../type';
 import { Link } from 'react-router-dom';
 
 // styles
-import { StyledDiv } from './FeedCommentListStyle';
+import { StyledDiv, StyledNoCommentDiv } from './FeedCommentListStyle';
 
 // components
 import FeedCommentItem from './FeedCommentItem';
@@ -17,31 +17,20 @@ interface FeedCommentListProps {
   thumbnail?: boolean;
 }
 
-function FeedCommentList({
-  postId,
-  visual,
-  getCommentsPost,
-  viewTime,
-  thumbnail,
-}: FeedCommentListProps) {
-  const { postComments, myComments } = useSelector(
-    (state: RootState) => state.comments,
-  );
+function FeedCommentList({ postId, visual, getCommentsPost, viewTime, thumbnail }: FeedCommentListProps) {
+  const { postComments, myComments } = useSelector((state: RootState) => state.comments);
 
   useEffect(() => {
     getCommentsPost(postId);
   }, [getCommentsPost, postId]);
 
-  const currentPostComments = postComments.filter(
-    comment => comment.post_id === postId,
-  );
-  const currentPostMyComments = myComments.filter(
-    comment => comment.post_id === postId,
-  );
+  const currentPostComments = postComments.filter(comment => comment.post_id === postId);
+  const currentPostMyComments = myComments.filter(comment => comment.post_id === postId);
   const mergedComments = [...currentPostComments, ...currentPostMyComments];
 
   return (
     <StyledDiv>
+      {mergedComments.length === 0 && <StyledNoCommentDiv />}
       <ul>
         {mergedComments.length < 3 &&
           !visual &&
@@ -61,9 +50,7 @@ function FeedCommentList({
             {currentPostComments.length >= 3 && (
               <li>
                 <Link to={`/post/${postId}`} className="comment-more">
-                  <span tabIndex={-1}>
-                    댓글 {currentPostComments.length}개 모두 보기
-                  </span>
+                  <span tabIndex={-1}>댓글 {currentPostComments.length}개 모두 보기</span>
                 </Link>
               </li>
             )}

@@ -6,18 +6,9 @@ const baseUrl = '/post';
 interface IPostService {
   getRandomPosts: (token: string | null) => Promise<EachPostState[]>;
   getFollowersPosts: (token: string | null) => Promise<EachPostState[]>;
-  getUserPosts: (
-    token: string | null,
-    user_id: string,
-  ) => Promise<EachPostState[]>;
-  getSelectedPost: (
-    token: string | null,
-    post_id: number,
-  ) => Promise<EachPostState>;
-  getSpecificPost: (
-    token: null | string,
-    post_id: number,
-  ) => Promise<EachPostState>;
+  getUserPosts: (token: string | null, user_id: string) => Promise<EachPostState[]>;
+  getSelectedPost: (token: string | null, post_id: number) => Promise<EachPostState>;
+  getSpecificPost: (token: null | string, post_id: number) => Promise<EachPostState>;
   deletePost: (token: string | null, post_id: number) => void;
   getCountPost: (token: string | null, post_id: number) => Promise<CountState>;
 }
@@ -34,16 +25,12 @@ const PostService: IPostService = class {
   }
 
   static async getFollowersPosts(token: string | null) {
-    const res = await axios.get<EachPostState[]>(
-      `/user/relationship${baseUrl}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    const res = await axios.get<EachPostState[]>(`/user/relationship${baseUrl}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    );
+    });
 
-    console.log('getFollowersPosts', res.data);
     return res.data;
   }
 
@@ -54,7 +41,6 @@ const PostService: IPostService = class {
       },
     });
 
-    console.log('getUserPosts', res.data);
     return res.data;
   }
 

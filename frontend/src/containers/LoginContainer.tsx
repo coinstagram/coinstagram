@@ -39,8 +39,7 @@ function LoginContainer() {
   const dispatch = useDispatch();
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    if (idCheck && passwordCheck)
-      dispatch(signInSagaActionCreator(user_id, user_password));
+    if (idCheck && passwordCheck) dispatch(signInSagaActionCreator(user_id, user_password));
   };
   // 로그인 실패 시
   const { auth } = useSelector((state: RootState) => state);
@@ -53,23 +52,12 @@ function LoginContainer() {
       <StyledLogin width={width}>
         <ImageLogo width={width} />
         <StyledForm onSubmit={handleSubmit} width={width}>
-          <InputUserId
-            userId={user_id}
-            onInputUserId={onInputUserId}
-            toggleIcon={idCheck}
-          />
-          <InputPassword
-            userPassword={user_password}
-            onInputPassword={onInputPassword}
-            toggleIcon={passwordCheck}
-            style={{ marginBottom: '20px' }}
-          />
+          <InputUserId userId={user_id} onInputUserId={onInputUserId} toggleIcon={idCheck} />
+          <InputPassword userPassword={user_password} onInputPassword={onInputPassword} toggleIcon={passwordCheck} style={{ marginBottom: '20px' }} />
           <JoinLoginButton
             content="로그인"
             disabled={!idCheck && !passwordCheck}
-            className={['button', idCheck && passwordCheck && 'active'].join(
-              ' ',
-            )}
+            className={['button', idCheck && passwordCheck && 'active'].join(' ')}
           />
         </StyledForm>
         <ErrorMessage error={error}>

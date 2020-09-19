@@ -28,7 +28,7 @@ export const StyledLogin = styled.div`
           height: 100%;
           border: none;
           margin: 0;
-          /* padding: 30px 40px 70px; */
+
           padding: 10vh 10vw;
         `}
 `;
