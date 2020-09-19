@@ -1,9 +1,4 @@
-import RootState, {
-  UserInfoState,
-  AuthState,
-  UserResponseState,
-  AnotherUserState,
-} from '../../type';
+import RootState, { UserInfoState, AuthState, UserResponseState, AnotherUserState } from '../../type';
 import { put, call, takeEvery, select, delay } from 'redux-saga/effects';
 import UserService from '../services/userService';
 
@@ -58,11 +53,7 @@ const startFollowUser = () => ({
   type: START_FOLLOW_USER,
 });
 
-const followUser = (
-  user_id: string,
-  user_name: string,
-  user_profile: null | string,
-) => ({
+const followUser = (user_id: string, user_name: string, user_profile: null | string) => ({
   type: FOLLOW_USER,
   payload: {
     user_id,
@@ -121,11 +112,7 @@ export const getRandomUserInfoSaga = () => ({
   type: GET_RANDOM_USER_SAGA,
 });
 
-export const followUserSaga = (
-  user_id: string,
-  user_name: string,
-  user_profile: null | string,
-) => ({
+export const followUserSaga = (user_id: string, user_name: string, user_profile: null | string) => ({
   type: FOLLOW_USER_SAGA,
   payload: {
     user_id,
@@ -149,10 +136,7 @@ function* getUserSaga() {
   try {
     const { token }: AuthState = yield select((state: RootState) => state.auth);
     yield put(startGetUserInfo());
-    const getUserData: UserResponseState = yield call(
-      UserService.getUserData,
-      token,
-    );
+    const getUserData: UserResponseState = yield call(UserService.getUserData, token);
     yield put(successGetUserInfo(getUserData));
   } catch (error) {
     yield put(failUserInfo(error));
@@ -163,10 +147,7 @@ function* getRandomUserSaga() {
   try {
     const { token }: AuthState = yield select((state: RootState) => state.auth);
     yield put(startGetRandomUser());
-    const randomUsers: AnotherUserState[] = yield call(
-      UserService.getRandomUser,
-      token,
-    );
+    const randomUsers: AnotherUserState[] = yield call(UserService.getRandomUser, token);
     yield put(successGetRandomUser(randomUsers));
   } catch (error) {
     yield put(failGetRandomUser(error));
@@ -179,13 +160,7 @@ function* followingUserSaga(action: followSagaActions) {
     yield put(startFollowUser());
     yield call(UserService.followUser, action.payload.user_id, token);
     yield delay(1000);
-    yield put(
-      followUser(
-        action.payload.user_id,
-        action.payload.user_name,
-        action.payload.user_profile,
-      ),
-    );
+    yield put(followUser(action.payload.user_id, action.payload.user_name, action.payload.user_profile));
   } catch (error) {
     yield put(failFollowUser(error));
   }
@@ -229,10 +204,7 @@ const initialState: UserInfoState = {
 };
 
 // reducer
-function userInfoReducer(
-  state: UserInfoState = initialState,
-  action: UserActions,
-): UserInfoState {
+function userInfoReducer(state: UserInfoState = initialState, action: UserActions): UserInfoState {
   switch (action.type) {
     case CHANGE_USER_PROFILE:
       return {
@@ -352,9 +324,7 @@ function userInfoReducer(
         followers: {
           loading: false,
           error: null,
-          users: state.followers.users.filter(
-            follower => follower.user_id !== action.payload.user_id,
-          ),
+          users: state.followers.users.filter(follower => follower.user_id !== action.payload.user_id),
         },
         followees: state.followees,
         randomUsers: state.randomUsers,
