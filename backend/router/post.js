@@ -278,8 +278,30 @@ router.get('/comment/post/:post_id', verifyToken, async (req, res) => {
     try {
       sql = `SELECT * FROM comments where post_id = ?`;
       const [check] = await connection.query(sql, post_id);
+      const user_id = check.map(({ user_id }) => user_id);
+      sql = 'select user_profile from users where user_id = ?;';
+      let sqls = '';
+      let parmas = '';
 
-      res.send(check);
+      for (let i = 0; i < user_id.length; i++) {
+        console.log(i);
+        parmas = user_id[i];
+        sqls += mysql.format(sql, parmas);
+      }
+      console.log('check', check);
+      if (sqls === '') {
+        return res.json(check);
+      }
+      const [profile] = await connection.query(sqls);
+      console.log(profile);
+      let result;
+
+      result = check.map((list, index) => ({
+        ...list,
+        user_profile: profile[index][0].user_profile,
+      }));
+
+      res.send(result);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
@@ -422,14 +444,12 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
 
           return list;
         });
-        console.log(arr);
         let result = [];
         try {
           result = arr.reduce((acc, it) => [...acc, ...it], []);
         } catch (err) {
           result = arr;
         }
-
         res.json(result);
       }
     } catch (error) {
@@ -554,6 +574,7 @@ router.post('/post/image', verifyToken, async (req, res) => {
  * }
  */
 router.post('/post/like', verifyToken, async (req, res) => {
+  console.log('post /post/like');
   const token = req.headers.authorization.split('Bearer ')[1];
   const userData = jwt.verify(
     token,
@@ -586,57 +607,18 @@ router.post('/post/like', verifyToken, async (req, res) => {
 });
 
 router.get('/post/like/:post_id', verifyToken, async (req, res) => {
+  console.log('get /post/like/:post_id');
   const { post_id } = req.params;
+
   let sql = '';
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
       sql =
         'select user_id from users where user_id in (select user_id from post_like where post_id = ?)';
-
       const [data] = await connection.query(sql, post_id);
+      console.log(data);
       res.send([{ user_id: data.map(({ user_id }) => user_id), post_id }]);
-    } catch (error) {
-      await connection.rollback(); // ROLLBACK
-      await connection.release();
-      console.log(error);
-      res.status(500).json('SQL ERROR');
-    } finally {
-      await connection.release();
-    }
-  } catch (error) {
-    res.status(500).json('DB CONNECT ERROR');
-  }
-});
-
-router.delete('/post/like/:post_id', verifyToken, async (req, res) => {
-  const { post_id } = req.params;
-  const token = req.headers.authorization.split('Bearer ')[1];
-  const userData = jwt.verify(
-    token,
-    // eslint-disable-next-line no-undef
-    process.env.JWT_SECRET,
-  );
-  const { user_id } = userData;
-  let sql = '';
-  let sqls = [];
-  let params = [];
-  try {
-    const connection = await pool.getConnection(async (conn) => conn);
-    try {
-      sql = 'SET foreign_key_checks = 0;';
-      sqls += mysql.format(sql);
-      sql = 'delete from post_like where post_id = ? and user_id = ?;';
-      params = [post_id, user_id];
-      sqls += mysql.format(sql, params);
-      sql = 'SET foreign_key_checks = 1;';
-      sqls += mysql.format(sql);
-      const [test] = await connection.query(sqls);
-      if (test[1].affectedRows === 0) {
-        res.send({ success: false });
-      } else {
-        res.send({ success: true });
-      }
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
@@ -807,6 +789,8 @@ router.delete('/bookmark/:post_id', verifyToken, async (req, res) => {
 });
 
 router.delete('/post/like/:post_id', verifyToken, async (req, res) => {
+  console.log('del /post/like/:post_id');
+
   const { post_id } = req.params;
   const token = req.headers.authorization.split('Bearer ')[1];
   const userData = jwt.verify(
@@ -815,7 +799,6 @@ router.delete('/post/like/:post_id', verifyToken, async (req, res) => {
     process.env.JWT_SECRET,
   );
   const { user_id } = userData;
-
   let sql = '';
   let sqls = [];
   let params = [];
