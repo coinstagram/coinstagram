@@ -414,6 +414,7 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
         } catch (err) {
           let imageitem = image[0].image_path;
           arr[0] = { ...arr[0], image_path: [imageitem] };
+          console.log('arr', arr);
         }
         res.json(arr);
       }
