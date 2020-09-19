@@ -32,3 +32,14 @@ export const StyledLogin = styled.div`
           padding: 10vh 10vw;
         `}
 `;
+
+export const StyledForm = styled.form`
+  position: relative;
+  padding-bottom: 10px;
+  ${props =>
+    props.width <= 750 &&
+    css`
+      margin: auto;
+      max-width: 400px;
+    `}
+`;
