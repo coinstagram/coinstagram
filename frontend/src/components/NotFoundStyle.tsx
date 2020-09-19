@@ -22,7 +22,7 @@ const StyledDiv = styled.div`
 const TextWrapper = styled.div`
   text-align: center;
   p {
-    color: #707070;
+    color: #4d4d4d;
   }
   button {
     all: unset;

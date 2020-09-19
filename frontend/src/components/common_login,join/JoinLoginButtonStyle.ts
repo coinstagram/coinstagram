@@ -14,6 +14,7 @@ export const StyledButton = styled.button`
   width: 100%;
   height: 30px;
   border-radius: 3px;
+  margin-bottom: 10px;
   cursor: default;
   &.active {
     background: #0095f6;

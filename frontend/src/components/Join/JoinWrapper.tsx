@@ -16,7 +16,8 @@ export default function JoinWrapper() {
       <StyledJoinWrapper width={width}>
         <JoinHeader />
         <JoinContainer />
-        <JoinPolicy />
+
+        <JoinPolicy width={width} />
       </StyledJoinWrapper>
       <Link to={'/login'}>
         <JoinAskLogin askContent="계정이 있으신가요?" content="로그인" />
