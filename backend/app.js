@@ -11,6 +11,11 @@ const userRouter = require('./router/user');
 const bodyParser = require('body-parser');
 
 const app = express();
+app.use(function (req, res, next) {
+  console.log(req.url);
+  next();
+});
+
 // eslint-disable-next-line no-undef
 app.use('/', express.static(path.join(__dirname, 'uploads')));
 app.use(bodyParser.urlencoded({ extended: true }));
