@@ -314,6 +314,7 @@ router.get('/comment/post/:post_id', verifyToken, async (req, res) => {
     res.status(500).json('DB CONNECT ERROR');
   }
 });
+
 /**
  * get post detail
  * /user/post/:user_id
@@ -364,6 +365,31 @@ router.get('/user/post/:user_id', verifyToken, async (req, res) => {
  * login user friend post
  * /user/relationship/post
  */
+/**
+ *
+ * @param { Array } testArray
+ * 배열이 비어있음 true 아니면 false
+ */
+const checkEmpty = (testArray) => {
+  let check;
+  try {
+    check = testArray.reduce((acc, it) => [...acc, ...it], []).length === 0;
+  } catch (err) {
+    check = testArray.length === 0;
+  }
+  return check;
+};
+
+const checkMultArray = (testArray) => {
+  let check;
+  try {
+    check = testArray.reduce((acc, it) => [...acc, ...it], []);
+    return true;
+  } catch (err) {
+    check = testArray.length;
+    return false;
+  }
+};
 router.get('/user/relationship/post', verifyToken, async (req, res) => {
   console.log('/user/relationship/post');
   const token = req.headers.authorization.split('Bearer ')[1];
@@ -374,84 +400,98 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
   );
   const user = userData;
   let sql = '';
+  let isEmpty = false;
+  let sqls = '';
+  let params = [];
+  // 결과값
+  let result = [];
+
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
+      // 로그인 한 아이디 친구
       sql = `select user_id from users where user_id in(select followee_id from users_relationship where follower_id = ?);`;
       const [followee_id] = await connection.query(sql, user.user_id);
-
-      sql = `select * from posts where user_id = ?;`;
-      let sqls = '';
-      let params = [];
+      // 친구가 없으면 리턴
       if (followee_id.length === 0) return res.json(followee_id);
+
+      // 친구의 게시글 확인
+      sql = `select * from posts where user_id = ?;`;
 
       followee_id.map(({ user_id }) => {
         params = [user_id];
         sqls += mysql.format(sql, params);
       });
-
       const [post_list] = await connection.query(sqls);
 
-      let post_id = post_list.map((foll) => {
-        try {
-          if (foll.length === 0) {
-            return undefined;
-          } else {
-            return [...foll.map(({ id }) => id)];
-          }
-        } catch (err) {
-          return [foll.id];
-        }
-      });
-
-      post_id = post_id.map((id) => {
-        if (id === undefined) {
-          return [];
-        }
-        return id;
-      });
-
-      if (post_id.length === 0) {
+      // 친구의 게시글이 없으면 리턴
+      isEmpty = checkEmpty(post_list);
+      if (isEmpty) {
         return res.json([]);
-      } else {
-        sql = `select image_path from post_image where post_id = ?;`;
-        sqls = '';
-        post_id.map((id) => {
-          if (id.length === 0) {
-            return [];
-          } else {
-            id.map((postId) => {
-              sqls += mysql.format(sql, postId);
-            });
-          }
-        });
-        const [image] = await connection.query(sqls);
-        const arr = post_list.map((list, index) => {
-          if (post_list.length === 0 || image.length === 0) return [];
-          if (list.length === undefined) {
-            list = {
-              ...list,
-              image_path: image[index].map(({ image_path }) => image_path),
-            };
-          } else {
-            for (let i = 0; i < list.length; i++) {
-              list[i] = {
-                ...list[i],
-                image_path: image[index].map(({ image_path }) => image_path),
-              };
-            }
-          }
-
-          return list;
-        });
-        let result = [];
-        try {
-          result = arr.reduce((acc, it) => [...acc, ...it], []);
-        } catch (err) {
-          result = arr;
-        }
-        res.json(result);
       }
+
+      // 친구의 게시글의 id 가져오기
+      // 만약 게시글이 없는 친구는 빈 배열이 들어감
+      let post_id = [];
+      if (checkMultArray(post_list)) {
+        post_list.forEach((list, index1) => {
+          post_id[index1] = list.map(({ id }) => id);
+        });
+      } else {
+        post_list.forEach((list) => {
+          post_id = [...post_id, list.id];
+        });
+      }
+
+      sql = `select image_path from post_image where post_id = ?;`;
+      sqls = '';
+      // sqls 만들기
+      if (checkMultArray(post_id)) {
+        post_id.forEach((list) => {
+          list.forEach((id) => (sqls += mysql.format(sql, id)));
+        });
+      } else {
+        post_id.forEach((id) => {
+          console.log(id);
+          sqls += mysql.format(sql, id);
+        });
+      }
+      // 게시물의 이미지 가져옴
+      const [image] = await connection.query(sqls);
+      isEmpty = checkEmpty(image);
+
+      if (isEmpty) {
+        if (checkMultArray(post_list)) {
+          post_list.forEach((list, index1) => {
+            result[index1] = list.map(({ id }) => id);
+          });
+        } else {
+          post_list.forEach((list) => {
+            result = [...result, list.id.id];
+          });
+        }
+      }
+
+      if (checkMultArray(post_list)) {
+        result = post_list.reduce((acc, it) => [...acc, ...it], []);
+        result = result.map((list, index) => {
+          return {
+            ...list,
+            image_path: image[index].map(({ image_path }) => image_path),
+          };
+        });
+      } else {
+        result = post_list;
+        result.forEach((list, index) => {
+          console.log(image);
+          result[index] = {
+            ...list,
+            image_path: image[index].map(({ image_path }) => image_path),
+          };
+        });
+      }
+      console.log(result);
+      res.json(result);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
