@@ -184,6 +184,7 @@ function* getRandomPosts() {
 function* getFeedPosts(action: PostSagaActions) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
+
     yield put(startGetPostsFeed());
     const followersPosts: EachPostState[] = yield call(PostService.getFollowersPosts, token);
     const myPosts: EachPostState[] = yield call(PostService.getUserPosts, token, action.payload.user_id);

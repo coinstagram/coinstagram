@@ -154,6 +154,7 @@ type deletePostLikeSagaAction = ReturnType<typeof deletePostLikeSaga>;
 function* getPostLikes(action: getLikesSagaAction) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
+
     yield put(startGetPostLikes());
     const userLikes = yield call(LikeService.getLikesPost, token, action.payload.post_id);
     yield put(successGetPostLikes(userLikes));
