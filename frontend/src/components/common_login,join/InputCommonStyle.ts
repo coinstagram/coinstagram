@@ -34,7 +34,7 @@ export const StyledDiv = styled.div`
     input {
       background: #fafafa;
       color: #828282;
-      padding: 10px;
+      /* padding: 10px; */
       margin-top: 2px;
       border: none;
       width: 100%;

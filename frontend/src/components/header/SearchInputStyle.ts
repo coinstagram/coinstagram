@@ -6,7 +6,7 @@ export const StyledButton = styled.div`
 
   input {
     width: 100%;
-    height: 30px;
+    height: 40px;
     padding: 3px 26px;
     box-sizing: border-box;
     border: 1px solid rgb(219, 219, 219);
@@ -25,14 +25,14 @@ export const StyledButton = styled.div`
     }
 
     &.search {
-      top: 7px;
+      top: 13px;
       left: 5px;
       width: 15px;
       height: 15px;
     }
 
     &.reset {
-      top: 4.5px;
+      top: 10px;
       right: 3px;
 
       width: 20px;

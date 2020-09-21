@@ -17,7 +17,6 @@ export const StyledLi = styled.li`
       @keyframes fadeIn {
         from {
           opacity: 0;
-          transform: scale(0.9);
         }
         to {
           opacity: 1;

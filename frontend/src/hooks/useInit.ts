@@ -11,8 +11,10 @@ function useInit() {
   const dispatch = useDispatch();
   const { token } = useSelector((state: RootState) => state.auth);
   const { user } = useSelector((state: RootState) => state.userInfo);
+  const { followers } = useSelector((state: RootState) => state.userInfo);
   const { feedPosts } = useSelector((state: RootState) => state.posts.feedPosts);
   const userId = user && user.user_id;
+  const followersInfo = followers.users;
 
   useEffect(() => {
     if (token === null) return;
@@ -21,6 +23,9 @@ function useInit() {
 
   useEffect(() => {
     dispatch(getFeedPostsSaga(userId));
+  }, [dispatch, userId, followersInfo]);
+
+  useEffect(() => {
     dispatch(getBookmarksSaga(userId));
   }, [dispatch, userId]);
 

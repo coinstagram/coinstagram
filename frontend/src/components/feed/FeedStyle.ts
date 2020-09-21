@@ -9,7 +9,6 @@ export const StyledArticle = styled.article`
   @keyframes fadeIn {
     from {
       opacity: 0;
-      transform: scale(0.9);
     }
     to {
       opacity: 1;
@@ -19,10 +18,10 @@ export const StyledArticle = styled.article`
   border: 1px solid rgb(219, 219, 219);
   border-radius: 10px;
   animation: fadeIn 1s;
-  transition: transform 0.3s;
+  transition: box-shadow 0.3s, transform 0.5s;
 
   &.selected {
-    transform: ${props => props.width >= 1000 && `translateY(${-10}px)`};
+    box-shadow: 5px 5px 10px rgb(219, 219, 219);
   }
 
   ${props =>

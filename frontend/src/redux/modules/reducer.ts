@@ -7,7 +7,7 @@ import userInfo from './userInfo';
 import anotherUserInfo from './anotherUser';
 import posts from './post';
 import comments from './comment';
-import postReducer from './upload';
+import upload from './upload';
 import likes from './like';
 import bookmarks from './bookmark';
 import otherPosts from './otherPost';
@@ -19,7 +19,7 @@ const rootReducer = (history: History) =>
     userInfo,
     anotherUserInfo,
     posts,
-    postReducer,
+    upload,
     comments,
     likes,
     bookmarks,

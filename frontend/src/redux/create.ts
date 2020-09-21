@@ -57,6 +57,19 @@ function preloadedState(token: string | null): RootState {
         randomPosts: [],
       },
     },
+    upload: {
+      Loading: false,
+      Done: false,
+      Error: null,
+      data: {
+        user_id: '',
+        post_context: '',
+        post_anotheruser: '',
+        post_location: '',
+        tag: [],
+        image: [],
+      },
+    },
     comments: {
       loading: false,
       error: null,
@@ -102,9 +115,7 @@ function create(token: string | null): Store<RootState> {
   const store: Store<RootState> = createStore(
     rootReducer(history),
     preloadedState(token),
-    composeWithDevTools(
-      applyMiddleware(routerMiddleware(history), sagaMiddleWare),
-    ),
+    composeWithDevTools(applyMiddleware(routerMiddleware(history), sagaMiddleWare)),
   );
 
   sagaMiddleWare.run(rootSaga);
