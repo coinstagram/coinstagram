@@ -1,5 +1,6 @@
 import React from 'react';
 import useAuth from '../hooks/useAuth';
+import useWindowWidth from '../hooks/useWindowWidth';
 
 // styles
 import StyledMain from '../components/common/StyledMain';
@@ -9,12 +10,13 @@ import Header from '../components/header/Header';
 import ProfileContainer from '../containers/ProfileContainer';
 
 function Profile() {
+  const width = useWindowWidth();
   useAuth();
 
   return (
     <>
       <Header />
-      <StyledMain>
+      <StyledMain width={width}>
         <ProfileContainer />
       </StyledMain>
     </>

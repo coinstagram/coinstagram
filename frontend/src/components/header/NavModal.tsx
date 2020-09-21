@@ -3,7 +3,7 @@ import { logout } from '../../redux/modules/auth';
 import { useDispatch } from 'react-redux';
 
 // styles
-import { StyledDivBg, StyledModal } from './NavModalStyle';
+import { StyledDivBg, StyledModal, StyledReadyDiv } from './NavModalStyle';
 
 // icons
 import { IoIosSettings } from 'react-icons/io';
@@ -58,7 +58,16 @@ function NavModal({ top, left, favorite, profile, userId }: NavModalProps) {
               </li>
             </>
           )}
-          {favorite && <li>준비중입니다.</li>}
+          {favorite && (
+            <li>
+              <StyledReadyDiv>
+                열심히 준비중인 기능이에요{' '}
+                <span aria-label="우는 표정" role="img">
+                  😭
+                </span>
+              </StyledReadyDiv>
+            </li>
+          )}
         </ul>
       </StyledModal>
     </StyledDivBg>

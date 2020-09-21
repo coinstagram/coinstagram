@@ -6,11 +6,7 @@ export interface userIdProps {
   onInputUserId?: (text: string) => void;
   toggleIcon: boolean;
 }
-export default function InputUserId({
-  userId,
-  onInputUserId,
-  toggleIcon,
-}: userIdProps) {
+export default function InputUserId({ userId, onInputUserId, toggleIcon }: userIdProps) {
   return (
     <>
       <InputCommon

@@ -1,5 +1,5 @@
 import RootState, { PostsState, EachPostState } from '../../type';
-import { takeLatest, put, select, call, takeLeading } from 'redux-saga/effects';
+import { takeLatest, put, select, call } from 'redux-saga/effects';
 import PostService from '../services/postService';
 
 // action type
@@ -187,9 +187,7 @@ function* getFeedPosts(action: PostSagaActions) {
 
     yield put(startGetPostsFeed());
     const followersPosts: EachPostState[] = yield call(PostService.getFollowersPosts, token);
-
     const myPosts: EachPostState[] = yield call(PostService.getUserPosts, token, action.payload.user_id);
-
     yield put(successGetPostsFeed(followersPosts, myPosts));
   } catch (error) {
     yield put(failGetPostsFeed(error));
@@ -232,7 +230,7 @@ function* deletePost(action: onePostSagaAction) {
 // saga function register
 export function* postsSaga() {
   yield takeLatest(GET_RANDOM_POSTS_SAGA, getRandomPosts);
-  yield takeLeading(GET_FEED_POSTS_SAGA, getFeedPosts);
+  yield takeLatest(GET_FEED_POSTS_SAGA, getFeedPosts);
   yield takeLatest(GET_USER_POSTS_SAGA, getUserPosts);
   yield takeLatest(GET_SELECTED_POST_SAGA, getSelectedPost);
   yield takeLatest(DELETE_POST_SAGA, deletePost);
@@ -265,7 +263,7 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
         feedPosts: {
           loading: true,
           error: null,
-          feedPosts: state.feedPosts.feedPosts,
+          feedPosts: [],
         },
         selectedPost: state.selectedPost,
         randomPosts: state.randomPosts,
@@ -310,12 +308,6 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
           randomPosts: action.payload.randomPosts,
         },
       };
-    // case SUCCESS_GET_POSTS_USER:
-    //   return {
-    //     feedPosts: state.feedPosts,
-    //     selectedPost: state.selectedPost,
-    //     randomPosts: state.randomPosts,
-    //   };
     case SUCCESS_GET_POSTS_FEED:
       return {
         feedPosts: {
@@ -365,6 +357,16 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
           selectedPost: null,
         },
         randomPosts: state.randomPosts,
+      };
+    case FAIL_GET_POSTS_RANDOM:
+      return {
+        feedPosts: state.feedPosts,
+        selectedPost: state.selectedPost,
+        randomPosts: {
+          loading: false,
+          error: action.payload,
+          randomPosts: [],
+        },
       };
     case FAIL_DELETE_POST:
       return {

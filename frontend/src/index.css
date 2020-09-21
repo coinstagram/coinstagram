@@ -10,9 +10,8 @@ html {
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Open Sans', 'Lato',
-    sans-serif !important;
-  background: #fafafa;
+  font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Open Sans', 'Lato', sans-serif !important;
+  background-color: #f8f9fa;
   overflow-y: auto;
 }
 

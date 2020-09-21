@@ -1,12 +1,58 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+export const StyledDiv = styled.div`
+  position: relative;
+  min-height: 170px;
+`;
 
 export const StyledArticle = styled.article`
-  border: 1px solid rgb(219, 219, 219);
-  border-radius: 3px;
-
-  & + & {
-    margin-top: 60px;
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+    }
   }
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(219, 219, 219);
+  border-radius: 10px;
+  animation: fadeIn 1s;
+  transition: transform 0.3s;
+
+  &.selected {
+    transform: ${props => props.width >= 1000 && `translateY(${-10}px)`};
+  }
+
+  ${props =>
+    props.width < 655
+      ? css`
+          margin-top: 20px;
+          border: 1px solid rgb(219, 219, 219);
+        `
+      : css`
+          margin-top: 50px;
+        `}
+
+  ${props =>
+    props.width < 655
+      ? css`
+          & {
+            margin-left: 0;
+          }
+        `
+      : css`
+          display: inline-block;
+          box-sizing: border-box;
+          width: 32%;
+          & {
+            margin-left: 2%;
+          }
+          &:nth-of-type(3n + 1) {
+            margin-left: 0;
+          }
+        `}
 `;
 
 export const StyledPreviewDiv = styled.div`
@@ -28,7 +74,13 @@ export const StyledPreviewDiv = styled.div`
   }
 
   a {
-    font-size: 60px;
+    font-size: 40px;
     color: rgb(51, 154, 240);
   }
+`;
+
+export const StyledSpinnerDiv = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
 `;

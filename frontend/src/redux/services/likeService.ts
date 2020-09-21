@@ -11,15 +11,11 @@ interface ILikeService {
 
 const LikeService: ILikeService = class {
   static async getLikesPost(token: null | string, post_id: number) {
-    console.log(`getLikesPost`);
-
     const res = await axios.get<userLikesState[]>(`/post${baseUrl}/${post_id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-
-    console.log(`/post${baseUrl}/${post_id}`);
 
     return res.data;
   }

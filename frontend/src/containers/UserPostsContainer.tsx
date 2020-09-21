@@ -1,39 +1,24 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import RootState from '../type';
 import { useLocation } from 'react-router-dom';
 import { getAnotherUserSaga } from '../redux/modules/anotherUser';
 import { getSelectedPostSaga, deletePostSaga } from '../redux/modules/post';
-import { getPostComments, addPostComment } from '../redux/modules/comment';
-import {
-  cancelFollowUserSaga,
-  followUserSaga,
-} from '../redux/modules/userInfo';
-import {
-  addPostLikeSaga,
-  deletePostLikeSaga,
-  getPostLikesSaga,
-} from '../redux/modules/like';
-import {
-  addBookmarkSaga,
-  deleteBookmarkSaga,
-  getBookmarksSaga,
-} from '../redux/modules/bookmark';
-import {
-  getOtherPostsSaga,
-  getPostCountsSaga,
-} from '../redux/modules/otherPost';
+import { addPostComment } from '../redux/modules/comment';
+import { cancelFollowUserSaga, followUserSaga } from '../redux/modules/userInfo';
+import { addPostLikeSaga, deletePostLikeSaga } from '../redux/modules/like';
+import { addBookmarkSaga, deleteBookmarkSaga } from '../redux/modules/bookmark';
+import { getOtherPostsSaga, getPostCountsSaga } from '../redux/modules/otherPost';
+import { followContext } from '../App';
 
 // components
 import SelectedPost from '../components/post/SelectedPost';
 import OtherPosts from '../components/post/OtherPosts';
 
 function UserPostsContainer() {
-  const { selectedPost } = useSelector((state: RootState) => state.posts);
+  const { user_id } = useContext(followContext);
   const { user } = useSelector((state: RootState) => state.anotherUserInfo);
   const dispatch = useDispatch();
-  const user_id =
-    selectedPost.selectedPost && selectedPost.selectedPost.user_id;
 
   const selectedUserId = user && user.user_id;
   const selectedUserName = user && user.user_name;
@@ -45,24 +30,12 @@ function UserPostsContainer() {
   }, [dispatch, selectedPostId]);
 
   useEffect(() => {
-    if (!user_id) return;
     dispatch(getAnotherUserSaga(user_id));
   }, [dispatch, user_id]);
 
-  const getCommentsPost = useCallback(() => {
-    dispatch(getPostComments(selectedPostId));
-  }, [dispatch, selectedPostId]);
-
   const addCommentPost = useCallback(
-    (post_id: number, comment_text: string) => {
-      dispatch(addPostComment(post_id, comment_text));
-    },
-    [dispatch],
-  );
-
-  const getPostLikes = useCallback(
-    (post_id: number) => {
-      dispatch(getPostLikesSaga(post_id));
+    (post_id: number, comment_text: string, myProfile: string) => {
+      dispatch(addPostComment(post_id, comment_text, myProfile));
     },
     [dispatch],
   );
@@ -82,9 +55,7 @@ function UserPostsContainer() {
   );
 
   const follow = useCallback(() => {
-    dispatch(
-      followUserSaga(selectedUserId, selectedUserName, selectedUserProfile),
-    );
+    dispatch(followUserSaga(selectedUserId, selectedUserName, selectedUserProfile));
   }, [dispatch, selectedUserId, selectedUserName, selectedUserProfile]);
 
   const cancelFollow = useCallback(() => {
@@ -94,13 +65,6 @@ function UserPostsContainer() {
   const deletePost = useCallback(
     (post_id: number) => {
       dispatch(deletePostSaga(post_id));
-    },
-    [dispatch],
-  );
-
-  const getBookmarks = useCallback(
-    (user_id: string) => {
-      dispatch(getBookmarksSaga(user_id));
     },
     [dispatch],
   );
@@ -137,23 +101,16 @@ function UserPostsContainer() {
         selectedUserProfile={selectedUserProfile}
         selectedPostId={selectedPostId}
         getSelectedPostInfo={getSelectedPostInfo}
-        getCommentsPost={getCommentsPost}
         addCommentPost={addCommentPost}
-        getPostLikes={getPostLikes}
         addPostLikes={addPostLikes}
         deletePostLike={deletePostLike}
         follow={follow}
         cancelFollow={cancelFollow}
         deletePost={deletePost}
-        getBookmarks={getBookmarks}
         addBookmark={addBookmark}
         deleteBookmark={deleteBookmark}
       />
-      <OtherPosts
-        selectedUserId={selectedUserId}
-        getOtherPosts={getOtherPosts}
-        getPostCounts={getPostCounts}
-      />
+      <OtherPosts selectedUserId={selectedUserId} getOtherPosts={getOtherPosts} getPostCounts={getPostCounts} />
     </>
   );
 }

@@ -2,13 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // icons
-import {
-  BsHeartFill,
-  BsHeart,
-  BsBookmarks,
-  BsBookmarksFill,
-  BsChat,
-} from 'react-icons/bs';
+import { BsHeartFill, BsHeart, BsBookmarks, BsBookmarksFill, BsChat } from 'react-icons/bs';
 import RootState from '../../type';
 import { useSelector } from 'react-redux';
 
@@ -23,43 +17,21 @@ interface State {
 interface FeedIconsProps {
   myId: string;
   postId: number;
-  getPostLikes: (post_id: number) => void;
   addPostLikes: (post_id: number) => void;
   deletePostLike: (post_id: number) => void;
-  getBookmarks: (user_id: string) => void;
   addBookmark: (post_id: number) => void;
   deleteBookmark: (post_id: number) => void;
 }
 
-function FeedIcons({
-  myId,
-  postId,
-  getPostLikes,
-  addPostLikes,
-  deletePostLike,
-  getBookmarks,
-  addBookmark,
-  deleteBookmark,
-}: FeedIconsProps) {
-  const { userLikes } = useSelector(
-    (state: RootState) => state.likes.postLikes,
-  );
+function FeedIcons({ myId, postId, addPostLikes, deletePostLike, addBookmark, deleteBookmark }: FeedIconsProps) {
+  const { userLikes } = useSelector((state: RootState) => state.likes.postLikes);
   const { bookmarks } = useSelector((state: RootState) => state.bookmarks);
   const postLikesInfo = userLikes.find(like => +like.post_id === postId);
-  const likesCount =
-    postLikesInfo === undefined ? 0 : postLikesInfo.user_id.length;
+  const likesCount = postLikesInfo === undefined ? 0 : postLikesInfo.user_id.length;
   const [state, setState] = useState<State>({
     like: false,
     favorite: false,
   });
-
-  useEffect(() => {
-    getPostLikes(postId);
-  }, [getPostLikes, postId]);
-
-  useEffect(() => {
-    getBookmarks(myId);
-  }, [getBookmarks, myId]);
 
   useEffect(() => {
     const isBookmarked = bookmarks.some(post => post === postId);
@@ -71,8 +43,7 @@ function FeedIcons({
   }, [bookmarks, postId]);
 
   useEffect(() => {
-    const isLiked =
-      postLikesInfo && postLikesInfo.user_id.some(userId => userId === myId);
+    const isLiked = postLikesInfo && postLikesInfo.user_id.some(userId => userId === myId);
 
     setState(st => ({
       ...st,
@@ -85,9 +56,7 @@ function FeedIcons({
       <IconDiv like={state.like}>
         <div>
           <button onClick={toggleLike} className={`like-${postId}`}>
-            <span tabIndex={-1}>
-              {state.like ? <BsHeartFill /> : <BsHeart />}
-            </span>
+            <span tabIndex={-1}>{state.like ? <BsHeartFill /> : <BsHeart />}</span>
           </button>
           <Link to={`/post/${postId}`}>
             <span tabIndex={-1}>
@@ -96,9 +65,7 @@ function FeedIcons({
           </Link>
         </div>
         <button onClick={togleBookmark}>
-          <span tabIndex={-1}>
-            {state.favorite ? <BsBookmarksFill /> : <BsBookmarks />}
-          </span>
+          <span tabIndex={-1}>{state.favorite ? <BsBookmarksFill /> : <BsBookmarks />}</span>
         </button>
       </IconDiv>
       <div>

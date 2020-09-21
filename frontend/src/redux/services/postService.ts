@@ -15,8 +15,6 @@ interface IPostService {
 
 const PostService: IPostService = class {
   static async getRandomPosts(token: string | null) {
-    console.log(`get ${baseUrl}`);
-
     const res = await axios.get<EachPostState[]>(`${baseUrl}s`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -27,20 +25,16 @@ const PostService: IPostService = class {
   }
 
   static async getFollowersPosts(token: string | null) {
-    console.log(`get /user/relationship${baseUrl}`);
     const res = await axios.get<EachPostState[]>(`/user/relationship${baseUrl}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
-    console.log('getFollowersPosts', res.data);
     return res.data;
   }
 
   static async getUserPosts(token: string | null, user_id: string) {
-    console.log(`get /user${baseUrl}/${user_id}`);
-
     const res = await axios.get<EachPostState[]>(`/user${baseUrl}/${user_id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -51,8 +45,6 @@ const PostService: IPostService = class {
   }
 
   static async getSelectedPost(token: string | null, post_id: number) {
-    console.log(`get ${baseUrl}/${post_id}`);
-
     const res = await axios.get<EachPostState>(`${baseUrl}/${post_id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -63,8 +55,6 @@ const PostService: IPostService = class {
   }
 
   static async getSpecificPost(token: null | string, post_id: number) {
-    console.log(`get ${baseUrl}/${post_id}`);
-
     const res = await axios.get<EachPostState>(`${baseUrl}/${post_id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -83,8 +73,6 @@ const PostService: IPostService = class {
   }
 
   static async getCountPost(token: string | null, post_id: number) {
-    console.log(`get ${baseUrl}/count/${post_id}`);
-
     const res = await axios.get<CountState>(`${baseUrl}/count/${post_id}`, {
       headers: {
         Authorization: `Bearer ${token}`,

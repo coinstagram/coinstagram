@@ -16,8 +16,10 @@ export const StyledSpan = styled.span`
       width: ${size}px;
       height: ${size}px;
     `}
+
+  background-color: rgb(255, 255, 255);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: 50% 50%;
-  background-image: url(${({ imageUrl }: ThumbnailProps) => (imageUrl === null ? profile : `http://localhost:4000/uploads/${imageUrl}`)});
+  background-image: url(${({ imageUrl }: ThumbnailProps) => (!imageUrl ? profile : `http://localhost:4000/${imageUrl}`)});
 `;

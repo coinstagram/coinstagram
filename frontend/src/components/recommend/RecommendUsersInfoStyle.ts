@@ -4,6 +4,7 @@ import { RecommendUserInfoProps } from './RecommendUsersInfo';
 
 export const StyledDiv = styled.div`
   position: relative;
+
   button {
     display: flex;
     border-radius: 50%;
@@ -31,6 +32,10 @@ export const StyledDiv = styled.div`
 export const StyledDivUsername = styled.div`
   dd {
     position: absolute;
+    width: 65%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     font-size: 12px;
     color: rgb(142, 142, 142);
     ${({ size }: RecommendUserInfoProps) => css`
