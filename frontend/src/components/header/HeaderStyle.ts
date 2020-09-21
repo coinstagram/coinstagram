@@ -6,13 +6,14 @@ export const StyledHeader = styled.header`
   width: 100%;
   z-index: 10;
   background-color: rgb(255, 255, 255);
-  border-bottom: 1px solid rgb(219, 219, 219);
+  background-color: rgb(50, 50, 50);
 
   .container {
-    height: 54px;
+    height: ${props => (props.width < 655 ? 54 : 70)};
     padding: 0 20px;
     margin: 0 auto;
-    max-width: 975px;
+    max-width: 1500px;
+    color: rgb(255, 255, 255);
 
     display: flex;
     justify-content: space-between;

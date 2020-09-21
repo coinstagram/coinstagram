@@ -12,33 +12,19 @@ interface FeedCommentProps {
   userId: null | string;
   context: null | string;
   postId: number;
-  getCommentsPost: (post_id: number) => void;
-  addCommentPost: (post_id: number, comment_text: string) => void;
+  addCommentPost: (post_id: number, comment_text: string, myProfile: string) => void;
   postCreatedTime: string;
 }
 
-function FeedComment({
-  userId,
-  context,
-  postId,
-  getCommentsPost,
-  addCommentPost,
-  postCreatedTime,
-}: FeedCommentProps) {
+function FeedComment({ userId, context, postId, addCommentPost, postCreatedTime }: FeedCommentProps) {
   return (
     <>
       <StyledContainer>
         <FeedCommentOwner userId={userId} context={context} />
-        <FeedCommentList postId={postId} getCommentsPost={getCommentsPost} />
-        <StyledPassedTimeDiv className={`${postId}-createdTime`}>
-          {computePassedTime(postCreatedTime)}
-        </StyledPassedTimeDiv>
+        <FeedCommentList postId={postId} />
+        <StyledPassedTimeDiv className={`${postId}-createdTime`}>{computePassedTime(postCreatedTime)}</StyledPassedTimeDiv>
       </StyledContainer>
-      <FeedAddComment
-        userId={userId}
-        postId={postId}
-        addCommentPost={addCommentPost}
-      />
+      <FeedAddComment userId={userId} postId={postId} addCommentPost={addCommentPost} />
     </>
   );
 }
@@ -63,36 +49,17 @@ export function computePassedTime(time: null | string) {
   const currentMinute = now.getUTCMinutes();
   const currentSeconds = now.getUTCSeconds();
 
-  const createdTime = Date.UTC(
-    createdYear,
-    createdMonth,
-    createdDate,
-    createdHour,
-    createdMinute,
-    createdSeconds,
-  );
+  const createdTime = Date.UTC(createdYear, createdMonth, createdDate, createdHour, createdMinute, createdSeconds);
 
-  const currentTime = Date.UTC(
-    currentYear,
-    currentMonth,
-    currentDate,
-    currentHour,
-    currentMinute,
-    currentSeconds,
-  );
+  const currentTime = Date.UTC(currentYear, currentMonth, currentDate, currentHour, currentMinute, currentSeconds);
   const passedTime = currentTime - createdTime;
 
   if (passedTime / 1000 < 60) return `${Math.floor(passedTime / 1000)}초 전`;
-  if (passedTime / 1000 < 60 * 60)
-    return `${Math.floor(passedTime / (1000 * 60))}분 전`;
-  if (passedTime / 1000 < 60 * 60 * 24)
-    return `${Math.floor(passedTime / (1000 * 60 * 60))}시간 전`;
-  if (passedTime / 1000 < 60 * 60 * 24 * 30)
-    return `${Math.floor(passedTime / (1000 * 60 * 60 * 24))}일 전`;
-  if (passedTime / 1000 < 60 * 60 * 24 * 30 * 12)
-    return `${Math.floor(passedTime / (1000 * 60 * 60 * 24 * 30))}달 전`;
-  if (passedTime / 100 >= 60 * 60 * 24 * 30 * 12)
-    return `${Math.floor(passedTime / (1000 * 60 * 60 * 24 * 30 * 12))}년 전`;
+  if (passedTime / 1000 < 60 * 60) return `${Math.floor(passedTime / (1000 * 60))}분 전`;
+  if (passedTime / 1000 < 60 * 60 * 24) return `${Math.floor(passedTime / (1000 * 60 * 60))}시간 전`;
+  if (passedTime / 1000 < 60 * 60 * 24 * 30) return `${Math.floor(passedTime / (1000 * 60 * 60 * 24))}일 전`;
+  if (passedTime / 1000 < 60 * 60 * 24 * 30 * 12) return `${Math.floor(passedTime / (1000 * 60 * 60 * 24 * 30))}달 전`;
+  if (passedTime / 100 >= 60 * 60 * 24 * 30 * 12) return `${Math.floor(passedTime / (1000 * 60 * 60 * 24 * 30 * 12))}년 전`;
 }
 
 export default FeedComment;

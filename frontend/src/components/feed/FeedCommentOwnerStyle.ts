@@ -1,12 +1,21 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const StyledDiv = styled.div`
   position: relative;
   padding-left: ${props => props.thumbnail && 50};
+  ${props =>
+    !props.thumbnail &&
+    css`
+      height: 22px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    `}
 
   .owner-comment {
     display: inline-block;
     margin-right: 5px;
+
     dd {
       display: inline-block;
       span {
@@ -23,6 +32,9 @@ export const StyledDiv = styled.div`
         left: 0;
       }
     }
+  }
+
+  .owner-context {
   }
 
   time {

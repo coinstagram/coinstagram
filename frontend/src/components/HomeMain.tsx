@@ -1,7 +1,6 @@
-import React, { useCallback, useContext, useEffect } from 'react';
+import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserInfoSaga } from '../redux/modules/userInfo';
 import { deletePostSaga } from '../redux/modules/post';
 import { deleteBookmarkSaga } from '../redux/modules/bookmark';
 import { ModalContext } from '../App';
@@ -17,33 +16,20 @@ const StyledDiv = styled.div`
   position: relative;
 
   .list-container {
-    max-width: 614px;
+    max-width: 1150px;
   }
 
   .recommend-container {
     position: absolute;
     top: 0;
-    right: 315px;
+    right: 313;
   }
 `;
 
-export interface ModalState {
-  user_id: string;
-  user_profile: null | string;
-  targetEl: null | HTMLSpanElement;
-}
-
 function HomeMain() {
   const { users } = useSelector((state: RootState) => state.userInfo.followers);
-  const { user } = useSelector((state: RootState) => state.userInfo);
-  const myId = user && user.user_id;
   const dispatch = useDispatch();
   const { follow, popFollowModal, popPostModal, postId, postModal, user_id, user_profile } = useContext(ModalContext);
-
-  // useEffect(() => {
-  //   if (myId) return;
-  //   dispatch(getUserInfoSaga());
-  // }, [dispatch, myId]);
 
   const deletePost = useCallback(
     (post_id: number) => {

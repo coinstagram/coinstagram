@@ -119,7 +119,6 @@ function* addPostSagafun() {
 
     yield put(add_post({ ...postReducer.data, id, user_id, created_at, image_path: [...image_path] }));
     yield put(add_post_success());
-
     yield put(push('/'));
   } catch (error) {
     yield put(add_post_failure(error));

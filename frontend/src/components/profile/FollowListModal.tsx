@@ -1,8 +1,8 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import RootState from '../../type';
 import { logout } from '../../redux/modules/auth';
 import TokenService from '../../redux/services/tokenService';
+import RootState, { AnotherUserState } from '../../type';
 
 // styles
 import { StyledDiv, StyledBackground, StyledBtn } from './FollowListModalStyle';
@@ -14,6 +14,9 @@ import { ImCancelCircle } from 'react-icons/im';
 import RecommendUsersInfo from '../recommend/RecommendUsersInfo';
 
 interface FollowListModalProps {
+  myId: string;
+  followers: AnotherUserState[];
+  followees: AnotherUserState[];
   modal: boolean;
   content: string;
   isList?: boolean;
@@ -21,11 +24,8 @@ interface FollowListModalProps {
   popModal: () => void;
 }
 
-function FollowListModal({ modal, content, isList, toggleModal, popModal }: FollowListModalProps) {
-  const { followers, followees } = useSelector((state: RootState) => state.anotherUserInfo);
-  const { userInfo } = useSelector((state: RootState) => state);
-  const myId = userInfo.user && userInfo.user.user_id;
-  const myFollowers = userInfo.followers.users;
+function FollowListModal({ myId, followers, followees, modal, content, isList, toggleModal, popModal }: FollowListModalProps) {
+  const myFollowers = useSelector((state: RootState) => state.userInfo.followers.users);
   const dispatch = useDispatch();
   const onLogout = () => {
     dispatch(logout());

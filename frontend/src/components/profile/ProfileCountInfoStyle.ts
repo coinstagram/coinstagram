@@ -27,6 +27,7 @@ export const StyledDiv = styled.div`
     props.width < 750 &&
     css`
       position: absolute;
+      left: 0;
       bottom: 0;
       width: 100%;
       height: 45px;

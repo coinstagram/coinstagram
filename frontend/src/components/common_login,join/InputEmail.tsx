@@ -6,11 +6,7 @@ interface emailProps {
   toggleIcon: boolean;
   onInputEmail: (text: string) => void;
 }
-export default function InputEmail({
-  userEmail,
-  onInputEmail,
-  toggleIcon,
-}: emailProps) {
+export default function InputEmail({ userEmail, onInputEmail, toggleIcon }: emailProps) {
   return (
     <>
       <InputCommon

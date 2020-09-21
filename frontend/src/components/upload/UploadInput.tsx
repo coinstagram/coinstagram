@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyledDiv, StyledLabel } from './UploadInput.style';
+import { StyledDiv, StyledLabel, UploadWrapper } from './UploadInput.style';
 import FeedImgSlider from '../feed/FeedImgSlider';
 import uploadService from '../../redux/services/uploadService';
 
@@ -15,16 +15,10 @@ const UploadInput: React.FC<UploadDetailsProps> = ({ image }) => {
   const [imageFile, setImageFile] = useState<Array<String>>([]);
 
   const isSelectedImg = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const FileUrl = await uploadService.uploadImageView(
-      event.target.files,
-      localStorage.getItem('access_token'),
-    );
+    const FileUrl = await uploadService.uploadImageView(event.target.files, localStorage.getItem('access_token'));
     setImageFile([...imageFile, ...FileUrl]);
 
-    setImageURL([
-      ...imageURL,
-      ...FileUrl.map((data: resDataProps) => data.image_path),
-    ]);
+    setImageURL([...imageURL, ...FileUrl.map((data: resDataProps) => data.image_path)]);
   };
 
   React.useEffect(() => {
@@ -35,18 +29,20 @@ const UploadInput: React.FC<UploadDetailsProps> = ({ image }) => {
     <>
       {imageURL[0] === '' ? (
         <StyledDiv>
-          <StyledLabel htmlFor="image" tabIndex={0}>
-            <input
-              type="file"
-              id="image"
-              name="image"
-              className="a11y-hidden"
-              tabIndex={-1}
-              multiple
-              onChange={isSelectedImg}
-              accept="image/png, image/jpeg"
-            />
-          </StyledLabel>
+          <UploadWrapper>
+            <StyledLabel htmlFor="image" tabIndex={0}>
+              <input
+                type="file"
+                id="image"
+                name="image"
+                className="a11y-hidden"
+                tabIndex={-1}
+                multiple
+                onChange={isSelectedImg}
+                accept="image/png, image/jpeg"
+              />
+            </StyledLabel>
+          </UploadWrapper>
         </StyledDiv>
       ) : (
         <>

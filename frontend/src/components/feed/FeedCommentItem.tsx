@@ -19,15 +19,7 @@ interface FeedCommentItemProps {
   thumbnail: boolean;
 }
 
-function FeedCommentItem({
-  commentId,
-  userId,
-  userProfile,
-  commentText,
-  thumbnail,
-  viewTime,
-  createdTime,
-}: FeedCommentItemProps) {
+function FeedCommentItem({ commentId, userId, userProfile, commentText, thumbnail, viewTime, createdTime }: FeedCommentItemProps) {
   const [liked, setLiked] = useState<boolean>(false);
 
   return (
@@ -35,7 +27,7 @@ function FeedCommentItem({
       <span className="user-comment">
         <dt className="a11y-hidden">owner id</dt>
         <dd>
-          <Link to={`/${userId}`}>
+          <Link to={`/account/${userId}`}>
             {thumbnail && <Thumbnail imageUrl={userProfile} size={35} />}
             <span tabIndex={-1}>{userId}</span>
           </Link>

@@ -23,15 +23,12 @@ interface SelectedPostProps {
   selectedUserProfile: string;
   selectedPostId: number;
   getSelectedPostInfo: () => void;
-  getCommentsPost: () => void;
-  addCommentPost: (post_id: number, comment_text: string) => void;
-  getPostLikes: (post_id: number) => void;
+  addCommentPost: (post_id: number, comment_text: string, myProfile: string) => void;
   addPostLikes: (post_id: number) => void;
   deletePostLike: (post_id: number) => void;
   follow: () => void;
   cancelFollow: () => void;
   deletePost: (post_id: number) => void;
-  getBookmarks: (user_id: string) => void;
   addBookmark: (post_id: number) => void;
   deleteBookmark: (post_id: number) => void;
 }
@@ -41,15 +38,12 @@ function SelectedPost({
   selectedUserProfile,
   selectedPostId,
   getSelectedPostInfo,
-  getCommentsPost,
   addCommentPost,
-  getPostLikes,
   addPostLikes,
   deletePostLike,
   follow,
   cancelFollow,
   deletePost,
-  getBookmarks,
   addBookmark,
   deleteBookmark,
 }: SelectedPostProps) {
@@ -59,13 +53,8 @@ function SelectedPost({
   const user_id = user && user.user_id;
 
   const selectedPostInfo = selectedPost.selectedPost;
-
   const selectedPostImages = selectedPost.selectedPost !== null ? selectedPost.selectedPost.image_path : [];
-
-  console.log(selectedPostImages);
-
   const { postModal, popPostModal, popFollowModal } = useContext(ModalContext);
-
   const width = useWindowWidth();
 
   useEffect(() => {
@@ -74,12 +63,12 @@ function SelectedPost({
 
   return (
     <>
-      <StyledArticle width={width}>
+      <StyledArticle width={width} imageUrl={selectedPostImages[selectedPostImages.length - 1]}>
         <h3 className="a11y-hidden">
           {selectedUserId}님의 게시물 {selectedPostId}
         </h3>
         <div>
-          {width < 1000 && (
+          {width < 750 && (
             <FeedHeader
               userId={selectedUserId}
               userProfile={selectedUserProfile}
@@ -87,10 +76,12 @@ function SelectedPost({
               location={selectedPostInfo && selectedPostInfo.post_location}
             />
           )}
-          <FeedBody imageUrl={selectedPostImages} />
+          <div>
+            <FeedBody imageUrl={selectedPostImages} />
+          </div>
         </div>
         <div>
-          {width > 1000 && (
+          {width > 750 && (
             <FeedHeader
               userId={selectedUserId}
               userProfile={selectedUserProfile}
@@ -101,19 +92,18 @@ function SelectedPost({
           <StyledDiv width={width}>
             <FeedCommentOwner
               userId={selectedUserId}
+              userProfile={selectedUserProfile}
               context={selectedPostInfo && selectedPostInfo.post_context}
               createdTime={selectedPostInfo && selectedPostInfo.created_at}
               thumbnail={true}
             />
-            <FeedCommentList postId={selectedPostId} getCommentsPost={getCommentsPost} visual={true} viewTime={true} thumbnail={true} />
+            <FeedCommentList postId={selectedPostId} visual={true} viewTime={true} thumbnail={true} />
           </StyledDiv>
           <FeedIcons
             myId={user_id}
             postId={selectedPostId}
-            getPostLikes={getPostLikes}
             addPostLikes={addPostLikes}
             deletePostLike={deletePostLike}
-            getBookmarks={getBookmarks}
             addBookmark={addBookmark}
             deleteBookmark={deleteBookmark}
           />

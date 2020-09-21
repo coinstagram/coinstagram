@@ -144,11 +144,7 @@ function* getBookmarks(action: GetBookmarksAction) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
     yield put(startGetBookmarks());
-    const bookmarkPosts = yield call(
-      BookmarkService.getBookmarkedId,
-      token,
-      action.payload.user_id,
-    );
+    const bookmarkPosts = yield call(BookmarkService.getBookmarkedId, token, action.payload.user_id);
     yield put(successGetBookmarks(bookmarkPosts));
   } catch (error) {
     yield put(failGetBookmarks(error));
@@ -170,11 +166,7 @@ function* getBookmarkPosts(action: GetBookmarkPostsAction) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
     yield put(startGetBookmarkPosts());
-    const postInfo = yield call(
-      PostService.getSpecificPost,
-      token,
-      action.payload.post_id,
-    );
+    const postInfo = yield call(PostService.getSpecificPost, token, action.payload.post_id);
     yield put(successGetBookmarkPosts(postInfo));
   } catch (error) {
     yield put(failGetBookmarkPosts(error));
@@ -185,11 +177,7 @@ function* deleteBookmark(action: DeleteBookmarkAction) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
     yield put(startDeleteBookmark());
-    yield call(
-      BookmarkService.deleteBookmarkPost,
-      token,
-      action.payload.post_id,
-    );
+    yield call(BookmarkService.deleteBookmarkPost, token, action.payload.post_id);
     yield put(successDeleteBookmark(action.payload.post_id));
   } catch (error) {
     yield put(failDeleteBookmark(error));
@@ -217,16 +205,13 @@ const initialState: BookmarkState = {
 };
 
 // reducer
-function bookmarkReducer(
-  state: BookmarkState = initialState,
-  action: BookmarkActions,
-) {
+function bookmarkReducer(state: BookmarkState = initialState, action: BookmarkActions) {
   switch (action.type) {
     case START_GET_BOOKMARKS:
       return {
         loading: true,
         error: null,
-        bookmarks: [],
+        bookmarks: state.bookmarks,
         bookmarkPosts: state.bookmarkPosts,
       };
     case SUCCESS_GET_BOOKMARKS:
@@ -262,14 +247,8 @@ function bookmarkReducer(
         bookmarkPosts: {
           loading: false,
           error: null,
-          bookmarkPosts: state.bookmarkPosts.bookmarkPosts.some(
-            post => post.id === action.payload.postInfo.id,
-          )
-            ? state.bookmarkPosts.bookmarkPosts.map(post =>
-                post.id === action.payload.postInfo.id
-                  ? action.payload.postInfo
-                  : post,
-              )
+          bookmarkPosts: state.bookmarkPosts.bookmarkPosts.some(post => post.id === action.payload.postInfo.id)
+            ? state.bookmarkPosts.bookmarkPosts.map(post => (post.id === action.payload.postInfo.id ? action.payload.postInfo : post))
             : [...state.bookmarkPosts.bookmarkPosts, action.payload.postInfo],
         },
       };
@@ -320,9 +299,7 @@ function bookmarkReducer(
         bookmarkPosts: {
           loading: false,
           error: null,
-          bookmarkPosts: state.bookmarkPosts.bookmarkPosts.filter(
-            post => post.id !== action.payload.post_id,
-          ),
+          bookmarkPosts: state.bookmarkPosts.bookmarkPosts.filter(post => post.id !== action.payload.post_id),
         },
       };
     case FAIL_DELETE_BOOKMARK:

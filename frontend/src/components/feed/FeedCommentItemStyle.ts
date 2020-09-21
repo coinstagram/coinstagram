@@ -6,6 +6,15 @@ export const StyledLi = styled.li`
   padding-left: ${props => props.thumbnail && 50};
   margin-top: ${props => (props.viewTime ? 25 : 6)};
 
+  ${props =>
+    !props.thumbnail &&
+    css`
+      height: 19px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    `}
+
   .user-comment {
     display: inline-block;
     margin-right: 5px;

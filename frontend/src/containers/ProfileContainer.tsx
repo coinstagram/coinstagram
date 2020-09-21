@@ -18,15 +18,20 @@ function ProfileContainer() {
   const { user, followers, followees } = useSelector((state: RootState) => state.anotherUserInfo);
   const { userInfo } = useSelector((state: RootState) => state);
   const myId = userInfo.user && userInfo.user.user_id;
+  const myName = userInfo.user && userInfo.user.user_name;
+  const myProfile = userInfo.user && userInfo.user.user_profile;
+  const myIntroduce = userInfo.user && userInfo.user.user_introduce;
   const myFollowers = userInfo.followers.users;
   const myFollowees = userInfo.followees;
   const profileName = user && user.user_name;
   const profileIntro = user && user.user_introduce;
   const profileImage = user && user.user_profile;
+  const isMe = useCallback(() => myId === profileId, [myId, profileId]);
 
   useEffect(() => {
+    if (isMe()) return;
     dispatch(getAnotherUserSaga(profileId));
-  }, [dispatch, profileId]);
+  }, [dispatch, profileId, isMe]);
 
   useEffect(() => {
     dispatch(getOtherPostsSaga(profileId));
@@ -55,12 +60,12 @@ function ProfileContainer() {
     <>
       <ProfileHeader
         myId={myId}
-        profileId={profileId}
-        profileName={profileName}
-        profileIntro={profileIntro}
-        profileImage={profileImage}
-        followers={myId === profileId ? myFollowers : followers}
-        followees={myId === profileId ? myFollowees : followees}
+        profileId={isMe() ? myId : profileId}
+        profileName={isMe() ? myName : profileName}
+        profileIntro={isMe() ? myIntroduce : profileIntro}
+        profileImage={isMe() ? myProfile : profileImage}
+        followers={isMe() ? myFollowers : followers}
+        followees={isMe() ? myFollowees : followees}
       />
       <ProfilePosts profileId={profileId} myId={myId} bookmarkedId={bookmarkedId} getBookmarkPosts={getBookmarkPosts} getPostCounts={getPostCounts} />
     </>

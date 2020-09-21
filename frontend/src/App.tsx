@@ -1,11 +1,11 @@
-import React, { useState, useCallback, createContext, useEffect } from 'react';
+import React, { useState, useCallback, createContext } from 'react';
 import { history } from './redux/create';
 import { Switch, Route } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ConnectedRouter } from 'connected-react-router';
-import { useDispatch, useSelector } from 'react-redux';
-import { cancelFollowUserSaga, followUserSaga, getUserInfoSaga } from './redux/modules/userInfo';
-import RootState from './type';
+import { useDispatch } from 'react-redux';
+import { cancelFollowUserSaga, followUserSaga } from './redux/modules/userInfo';
+import useInit from './hooks/useInit';
 
 // styles
 import ModalGlobalStyle from './components/common/ModalGlobalStyle';
@@ -29,6 +29,7 @@ interface contextValue {
   follow: (user_id: string, user_name: string, user_profile: null | string) => void;
   setFollowInfo: (user_id: string, user_profile: null | string, targetEl: null | HTMLSpanElement) => void;
   changePostId: (post_id: number) => void;
+  user_id: string;
 }
 
 export const followContext = createContext<null | contextValue>(null);
@@ -62,7 +63,6 @@ export const ModalContext = createContext<ModalType>({
 });
 
 function App() {
-  const { token } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   const [postModal, setPostModal] = useState<boolean>(false);
   const [postId, setPostId] = useState<number>(0);
@@ -74,6 +74,8 @@ function App() {
   });
 
   const { user_id, user_profile, targetEl } = followModalState;
+
+  useInit();
 
   const changePostId = useCallback((post_id: number) => {
     setPostId(post_id);
@@ -110,12 +112,8 @@ function App() {
     follow,
     setFollowInfo,
     changePostId,
+    user_id,
   };
-
-  useEffect(() => {
-    if (token === null) return;
-    dispatch(getUserInfoSaga());
-  }, [dispatch, token]);
 
   return (
     <ErrorBoundary FallbackComponent={FatalError}>

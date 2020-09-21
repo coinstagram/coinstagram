@@ -215,7 +215,7 @@ function likeReducer(state: likeState = initialState, action: likeActios) {
         postLikes: {
           loading: true,
           error: null,
-          userLikes: [],
+          userLikes: state.postLikes.userLikes,
         },
         commentLikes: state.commentLikes,
       };

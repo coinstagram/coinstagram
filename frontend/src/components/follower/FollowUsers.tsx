@@ -42,8 +42,7 @@ function FollowUsers({ followers, loading, error }: FoolowUsersProps) {
     if (li === null || ul === null) return;
     const ulRightPos = ul.getBoundingClientRect().right;
     const liRightPos = li.getBoundingClientRect().right;
-    const liLeftPos = (ul.firstElementChild as HTMLLIElement).getBoundingClientRect()
-      .left;
+    const liLeftPos = (ul.firstElementChild as HTMLLIElement).getBoundingClientRect().left;
     const lastSlidePos = liRightPos - liLeftPos - ul.offsetWidth + 10;
 
     if (state.slideCount === state.count) {
@@ -104,28 +103,21 @@ function FollowUsers({ followers, loading, error }: FoolowUsersProps) {
   }, [state]);
 
   return (
-    <StyledSection>
+    <StyledSection width={width}>
       <h3 className="a11y-hidden">팔로우한 계정</h3>
       <div className="hidden-container">
         {state.count !== 0 && <PrevBtn onClick={prev} />}
-        {state.visual && state.slideCount !== state.count && (
-          <NextBtn onClick={next} />
-        )}
+        {state.visual && state.slideCount !== state.count && <NextBtn onClick={next} />}
         <ul ref={ulRef}>
           {followers.length === 0 && (
             <p>
-              아직 팔로우한 계정이 없으시군요? 다른 유저들을{' '}
-              <span style={{ color: 'rgb(0, 149, 246)' }}>follow</span> 해
-              보세요!
+              아직 팔로우한 계정이 없으시군요? 다른 유저들을 <span style={{ color: 'rgb(0, 149, 246)' }}>follow</span> 해 보세요!
             </p>
           )}
           {followers.length !== 0 &&
             followers.map(follower => (
               <li key={follower.user_id} ref={liRef}>
-                <StyledButton
-                  onClick={e => click(e, follower.user_id)}
-                  id={follower.user_id === null ? undefined : follower.user_id}
-                >
+                <StyledButton onClick={e => click(e, follower.user_id)} id={follower.user_id === null ? undefined : follower.user_id}>
                   <Thumbnail size={56} imageUrl={follower.user_profile} />
                   <div tabIndex={-1}>
                     <dt className="a11y-hidden">유저 ID</dt>
@@ -139,10 +131,7 @@ function FollowUsers({ followers, loading, error }: FoolowUsersProps) {
     </StyledSection>
   );
 
-  function click(
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    user_id: string,
-  ) {
+  function click(e: React.MouseEvent<HTMLButtonElement, MouseEvent>, user_id: string) {
     rotate(e);
     setTimeout(() => {
       history.push(`/account/${user_id}`);

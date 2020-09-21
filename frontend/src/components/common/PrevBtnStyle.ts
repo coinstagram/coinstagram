@@ -17,6 +17,7 @@ export const StyledButton = styled.button`
     background-image: url(${spriteImg});
     background-position: 270px 215px;
     outline: none;
+    opacity: 0.5;
   }
 
   transition: transform 0.2s;

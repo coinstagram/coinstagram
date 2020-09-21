@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 
 export const StyledSection = styled.section`
   position: relative;
+  padding: ${props => (props.width < 750 ? 10 : 45)};
   display: flex;
   flex-flow: row wrap;
   padding-bottom: 45px;
