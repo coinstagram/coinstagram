@@ -16,7 +16,7 @@ function Home() {
   return (
     <>
       <Header />
-      <StyledMain width={width}>
+      <StyledMain width={width} isMain={true}>
         <HomeMain />
       </StyledMain>
     </>

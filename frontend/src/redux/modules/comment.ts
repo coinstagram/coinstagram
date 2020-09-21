@@ -9,6 +9,7 @@ const FAIL_GET_COMMENTS = 'coinstagram/comment/FAIL_GET_COMMENTS' as const;
 const START_ADD_COMMENT = 'coinstagram/comment/START_ADD_COMMENT' as const;
 const SUCCESS_ADD_COMMENT = 'coinstagram/comment/SUCCESS_ADD_COMMENT' as const;
 const FAIL_ADD_COMMENT = 'coinstagram/comment/FAIL_ADD_COMMENT' as const;
+const RESET_COMMENT = 'coinstagram/comment/RESET_COMMENT' as const;
 
 // action creator
 const startGetComments = () => ({
@@ -31,10 +32,11 @@ const startAddComment = () => ({
   type: START_ADD_COMMENT,
 });
 
-const successAddComment = (addComment: EachCommentState) => ({
+const successAddComment = (addComment: EachCommentState, myProfile: string) => ({
   type: SUCCESS_ADD_COMMENT,
   payload: {
-    addComment,
+    ...addComment,
+    user_profile: myProfile,
   },
 });
 
@@ -43,13 +45,18 @@ const failAddComment = (error: Error) => ({
   payload: error,
 });
 
+export const resetComment = () => ({
+  type: RESET_COMMENT,
+});
+
 type CommentActions =
   | ReturnType<typeof startGetComments>
   | ReturnType<typeof successGetComments>
   | ReturnType<typeof failGetComments>
   | ReturnType<typeof startAddComment>
   | ReturnType<typeof successAddComment>
-  | ReturnType<typeof failAddComment>;
+  | ReturnType<typeof failAddComment>
+  | ReturnType<typeof resetComment>;
 
 // saga action
 const GET_POST_COMMENTS = 'GET_POST_COMMENTS' as const;
@@ -63,11 +70,12 @@ export const getPostComments = (post_id: number) => ({
   },
 });
 
-export const addPostComment = (post_id: number, comment_text: string) => ({
+export const addPostComment = (post_id: number, comment_text: string, myProfile: string) => ({
   type: ADD_POST_COMMENT,
   payload: {
     post_id,
     comment_text,
+    myProfile,
   },
 });
 
@@ -92,7 +100,7 @@ function* addComment(action: commentSagaActions) {
     const { token } = yield select((state: RootState) => state.auth);
     yield put(startAddComment());
     const addComment = yield call(CommentService.addComment, token, action.payload.post_id, action.payload.comment_text);
-    yield put(successAddComment(addComment));
+    yield put(successAddComment(addComment, action.payload.myProfile));
   } catch (error) {
     yield put(failAddComment(error));
   }
@@ -133,7 +141,7 @@ function commentReducer(state: CommentsState = initialState, action: CommentActi
       return {
         loading: false,
         error: action.payload,
-        postComments: [],
+        postComments: state.postComments,
         myComments: [],
       };
     case START_ADD_COMMENT:
@@ -148,7 +156,7 @@ function commentReducer(state: CommentsState = initialState, action: CommentActi
         loading: false,
         error: null,
         postComments: state.postComments,
-        myComments: [...state.myComments, action.payload.addComment],
+        myComments: [...state.myComments, action.payload],
       };
     case FAIL_ADD_COMMENT:
       return {
@@ -156,6 +164,12 @@ function commentReducer(state: CommentsState = initialState, action: CommentActi
         error: action.payload,
         postComments: state.postComments,
         myComments: state.myComments,
+      };
+    case RESET_COMMENT:
+      return {
+        ...state,
+        postComments: [...state.postComments, ...state.myComments],
+        myComments: [],
       };
     default:
       return state;

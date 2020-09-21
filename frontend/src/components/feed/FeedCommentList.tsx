@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import RootState from '../../type';
 import { Link } from 'react-router-dom';
@@ -12,17 +12,12 @@ import FeedCommentItem from './FeedCommentItem';
 interface FeedCommentListProps {
   postId: number;
   visual?: boolean;
-  getCommentsPost: (post_id: number) => void;
   viewTime?: boolean;
   thumbnail?: boolean;
 }
 
-function FeedCommentList({ postId, visual, getCommentsPost, viewTime, thumbnail }: FeedCommentListProps) {
+function FeedCommentList({ postId, visual, viewTime, thumbnail }: FeedCommentListProps) {
   const { postComments, myComments } = useSelector((state: RootState) => state.comments);
-
-  useEffect(() => {
-    getCommentsPost(postId);
-  }, [getCommentsPost, postId]);
 
   const currentPostComments = postComments.filter(comment => comment.post_id === postId);
   const currentPostMyComments = myComments.filter(comment => comment.post_id === postId);
@@ -38,7 +33,7 @@ function FeedCommentList({ postId, visual, getCommentsPost, viewTime, thumbnail 
               key={comment.id}
               commentId={comment.id}
               userId={comment.user_id}
-              userProfile={null}
+              userProfile={comment.user_profile}
               commentText={comment.comment_text}
               createdTime={comment.created_at}
               thumbnail={thumbnail}
@@ -58,7 +53,7 @@ function FeedCommentList({ postId, visual, getCommentsPost, viewTime, thumbnail 
                 key={currentPostComments[0].id}
                 commentId={currentPostComments[0].id}
                 userId={currentPostComments[0].user_id}
-                userProfile={null}
+                userProfile={currentPostComments[0].user_profile}
                 commentText={currentPostComments[0].comment_text}
                 createdTime={currentPostComments[0].created_at}
                 thumbnail={thumbnail}
@@ -69,7 +64,7 @@ function FeedCommentList({ postId, visual, getCommentsPost, viewTime, thumbnail 
                 key={currentPostComments[1].id}
                 commentId={currentPostComments[1].id}
                 userId={currentPostComments[1].user_id}
-                userProfile={null}
+                userProfile={currentPostComments[1].user_profile}
                 commentText={currentPostComments[1].comment_text}
                 createdTime={currentPostComments[1].created_at}
                 thumbnail={thumbnail}
@@ -80,7 +75,7 @@ function FeedCommentList({ postId, visual, getCommentsPost, viewTime, thumbnail 
                 key={comment.id}
                 commentId={comment.id}
                 userId={comment.user_id}
-                userProfile={null}
+                userProfile={comment.user_profile}
                 commentText={comment.comment_text}
                 createdTime={comment.created_at}
                 thumbnail={thumbnail}
@@ -94,7 +89,7 @@ function FeedCommentList({ postId, visual, getCommentsPost, viewTime, thumbnail 
               key={comment.id}
               commentId={comment.id}
               userId={comment.user_id}
-              userProfile={null}
+              userProfile={comment.user_profile}
               commentText={comment.comment_text}
               createdTime={comment.created_at}
               viewTime={viewTime}

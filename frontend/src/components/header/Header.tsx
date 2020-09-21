@@ -1,4 +1,5 @@
 import React from 'react';
+import useWindowWidth from '../../hooks/useWindowWidth';
 
 // styles
 import { StyledHeader } from './HeaderStyle';
@@ -9,8 +10,9 @@ import NavigationContainer from '../../containers/NavigationContainer';
 import SearchInput from './SearchInput';
 
 function Header() {
+  const width = useWindowWidth();
   return (
-    <StyledHeader>
+    <StyledHeader width={width}>
       <div className="container">
         <Logo />
         <SearchInput />

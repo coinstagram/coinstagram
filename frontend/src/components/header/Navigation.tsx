@@ -11,6 +11,7 @@ import { FaCompass } from 'react-icons/fa';
 // components
 import Thumbnail from '../common/Thumbnail';
 import NavModal from './NavModal';
+import useWindowWidth from '../../hooks/useWindowWidth';
 
 interface State {
   favorite: boolean;
@@ -23,6 +24,7 @@ interface NavigationProps {
 }
 
 function Navigation({ imageUrl, userId }: NavigationProps) {
+  const width = useWindowWidth();
   const page = useLocation().pathname.split('/')[1];
   const [state, setState] = useState<State>({
     favorite: false,
@@ -32,7 +34,7 @@ function Navigation({ imageUrl, userId }: NavigationProps) {
   const left = useRef<number>(0);
 
   return (
-    <StyledNav>
+    <StyledNav width={width}>
       <h2 id="nav-heading" className="a11y-hidden">
         메인 메뉴
       </h2>
@@ -52,7 +54,7 @@ function Navigation({ imageUrl, userId }: NavigationProps) {
         </li>
         <li aria-label="내 프로필" onClick={toggle} id="profile">
           <StyledButton clicked={state.profile}>
-            <Thumbnail size={26} imageUrl={imageUrl} />
+            <Thumbnail size={28} imageUrl={imageUrl} />
           </StyledButton>
           {state.profile && <NavModal top={top.current} left={left.current} profile={state.profile} userId={userId} />}
         </li>

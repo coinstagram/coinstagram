@@ -74,3 +74,9 @@ export const StyledModal = styled.div`
     }
   }
 `;
+
+export const StyledReadyDiv = styled.div`
+  font-size: 16px;
+  padding: 50px;
+  text-align: center;
+`;

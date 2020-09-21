@@ -1,7 +1,8 @@
 import React from 'react';
+import { StyledReadyDiv } from '../profile/ProfilePostsStyle';
 
 function Working() {
-  return <div>준비 중입니다..</div>;
+  return <StyledReadyDiv />;
 }
 
 export default Working;

@@ -21,40 +21,17 @@ interface FeedProps {
   error: null | Error;
   myId: null | string;
   feedPosts: EachPostState[];
-  getFeedPosts: (user_id: string) => void;
-  getCommentsPost: (post_id: number) => void;
-  addCommentPost: (post_id: number, comment_text: string) => void;
-  getPostLikes: (post_id: number) => void;
+  addCommentPost: (post_id: number, comment_text: string, myProfile: string) => void;
   addPostLikes: (post_id: number) => void;
   deletePostLike: (post_id: number) => void;
-  getBookmarks: (user_id: string) => void;
   addBookmark: (post_id: number) => void;
   deleteBookmark: (post_id: number) => void;
 }
 
-function Feed({
-  loading,
-  error,
-  myId,
-  feedPosts,
-  getFeedPosts,
-  getCommentsPost,
-  addCommentPost,
-  getPostLikes,
-  addPostLikes,
-  deletePostLike,
-  getBookmarks,
-  addBookmark,
-  deleteBookmark,
-}: FeedProps) {
+function Feed({ loading, error, myId, feedPosts, addCommentPost, addPostLikes, deletePostLike, addBookmark, deleteBookmark }: FeedProps) {
   const width = useWindowWidth();
   const lastItemRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver>();
-
-  useEffect(() => {
-    if (!myId) return;
-    getFeedPosts(myId);
-  }, [getFeedPosts, myId]);
 
   useEffect(() => {
     if (!observerRef.current) {
@@ -73,7 +50,7 @@ function Feed({
     }
 
     lastItemRef.current && observerRef.current.observe(lastItemRef.current);
-  }, [getFeedPosts, myId]);
+  }, []);
 
   return (
     <StyledDiv>
@@ -101,10 +78,8 @@ function Feed({
             <FeedIcons
               myId={myId}
               postId={post.id}
-              getPostLikes={getPostLikes}
               addPostLikes={addPostLikes}
               deletePostLike={deletePostLike}
-              getBookmarks={getBookmarks}
               addBookmark={addBookmark}
               deleteBookmark={deleteBookmark}
             />
@@ -112,7 +87,6 @@ function Feed({
               userId={post.user_id}
               postId={post.id}
               context={post.post_context}
-              getCommentsPost={getCommentsPost}
               addCommentPost={addCommentPost}
               postCreatedTime={post.created_at}
             />

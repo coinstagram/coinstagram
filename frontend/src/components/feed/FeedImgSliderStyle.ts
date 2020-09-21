@@ -10,6 +10,7 @@ export const StyledUl = styled.ul`
 
   img {
     position: absolute;
+    display: inline-block;
     width: 100%;
     height: 100%;
   }

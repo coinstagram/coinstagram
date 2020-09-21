@@ -40,9 +40,10 @@ function JoinContainer() {
 
   const dispatch = useDispatch();
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (phoneEmailCheck && nameCheck && idCheck && passwordCheck) dispatch(signupSagaActionCreator(user_email, user_name, user_id, user_password));
+    if (!(phoneEmailCheck && nameCheck && idCheck && passwordCheck)) return;
+    dispatch(signupSagaActionCreator(user_email, user_name, user_id, user_password));
   };
 
   // 회원가입 실패 시

@@ -15,10 +15,15 @@ export const StyledArticle = styled.article`
       opacity: 1;
     }
   }
-  background-color: rgb(250, 250, 250);
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(219, 219, 219);
   border-radius: 10px;
   animation: fadeIn 1s;
   transition: transform 0.3s;
+
+  &.selected {
+    transform: ${props => props.width >= 1000 && `translateY(${-10}px)`};
+  }
 
   ${props =>
     props.width < 655
@@ -27,16 +32,17 @@ export const StyledArticle = styled.article`
           border: 1px solid rgb(219, 219, 219);
         `
       : css`
-          box-shadow: 5px 5px 10px rgb(219, 219, 219);
           margin-top: 50px;
-          &.selected {
-            transform: translateY(-10px);
-          }
         `}
 
   ${props =>
-    props.width > 1000
+    props.width < 655
       ? css`
+          & {
+            margin-left: 0;
+          }
+        `
+      : css`
           display: inline-block;
           box-sizing: border-box;
           width: 32%;
@@ -44,11 +50,6 @@ export const StyledArticle = styled.article`
             margin-left: 2%;
           }
           &:nth-of-type(3n + 1) {
-            margin-left: 0;
-          }
-        `
-      : css`
-          & {
             margin-left: 0;
           }
         `}

@@ -1,5 +1,5 @@
 import RootState, { PostsState, EachPostState } from '../../type';
-import { takeLatest, put, select, call, takeLeading } from 'redux-saga/effects';
+import { takeLatest, put, select, call } from 'redux-saga/effects';
 import PostService from '../services/postService';
 
 // action type
@@ -230,7 +230,7 @@ function* deletePost(action: onePostSagaAction) {
 // saga function register
 export function* postsSaga() {
   yield takeLatest(GET_RANDOM_POSTS_SAGA, getRandomPosts);
-  yield takeLeading(GET_FEED_POSTS_SAGA, getFeedPosts);
+  yield takeLatest(GET_FEED_POSTS_SAGA, getFeedPosts);
   yield takeLatest(GET_USER_POSTS_SAGA, getUserPosts);
   yield takeLatest(GET_SELECTED_POST_SAGA, getSelectedPost);
   yield takeLatest(DELETE_POST_SAGA, deletePost);

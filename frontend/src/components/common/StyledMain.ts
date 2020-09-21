@@ -7,7 +7,7 @@ const StyledMain = styled.main`
 
   padding: ${props => props.width < 655 && '54px 0 0'};
 
-  max-width: ${props => props.width < 1000 && '600px'};
+  max-width: ${props => props.width < 1500 && props.isMain && '1000px'};
 `;
 
 export default StyledMain;

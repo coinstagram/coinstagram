@@ -20,7 +20,7 @@ function FeedCommentOwner({ userId, userProfile, context, thumbnail, createdTime
       <span className="owner-comment">
         <dt className="a11y-hidden">post owner id</dt>
         <dd>
-          <Link to={`/${userId}`}>
+          <Link to={`/account/${userId}`}>
             {thumbnail && <Thumbnail imageUrl={userProfile} size={35} />}
             <span tabIndex={-1}>{userId}</span>
           </Link>

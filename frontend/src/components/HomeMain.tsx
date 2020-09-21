@@ -22,15 +22,9 @@ const StyledDiv = styled.div`
   .recommend-container {
     position: absolute;
     top: 0;
-    right: 315px;
+    right: 313;
   }
 `;
-
-export interface ModalState {
-  user_id: string;
-  user_profile: null | string;
-  targetEl: null | HTMLSpanElement;
-}
 
 function HomeMain() {
   const { users } = useSelector((state: RootState) => state.userInfo.followers);

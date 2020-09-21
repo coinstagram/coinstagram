@@ -29,9 +29,10 @@ function LoginContainer() {
   const passwordCheck = user_password.length >= 6;
 
   const dispatch = useDispatch();
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (idCheck && passwordCheck) dispatch(signInSagaActionCreator(user_id, user_password));
+    if (!(idCheck && passwordCheck)) return;
+    dispatch(signInSagaActionCreator(user_id, user_password));
   };
   // 로그인 실패 시
   const { auth } = useSelector((state: RootState) => state);
