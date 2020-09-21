@@ -18,6 +18,7 @@ export const StyledButton = styled.button`
     background-image: url(${spriteImg});
     background-position: 220px 215px;
     outline: none;
+    opacity: 0.5;
   }
 
   &:active {

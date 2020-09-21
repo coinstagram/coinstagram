@@ -6,10 +6,13 @@ interface Props {
 
 export const StyledArticle = styled.article`
   border: 1px solid rgb(219, 219, 219);
+  /* border-radius: 10px; */
+  background: #ffffff;
 
   & > div:nth-of-type(1) {
     float: left;
     width: 100%;
+    /* border-radius: 10px 0 0 10px; */
 
     ${props =>
       props.width > 750
@@ -24,6 +27,7 @@ export const StyledArticle = styled.article`
             & > div {
               background-color: rgba(0, 0, 0, 0.6);
               backdrop-filter: blur(20px);
+              /* border-radius: 10px 0 0 10px; */
             }
             li {
               height: 100%;
