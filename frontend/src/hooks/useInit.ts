@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getBookmarksSaga } from '../redux/modules/bookmark';
 import { getPostComments } from '../redux/modules/comment';
 import { getPostLikesSaga } from '../redux/modules/like';
-import { getFeedPostsSaga } from '../redux/modules/post';
+import { getFeedPostsSaga, getRandomPostsSaga } from '../redux/modules/post';
 import { getUserInfoSaga } from '../redux/modules/userInfo';
 import RootState from '../type';
 
@@ -33,6 +33,10 @@ function useInit() {
     feedPosts.forEach(post => dispatch(getPostLikesSaga(post.id)));
     feedPosts.forEach(post => dispatch(getPostComments(post.id)));
   }, [dispatch, feedPosts]);
+
+  useEffect(() => {
+    dispatch(getRandomPostsSaga());
+  }, [dispatch]);
 }
 
 export default useInit;

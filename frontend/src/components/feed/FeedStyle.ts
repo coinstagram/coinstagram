@@ -54,16 +54,28 @@ export const StyledArticle = styled.article`
         `}
 `;
 
+export const StyledSpinnerDiv = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+`;
+
 export const StyledPreviewDiv = styled.div`
   position: relative;
-  box-sizing: border-box;
-  padding: 50px;
-  height: 500px;
+  margin: 40px auto;
+  max-width: 670px;
   border: 1px solid rgb(219, 219, 219);
+`;
+
+export const StyledCommentDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
 
   p {
-    float: left;
-    margin: 13px 40px 0 0;
+    display: inline-block;
+    margin: 0 20px;
     padding: 5px 40px;
     background-color: rgb(51, 154, 240);
     border-radius: 5px;
@@ -73,13 +85,43 @@ export const StyledPreviewDiv = styled.div`
   }
 
   a {
-    font-size: 40px;
+    display: inline-block:
+    margin-top: 10px;
+    vertical-align: bottom;
+    font-size: 60px;
     color: rgb(51, 154, 240);
   }
 `;
 
-export const StyledSpinnerDiv = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
+export const StyledPostDiv = styled.div`
+  display: inline-block;
+  margin-left: 2.5%;
+  margin-top: 2.5%;
+  width: 30%;
+  padding-bottom: 30%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url(${props => `http://localhost:4000/${paseImagePath(props.image[0])}`});
+
+  @keyframse fadeIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  animation: fadeIn 2s;
 `;
+
+function paseImagePath(imageUrl: string) {
+  if (imageUrl !== null && imageUrl !== undefined) {
+    if (imageUrl.split('\\')[1] !== undefined) {
+      return imageUrl.split('\\')[1];
+    } else if (imageUrl.split('/')[1] !== undefined) {
+      return imageUrl.split('/')[1];
+    }
+  }
+}

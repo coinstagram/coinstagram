@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-import { EachPostState } from '../../type';
+import RootState, { EachPostState } from '../../type';
 import { Link } from 'react-router-dom';
 import useWindowWidth from '../../hooks/useWindowWidth';
 
 // styles
-import { StyledArticle, StyledPreviewDiv, StyledSpinnerDiv, StyledDiv } from './FeedStyle';
+import { StyledArticle, StyledPreviewDiv, StyledSpinnerDiv, StyledDiv, StyledPostDiv, StyledCommentDiv } from './FeedStyle';
 
 // icons
 import { BsPlusCircle } from 'react-icons/bs';
@@ -15,6 +15,7 @@ import FeedBody from './FeedBody';
 import FeedComment from './FeedComment';
 import FeedIcons from './FeedIcons';
 import Spinner from '../common/Spinner';
+import { useSelector } from 'react-redux';
 
 interface FeedProps {
   loading: boolean;
@@ -29,6 +30,7 @@ interface FeedProps {
 }
 
 function Feed({ loading, error, myId, feedPosts, addCommentPost, addPostLikes, deletePostLike, addBookmark, deleteBookmark }: FeedProps) {
+  const { randomPosts } = useSelector((state: RootState) => state.posts.randomPosts);
   const width = useWindowWidth();
   const lastItemRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver>();
@@ -52,16 +54,21 @@ function Feed({ loading, error, myId, feedPosts, addCommentPost, addPostLikes, d
     lastItemRef.current && observerRef.current.observe(lastItemRef.current);
   }, []);
 
+  const filteredNinePosts = randomPosts.filter((_, i) => i < 9);
+
   return (
     <StyledDiv>
       {feedPosts.length === 0 && !loading && error === null && (
         <StyledPreviewDiv>
-          <div>
+          {filteredNinePosts.map(post => (
+            <StyledPostDiv key={post.id} image={post.image_path} />
+          ))}
+          <StyledCommentDiv>
             <p>지금 당신의 추억을 공유해 보세요</p>
             <Link to="/upload">
               <BsPlusCircle />
             </Link>
-          </div>
+          </StyledCommentDiv>
         </StyledPreviewDiv>
       )}
       {loading && (

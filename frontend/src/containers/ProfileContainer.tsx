@@ -5,6 +5,7 @@ import RootState from '../type';
 import { useLocation } from 'react-router-dom';
 import { getOtherPostsSaga, getPostCountsSaga } from '../redux/modules/otherPost';
 import { getBookmarkPostsSaga, getBookmarksSaga } from '../redux/modules/bookmark';
+import { resetComment } from '../redux/modules/comment';
 
 // components;
 import ProfileHeader from '../components/profile/ProfileHeader';
@@ -41,6 +42,10 @@ function ProfileContainer() {
     if (bookmarkedId.length !== 0) return;
     dispatch(getBookmarksSaga(myId));
   }, [bookmarkedId.length, dispatch, myId]);
+
+  useEffect(() => {
+    dispatch(resetComment());
+  }, [dispatch]);
 
   const getBookmarkPosts = useCallback(
     (post_id: number) => {

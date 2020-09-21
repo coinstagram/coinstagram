@@ -99,18 +99,20 @@ function SelectedPost({
             />
             <FeedCommentList postId={selectedPostId} visual={true} viewTime={true} thumbnail={true} />
           </StyledDiv>
-          <FeedIcons
-            myId={user_id}
-            postId={selectedPostId}
-            addPostLikes={addPostLikes}
-            deletePostLike={deletePostLike}
-            addBookmark={addBookmark}
-            deleteBookmark={deleteBookmark}
-          />
-          <StyledPassedTimeDiv className={`${selectedPostId}-createdTime`} marginLeft={true}>
-            {computePassedTime(selectedPostInfo && selectedPostInfo.created_at)}
-          </StyledPassedTimeDiv>
-          <FeedAddComment userId={selectedUserId} postId={selectedPostId} addCommentPost={addCommentPost} />
+          <div>
+            <FeedIcons
+              myId={user_id}
+              postId={selectedPostId}
+              addPostLikes={addPostLikes}
+              deletePostLike={deletePostLike}
+              addBookmark={addBookmark}
+              deleteBookmark={deleteBookmark}
+            />
+            <StyledPassedTimeDiv className={`${selectedPostId}-createdTime`} marginLeft={true}>
+              {computePassedTime(selectedPostInfo && selectedPostInfo.created_at)}
+            </StyledPassedTimeDiv>
+            <FeedAddComment userId={selectedUserId} postId={selectedPostId} addCommentPost={addCommentPost} />
+          </div>
         </div>
       </StyledArticle>
       {postModal && (
