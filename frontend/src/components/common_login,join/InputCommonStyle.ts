@@ -35,9 +35,9 @@ export const StyledDiv = styled.div`
       background: #fafafa;
       color: #828282;
       /* padding: 10px; */
-      margin-top: 2px;
+      /* margin-top: 2px; */
       border: none;
-      width: 100%;
+      /* width: 100%; */
       height: 36px;
       outline: none;
       ${props =>

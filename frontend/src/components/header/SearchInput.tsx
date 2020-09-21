@@ -5,7 +5,7 @@ import useWindowWidth from '../../hooks/useWindowWidth';
 import { StyledButton } from './SearchInputStyle';
 
 // icons
-import { TiDelete } from 'react-icons/ti';
+// import { CgClose } from 'react-icons/cg';
 import { FiSearch } from 'react-icons/fi';
 
 function SearchInput() {
@@ -19,9 +19,9 @@ function SearchInput() {
         <FiSearch />
       </span>
       <input placeholder="검색" />
-      <span className="reset">
-        <TiDelete />
-      </span>
+      {/* <span className="reset">
+        <CgClose />
+      </span> */}
     </StyledButton>
   );
 }
