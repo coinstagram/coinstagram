@@ -111,7 +111,6 @@ function* addPostSagafun() {
     yield call(uploadService.uploadPost, postReducer.data, token);
 
     yield put(add_post_success());
-
     yield put(push('/'));
   } catch (error) {
     yield put(add_post_failure(error));

@@ -1,9 +1,5 @@
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
-import RootState, {
-  CountResponseState,
-  EachPostState,
-  OtherPostState,
-} from '../../type';
+import RootState, { CountResponseState, EachPostState, OtherPostState } from '../../type';
 import PostService from '../services/postService';
 
 // action type
@@ -84,11 +80,7 @@ function* getOtherPosts(action: OtherPostSagaAction) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
     yield put(startGetOtherPosts());
-    const otherPosts = yield call(
-      PostService.getUserPosts,
-      token,
-      action.payload.user_id,
-    );
+    const otherPosts = yield call(PostService.getUserPosts, token, action.payload.user_id);
     yield put(successGetOtherPosts(otherPosts));
   } catch (error) {
     yield put(failGetOtherPosts(error));
@@ -99,11 +91,7 @@ function* getPostCounts(action: GetPostCountsSagaAction) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
     yield put(startGetPostCounts());
-    const countObj = yield call(
-      PostService.getCountPost,
-      token,
-      action.payload.post_id,
-    );
+    const countObj = yield call(PostService.getCountPost, token, action.payload.post_id);
     yield put(successGetPostCounts(action.payload.post_id, countObj));
   } catch (error) {
     yield put(failGetPostCounts(error));
@@ -129,10 +117,7 @@ const initialState: OtherPostState = {
 };
 
 // reducer
-function otherPostReducer(
-  state: OtherPostState = initialState,
-  action: OtherPostActions,
-) {
+function otherPostReducer(state: OtherPostState = initialState, action: OtherPostActions) {
   switch (action.type) {
     case START_GET_OTHER_POSTS:
       return {
@@ -174,12 +159,8 @@ function otherPostReducer(
         counts: {
           loading: false,
           error: null,
-          counts: state.counts.counts.some(
-            info => info.post_id === action.payload.post_id,
-          )
-            ? state.counts.counts.map(info =>
-                info.post_id === action.payload.post_id ? action.payload : info,
-              )
+          counts: state.counts.counts.some(info => info.post_id === action.payload.post_id)
+            ? state.counts.counts.map(info => (info.post_id === action.payload.post_id ? action.payload : info))
             : [...state.counts.counts, action.payload],
         },
       };

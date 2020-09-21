@@ -22,5 +22,7 @@ declare module 'react' {
     top?: number;
     right?: number;
     isList?: boolean;
+    imageUrl?: string;
+    isMain?: boolean;
   }
 }

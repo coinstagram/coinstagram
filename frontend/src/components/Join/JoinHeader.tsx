@@ -12,9 +12,7 @@ export default function JoinHeader() {
       <Header width={width}>
         <ImageLogo width={width} logoStyle="joinLogo" />
         {/* <MainLogo style={{ marginBottom: '15px' }}>coInstagram</MainLogo> */}
-        {width > 750 && (
-          <StyledH2>친구들의 사진과 동영상을 보려면 가입하세요.</StyledH2>
-        )}
+        {width > 750 && <StyledH2>친구들의 사진과 동영상을 보려면 가입하세요.</StyledH2>}
       </Header>
     </>
   );

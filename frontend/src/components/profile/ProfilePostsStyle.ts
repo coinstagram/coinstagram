@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import readyImg from '../../resource/image/ready_img.png';
 
 export const StyledSection = styled.section`
   border-top: 1px solid rgb(219, 219, 219);
@@ -40,4 +41,24 @@ export const StyledNavDiv = styled.div`
       }
     }
   }
+`;
+
+export const StyledSpinnerDiv = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+`;
+
+export const StyledReadyDiv = styled.div`
+  background-image: url(${readyImg});
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: 50% 50%;
+  height: 50%;
+`;
+
+export const StyledNocontentDiv = styled.div`
+  margin-top: 50px;
+  text-align: center;
+  font-size: 18px;
 `;

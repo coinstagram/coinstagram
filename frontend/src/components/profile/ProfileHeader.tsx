@@ -103,7 +103,16 @@ function ProfileHeader({ myId, profileId, profileName, profileIntro, profileImag
           </>
         )}
       </StyledSection>
-      <FollowListModal modal={state.modal} content={state.content} isList={state.isList} toggleModal={toggleModal} popModal={popModal} />
+      <FollowListModal
+        myId={myId}
+        followees={followees}
+        followers={followers}
+        modal={state.modal}
+        content={state.content}
+        isList={state.isList}
+        toggleModal={toggleModal}
+        popModal={popModal}
+      />
     </>
   );
 

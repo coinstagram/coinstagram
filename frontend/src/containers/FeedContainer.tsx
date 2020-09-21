@@ -1,18 +1,9 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import RootState from '../type';
 import { useSelector, useDispatch } from 'react-redux';
-import { getFeedPostsSaga } from '../redux/modules/post';
-import { getPostComments, addPostComment } from '../redux/modules/comment';
-import {
-  addPostLikeSaga,
-  deletePostLikeSaga,
-  getPostLikesSaga,
-} from '../redux/modules/like';
-import {
-  addBookmarkSaga,
-  deleteBookmarkSaga,
-  getBookmarksSaga,
-} from '../redux/modules/bookmark';
+import { addPostComment, resetComment } from '../redux/modules/comment';
+import { addPostLikeSaga, deletePostLikeSaga } from '../redux/modules/like';
+import { addBookmarkSaga, deleteBookmarkSaga } from '../redux/modules/bookmark';
 
 // components
 import Feed from '../components/feed/Feed';
@@ -24,30 +15,13 @@ function FeedContainer() {
   const { loading, error } = posts.feedPosts;
   const myId = userInfo.user && userInfo.user.user_id;
 
-  const getFeedPosts = useCallback(
-    (userId: string) => {
-      dispatch(getFeedPostsSaga(userId));
-    },
-    [dispatch],
-  );
-
-  const getCommentsPost = useCallback(
-    (post_id: number) => {
-      dispatch(getPostComments(post_id));
-    },
-    [dispatch],
-  );
+  useEffect(() => {
+    dispatch(resetComment());
+  }, [dispatch]);
 
   const addCommentPost = useCallback(
-    (post_id: number, comment_text: string) => {
-      dispatch(addPostComment(post_id, comment_text));
-    },
-    [dispatch],
-  );
-
-  const getPostLikes = useCallback(
-    (post_id: number) => {
-      dispatch(getPostLikesSaga(post_id));
+    (post_id: number, comment_text: string, myProfile: string) => {
+      dispatch(addPostComment(post_id, comment_text, myProfile));
     },
     [dispatch],
   );
@@ -62,13 +36,6 @@ function FeedContainer() {
   const deletePostLike = useCallback(
     (post_id: number) => {
       dispatch(deletePostLikeSaga(post_id));
-    },
-    [dispatch],
-  );
-
-  const getBookmarks = useCallback(
-    (user_id: string) => {
-      dispatch(getBookmarksSaga(user_id));
     },
     [dispatch],
   );
@@ -93,13 +60,9 @@ function FeedContainer() {
       error={error}
       myId={myId}
       feedPosts={feedPosts}
-      getFeedPosts={getFeedPosts}
-      getCommentsPost={getCommentsPost}
       addCommentPost={addCommentPost}
-      getPostLikes={getPostLikes}
       addPostLikes={addPostLikes}
       deletePostLike={deletePostLike}
-      getBookmarks={getBookmarks}
       addBookmark={addBookmark}
       deleteBookmark={deleteBookmark}
     />

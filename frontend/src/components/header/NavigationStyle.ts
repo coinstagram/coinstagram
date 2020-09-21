@@ -1,24 +1,31 @@
 import styled, { css } from 'styled-components';
 
-interface StyledNavProps {
-  width: number;
-}
-
 export const StyledNav = styled.nav`
   ul {
     display: flex;
     align-items: center;
   }
-  li + li {
-    margin-left: 22px;
-  }
+
+  ${props =>
+    props.width < 655
+      ? css`
+          li + li {
+            margin-left: 17px;
+          }
+        `
+      : css`
+          li + li {
+            margin-left: 22px;
+          }
+        `}
   li {
-    height: 25px;
+    height: 27px;
   }
+
   svg {
-    font-size: 23px;
-    width: 25px;
-    height: 25px;
+    font-size: 27px;
+    width: 27px;
+    height: 27px;
     outline: none;
     vertical-align: bottom;
 
@@ -34,7 +41,7 @@ export const StyledButton = styled.button`
     css`
       & > span {
         position: relative;
-        border: 1px solid rgb(255, 255, 255);
+        border: 1px solid rgb(50, 50, 50);
       }
       & > span::after {
         content: '';
@@ -45,7 +52,7 @@ export const StyledButton = styled.button`
         right: ${-2}px;
         z-index: -1;
         border-radius: 50%;
-        background: rgb(0, 0, 0);
+        background: rgb(255, 255, 255);
       }
     `}
 `;

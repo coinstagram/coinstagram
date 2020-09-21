@@ -11,6 +11,7 @@ export const StyledDivBg = styled.div`
 
 export const StyledModal = styled.div`
   position: absolute;
+  color: rgb(50, 50, 50);
   top: ${({ top }: NavModalProps) => top + 13};
   left: ${({ left }: NavModalProps) => left - 200};
   width: 230px;
@@ -72,4 +73,10 @@ export const StyledModal = styled.div`
       margin-left: 0;
     }
   }
+`;
+
+export const StyledReadyDiv = styled.div`
+  font-size: 16px;
+  padding: 50px;
+  text-align: center;
 `;

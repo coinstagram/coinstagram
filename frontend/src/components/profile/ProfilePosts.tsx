@@ -8,11 +8,13 @@ import useWindowWidth from '../../hooks/useWindowWidth';
 import { BsCardImage, BsTag, BsBookmarks } from 'react-icons/bs';
 
 // styles
-import { StyledSection, StyledNavDiv } from './ProfilePostsStyle';
+import { StyledSection, StyledNavDiv, StyledSpinnerDiv, StyledReadyDiv, StyledNocontentDiv } from './ProfilePostsStyle';
 import { StyledDiv } from '../post/OtherPostListStyle';
+import { StyledErrorDiv } from '../explore/RandomPostsStyle';
 
 // components
 import OtherPostItem from '../post/OtherPostItem';
+import Spinner from '../common/Spinner';
 
 interface ProfilePostsProps {
   profileId: string;
@@ -24,8 +26,11 @@ interface ProfilePostsProps {
 
 function ProfilePosts({ profileId, myId, bookmarkedId, getPostCounts, getBookmarkPosts }: ProfilePostsProps) {
   const pageName = useLocation().pathname.split('/')[3];
-  const { otherPosts } = useSelector((state: RootState) => state.otherPosts);
-  const { bookmarkPosts } = useSelector((state: RootState) => state.bookmarks.bookmarkPosts);
+  const { loading, error, otherPosts } = useSelector((state: RootState) => state.otherPosts);
+  const { bookmarkPosts } = useSelector((state: RootState) => state.bookmarks);
+  const bookmarkLoading = bookmarkPosts.loading;
+  const bookmarkError = bookmarkPosts.error;
+  const bookmarkedPosts = bookmarkPosts.bookmarkPosts;
   const width = useWindowWidth();
 
   useEffect(() => {
@@ -55,7 +60,31 @@ function ProfilePosts({ profileId, myId, bookmarkedId, getPostCounts, getBookmar
         </ul>
       </StyledNavDiv>
       <StyledDiv width={width}>
-        {pageName === undefined && otherPosts.length === 0 && <div>@{profileId}님이 업로드하신 게시물이 없습니다.</div>}
+        {loading && (
+          <StyledSpinnerDiv>
+            <Spinner />
+          </StyledSpinnerDiv>
+        )}
+        {error !== null && (
+          <StyledErrorDiv>
+            <p>
+              게시물 로딩에 실패하였습니다.{' '}
+              <span aria-label="아쉬운 표정" role="img">
+                😅
+              </span>{' '}
+              <br />
+              페이지 새로고침 후 다시 실행해 주시기바랍니다.
+            </p>
+          </StyledErrorDiv>
+        )}
+        {pageName === undefined && !loading && otherPosts.length === 0 && (
+          <StyledNocontentDiv>
+            아직 업로드하신 게시물이 없네요{' '}
+            <span aria-label="아쉬운 표정" role="img">
+              😂
+            </span>
+          </StyledNocontentDiv>
+        )}
         {pageName === undefined && (
           <ul>
             {otherPosts.map(post => (
@@ -69,9 +98,34 @@ function ProfilePosts({ profileId, myId, bookmarkedId, getPostCounts, getBookmar
             ))}
           </ul>
         )}
+        {bookmarkLoading && (
+          <StyledSpinnerDiv>
+            <Spinner />
+          </StyledSpinnerDiv>
+        )}
+        {bookmarkError !== null && (
+          <StyledErrorDiv>
+            <p>
+              게시물 로딩에 실패하였습니다.{' '}
+              <span aria-label="아쉬운 표정" role="img">
+                😅
+              </span>{' '}
+              <br />
+              페이지 새로고침 후 다시 실행해 주시기바랍니다.
+            </p>
+          </StyledErrorDiv>
+        )}
+        {pageName === 'saved' && !bookmarkLoading && bookmarkedPosts.length === 0 && (
+          <StyledNocontentDiv>
+            아직 찜한 게시물이 없네요{' '}
+            <span aria-label="아쉬운 표정" role="img">
+              😊
+            </span>
+          </StyledNocontentDiv>
+        )}
         {pageName === 'saved' && (
           <ul>
-            {bookmarkPosts.map(post => (
+            {bookmarkedPosts.map(post => (
               <OtherPostItem
                 key={post.id}
                 postId={post.id}
@@ -82,7 +136,7 @@ function ProfilePosts({ profileId, myId, bookmarkedId, getPostCounts, getBookmar
             ))}
           </ul>
         )}
-        {pageName === 'tagged' && '태그된 게시물 뷰'}
+        {pageName === 'tagged' && <StyledReadyDiv />}
       </StyledDiv>
     </StyledSection>
   );

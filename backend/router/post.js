@@ -282,7 +282,6 @@ router.get('/comment/post/:post_id', verifyToken, async (req, res) => {
       sql = 'select user_profile from users where user_id = ?;';
       let sqls = '';
       let parmas = '';
-
       for (let i = 0; i < user_id.length; i++) {
         console.log(i);
         parmas = user_id[i];
@@ -293,14 +292,21 @@ router.get('/comment/post/:post_id', verifyToken, async (req, res) => {
         return res.json(check);
       }
       const [profile] = await connection.query(sqls);
-      console.log(profile);
       let result;
-
+      let imageData = [];
+      if (checkMultArray(profile)) {
+        imageData = profile.map((profileArray) =>
+          !profileArray[0] ? '' : profileArray[0].user_profile,
+        );
+      } else {
+        imageData = profile.map(({ user_profile }) =>
+          !user_profile ? '' : user_profile,
+        );
+      }
       result = check.map((list, index) => ({
         ...list,
-        user_profile: profile[index][0].user_profile,
+        user_profile: imageData[index],
       }));
-
       res.send(result);
     } catch (error) {
       await connection.rollback(); // ROLLBACK

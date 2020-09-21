@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-
 export const StyledLi = styled.li`
   position: relative;
 
@@ -15,10 +14,21 @@ export const StyledLi = styled.li`
     width: 100%;
     padding-bottom: 100%;
     img {
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+        }
+      }
       position: absolute;
       width: 100%;
       height: 100%;
       border-radius: 3px;
+      background-color: rgba(219, 219, 219, 0.7);
+      animation: fadeIn 1s;
     }
     svg {
       position: absolute;
