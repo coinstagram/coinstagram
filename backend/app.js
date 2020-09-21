@@ -14,7 +14,6 @@ const app = express();
 app.use(function (req, res, next) {
   const check = /\/api/g;
   req.url = req.url.replace(check, '');
-  console.log(req.url);
   next();
 });
 

@@ -9,27 +9,31 @@ import { useDispatch } from 'react-redux';
 import { add_post, addPostSaga } from '../redux/modules/upload';
 
 export interface contextValue {
+  id: String;
   user_id: String;
   post_context: String;
   post_anotheruser: String;
   post_location: String;
+  created_at: String;
   tag: Array<String>;
-  image: Array<Object>;
+  image_path: Array<Object>;
 }
 
 const UploadContainer = () => {
   const [data, setData] = useState<contextValue>({
+    id: '',
     user_id: '',
     post_context: '',
     post_anotheruser: '',
     post_location: '',
+    created_at: '',
     tag: [],
-    image: [],
+    image_path: [],
   });
   const image = useCallback((img: Array<Object>) => {
     setData(data => ({
       ...data,
-      image: img,
+      image_path: img,
     }));
   }, []);
 

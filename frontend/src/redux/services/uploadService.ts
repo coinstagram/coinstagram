@@ -18,12 +18,13 @@ const uploadService = class {
       },
     );
     const { post_id } = res.data;
+    console.log(data);
 
-    await axios.post(
+    const imageRes = await axios.post(
       `${getUrl}/image`,
       {
         post_id,
-        image: [...data.image],
+        image_path: [...data.image_path],
       },
       {
         headers: {
@@ -31,8 +32,10 @@ const uploadService = class {
         },
       },
     );
+    console.log('test: ', imageRes.data);
+    console.log('imageRes', imageRes.data);
 
-    return res.data;
+    return { ...res.data, ...imageRes.data };
   }
 
   static async uploadImageView(files: FileList, token: String) {
@@ -61,7 +64,7 @@ const uploadService = class {
       },
     });
 
-    await axios.patch(`/user/image`, [{ image: res.data.image_path }], {
+    await axios.patch(`/user/image`, [{ image_path: res.data.image_path }], {
       headers: {
         Authorization: `Bearer ${token}`,
       },

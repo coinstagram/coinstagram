@@ -7,12 +7,14 @@ import { push } from 'connected-react-router';
 
 // 타입설정
 export type postData = {
+  id: String;
   user_id: String;
   post_context: String;
   post_anotheruser: String;
   post_location: String;
+  created_at: String;
   tag: Array<String>;
-  image: Array<Object>;
+  image_path: Array<Object>;
 };
 type uploadState = {
   Loading: boolean;
@@ -33,12 +35,14 @@ export const add_post_success = createAction(ADD_POST_SUCCESS)();
 export const add_post = (data: postData) => ({
   type: ADD_POST,
   payload: {
+    id: data.user_id,
     user_id: data.user_id,
     post_context: data.post_context,
     post_anotheruser: data.post_anotheruser,
     post_location: data.post_location,
+    created_at: data.created_at,
     tag: data.tag,
-    image: data.image,
+    image_path: data.image_path,
   },
 });
 
@@ -57,12 +61,14 @@ const initialState: uploadState = {
   Done: false,
   Error: null,
   data: {
+    id: '',
     user_id: '',
     post_context: '',
     post_anotheruser: '',
     post_location: '',
+    created_at: '',
     tag: [],
-    image: [],
+    image_path: [],
   },
 };
 
@@ -109,7 +115,9 @@ function* addPostSagafun() {
     const { postReducer } = yield select((state: uploadState) => state);
 
     yield call(uploadService.uploadPost, postReducer.data, token);
+    const { id, user_id, created_at, image_path } = yield uploadService.uploadPost(postReducer.data, token);
 
+    yield put(add_post({ ...postReducer.data, id, user_id, created_at, image_path: [...image_path] }));
     yield put(add_post_success());
 
     yield put(push('/'));
