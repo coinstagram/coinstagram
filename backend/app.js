@@ -12,6 +12,8 @@ const bodyParser = require('body-parser');
 
 const app = express();
 app.use(function (req, res, next) {
+  const check = /\/api/g;
+  req.url = req.url.replace(check, '');
   console.log(req.url);
   next();
 });
@@ -21,10 +23,10 @@ app.use('/', express.static(path.join(__dirname, 'uploads')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/api', userRouter);
-app.use('/api', signinRouter);
-app.use('/api', loginRouter);
-app.use('/api', postRouter);
+app.use(userRouter);
+app.use(signinRouter);
+app.use(loginRouter);
+app.use(postRouter);
 app.use('/uploads', express.static('uploads'));
 
 app.listen(PORT, () => {
