@@ -52,7 +52,7 @@ function LoginContainer() {
             disabled={!idCheck && !passwordCheck}
             className={['button', idCheck && passwordCheck && 'active'].join(' ')}
           />
-          {/* <LoadingSpinner /> */}
+
           {loading && <LoadingSpinner />}
         </StyledForm>
         <ErrorMessage error={error}>

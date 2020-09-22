@@ -29,11 +29,7 @@ export const logout = () => ({
   type: LOG_OUT,
 });
 
-type AuthActions =
-  | ReturnType<typeof signinStart>
-  | ReturnType<typeof signinSuccess>
-  | ReturnType<typeof signinFail>
-  | ReturnType<typeof logout>;
+type AuthActions = ReturnType<typeof signinStart> | ReturnType<typeof signinSuccess> | ReturnType<typeof signinFail> | ReturnType<typeof logout>;
 
 const initialState: AuthState = {
   loading: false,
@@ -42,10 +38,7 @@ const initialState: AuthState = {
 };
 
 // reducer
-function authReducer(
-  state: AuthState = initialState,
-  action: AuthActions,
-): AuthState {
+function authReducer(state: AuthState = initialState, action: AuthActions): AuthState {
   switch (action.type) {
     case SIGNIN_START:
       return {
@@ -67,6 +60,11 @@ function authReducer(
       };
     case LOG_OUT:
       return initialState;
+    // return {
+    //   loading: true,
+    //   error: null,
+    //   token: null,
+    // };
     default:
       return state;
   }
@@ -77,10 +75,7 @@ export default authReducer;
 const START_SIGNIN_SAGA = 'START_SIGNIN_SAGA' as const;
 
 // saga action creator
-export const signInSagaActionCreator = (
-  user_id: string,
-  user_password: string,
-) => ({
+export const signInSagaActionCreator = (user_id: string, user_password: string) => ({
   type: START_SIGNIN_SAGA,
   payload: { user_id, user_password },
 });
@@ -91,11 +86,7 @@ function* signinRequestSaga(action: SagaActions) {
   const payload = action.payload;
   yield put(signinStart());
   try {
-    const token = yield call(
-      authService.signin,
-      payload.user_id,
-      payload.user_password,
-    );
+    const token = yield call(authService.signin, payload.user_id, payload.user_password);
     yield call(TokenService.save, token);
     yield put(signinSuccess(token));
     if (token) yield put(push('/'));

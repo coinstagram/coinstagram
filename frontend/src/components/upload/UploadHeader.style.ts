@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const StyledDiv = styled.div`
-  line-height: 60px;
+  line-height: 50px;
   font-size: 16px;
   font-weight: bold;
   padding-left: 15px;
