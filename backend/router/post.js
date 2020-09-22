@@ -18,6 +18,7 @@ const fs = require('fs');
  * }
  */
 router.post('/post', verifyToken, async (req, res) => {
+  console.log('/post');
   const token = req.headers.authorization.split('Bearer ')[1];
   const { user_id } = jwt.verify(
     token,
@@ -43,6 +44,7 @@ router.post('/post', verifyToken, async (req, res) => {
       ]);
       sql = `select id, user_id, created_at from posts order by id desc limit 1; `;
       const [post_id] = await connection.query(sql);
+      console.log(post_id);
       res.send({ ...post_id[0] });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
@@ -588,7 +590,7 @@ router.post(
  */
 router.post('/post/image', verifyToken, async (req, res) => {
   console.log('post/image');
-  const { post_id, image_path } = req.body;
+  const { id, image_path } = req.body;
   let sql = ``;
   let sqls = [];
   let params = [];
@@ -604,7 +606,7 @@ router.post('/post/image', verifyToken, async (req, res) => {
         for (let imageData of image_path) {
           sql = `insert into post_image(post_id, image_path, image_name, image_type) values(?, ?, ?, ?);`;
           params = [
-            post_id,
+            id,
             imageData.image_path,
             imageData.image_name,
             imageData.image_type,
