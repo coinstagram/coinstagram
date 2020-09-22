@@ -1,5 +1,3 @@
-import { Interface } from 'readline';
-
 export interface followState {
   loading: boolean;
   error: null | Error;
@@ -65,9 +63,16 @@ export interface EachCommentState {
 }
 
 export interface CommentsState {
-  loading: boolean;
-  error: null | Error;
-  postComments: EachCommentState[];
+  feedPostComments: {
+    loading: boolean;
+    error: null | Error;
+    comments: EachCommentState[];
+  };
+  selectedPostComments: {
+    loading: boolean;
+    error: null | Error;
+    comments: EachCommentState[];
+  };
   myComments: EachCommentState[];
 }
 

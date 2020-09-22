@@ -71,9 +71,16 @@ function preloadedState(token: string | null): RootState {
       },
     },
     comments: {
-      loading: false,
-      error: null,
-      postComments: [],
+      feedPostComments: {
+        loading: false,
+        error: null,
+        comments: [],
+      },
+      selectedPostComments: {
+        loading: false,
+        error: null,
+        comments: [],
+      },
       myComments: [],
     },
     likes: {

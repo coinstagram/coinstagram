@@ -6,6 +6,11 @@ import CommentService from '../services/commentService';
 const START_GET_COMMENTS = 'coinstagram/comment/START_GET_COMMENTS' as const;
 const SUCCESS_GET_COMMENTS = 'coinstagram/comment/SUCCESS_GET_COMMENTS' as const;
 const FAIL_GET_COMMENTS = 'coinstagram/comment/FAIL_GET_COMMENTS' as const;
+
+const START_GET_SELECTED_COMMENTS = 'coinstagram/comment/START_GET_SELECTED_COMMENTS' as const;
+const SUCCESS_GET_SELECTED_COMMENTS = 'coinstagram/comment/SUCCESS_GET_SELECTED_COMMENTS' as const;
+const FAIL_GET_SELECTED_COMMENTS = 'coinstagram/comment/FAIL_GET_SELECTED_COMMENTS' as const;
+
 const START_ADD_COMMENT = 'coinstagram/comment/START_ADD_COMMENT' as const;
 const SUCCESS_ADD_COMMENT = 'coinstagram/comment/SUCCESS_ADD_COMMENT' as const;
 const FAIL_ADD_COMMENT = 'coinstagram/comment/FAIL_ADD_COMMENT' as const;
@@ -25,6 +30,22 @@ const successGetComments = (postComments: EachCommentState[]) => ({
 
 const failGetComments = (error: Error) => ({
   type: FAIL_GET_COMMENTS,
+  payload: error,
+});
+
+const startGetSelectedComments = () => ({
+  type: START_GET_SELECTED_COMMENTS,
+});
+
+const successGetSelectedComments = (postComments: EachCommentState[]) => ({
+  type: SUCCESS_GET_SELECTED_COMMENTS,
+  paylaod: {
+    postComments,
+  },
+});
+
+const failGetSelectedComments = (error: Error) => ({
+  type: FAIL_GET_SELECTED_COMMENTS,
   payload: error,
 });
 
@@ -53,6 +74,9 @@ type CommentActions =
   | ReturnType<typeof startGetComments>
   | ReturnType<typeof successGetComments>
   | ReturnType<typeof failGetComments>
+  | ReturnType<typeof startGetSelectedComments>
+  | ReturnType<typeof successGetSelectedComments>
+  | ReturnType<typeof failGetSelectedComments>
   | ReturnType<typeof startAddComment>
   | ReturnType<typeof successAddComment>
   | ReturnType<typeof failAddComment>
@@ -60,6 +84,7 @@ type CommentActions =
 
 // saga action
 const GET_POST_COMMENTS = 'GET_POST_COMMENTS' as const;
+const GET_SELECTED_COMMENTS = 'GET_SELECTED_COMMENTS' as const;
 const ADD_POST_COMMENT = 'ADD_POST_COMMENT' as const;
 
 // saga action creator
@@ -79,9 +104,15 @@ export const addPostComment = (post_id: number, comment_text: string, myProfile:
   },
 });
 
-type commentSagaActions =
-  // | ReturnType<typeof getPostComments>
-  ReturnType<typeof addPostComment>;
+export const getSelectedComments = (post_id: number) => ({
+  type: GET_SELECTED_COMMENTS,
+  payload: {
+    post_id,
+  },
+});
+
+type commentSagaActions = ReturnType<typeof addPostComment>;
+type getSelectedActions = ReturnType<typeof getSelectedComments>;
 
 // saga function
 function* getComments(action: commentSagaActions) {
@@ -92,6 +123,17 @@ function* getComments(action: commentSagaActions) {
     yield put(successGetComments(postComments));
   } catch (error) {
     yield put(failGetComments(error));
+  }
+}
+
+function* getSelectedPostComments(action: getSelectedActions) {
+  try {
+    const { token } = yield select((state: RootState) => state.auth);
+    yield put(startGetSelectedComments());
+    const postComments: EachCommentState[] = yield call(CommentService.getComment, token, action.payload.post_id);
+    yield put(successGetSelectedComments(postComments));
+  } catch (error) {
+    yield put(failGetSelectedComments(error));
   }
 }
 
@@ -109,14 +151,22 @@ function* addComment(action: commentSagaActions) {
 // saga function register
 export function* commentSaga() {
   yield takeEvery(GET_POST_COMMENTS, getComments);
+  yield takeEvery(GET_SELECTED_COMMENTS, getSelectedPostComments);
   yield takeLeading(ADD_POST_COMMENT, addComment);
 }
 
 // initial state
 const initialState: CommentsState = {
-  loading: false,
-  error: null,
-  postComments: [],
+  feedPostComments: {
+    loading: false,
+    error: null,
+    comments: [],
+  },
+  selectedPostComments: {
+    loading: false,
+    error: null,
+    comments: [],
+  },
   myComments: [],
 };
 
@@ -125,50 +175,79 @@ function commentReducer(state: CommentsState = initialState, action: CommentActi
   switch (action.type) {
     case START_GET_COMMENTS:
       return {
-        loading: true,
-        error: null,
-        postComments: state.postComments,
+        ...state,
+        feedPostComments: {
+          ...state.feedPostComments,
+          loading: true,
+        },
         myComments: [],
       };
     case SUCCESS_GET_COMMENTS:
       return {
-        loading: false,
-        error: null,
-        postComments: [...state.postComments, ...action.paylaod.postComments],
+        ...state,
+        feedPostComments: {
+          ...state.feedPostComments,
+          loading: false,
+          comments: [...state.feedPostComments.comments, ...action.paylaod.postComments],
+        },
         myComments: [],
       };
     case FAIL_GET_COMMENTS:
       return {
-        loading: false,
-        error: action.payload,
-        postComments: state.postComments,
+        ...state,
+        feedPostComments: {
+          ...state.feedPostComments,
+          error: action.payload,
+        },
         myComments: [],
+      };
+    case START_GET_SELECTED_COMMENTS:
+      return {
+        ...state,
+        selectedPostComments: {
+          ...state.selectedPostComments,
+          loading: true,
+        },
+        myComments: [],
+      };
+    case SUCCESS_GET_SELECTED_COMMENTS:
+      return {
+        ...state,
+        selectedPostComments: {
+          ...state.selectedPostComments,
+          loading: false,
+          comments: action.paylaod.postComments,
+        },
+        myComments: [],
+      };
+    case FAIL_GET_SELECTED_COMMENTS:
+      return {
+        ...state,
+        selectedPostComments: {
+          ...state.selectedPostComments,
+          error: action.payload,
+        },
       };
     case START_ADD_COMMENT:
       return {
-        loading: true,
-        error: null,
-        postComments: state.postComments,
-        myComments: state.myComments,
+        ...state,
       };
     case SUCCESS_ADD_COMMENT:
       return {
-        loading: false,
-        error: null,
-        postComments: state.postComments,
+        ...state,
         myComments: [...state.myComments, action.payload],
       };
     case FAIL_ADD_COMMENT:
       return {
-        loading: false,
-        error: action.payload,
-        postComments: state.postComments,
-        myComments: state.myComments,
+        ...state,
       };
     case RESET_COMMENT:
       return {
         ...state,
-        postComments: [...state.postComments, ...state.myComments],
+        feedPostComments: {
+          ...state.feedPostComments,
+          comments: [...state.feedPostComments.comments, ...state.myComments],
+        },
         myComments: [],
       };
     default:
