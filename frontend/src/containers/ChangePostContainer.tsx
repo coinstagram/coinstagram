@@ -4,7 +4,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import UploadHeader from '../components/upload/UploadHeader';
 import UploadInput from '../components/upload/UploadInput';
 import UploadDetails from '../components/upload/UploadDetails';
-import { StyledButton } from '../components/upload/UploadDetails.style';
 import { useDispatch, useSelector } from 'react-redux';
 import { add_post, addPostSaga } from '../redux/modules/upload';
 import { getSelectedPostSaga } from '../redux/modules/post';
@@ -19,7 +18,7 @@ export interface contextValue {
   post_location: string;
   created_at: string;
   tag: Array<string>;
-  image_path: Array<Object>;
+  image_path: Array<string>;
 }
 interface test {
   getSelectedPostInfo: () => void;
@@ -56,10 +55,9 @@ const ChangePostContainer = () => {
         post_location: selectedPost.post_location,
       }));
     }
-    console.log(selectedPost);
   }, [selectedPost]);
 
-  const image = useCallback((img: Array<Object>) => {
+  const image = useCallback((img: Array<string>) => {
     setData(data => ({
       ...data,
       image_path: img,
@@ -86,17 +84,20 @@ const ChangePostContainer = () => {
     }
   };
 
-  const onsubmit = (e: any) => {
-    dispatch(add_post(data));
-    dispatch(addPostSaga());
-  };
+  const onsubmit = useCallback(
+    (e: any) => {
+      dispatch(add_post(data));
+      dispatch(addPostSaga());
+    },
+    [dispatch, data],
+  );
 
   return (
     <>
       <UploadHeader />
-      <UploadInput image={image} data={data} />
+      <UploadInput image={image} onsubmit={onsubmit} data={data} />
       <UploadDetails change={onchange} data={data} />
-      <StyledButton onClick={onsubmit}>계시하기</StyledButton>
+      {/* <StyledButton onClick={onsubmit}>계시하기</StyledButton> */}
     </>
   );
 };

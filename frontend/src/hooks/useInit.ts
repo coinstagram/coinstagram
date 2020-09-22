@@ -32,7 +32,7 @@ function useInit() {
   useEffect(() => {
     feedPosts.forEach(post => dispatch(getPostLikesSaga(post.id)));
     feedPosts.forEach(post => dispatch(getPostComments(post.id)));
-  }, [dispatch, feedPosts]);
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(getRandomPostsSaga());

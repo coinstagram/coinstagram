@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 
 export const StyledDiv = styled.div`
   position: relative;
-  min-height: 170px;
+  min-height: 300px;
 `;
 
 export const StyledArticle = styled.article`
@@ -25,7 +25,7 @@ export const StyledArticle = styled.article`
   }
 
   ${props =>
-    props.width < 655
+    props.width < 800
       ? css`
           margin-top: 20px;
           border: 1px solid rgb(219, 219, 219);
@@ -35,7 +35,7 @@ export const StyledArticle = styled.article`
         `}
 
   ${props =>
-    props.width < 655
+    props.width < 800
       ? css`
           & {
             margin-left: 0;
@@ -57,7 +57,7 @@ export const StyledArticle = styled.article`
 export const StyledSpinnerDiv = styled.div`
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 52%;
 `;
 
 export const StyledPreviewDiv = styled.div`

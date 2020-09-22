@@ -1,4 +1,4 @@
-import RootState, { PostsState, EachPostState } from '../../type';
+import RootState, { PostsState, PostData, EachPostState } from '../../type';
 import { takeLatest, put, select, call } from 'redux-saga/effects';
 import PostService from '../services/postService';
 
@@ -23,7 +23,25 @@ const START_DELETE_POST = '/coinstagram/post/START_DELETE_POST' as const;
 const SUCCESS_DELETE_POST = '/coinstagram/post/SUCCESS_DELETE_POST' as const;
 const FAIL_DELETE_POST = '/coinstagram/post/FAIL_DELETE_POST' as const;
 
+const UPLOAD_POST = '/coinstagram/post/UPLOAD_POST' as const;
+
 // action creator
+
+export const uploadPost = (post: PostData) => ({
+  type: UPLOAD_POST,
+  payload: {
+    post: {
+      id: +post.id,
+      user_id: post.user_id,
+      post_context: post.post_context,
+      post_anotheruser: post.post_anotheruser,
+      post_location: post.post_location,
+      created_at: post.created_at,
+      image_path: post.image_path,
+    },
+  },
+});
+
 const startGetPostsFeed = () => ({
   type: START_GET_POSTS_FEED,
 });
@@ -123,7 +141,8 @@ type PostActions =
   | ReturnType<typeof failGetPostSelcted>
   | ReturnType<typeof startDeletePost>
   | ReturnType<typeof successDeletePost>
-  | ReturnType<typeof failDeletePost>;
+  | ReturnType<typeof failDeletePost>
+  | ReturnType<typeof uploadPost>;
 
 // saga action type
 const GET_RANDOM_POSTS_SAGA = 'GET_RANDOM_POSTS_SAGA' as const;
@@ -373,6 +392,14 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
         feedPosts: state.feedPosts,
         selectedPost: state.selectedPost,
         randomPosts: state.randomPosts,
+      };
+    case UPLOAD_POST:
+      return {
+        ...state,
+        feedPosts: {
+          ...state.feedPosts,
+          feedPosts: [action.payload.post, ...state.feedPosts.feedPosts],
+        },
       };
     default:
       return state;

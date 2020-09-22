@@ -8,7 +8,6 @@ import useAuth from '../hooks/useAuth';
 import StyledMain from '../components/common/StyledMain';
 
 // containers
-import UploadContainer from '../containers/UploadContainer';
 import ChangePostContainer from '../containers/ChangePostContainer';
 
 const UploadMain = styled(StyledMain)`

@@ -68,7 +68,7 @@ function SelectedPost({
           {selectedUserId}님의 게시물 {selectedPostId}
         </h3>
         <div>
-          {width < 750 && (
+          {width < 1500 && (
             <FeedHeader
               userId={selectedUserId}
               userProfile={selectedUserProfile}
@@ -81,7 +81,7 @@ function SelectedPost({
           </div>
         </div>
         <div>
-          {width > 750 && (
+          {width > 1500 && (
             <FeedHeader
               userId={selectedUserId}
               userProfile={selectedUserProfile}
