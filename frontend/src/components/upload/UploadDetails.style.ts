@@ -6,7 +6,9 @@ interface ITest {
 
 export const StyledText: any = styled.textarea<ITest>`
   position: relative;
+  font-family: inherit;
   border: none;
+  border-top: 1px solid rgb(219, 219, 219);
   width: 100%;
   height: 120px;
   padding: 10px;
@@ -20,7 +22,7 @@ export const StyledText: any = styled.textarea<ITest>`
 export const StyledDiv = styled.div`
   display: flex;
   input {
-    height: 50px;
+    height: 40px;
     padding: 10px;
     flex-grow: 1;
     outline: none;
@@ -40,11 +42,13 @@ export const StyledDiv = styled.div`
 `;
 
 export const StyledButton = styled.button`
+  width: 100%;
+  color: #ffffff;
   border: none;
-  border-radius: 4px;
-  font-size: 20px;
+  border-radius: 0 0 5px 5px;
   font-weight: bold;
-  padding: 0.25rem 1rem;
-  color: black;
+  padding: 10px 15px;
   outline: none;
+  background: #0095f6;
+  cursor: pointer;
 `;

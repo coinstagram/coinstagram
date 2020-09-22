@@ -1,16 +1,21 @@
 import styled from 'styled-components';
 import borderStyle from '../common/ThumbnailBorderStyle';
 
+export const StyledDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  height: 84px;
+`;
 export const StyledSection = styled.section`
   z-index: 1;
   height: 84px;
   padding: 16px 40px 10px 33px;
-  border-radius: 3px;
+  border-radius: 10px;
   background-color: rgb(255, 255, 255);
   overflow: hidden;
   position: relative;
   width: ${props => props.width > 1520 && 50}%;
-  margin: 0 auto;
+  margin: ${props => props.width <= 1000 && '0 auto'};
   border: 1px solid rgb(219, 219, 219);
 
   .hidden-container {

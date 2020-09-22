@@ -16,6 +16,9 @@ const UploadMain = styled(StyledMain)`
 `;
 const StyledSection = styled.section`
   border: 1px solid rgb(219, 219, 219);
+  background: #ffffff;
+  border-radius: 10px;
+  margin-top: 20px;
 `;
 
 function Upload() {

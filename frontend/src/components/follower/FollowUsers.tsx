@@ -5,12 +5,13 @@ import useWindowWidth from '../../hooks/useWindowWidth';
 import { useHistory } from 'react-router-dom';
 
 // styles
-import { StyledButton, StyledSection } from './FollowUsersStyle';
+import { StyledButton, StyledSection, StyledDiv } from './FollowUsersStyle';
 
 // components
 import Thumbnail from '../common/Thumbnail';
 import NextBtn from '../common/NextBtn';
 import PrevBtn from '../common/PrevBtn';
+import Notice from './Notice';
 
 interface State {
   count: number;
@@ -103,32 +104,35 @@ function FollowUsers({ followers, loading, error }: FoolowUsersProps) {
   }, [state]);
 
   return (
-    <StyledSection width={width}>
-      <h3 className="a11y-hidden">팔로우한 계정</h3>
-      <div className="hidden-container">
-        {state.count !== 0 && <PrevBtn onClick={prev} />}
-        {state.visual && state.slideCount !== state.count && <NextBtn onClick={next} />}
-        <ul ref={ulRef}>
-          {followers.length === 0 && (
-            <p>
-              아직 팔로우한 계정이 없으시군요? 다른 유저들을 <span style={{ color: 'rgb(0, 149, 246)' }}>follow</span> 해 보세요!
-            </p>
-          )}
-          {followers.length !== 0 &&
-            followers.map(follower => (
-              <li key={follower.user_id} ref={liRef}>
-                <StyledButton onClick={e => click(e, follower.user_id)} id={follower.user_id === null ? undefined : follower.user_id}>
-                  <Thumbnail size={56} imageUrl={follower.user_profile} />
-                  <div tabIndex={-1}>
-                    <dt className="a11y-hidden">유저 ID</dt>
-                    <dd>{follower.user_id}</dd>
-                  </div>
-                </StyledButton>
-              </li>
-            ))}
-        </ul>
-      </div>
-    </StyledSection>
+    <StyledDiv>
+      <StyledSection width={width}>
+        <h3 className="a11y-hidden">팔로우한 계정</h3>
+        <div className="hidden-container">
+          {state.count !== 0 && <PrevBtn onClick={prev} />}
+          {state.visual && state.slideCount !== state.count && <NextBtn onClick={next} />}
+          <ul ref={ulRef}>
+            {followers.length === 0 && (
+              <p>
+                아직 팔로우한 계정이 없으시군요? 다른 유저들을 <span style={{ color: 'rgb(0, 149, 246)' }}>follow</span> 해 보세요!
+              </p>
+            )}
+            {followers.length !== 0 &&
+              followers.map(follower => (
+                <li key={follower.user_id} ref={liRef}>
+                  <StyledButton onClick={e => click(e, follower.user_id)} id={follower.user_id === null ? undefined : follower.user_id}>
+                    <Thumbnail size={56} imageUrl={follower.user_profile} />
+                    <div tabIndex={-1}>
+                      <dt className="a11y-hidden">유저 ID</dt>
+                      <dd>{follower.user_id}</dd>
+                    </div>
+                  </StyledButton>
+                </li>
+              ))}
+          </ul>
+        </div>
+      </StyledSection>
+      {width > 1000 && <Notice />}
+    </StyledDiv>
   );
 
   function click(e: React.MouseEvent<HTMLButtonElement, MouseEvent>, user_id: string) {
