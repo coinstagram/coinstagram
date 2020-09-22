@@ -7,25 +7,35 @@ export const StyledNav = styled.nav`
   }
 
   ${props =>
-    props.width < 655
+    props.width < 400
       ? css`
           li + li {
-            margin-left: 17px;
+            margin-left: 15px;
+          }
+          li {
+            height: 22px;
+          }
+          svg {
+            font-size: 22px;
+            width: 22px;
+            height: 22px;
           }
         `
       : css`
           li + li {
             margin-left: 22px;
           }
+          li {
+            height: 27px;
+          }
+          svg {
+            font-size: 27px;
+            width: 27px;
+            height: 27px;
+          }
         `}
-  li {
-    height: 27px;
-  }
 
   svg {
-    font-size: 27px;
-    width: 27px;
-    height: 27px;
     outline: none;
     vertical-align: bottom;
 

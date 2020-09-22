@@ -3,9 +3,6 @@ import { useDispatch } from 'react-redux';
 import { add_post, addPostSaga } from '../redux/modules/upload';
 import { resetComment } from '../redux/modules/comment';
 
-// styles
-import { StyledButton } from '../components/upload/UploadDetails.style';
-
 // components;
 import UploadHeader from '../components/upload/UploadHeader';
 import UploadInput from '../components/upload/UploadInput';
@@ -19,7 +16,7 @@ export interface contextValue {
   post_location: string;
   created_at: string;
   tag: Array<string>;
-  image_path: Array<Object>;
+  image_path: Array<string>;
 }
 
 const UploadContainer = () => {
@@ -40,7 +37,7 @@ const UploadContainer = () => {
     image_path: [],
   });
 
-  const image = useCallback((img: Array<Object>) => {
+  const image = useCallback((img: Array<string>) => {
     setData(data => ({
       ...data,
       image_path: img,
@@ -67,17 +64,19 @@ const UploadContainer = () => {
     }
   };
 
-  const onsubmit = (e: any) => {
-    dispatch(add_post(data));
-    dispatch(addPostSaga());
-  };
+  const onsubmit = useCallback(
+    (e: any) => {
+      dispatch(add_post(data));
+      dispatch(addPostSaga());
+    },
+    [dispatch, data],
+  );
 
   return (
     <>
       <UploadHeader />
-      <UploadInput image={image} data={data} />
+      <UploadInput image={image} onsubmit={onsubmit} data={data} />
       <UploadDetails change={onchange} data={data} />
-      <StyledButton onClick={onsubmit}>업로드</StyledButton>
     </>
   );
 };

@@ -1,23 +1,33 @@
 import React, { useState } from 'react';
-import { StyledDiv, StyledLabel } from './UploadInput.style';
 import FeedImgSlider from '../feed/FeedImgSlider';
 import uploadService from '../../redux/services/uploadService';
 import { contextValue } from '../../containers/ChangePostContainer';
+import { useSelector } from 'react-redux';
+import RootState from '../../type';
+import useWindowWidth from '../../hooks/useWindowWidth';
+
+// styles
+import { StyledDiv, StyledLabel, StyledButton, StyledSpinnerDiv } from './UploadInput.style';
+
+// components
+import Spinner from '../common/Spinner';
 
 interface UploadDetailsProps {
-  image: (img: Array<object>) => void;
+  image: (img: Array<string>) => void;
+  onsubmit: (e: any) => void;
   data?: contextValue;
 }
 interface resDataProps {
   image_path: string;
 }
 
-const UploadInput: React.FC<UploadDetailsProps> = ({ image, data }) => {
+const UploadInput: React.FC<UploadDetailsProps> = ({ image, onsubmit, data }) => {
+  const { Loading } = useSelector((state: RootState) => state.upload);
   const [imageURL, setImageURL] = useState<Array<string>>([]);
-  const [imageFile, setImageFile] = useState<Array<String>>([]);
-  React.useEffect(() => {
-    console.log('input', data.image_path);
-  }, [data]);
+  const [imageFile, setImageFile] = useState<Array<string>>([]);
+  const width = useWindowWidth();
+
+  React.useEffect(() => {}, [data]);
 
   const isSelectedImg = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const FileUrl = await uploadService.uploadImageView(event.target.files, localStorage.getItem('access_token'));
@@ -34,7 +44,7 @@ const UploadInput: React.FC<UploadDetailsProps> = ({ image, data }) => {
     <>
       {imageURL[0] === '' ? (
         <StyledDiv>
-          <StyledLabel htmlFor="image" tabIndex={0}>
+          <StyledLabel htmlFor="image" tabIndex={0} width={width}>
             <input
               type="file"
               id="image"
@@ -50,7 +60,7 @@ const UploadInput: React.FC<UploadDetailsProps> = ({ image, data }) => {
       ) : (
         <>
           <FeedImgSlider imageUrl={imageURL}>
-            <StyledLabel htmlFor="image" tabIndex={0}>
+            <StyledLabel htmlFor="image" tabIndex={0} width={width}>
               <input
                 type="file"
                 id="image"
@@ -63,6 +73,14 @@ const UploadInput: React.FC<UploadDetailsProps> = ({ image, data }) => {
               />
             </StyledLabel>
           </FeedImgSlider>
+          <StyledButton onClick={onsubmit} disabled={imageURL.length === 0 || Loading ? true : false} image={imageURL} Loading={Loading}>
+            업로드
+            {Loading && (
+              <StyledSpinnerDiv>
+                <Spinner />
+              </StyledSpinnerDiv>
+            )}
+          </StyledButton>
         </>
       )}
     </>

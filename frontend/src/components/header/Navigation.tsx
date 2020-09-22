@@ -54,7 +54,7 @@ function Navigation({ imageUrl, userId }: NavigationProps) {
         </li>
         <li aria-label="내 프로필" onClick={toggle} id="profile">
           <StyledButton clicked={state.profile}>
-            <Thumbnail size={28} imageUrl={imageUrl} />
+            <Thumbnail size={width > 655 ? 28 : 22} imageUrl={imageUrl} />
           </StyledButton>
           {state.profile && <NavModal top={top.current} left={left.current} profile={state.profile} userId={userId} />}
         </li>

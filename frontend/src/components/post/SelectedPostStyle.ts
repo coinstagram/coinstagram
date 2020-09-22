@@ -25,8 +25,8 @@ export const StyledArticle = styled.article`
 export const StyledDiv = styled.div`
   padding: 16px;
   border-bottom: 1px solid rgb(239, 239, 239);
-  height: 100%;
-  max-height: ${props => (props.width > 1500 ? 433 : 200)};
+  height: ${props => (props.width > 1500 ? 100 : '')}%;
+  max-height: ${props => (props.width > 1500 ? 433 : 330)};
   overflow-y: auto;
 
   -ms-overflow-style: none;

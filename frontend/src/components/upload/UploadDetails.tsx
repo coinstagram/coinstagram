@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { StyledText, StyledDiv } from './UploadDetails.style';
+import React, { useRef } from 'react';
+import { StyledText } from './UploadDetails.style';
 import { contextValue } from '../../containers/ChangePostContainer';
 
 interface UploadDetailsProps {
@@ -9,8 +9,8 @@ interface UploadDetailsProps {
 
 const UploadDetails: React.FC<UploadDetailsProps> = ({ change, data }) => {
   const contextRef = useRef();
-  const peopleRef = useRef();
-  const locationRef = useRef();
+  // const peopleRef = useRef();
+  // const locationRef = useRef();
   return (
     <>
       <StyledText id="context" placeholder="문구를 입력 해 주세요." onChange={change} value={!data ? '' : data.post_context} ref={contextRef} />{' '}
