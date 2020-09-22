@@ -11,7 +11,7 @@ interface ILikeService {
 
 const LikeService: ILikeService = class {
   static async getLikesPost(token: null | string, post_id: number) {
-    const res = await axios.get<userLikesState[]>(`/post${baseUrl}/${post_id}`, {
+    const res = await axios.get<userLikesState[]>(`/api/post${baseUrl}/${post_id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -22,7 +22,7 @@ const LikeService: ILikeService = class {
 
   static async addLikePost(token: null | string, post_id: number) {
     await axios.post(
-      `/post${baseUrl}`,
+      `/api/post${baseUrl}`,
       {
         post_id,
       },
@@ -35,7 +35,7 @@ const LikeService: ILikeService = class {
   }
 
   static async deleteLikePost(token: null | string, post_id: number) {
-    await axios.delete(`/post${baseUrl}/${post_id}`, {
+    await axios.delete(`/api/post${baseUrl}/${post_id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

@@ -146,14 +146,15 @@ export interface SignupInfoState {
 }
 
 export interface PostData {
+  id: String;
   user_id: String;
   post_context: String;
   post_anotheruser: String;
   post_location: String;
+  created_at: String;
   tag: Array<String>;
-  image: Array<Object>;
+  image_path: Array<Object>;
 }
-
 export interface AuthState {
   loading: boolean;
   token: null | string;

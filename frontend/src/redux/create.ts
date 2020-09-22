@@ -62,12 +62,14 @@ function preloadedState(token: string | null): RootState {
       Done: false,
       Error: null,
       data: {
+        id: '',
         user_id: '',
         post_context: '',
         post_anotheruser: '',
         post_location: '',
         tag: [],
-        image: [],
+        image_path: [],
+        created_at: '',
       },
     },
     comments: {

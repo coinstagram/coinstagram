@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { EachCommentState } from '../../type';
 
-const baseUrl = '/comment';
+const baseUrl = '/api/comment';
 
 interface ICommentService {
   addComment: (token: string | null, post_id: number, comment_text: string) => Promise<EachCommentState>;

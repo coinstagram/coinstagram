@@ -5,7 +5,7 @@ const getUrl = '/post';
 const uploadService = class {
   static async uploadPost(data: PostData, token: String) {
     const res = await axios.post(
-      `${getUrl}`,
+      `/api${getUrl}`,
       {
         post_context: data.post_context,
         post_anotheruser: data.post_anotheruser,
@@ -19,11 +19,11 @@ const uploadService = class {
     );
     const { post_id } = res.data;
 
-    await axios.post(
-      `${getUrl}/image`,
+    const imageRes = await axios.post(
+      `/api${getUrl}/image`,
       {
         post_id,
-        image: [...data.image],
+        image_path: [...data.image_path],
       },
       {
         headers: {
@@ -32,7 +32,7 @@ const uploadService = class {
       },
     );
 
-    return res.data;
+    return { ...res.data, ...imageRes.data };
   }
 
   static async uploadImageView(files: FileList, token: String) {
@@ -42,7 +42,7 @@ const uploadService = class {
         fd.append('image', f);
       });
 
-      const res = await axios.post(`images`, fd, {
+      const res = await axios.post(`/api/images`, fd, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -55,13 +55,13 @@ const uploadService = class {
     const fd = new FormData();
     fd.append('user-profile', file);
 
-    const res = await axios.post(`/image`, fd, {
+    const res = await axios.post(`/api/image`, fd, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
-    await axios.patch(`/user/image`, [{ image: res.data.image_path }], {
+    await axios.patch(`/api/user/image`, [{ image_path: res.data.image_path }], {
       headers: {
         Authorization: `Bearer ${token}`,
       },
