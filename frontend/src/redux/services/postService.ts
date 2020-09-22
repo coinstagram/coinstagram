@@ -11,6 +11,7 @@ interface IPostService {
   getSpecificPost: (token: null | string, post_id: number) => Promise<EachPostState>;
   deletePost: (token: string | null, post_id: number) => void;
   getCountPost: (token: string | null, post_id: number) => Promise<CountState>;
+  changePost: (token: string | null, post_id: number, post_context: string) => void;
 }
 
 const PostService: IPostService = class {
@@ -82,7 +83,21 @@ const PostService: IPostService = class {
     return res.data;
   }
 
-  // static async patchPosts..
+  static async changePost(token: string | null, post_id: number, post_context: string) {
+    const res = await axios.put(
+      `/post/chagne/${post_id}`,
+      {
+        post_context,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    return res;
+  }
 };
 
 export default PostService;

@@ -75,7 +75,7 @@ const UploadContainer = () => {
   return (
     <>
       <UploadHeader />
-      <UploadInput image={image} data={data} />
+      <UploadInput image={image} />
       <UploadDetails change={onchange} data={data} />
       <StyledButton onClick={onsubmit}>계시하기</StyledButton>
     </>

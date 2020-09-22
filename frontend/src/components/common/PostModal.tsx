@@ -45,11 +45,9 @@ function PostModal({
               <li>
                 <button>
                   <span tabIndex={-1}>
-                    수정 (준비중
-                    <span aria-label="우는 표정" role="img">
-                      😭
-                    </span>
-                    )
+                    <Link to={`/change/${postId}`}>
+                      <span tabIndex={-1}>수정하기</span>
+                    </Link>
                   </span>
                 </button>
               </li>

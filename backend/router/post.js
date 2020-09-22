@@ -1001,4 +1001,38 @@ router.get('/post/count/:post_id', verifyToken, async (req, res) => {
   }
 });
 
+router.put('/post/chagne/:post_id', verifyToken, async (req, res) => {
+  const { post_id } = req.params;
+  const { post_context } = req.body;
+
+  let sql = '';
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      sql = `update posts set post_context = ? where id = ?;`;
+      const [test] = await connection.query(sql, [
+        post_context + '',
+        post_id + '',
+      ]);
+
+      sql = `update post_image set post_context = ? where post_id = ?;`;
+      // const [test] = await connection.query(sql, [
+      //   post_context + '',
+      //   post_id + '',
+      // ]);
+
+      res.send({ success: test.changedRows });
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      console.log(error);
+      res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
+});
+
 module.exports = router;
