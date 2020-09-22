@@ -1,31 +1,32 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const StyledArticle = styled.article`
-  display: flex;
   border: 1px solid rgb(219, 219, 219);
   background: rgb(255, 255, 255);
 
-  & > div:nth-of-type(1) {
-    width: 70%;
+  ${props =>
+    props.width > 1500
+      ? css`
+          display: flex;
+          & > div:nth-of-type(1) {
+            width: 70%;
 
-    li {
-      padding-bottom: 65%;
-    }
-  }
-
-  & > div:nth-of-type(2) {
-    flex-grow: 2;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    overflow: hidden;
-  }
+            li {
+              padding-bottom: 65%;
+            }
+          }
+          & > div:nth-of-type(2) {
+            flex-grow: 2;
+          }
+        `
+      : css``}
 `;
 
 export const StyledDiv = styled.div`
-  flex-shrink: 2;
   padding: 16px;
   border-bottom: 1px solid rgb(239, 239, 239);
+  height: 100%;
+  max-height: ${props => (props.width > 1500 ? 433 : 200)};
   overflow-y: auto;
 
   -ms-overflow-style: none;

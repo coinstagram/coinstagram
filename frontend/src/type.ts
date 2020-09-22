@@ -83,8 +83,10 @@ export interface EachLikeState {
 }
 
 export interface likeState {
-  postLikes: EachLikeState;
-  commentLikes: EachLikeState;
+  feedPostLikes: EachLikeState;
+  selectedPostLikes: EachLikeState;
+  // feedCommentLikes: EachLikeState;
+  // selectedCommentLikes: EachLikeState;
 }
 
 export interface EachPostState {

@@ -16,7 +16,7 @@ const StyledDiv = styled.div`
   position: relative;
 
   .list-container {
-    max-width: 1150px;
+    max-width: ${props => (props.feedPosts.length === 0 ? 1450 : 1150)};
   }
 
   .recommend-container {
@@ -28,6 +28,7 @@ const StyledDiv = styled.div`
 
 function HomeMain() {
   const { users } = useSelector((state: RootState) => state.userInfo.followers);
+  const { feedPosts } = useSelector((state: RootState) => state.posts.feedPosts);
   const dispatch = useDispatch();
   const { follow, popFollowModal, popPostModal, postId, postModal, user_id, user_profile } = useContext(ModalContext);
 
@@ -47,7 +48,7 @@ function HomeMain() {
 
   return (
     <>
-      <StyledDiv>
+      <StyledDiv feedPosts={feedPosts}>
         <div className="list-container">
           <FollowUsersContainer />
           <FeedContainer />

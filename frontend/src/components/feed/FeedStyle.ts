@@ -62,7 +62,7 @@ export const StyledSpinnerDiv = styled.div`
 
 export const StyledPreviewDiv = styled.div`
   position: relative;
-  margin: 40px auto;
+  margin: 30px auto;
   max-width: 670px;
   border: 1px solid rgb(219, 219, 219);
 `;

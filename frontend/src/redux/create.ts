@@ -77,12 +77,12 @@ function preloadedState(token: string | null): RootState {
       myComments: [],
     },
     likes: {
-      postLikes: {
+      feedPostLikes: {
         loading: false,
         error: null,
         userLikes: [],
       },
-      commentLikes: {
+      selectedPostLikes: {
         loading: false,
         error: null,
         userLikes: [],
