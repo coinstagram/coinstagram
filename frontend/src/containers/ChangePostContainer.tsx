@@ -47,8 +47,6 @@ const ChangePostContainer = () => {
 
   useEffect(() => {
     if (!!selectedPost) {
-      console.log('tset');
-
       setData(state => ({
         ...state,
         id: selectedPost.id + '',
@@ -58,9 +56,8 @@ const ChangePostContainer = () => {
         post_location: selectedPost.post_location,
       }));
     }
-    console.log(data);
     console.log(selectedPost);
-  }, [data, selectedPost]);
+  }, [selectedPost]);
 
   const image = useCallback((img: Array<Object>) => {
     setData(data => ({
