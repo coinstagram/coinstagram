@@ -15,7 +15,7 @@ interface IPostService {
 
 const PostService: IPostService = class {
   static async getRandomPosts(token: string | null) {
-    const res = await axios.get<EachPostState[]>(`${baseUrl}s`, {
+    const res = await axios.get<EachPostState[]>(`/api${baseUrl}s`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -25,7 +25,7 @@ const PostService: IPostService = class {
   }
 
   static async getFollowersPosts(token: string | null) {
-    const res = await axios.get<EachPostState[]>(`/user/relationship${baseUrl}`, {
+    const res = await axios.get<EachPostState[]>(`/api/user/relationship${baseUrl}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -35,7 +35,7 @@ const PostService: IPostService = class {
   }
 
   static async getUserPosts(token: string | null, user_id: string) {
-    const res = await axios.get<EachPostState[]>(`/user${baseUrl}/${user_id}`, {
+    const res = await axios.get<EachPostState[]>(`/api/user${baseUrl}/${user_id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -45,7 +45,7 @@ const PostService: IPostService = class {
   }
 
   static async getSelectedPost(token: string | null, post_id: number) {
-    const res = await axios.get<EachPostState>(`${baseUrl}/${post_id}`, {
+    const res = await axios.get<EachPostState>(`/api${baseUrl}/${post_id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -55,7 +55,7 @@ const PostService: IPostService = class {
   }
 
   static async getSpecificPost(token: null | string, post_id: number) {
-    const res = await axios.get<EachPostState>(`${baseUrl}/${post_id}`, {
+    const res = await axios.get<EachPostState>(`/api${baseUrl}/${post_id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -65,7 +65,7 @@ const PostService: IPostService = class {
   }
 
   static async deletePost(token: string | null, post_id: number) {
-    await axios.delete(`${baseUrl}/${post_id}`, {
+    await axios.delete(`/api${baseUrl}/${post_id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -73,7 +73,7 @@ const PostService: IPostService = class {
   }
 
   static async getCountPost(token: string | null, post_id: number) {
-    const res = await axios.get<CountState>(`${baseUrl}/count/${post_id}`, {
+    const res = await axios.get<CountState>(`/api${baseUrl}/count/${post_id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

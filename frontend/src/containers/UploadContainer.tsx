@@ -12,12 +12,14 @@ import UploadInput from '../components/upload/UploadInput';
 import UploadDetails from '../components/upload/UploadDetails';
 
 export interface contextValue {
-  user_id: String;
-  post_context: String;
-  post_anotheruser: String;
-  post_location: String;
-  tag: Array<String>;
-  image: Array<Object>;
+  id: string;
+  user_id: string;
+  post_context: string;
+  post_anotheruser: string;
+  post_location: string;
+  created_at: string;
+  tag: Array<string>;
+  image_path: Array<Object>;
 }
 
 const UploadContainer = () => {
@@ -28,18 +30,20 @@ const UploadContainer = () => {
   }, [dispatch]);
 
   const [data, setData] = useState<contextValue>({
+    id: '',
     user_id: '',
     post_context: '',
     post_anotheruser: '',
     post_location: '',
+    created_at: '',
     tag: [],
-    image: [],
+    image_path: [],
   });
 
   const image = useCallback((img: Array<Object>) => {
     setData(data => ({
       ...data,
-      image: img,
+      image_path: img,
     }));
   }, []);
 
@@ -71,9 +75,9 @@ const UploadContainer = () => {
   return (
     <>
       <UploadHeader />
-      <UploadInput image={image} />
-      <UploadDetails change={onchange} />
-      <StyledButton onClick={onsubmit}>게시하기</StyledButton>
+      <UploadInput image={image} data={data} />
+      <UploadDetails change={onchange} data={data} />
+      <StyledButton onClick={onsubmit}>업로드</StyledButton>
     </>
   );
 };

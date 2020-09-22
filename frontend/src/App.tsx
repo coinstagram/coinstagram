@@ -24,6 +24,8 @@ import NotFound from './pages/NotFound';
 
 // components
 import FollowCancelModal from './components/common/FollowCancelModal';
+import ChangePostContainer from './containers/ChangePostContainer';
+import ChangePost from './pages/ChangePost';
 
 interface contextValue {
   follow: (user_id: string, user_name: string, user_profile: null | string) => void;
@@ -137,6 +139,7 @@ function App() {
               <Route path="/post/:postid" component={Post} />
               <Route path="/explore" component={Explore} />
               <Route path="/upload" component={Upload} />
+              <Route path="/change/:post_id" component={ChangePost} />
               <Route path="/join" component={Join} />
               <Route path="/login" component={Login} />
               <Route path="/account/:userid/tagged" component={Profile} />

@@ -18,12 +18,14 @@ export const add_post_success = createAction(ADD_POST_SUCCESS)();
 export const add_post = (data: PostData) => ({
   type: ADD_POST,
   payload: {
+    id: data.user_id,
     user_id: data.user_id,
     post_context: data.post_context,
     post_anotheruser: data.post_anotheruser,
     post_location: data.post_location,
+    created_at: data.created_at,
     tag: data.tag,
-    image: data.image,
+    image_path: data.image_path,
   },
 });
 
@@ -42,12 +44,14 @@ const initialState: uploadState = {
   Done: false,
   Error: null,
   data: {
+    id: '',
     user_id: '',
     post_context: '',
     post_anotheruser: '',
     post_location: '',
+    created_at: '',
     tag: [],
-    image: [],
+    image_path: [],
   },
 };
 
@@ -91,10 +95,13 @@ function* addPostSagafun() {
   try {
     yield put(add_post_request());
     const { token }: AuthState = yield select((state: RootState) => state.auth);
-    const { upload } = yield select((state: RootState) => state);
+    const { upload } = yield select((state: uploadState) => state);
+    console.log(upload);
 
-    yield call(uploadService.uploadPost, upload.data, token);
+    const { id, user_id, created_at, image_path } = yield call(uploadService.uploadPost, upload.data, token);
+    console.log(id, user_id, created_at, image_path);
 
+    yield put(add_post({ ...upload.data, id, user_id, created_at, image_path: [...image_path] }));
     yield put(add_post_success());
     yield put(push('/'));
   } catch (error) {

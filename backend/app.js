@@ -14,13 +14,8 @@ app.use(function (req, res, next) {
   req.url = req.url.replace(check, '');
   next();
 });
+
 // eslint-disable-next-line no-undef
-
-// app.use(function (req, res, next) {
-//   const check = (req.url = req.url.replace(check, '')); //api/g;
-//   next();
-// });
-
 app.use('/', express.static(path.join(__dirname, 'uploads')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
