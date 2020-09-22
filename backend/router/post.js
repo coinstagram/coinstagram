@@ -1006,6 +1006,7 @@ router.put('/post/chagne/:post_id', verifyToken, async (req, res) => {
   const { post_context, post_image } = req.body;
 
   let sql = '';
+  let params = [];
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {

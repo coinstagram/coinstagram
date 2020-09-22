@@ -87,7 +87,7 @@ const PostService: IPostService = class {
     console.log(post_image);
 
     const res = await axios.put(
-      `/post/chagne/${post_id}`,
+      `/api/post/chagne/${post_id}`,
       {
         post_context,
         post_image,
