@@ -31,7 +31,7 @@ function OtherPostItem({ postId, postOwnerId, imageThumbnail, getPostCounts }: O
   return (
     <StyledLi>
       <Link to={`/post/${postId}`} onClick={() => setFollowInfo(postOwnerId, '', null)}>
-        <img src={`http://localhost:4000/${imageThumbnail[imageThumbnail.length - 1]}`} alt={`${postOwnerId}님의 게시물-${postId}}`} />
+        <img src={`${imageThumbnail[imageThumbnail.length - 1]}`} alt={`${postOwnerId}님의 게시물-${postId}}`} />
         {imageThumbnail.length > 1 && <FaClone />}
         <StyledCountDiv>
           <div>

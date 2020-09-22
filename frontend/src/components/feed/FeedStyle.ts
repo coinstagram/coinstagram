@@ -101,7 +101,7 @@ export const StyledPostDiv = styled.div`
   padding-bottom: 30%;
   background-repeat: no-repeat;
   background-size: cover;
-  background-image: url(${props => `http://localhost:4000/${paseImagePath(props.image[0])}`});
+  background-image: url(${props => `${paseImagePath(props.image[0])}`});
 
   @keyframse fadeIn {
     from {
