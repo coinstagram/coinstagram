@@ -17,7 +17,6 @@ export const StyledLi = styled.li`
       @keyframes fadeIn {
         from {
           opacity: 0;
-          transform: scale(0.9);
         }
         to {
           opacity: 1;
@@ -28,7 +27,7 @@ export const StyledLi = styled.li`
       height: 100%;
       border-radius: 3px;
       background-color: rgba(219, 219, 219, 0.7);
-      animation: fadeIn 1s;
+      animation: fadeIn 2s;
     }
     svg {
       position: absolute;

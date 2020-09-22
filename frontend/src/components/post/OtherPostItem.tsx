@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import RootState from '../../type';
@@ -8,6 +8,7 @@ import { FaComment, FaHeart, FaClone } from 'react-icons/fa';
 
 // styles
 import { StyledCountDiv, StyledLi } from './OtherPostItemStyle';
+import { followContext } from '../../App';
 
 interface OtherPostItemProps {
   postId: number;
@@ -18,7 +19,7 @@ interface OtherPostItemProps {
 
 function OtherPostItem({ postId, postOwnerId, imageThumbnail, getPostCounts }: OtherPostItemProps) {
   const { counts } = useSelector((state: RootState) => state.otherPosts.counts);
-
+  const { setFollowInfo } = useContext(followContext);
   const thisPostCounts = counts.find(info => info.post_id === postId);
   const likeCounts = thisPostCounts && thisPostCounts.likeCount;
   const commentCounts = thisPostCounts && thisPostCounts.commentCount;
@@ -29,7 +30,7 @@ function OtherPostItem({ postId, postOwnerId, imageThumbnail, getPostCounts }: O
 
   return (
     <StyledLi>
-      <Link to={`/post/${postId}`}>
+      <Link to={`/post/${postId}`} onClick={() => setFollowInfo(postOwnerId, '', null)}>
         <img src={`http://localhost:4000/${imageThumbnail[imageThumbnail.length - 1]}`} alt={`${postOwnerId}님의 게시물-${postId}}`} />
         {imageThumbnail.length > 1 && <FaClone />}
         <StyledCountDiv>

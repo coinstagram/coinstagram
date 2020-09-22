@@ -79,7 +79,7 @@ function ProfilePosts({ profileId, myId, bookmarkedId, getPostCounts, getBookmar
         )}
         {pageName === undefined && !loading && otherPosts.length === 0 && (
           <StyledNocontentDiv>
-            아직 업로드하신 게시물이 없네요{' '}
+            아직 업로드하신 게시물이 없어요{' '}
             <span aria-label="아쉬운 표정" role="img">
               😂
             </span>
@@ -117,7 +117,7 @@ function ProfilePosts({ profileId, myId, bookmarkedId, getPostCounts, getBookmar
         )}
         {pageName === 'saved' && !bookmarkLoading && bookmarkedPosts.length === 0 && (
           <StyledNocontentDiv>
-            아직 찜한 게시물이 없네요{' '}
+            아직 찜한 게시물이 없어요{' '}
             <span aria-label="아쉬운 표정" role="img">
               😊
             </span>
