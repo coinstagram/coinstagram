@@ -1,9 +1,11 @@
 import react from 'react';
+import { EachPostState } from './type';
 
 declare module 'react' {
   interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
     like?: boolean;
     width?: number;
+    height?: number;
     count?: number;
     clicked?: boolean;
     size?: number;
@@ -24,5 +26,7 @@ declare module 'react' {
     isList?: boolean;
     imageUrl?: string;
     isMain?: boolean;
+    image?: string[];
+    feedPosts?: EachPostState[];
   }
 }

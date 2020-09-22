@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { postData } from '../modules/upload';
+import { PostData } from '../../type';
 const getUrl = '/post';
 
 const uploadService = class {
-  static async uploadPost(data: postData, token: String) {
+  static async uploadPost(data: PostData, token: String) {
     const res = await axios.post(
       `/api${getUrl}`,
       {

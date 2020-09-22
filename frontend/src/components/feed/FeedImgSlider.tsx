@@ -32,6 +32,7 @@ const FeedImgSlider: React.FC<FeedImgSliderProps> = ({ imageUrl, children }) => 
             <img src={`http://localhost:4000/${image}`} alt={`이미지${image}`} />
           </li>
         ))}
+
         {children}
       </Slider>
     </StyledUl>

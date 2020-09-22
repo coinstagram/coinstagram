@@ -7,4 +7,15 @@ export const StyledDiv = styled.div`
   label {
     cursor: pointer;
   }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  animation: fadeIn 1s;
 `;

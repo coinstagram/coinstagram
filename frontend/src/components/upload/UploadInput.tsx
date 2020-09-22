@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyledDiv, StyledLabel, UploadWrapper } from './UploadInput.style';
+import { StyledDiv, StyledLabel } from './UploadInput.style';
 import FeedImgSlider from '../feed/FeedImgSlider';
 import uploadService from '../../redux/services/uploadService';
 import { contextValue } from '../../containers/ChangePostContainer';
@@ -31,20 +31,18 @@ const UploadInput: React.FC<UploadDetailsProps> = ({ image, data }) => {
     <>
       {imageURL[0] === '' ? (
         <StyledDiv>
-          <UploadWrapper>
-            <StyledLabel htmlFor="image" tabIndex={0}>
-              <input
-                type="file"
-                id="image"
-                name="image"
-                className="a11y-hidden"
-                tabIndex={-1}
-                multiple
-                onChange={isSelectedImg}
-                accept="image/png, image/jpeg"
-              />
-            </StyledLabel>
-          </UploadWrapper>
+          <StyledLabel htmlFor="image" tabIndex={0}>
+            <input
+              type="file"
+              id="image"
+              name="image"
+              className="a11y-hidden"
+              tabIndex={-1}
+              multiple
+              onChange={isSelectedImg}
+              accept="image/png, image/jpeg"
+            />
+          </StyledLabel>
         </StyledDiv>
       ) : (
         <>

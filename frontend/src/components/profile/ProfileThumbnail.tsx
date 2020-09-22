@@ -25,14 +25,15 @@ function ProfileThumbnail({ myId, profileId, profileImage }: ProfileThumbnailPro
   const [imageURL, setImageURL] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!imageURL) return;
     dispatch(changeUserProfile(imageURL));
   }, [dispatch, imageURL]);
 
-  useEffect(() => {
-    if (myInfo && myInfo.user_profile) {
-      setImageURL(myInfo.user_profile);
-    }
-  }, [myInfo]);
+  // useEffect(() => {
+  //   if (myInfo && myInfo.user_profile) {
+  //     setImageURL(myInfo.user_profile);
+  //   }
+  // }, [myInfo]);
 
   const isSelectedImg = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const res = await uploadService.UserProFile(event.target.files.item(0), localStorage.getItem('access_token'));

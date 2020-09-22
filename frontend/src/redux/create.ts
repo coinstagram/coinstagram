@@ -57,6 +57,21 @@ function preloadedState(token: string | null): RootState {
         randomPosts: [],
       },
     },
+    upload: {
+      Loading: false,
+      Done: false,
+      Error: null,
+      data: {
+        id: '',
+        user_id: '',
+        post_context: '',
+        post_anotheruser: '',
+        post_location: '',
+        tag: [],
+        image_path: [],
+        created_at: '',
+      },
+    },
     comments: {
       loading: false,
       error: null,
@@ -64,12 +79,12 @@ function preloadedState(token: string | null): RootState {
       myComments: [],
     },
     likes: {
-      postLikes: {
+      feedPostLikes: {
         loading: false,
         error: null,
         userLikes: [],
       },
-      commentLikes: {
+      selectedPostLikes: {
         loading: false,
         error: null,
         userLikes: [],
@@ -102,9 +117,7 @@ function create(token: string | null): Store<RootState> {
   const store: Store<RootState> = createStore(
     rootReducer(history),
     preloadedState(token),
-    composeWithDevTools(
-      applyMiddleware(routerMiddleware(history), sagaMiddleWare),
-    ),
+    composeWithDevTools(applyMiddleware(routerMiddleware(history), sagaMiddleWare)),
   );
 
   sagaMiddleWare.run(rootSaga);

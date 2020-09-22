@@ -13,17 +13,15 @@ const UploadDetails: React.FC<UploadDetailsProps> = ({ change, data }) => {
   const locationRef = useRef();
   return (
     <>
-      <div>
-        <StyledText id="context" placeholder="문구를 입력 해 주세요." onChange={change} value={!data ? '' : data.post_context} ref={contextRef} />
-        <StyledDiv>
+      <StyledText id="context" placeholder="문구를 입력 해 주세요." onChange={change} value={!data ? '' : data.post_context} ref={contextRef} />{' '}
+      {/* <StyledDiv>
           <label htmlFor="people">사람 태그하기</label>
           <input id="people" type="text" onChange={change} value={!data ? '' : data.post_anotheruser} ref={peopleRef} />
         </StyledDiv>
         <StyledDiv>
           <label htmlFor="location">위치 추가</label>
-          <input id="location" type="text" onChange={change} value={!data ? '' : data.post_location} ref={locationRef} />
-        </StyledDiv>
-      </div>
+          <input id="location" type="text" onChange={change} />
+        </StyledDiv> */}
     </>
   );
 };

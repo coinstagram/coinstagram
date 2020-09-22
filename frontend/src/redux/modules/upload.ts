@@ -1,27 +1,9 @@
 import { createReducer, createAction, ActionType } from 'typesafe-actions';
-import { AuthState } from '../../type';
+import { AuthState, PostData, uploadState } from '../../type';
 import { select, put, call, takeEvery } from 'redux-saga/effects';
 import RootState from '../../type';
 import uploadService from '../services/uploadService';
 import { push } from 'connected-react-router';
-
-// 타입설정
-export type postData = {
-  id: String;
-  user_id: String;
-  post_context: String;
-  post_anotheruser: String;
-  post_location: String;
-  created_at: String;
-  tag: Array<String>;
-  image_path: Array<Object>;
-};
-type uploadState = {
-  Loading: boolean;
-  Done: boolean;
-  Error: Error;
-  data: postData;
-};
 
 // 액션 타입
 const ADD_POST_FAILURE = `coinstagram/upload/ADD_POST_FAILURE`;
@@ -33,7 +15,7 @@ const ADD_POST = `coinstagram/upload/ADD_POST` as const;
 export const add_post_failure = createAction(ADD_POST_FAILURE)<Error>();
 export const add_post_request = createAction(ADD_POST_REQUEST)();
 export const add_post_success = createAction(ADD_POST_SUCCESS)();
-export const add_post = (data: postData) => ({
+export const add_post = (data: PostData) => ({
   type: ADD_POST,
   payload: {
     id: data.user_id,
@@ -113,13 +95,13 @@ function* addPostSagafun() {
   try {
     yield put(add_post_request());
     const { token }: AuthState = yield select((state: RootState) => state.auth);
-    const { postReducer } = yield select((state: uploadState) => state);
+    const { upload } = yield select((state: uploadState) => state);
+    console.log(upload);
 
-    //
-    const { id, user_id, created_at, image_path } = yield call(uploadService.uploadPost, postReducer.data, token);
-    console.log('test: ', id, user_id, created_at, image_path);
+    const { id, user_id, created_at, image_path } = yield call(uploadService.uploadPost, upload.data, token);
+    console.log(id, user_id, created_at, image_path);
 
-    yield put(add_post({ ...postReducer.data, id, user_id, created_at, image_path: [...image_path] }));
+    yield put(add_post({ ...upload.data, id, user_id, created_at, image_path: [...image_path] }));
     yield put(add_post_success());
     yield put(push('/'));
   } catch (error) {

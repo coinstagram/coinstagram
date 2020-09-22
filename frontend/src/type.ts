@@ -1,3 +1,5 @@
+import { Interface } from 'readline';
+
 export interface followState {
   loading: boolean;
   error: null | Error;
@@ -81,8 +83,10 @@ export interface EachLikeState {
 }
 
 export interface likeState {
-  postLikes: EachLikeState;
-  commentLikes: EachLikeState;
+  feedPostLikes: EachLikeState;
+  selectedPostLikes: EachLikeState;
+  // feedCommentLikes: EachLikeState;
+  // selectedCommentLikes: EachLikeState;
 }
 
 export interface EachPostState {
@@ -141,6 +145,16 @@ export interface SignupInfoState {
   user_password: null | string;
 }
 
+export interface PostData {
+  id: String;
+  user_id: String;
+  post_context: String;
+  post_anotheruser: String;
+  post_location: String;
+  created_at: String;
+  tag: Array<String>;
+  image_path: Array<Object>;
+}
 export interface AuthState {
   loading: boolean;
   token: null | string;
@@ -176,6 +190,13 @@ export interface PostsState {
   // taggedPosts: EachPostState[];
 }
 
+export interface uploadState {
+  Loading: boolean;
+  Done: boolean;
+  Error: Error;
+  data: PostData;
+}
+
 export interface OtherPostState {
   loading: boolean;
   error: null | Error;
@@ -188,6 +209,7 @@ interface RootState {
   userInfo: UserInfoState;
   anotherUserInfo: AnotherUserInfoState;
   posts: PostsState;
+  upload: uploadState;
   comments: CommentsState;
   likes: likeState;
   bookmarks: BookmarkState;

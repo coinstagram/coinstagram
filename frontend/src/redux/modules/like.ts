@@ -15,6 +15,10 @@ const START_DELETE_POST_LIKE = 'coinstagram/like/START_DELETE_POST_LIKE' as cons
 const SUCCESS_DELETE_POST_LIKE = 'coinstagram/like/SUCCESS_DELETE_POST_LIKE' as const;
 const FAIL_DELETE_POST_LIKE = 'coinstagram/like/FAIL_DELETE_POST_LIKE' as const;
 
+const START_GET_SELECTEDPOST_LIKES = 'coinstagram/like/START_GET_SELECTEDPOST_LIKES' as const;
+const SUCCESS_GET_SELECTEDPOST_LIKES = 'coinstagram/like/SUCCESS_GET_SELECTEDPOST_LIKES' as const;
+const FAIL_GET_SELECTEDPOST_LIKES = 'coinstagram/like/FAIL_GET_POST_LIKES' as const;
+
 // const START_GET_COMMENT_LIKES = 'coinstagram/like/START_GET_COMMENT_LIKES' as const;
 // const SUCCESS_GET_COMMENT_LIKES = 'coinstagram/like/SUCCESS_GET_COMMENT_LIKES' as const;
 // const FAIL_GET_COMMENT_LIKES = 'coinstagram/like/FAIL_GET_COMMENT_LIKES' as const;
@@ -74,6 +78,22 @@ const failDeletePostLike = (error: Error) => ({
   payload: error,
 });
 
+const startGetSelectedPostLikes = () => ({
+  type: START_GET_SELECTEDPOST_LIKES,
+});
+
+const successGetSelectedPostLikes = (postLikes: userLikesState[]) => ({
+  type: SUCCESS_GET_SELECTEDPOST_LIKES,
+  payload: {
+    postLikes,
+  },
+});
+
+const failGetSelectedPostLikes = (error: Error) => ({
+  type: FAIL_GET_SELECTEDPOST_LIKES,
+  payload: error,
+});
+
 // const startGetCommentLikes = () => ({
 //   type: START_GET_COMMENT_LIKES,
 // });
@@ -107,12 +127,16 @@ type likeActios =
   | ReturnType<typeof failAddPostLike>
   | ReturnType<typeof startDeletePostLike>
   | ReturnType<typeof successDeletePostLike>
-  | ReturnType<typeof failDeletePostLike>;
+  | ReturnType<typeof failDeletePostLike>
+  | ReturnType<typeof startGetSelectedPostLikes>
+  | ReturnType<typeof successGetSelectedPostLikes>
+  | ReturnType<typeof failGetSelectedPostLikes>;
 
 // saga action
 const GET_POST_LIKES_SAGA = 'GET_POST_LIKES_SAGA' as const;
 const ADD_POST_LIKE_SAGA = 'ADD_POST_LIKE_SAGA' as const;
 const DELETE_POST_LIKE_SAGA = 'DELETE_POST_LIKE_SAGA' as const;
+const GET_SELECTEDPOST_LIKES_SAGA = 'GET_SELECTEDPOST_LIKES_SAGA' as const;
 // const GET_COMMENT_LIKES_SAGA = 'GET_COMMENT_LIKES_SAGA' as const;
 // const ADD_COMMENT_LIKE_SAGA = 'ADD_COMMENT_LIKE_SAGA' as const;
 
@@ -133,6 +157,13 @@ export const addPostLikeSaga = (post_id: number) => ({
 
 export const deletePostLikeSaga = (post_id: number) => ({
   type: DELETE_POST_LIKE_SAGA,
+  payload: {
+    post_id,
+  },
+});
+
+export const getSelectedPostLikesSaga = (post_id: number) => ({
+  type: GET_SELECTEDPOST_LIKES_SAGA,
   payload: {
     post_id,
   },
@@ -187,21 +218,33 @@ function* deletePostLike(action: deletePostLikeSagaAction) {
   }
 }
 
+function* getSelectedPostLikes(action: getLikesSagaAction) {
+  try {
+    const { token } = yield select((state: RootState) => state.auth);
+    yield put(startGetSelectedPostLikes());
+    const userLikes = yield call(LikeService.getLikesPost, token, action.payload.post_id);
+    yield put(successGetSelectedPostLikes(userLikes));
+  } catch (error) {
+    yield put(failGetSelectedPostLikes(error));
+  }
+}
+
 // saga register
 export function* likeSaga() {
   yield takeEvery(GET_POST_LIKES_SAGA, getPostLikes);
   yield takeLeading(ADD_POST_LIKE_SAGA, addPostLike);
   yield takeLeading(DELETE_POST_LIKE_SAGA, deletePostLike);
+  yield takeEvery(GET_SELECTEDPOST_LIKES_SAGA, getSelectedPostLikes);
 }
 
 // initialstate
 const initialState: likeState = {
-  postLikes: {
+  feedPostLikes: {
     loading: false,
     error: null,
     userLikes: [],
   },
-  commentLikes: {
+  selectedPostLikes: {
     loading: false,
     error: null,
     userLikes: [],
@@ -212,46 +255,47 @@ function likeReducer(state: likeState = initialState, action: likeActios) {
   switch (action.type) {
     case START_GET_POST_LIKES:
       return {
-        postLikes: {
+        ...state,
+        feedPostLikes: {
           loading: true,
           error: null,
-          userLikes: state.postLikes.userLikes,
+          userLikes: state.feedPostLikes.userLikes,
         },
-        commentLikes: state.commentLikes,
       };
     case SUCCESS_GET_POST_LIKES:
       return {
-        postLikes: {
+        ...state,
+        feedPostLikes: {
           loading: false,
           error: null,
-          userLikes: [...state.postLikes.userLikes, ...action.payload.postLikes],
+          userLikes: [...state.feedPostLikes.userLikes, ...action.payload.postLikes],
         },
-        commentLikes: state.commentLikes,
       };
     case FAIL_GET_POST_LIKES:
       return {
-        postLikes: {
+        ...state,
+        feedPostLikes: {
           loading: false,
           error: action.payload,
           userLikes: [],
         },
-        commentLikes: state.commentLikes,
       };
     case START_ADD_POST_LIKE:
       return {
-        postLikes: {
+        ...state,
+        feedPostLikes: {
           loading: true,
           error: null,
-          userLikes: state.postLikes.userLikes,
+          userLikes: state.feedPostLikes.userLikes,
         },
-        commentLikes: state.commentLikes,
       };
     case SUCCESS_ADD_POST_LIKE:
       return {
-        postLikes: {
+        ...state,
+        feedPostLikes: {
           loading: false,
           error: null,
-          userLikes: state.postLikes.userLikes.map(like =>
+          userLikes: state.feedPostLikes.userLikes.map(like =>
             +like.post_id === action.payload.post_id
               ? {
                   post_id: like.post_id,
@@ -260,32 +304,32 @@ function likeReducer(state: likeState = initialState, action: likeActios) {
               : like,
           ),
         },
-        commentLikes: state.commentLikes,
       };
     case FAIL_ADD_POST_LIKE:
       return {
-        postLikes: {
+        ...state,
+        feedPostLikes: {
           loading: false,
           error: action.payload,
-          userLikes: state.postLikes.userLikes,
+          userLikes: state.feedPostLikes.userLikes,
         },
-        commentLikes: state.commentLikes,
       };
     case START_DELETE_POST_LIKE:
       return {
-        postLikes: {
+        ...state,
+        feedPostLikes: {
           loading: true,
           error: null,
-          userLikes: state.postLikes.userLikes,
+          userLikes: state.feedPostLikes.userLikes,
         },
-        commentLikes: state.commentLikes,
       };
     case SUCCESS_DELETE_POST_LIKE:
       return {
-        postLikes: {
+        ...state,
+        feedPostLikes: {
           loading: false,
           error: null,
-          userLikes: state.postLikes.userLikes.map(like =>
+          userLikes: state.feedPostLikes.userLikes.map(like =>
             +like.post_id === action.payload.post_id
               ? {
                   post_id: like.post_id,
@@ -294,12 +338,10 @@ function likeReducer(state: likeState = initialState, action: likeActios) {
               : like,
           ),
         },
-        commentLikes: state.commentLikes,
       };
     case FAIL_DELETE_POST_LIKE:
       return {
-        postLikes: state.postLikes,
-        commentLikes: state.commentLikes,
+        ...state,
       };
     default:
       return state;

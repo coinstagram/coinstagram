@@ -11,7 +11,7 @@ import { FiSearch } from 'react-icons/fi';
 function SearchInput() {
   const width = useWindowWidth();
 
-  if (width < 700) return null;
+  if (width < 850) return null;
 
   return (
     <StyledButton>

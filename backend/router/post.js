@@ -479,19 +479,33 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
       if (checkMultArray(post_list)) {
         result = post_list.reduce((acc, it) => [...acc, ...it], []);
         result = result.map((list, index) => {
-          return {
-            ...list,
-            image_path: image[index].map(({ image_path }) => image_path),
-          };
+          if (checkMultArray(image)) {
+            return {
+              ...list,
+              image_path: image[index].map(({ image_path }) => image_path),
+            };
+          } else {
+            return {
+              ...list,
+              image_path: image.map(({ image_path }) => image_path),
+            };
+          }
         });
       } else {
         result = post_list;
         result.forEach((list, index) => {
           console.log(image);
-          result[index] = {
-            ...list,
-            image_path: image[index].map(({ image_path }) => image_path),
-          };
+          if (checkMultArray(image)) {
+            result[index] = {
+              ...list,
+              image_path: image[index].map(({ image_path }) => image_path),
+            };
+          } else {
+            result[index] = {
+              ...list,
+              image_path: image.map(({ image_path }) => image_path),
+            };
+          }
         });
       }
       console.log(result);
@@ -551,6 +565,8 @@ router.post(
   upload.single('user-profile'),
   async (req, res) => {
     console.log('image');
+    console.log('res', res);
+    console.log('req', req);
     const {
       path: image_path,
       mimetype: image_type,
