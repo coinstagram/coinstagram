@@ -1,12 +1,15 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { add_post, addPostSaga } from '../redux/modules/upload';
+import { resetComment } from '../redux/modules/comment';
+
+// styles
+import { StyledButton } from '../components/upload/UploadDetails.style';
 
 // components;
 import UploadHeader from '../components/upload/UploadHeader';
 import UploadInput from '../components/upload/UploadInput';
 import UploadDetails from '../components/upload/UploadDetails';
-import { StyledButton } from '../components/upload/UploadDetails.style';
-import { useDispatch } from 'react-redux';
-import { add_post, addPostSaga } from '../redux/modules/upload';
 
 export interface contextValue {
   user_id: String;
@@ -18,6 +21,12 @@ export interface contextValue {
 }
 
 const UploadContainer = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(resetComment());
+  }, [dispatch]);
+
   const [data, setData] = useState<contextValue>({
     user_id: '',
     post_context: '',
@@ -26,6 +35,7 @@ const UploadContainer = () => {
     tag: [],
     image: [],
   });
+
   const image = useCallback((img: Array<Object>) => {
     setData(data => ({
       ...data,
@@ -33,7 +43,6 @@ const UploadContainer = () => {
     }));
   }, []);
 
-  const dispatch = useDispatch();
   const onchange = (e: any) => {
     const { id, value } = e.target;
     if (id === 'people') {

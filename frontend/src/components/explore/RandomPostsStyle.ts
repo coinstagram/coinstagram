@@ -99,7 +99,7 @@ export const StyledDiv = styled.div`
 `;
 
 export const StyledErrorDiv = styled.div`
-  margin-top: 30%;
+  margin-top: 25%;
   p {
     text-align: center;
     font-size: 20px;

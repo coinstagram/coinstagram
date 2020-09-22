@@ -24,7 +24,7 @@ interface FeedIconsProps {
 }
 
 function FeedIcons({ myId, postId, addPostLikes, deletePostLike, addBookmark, deleteBookmark }: FeedIconsProps) {
-  const { userLikes } = useSelector((state: RootState) => state.likes.postLikes);
+  const { userLikes } = useSelector((state: RootState) => state.likes.feedPostLikes);
   const { bookmarks } = useSelector((state: RootState) => state.bookmarks);
   const postLikesInfo = userLikes.find(like => +like.post_id === postId);
   const likesCount = postLikesInfo === undefined ? 0 : postLikesInfo.user_id.length;

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext } from 'react';
 import { ModalContext } from '../../App';
 import { followContext } from '../../App';
 import { Link, useHistory } from 'react-router-dom';
@@ -20,36 +20,23 @@ interface FeedHeaderProps {
 }
 
 function FeedHeader({ userId, postId, location }: FeedHeaderProps) {
-  const { user, followers } = useSelector((state: RootState) => state.userInfo);
-  const myId = user && user.user_id;
-  const myProfile = user && user.user_profile;
+  const { followers, user } = useSelector((state: RootState) => state.userInfo);
+  const anotherUser = useSelector((state: RootState) => state.anotherUserInfo.user);
   const followersInfo = followers.users;
   const { popPostModal } = useContext(ModalContext);
   const value = useContext(followContext);
   const setFollowInfo = value && value.setFollowInfo;
   const changePostId = value && value.changePostId;
   const history = useHistory();
-  const profileRef = useRef<string>('');
 
-  const [profile, setProfile] = useState<string>('');
-
-  useEffect(() => {
-    if (userId === myId) {
-      setProfile(myProfile);
-    } else {
-      const feedFollower = followersInfo.find(follower => follower.user_id === userId);
-
-      setProfile(feedFollower && feedFollower.user_profile);
-      if (feedFollower !== undefined) {
-        profileRef.current = feedFollower.user_profile;
-      }
-    }
-  }, [followersInfo, myId, myProfile, userId]);
+  const myId = user && user.user_id;
+  const myProfile = user && user.user_profile;
+  const anotherUserProfile = anotherUser && anotherUser.user_profile;
 
   return (
     <StyledDiv>
       <button onClick={pageMove}>
-        <Thumbnail size={35} imageUrl={profile === undefined ? profileRef.current : profile} />
+        <Thumbnail size={35} imageUrl={searchProfile()} />
         <UsernameDiv tabIndex={-1} hasLocation={location}>
           <dt className="a11y-hidden">user id</dt>
           <dd>{userId}</dd>
@@ -62,14 +49,7 @@ function FeedHeader({ userId, postId, location }: FeedHeaderProps) {
         </LocationDiv>
       </Link>
       {userId !== myId && (
-        <FollowBtn
-          top={23}
-          right={50}
-          userId={userId}
-          userName={undefined}
-          userProfile={profile === undefined ? profileRef.current : profile}
-          followers={followersInfo}
-        />
+        <FollowBtn top={23} right={50} userId={userId} userName={undefined} userProfile={searchProfile()} followers={followersInfo} />
       )}
       <StyledBtn onClick={setModal}>
         <div tabIndex={-1}>
@@ -89,8 +69,19 @@ function FeedHeader({ userId, postId, location }: FeedHeaderProps) {
     popPostModal();
     if (!changePostId || !setFollowInfo) return;
     changePostId(postId);
-    const followerProfile = profile === undefined ? profileRef.current : profile;
+    const followerProfile = searchProfile();
     setFollowInfo(userId, followerProfile, null);
+  }
+
+  function searchProfile() {
+    const isFollower = followers.users.find(user => user.user_id === userId);
+    if (myId === userId) {
+      return myProfile;
+    } else if (isFollower) {
+      return isFollower.user_profile;
+    }
+
+    return anotherUserProfile;
   }
 }
 

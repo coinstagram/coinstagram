@@ -4,7 +4,7 @@ import RootState from '../type';
 import { useLocation } from 'react-router-dom';
 import { getAnotherUserSaga } from '../redux/modules/anotherUser';
 import { getSelectedPostSaga, deletePostSaga } from '../redux/modules/post';
-import { addPostComment } from '../redux/modules/comment';
+import { addPostComment, resetComment } from '../redux/modules/comment';
 import { cancelFollowUserSaga, followUserSaga } from '../redux/modules/userInfo';
 import { addPostLikeSaga, deletePostLikeSaga } from '../redux/modules/like';
 import { addBookmarkSaga, deleteBookmarkSaga } from '../redux/modules/bookmark';
@@ -32,6 +32,10 @@ function UserPostsContainer() {
   useEffect(() => {
     dispatch(getAnotherUserSaga(user_id));
   }, [dispatch, user_id]);
+
+  useEffect(() => {
+    dispatch(resetComment());
+  }, [dispatch]);
 
   const addCommentPost = useCallback(
     (post_id: number, comment_text: string, myProfile: string) => {

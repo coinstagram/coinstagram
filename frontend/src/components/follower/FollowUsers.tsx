@@ -1,6 +1,6 @@
 import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { rotate } from '../common/ThumbnailBorderStyle';
-import { AnotherUserState } from '../../type';
+import RootState, { AnotherUserState } from '../../type';
 import useWindowWidth from '../../hooks/useWindowWidth';
 import { useHistory } from 'react-router-dom';
 
@@ -11,6 +11,7 @@ import { StyledButton, StyledSection } from './FollowUsersStyle';
 import Thumbnail from '../common/Thumbnail';
 import NextBtn from '../common/NextBtn';
 import PrevBtn from '../common/PrevBtn';
+import { useSelector } from 'react-redux';
 
 interface State {
   count: number;
@@ -101,6 +102,9 @@ function FollowUsers({ followers, loading, error }: FoolowUsersProps) {
       count: state.count - 1,
     });
   }, [state]);
+
+  const { feedPosts } = useSelector((state: RootState) => state.posts.feedPosts);
+  if (feedPosts.length === 0) return null;
 
   return (
     <StyledSection width={width}>

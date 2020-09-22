@@ -2,9 +2,10 @@ import styled from 'styled-components';
 
 export const StyledButton = styled.div`
   position: relative;
-  width: 330px;
+  width: 300px;
 
   input {
+    margin-left: 40px;
     width: 100%;
     height: 40px;
     padding: 3px 26px 3px 40px;
@@ -33,11 +34,11 @@ export const StyledButton = styled.div`
 
     &.search {
       top: 9px;
-      left: 15px;
+      left: 55px;
       width: 15px;
       height: 15px;
     }
-
+    /* 
     &.reset {
       top: 9px;
       right: 10px;
@@ -45,6 +46,6 @@ export const StyledButton = styled.div`
       width: 20px;
       height: 20px;
       font-size: 20px;
-    }
+    } */
   }
 `;
