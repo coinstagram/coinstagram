@@ -36,6 +36,7 @@ const ChangePostContainer = () => {
     tag: [],
     image_path: [],
   });
+  const dispatch = useDispatch();
 
   const selectedPostId = +useLocation().pathname.split('/')[2];
   useEffect(() => {
@@ -68,7 +69,6 @@ const ChangePostContainer = () => {
     }));
   }, []);
 
-  const dispatch = useDispatch();
   const onchange = (e: any) => {
     const { id, value } = e.target;
     if (id === 'people') {
