@@ -20,6 +20,11 @@ export const StyledArticle = styled.article`
           }
         `
       : css``}
+
+  .slick-dots {
+    bottom: 0;
+    top: 95%;
+  }
 `;
 
 export const StyledDiv = styled.div`

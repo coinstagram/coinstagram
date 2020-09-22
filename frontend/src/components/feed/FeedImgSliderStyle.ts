@@ -43,7 +43,7 @@ export const StyledUl = styled.ul`
       button::before {
         width: 12px;
         height: 12px;
-        color: rgb(28, 126, 214);
+        color: rgb(0, 0, 0);
       }
     }
   }
