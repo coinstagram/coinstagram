@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = '/bookmark';
+const baseUrl = '/api/bookmark';
 
 interface IBookmarkService {
   getBookmarkedId: (token: null | string, user_id: string) => Promise<number[]>;

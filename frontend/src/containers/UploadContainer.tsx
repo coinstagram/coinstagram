@@ -9,13 +9,13 @@ import { useDispatch } from 'react-redux';
 import { add_post, addPostSaga } from '../redux/modules/upload';
 
 export interface contextValue {
-  id: String;
-  user_id: String;
-  post_context: String;
-  post_anotheruser: String;
-  post_location: String;
-  created_at: String;
-  tag: Array<String>;
+  id: string;
+  user_id: string;
+  post_context: string;
+  post_anotheruser: string;
+  post_location: string;
+  created_at: string;
+  tag: Array<string>;
   image_path: Array<Object>;
 }
 
@@ -66,8 +66,8 @@ const UploadContainer = () => {
   return (
     <>
       <UploadHeader />
-      <UploadInput image={image} />
-      <UploadDetails change={onchange} />
+      <UploadInput image={image} data={data} />
+      <UploadDetails change={onchange} data={data} />
       <StyledButton onClick={onsubmit}>계시하기</StyledButton>
     </>
   );

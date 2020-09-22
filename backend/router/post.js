@@ -597,6 +597,7 @@ router.post('/post/image', verifyToken, async (req, res) => {
         }
 
         await connection.query(sqls);
+        console.log(image_path);
         res.send({
           image_path: image_path.map(({ image_path }) => image_path),
         });

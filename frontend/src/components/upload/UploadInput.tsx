@@ -2,15 +2,17 @@ import React, { useState } from 'react';
 import { StyledDiv, StyledLabel, UploadWrapper } from './UploadInput.style';
 import FeedImgSlider from '../feed/FeedImgSlider';
 import uploadService from '../../redux/services/uploadService';
+import { contextValue } from '../../containers/ChangePostContainer';
 
 interface UploadDetailsProps {
   image: (img: Array<object>) => void;
+  data?: contextValue;
 }
 interface resDataProps {
   image_path: String;
 }
 
-const UploadInput: React.FC<UploadDetailsProps> = ({ image }) => {
+const UploadInput: React.FC<UploadDetailsProps> = ({ image, data }) => {
   const [imageURL, setImageURL] = useState<Array<string>>([]);
   const [imageFile, setImageFile] = useState<Array<String>>([]);
 

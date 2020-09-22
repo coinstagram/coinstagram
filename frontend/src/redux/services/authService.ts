@@ -10,7 +10,7 @@ const authService: IAuthService = class {
   static async signin(user_id: string, user_password: string) {
     const res = await axios({
       method: 'POST',
-      url: 'api/login',
+      url: '/api/login',
       data: {
         user_id,
         user_password,
@@ -23,7 +23,7 @@ const authService: IAuthService = class {
   static async signup(user_email: string, user_name: string, user_id: string, user_password: string) {
     const res = await axios({
       method: 'POST',
-      url: 'api/signin/email',
+      url: '/api/signin/email',
       data: {
         user_email,
         user_name,

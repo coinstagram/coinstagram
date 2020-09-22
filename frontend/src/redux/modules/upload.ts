@@ -22,6 +22,7 @@ type uploadState = {
   Error: Error;
   data: postData;
 };
+
 // 액션 타입
 const ADD_POST_FAILURE = `coinstagram/upload/ADD_POST_FAILURE`;
 const ADD_POST_REQUEST = `coinstagram/upload/ADD_POST_REQUEST`;
@@ -114,8 +115,9 @@ function* addPostSagafun() {
     const { token }: AuthState = yield select((state: RootState) => state.auth);
     const { postReducer } = yield select((state: uploadState) => state);
 
-    yield call(uploadService.uploadPost, postReducer.data, token);
-    const { id, user_id, created_at, image_path } = yield uploadService.uploadPost(postReducer.data, token);
+    //
+    const { id, user_id, created_at, image_path } = yield call(uploadService.uploadPost, postReducer.data, token);
+    console.log('test: ', id, user_id, created_at, image_path);
 
     yield put(add_post({ ...postReducer.data, id, user_id, created_at, image_path: [...image_path] }));
     yield put(add_post_success());
