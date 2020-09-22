@@ -17,12 +17,12 @@ const uploadService = class {
         },
       },
     );
-    const { post_id } = res.data;
+    const { id } = res.data;
 
     const imageRes = await axios.post(
       `/api${getUrl}/image`,
       {
-        post_id,
+        id,
         image_path: [...data.image_path],
       },
       {

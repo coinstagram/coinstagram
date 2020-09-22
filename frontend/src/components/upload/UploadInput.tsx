@@ -9,12 +9,15 @@ interface UploadDetailsProps {
   data?: contextValue;
 }
 interface resDataProps {
-  image_path: String;
+  image_path: string;
 }
 
 const UploadInput: React.FC<UploadDetailsProps> = ({ image, data }) => {
   const [imageURL, setImageURL] = useState<Array<string>>([]);
   const [imageFile, setImageFile] = useState<Array<String>>([]);
+  React.useEffect(() => {
+    console.log('input', data.image_path);
+  }, [data]);
 
   const isSelectedImg = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const FileUrl = await uploadService.uploadImageView(event.target.files, localStorage.getItem('access_token'));
