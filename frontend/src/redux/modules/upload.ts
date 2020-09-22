@@ -1,5 +1,5 @@
 import { createReducer, createAction, ActionType } from 'typesafe-actions';
-import { AuthState, PostData, uploadState } from '../../type';
+import { AuthState, imageState, PostData, uploadState } from '../../type';
 import { select, put, call, takeEvery } from 'redux-saga/effects';
 import RootState from '../../type';
 import uploadService from '../services/uploadService';
@@ -175,13 +175,21 @@ function* changePostSagafun() {
     const { token }: AuthState = yield select((state: RootState) => state.auth);
     const { upload } = yield select((state: uploadState) => state);
 
-    const check = yield call(PostService.changePost, token, upload.data.id, upload.data.post_context);
+    yield call(PostService.changePost, token, upload.data.id, upload.data.post_context, upload.data.image_path);
 
-    if (check.data === 1) {
-      console.log('데이터 바뀜');
-    } else {
-      console.log('데이터 안바뀜');
-    }
+    yield put(
+      add_post({
+        id: upload.data.id,
+        user_id: upload.data.user_id,
+        post_context: upload.data.post_context,
+        post_anotheruser: upload.data.post_anotheruser,
+        post_location: upload.data.post_location,
+        created_at: upload.data.created_at,
+        tag: upload.data.tag,
+        image_path: [...upload.data.image_path.map(({ image_path }: imageState) => image_path)],
+      }),
+    );
+
     yield put(change_post_success());
     yield put(push('/'));
   } catch (error) {
