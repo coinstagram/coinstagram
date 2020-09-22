@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import RootState from '../../type';
+import { useSelector } from 'react-redux';
 
 // icons
 import { BsHeartFill, BsHeart, BsBookmarks, BsBookmarksFill, BsChat } from 'react-icons/bs';
-import RootState from '../../type';
-import { useSelector } from 'react-redux';
 
 // styles
 import { StyledDiv, IconDiv } from './FeedIconsStyle';
@@ -24,10 +24,14 @@ interface FeedIconsProps {
 }
 
 function FeedIcons({ myId, postId, addPostLikes, deletePostLike, addBookmark, deleteBookmark }: FeedIconsProps) {
-  const { userLikes } = useSelector((state: RootState) => state.likes.feedPostLikes);
+  const feedLikes = useSelector((state: RootState) => state.likes.feedPostLikes.userLikes);
+  const selectedLikes = useSelector((state: RootState) => state.likes.selectedPostLikes.userLikes);
   const { bookmarks } = useSelector((state: RootState) => state.bookmarks);
-  const postLikesInfo = userLikes.find(like => +like.post_id === postId);
-  const likesCount = postLikesInfo === undefined ? 0 : postLikesInfo.user_id.length;
+  const feedLikesInfo = feedLikes.find(like => +like.post_id === postId);
+  const selectedLikesInfo = selectedLikes.find(like => +like.post_id === postId);
+  const feedlikesCount = feedLikesInfo && feedLikesInfo.user_id.length;
+  const selectedlikesCount = selectedLikesInfo === undefined ? 0 : selectedLikesInfo.user_id.length;
+  const likesCount = feedLikesInfo === undefined ? selectedlikesCount : feedlikesCount;
   const [state, setState] = useState<State>({
     like: false,
     favorite: false,
@@ -43,13 +47,16 @@ function FeedIcons({ myId, postId, addPostLikes, deletePostLike, addBookmark, de
   }, [bookmarks, postId]);
 
   useEffect(() => {
-    const isLiked = postLikesInfo && postLikesInfo.user_id.some(userId => userId === myId);
+    const isLiked =
+      feedLikesInfo !== undefined
+        ? feedLikesInfo.user_id.some(userId => userId === myId)
+        : selectedLikesInfo && selectedLikesInfo.user_id.some(userId => userId === myId);
 
     setState(st => ({
       ...st,
       like: isLiked,
     }));
-  }, [postLikesInfo, myId]);
+  }, [feedLikesInfo, selectedLikesInfo, myId]);
 
   return (
     <StyledDiv>

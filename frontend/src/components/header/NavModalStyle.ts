@@ -19,6 +19,13 @@ export const StyledModal = styled.div`
   border-radius: 6px;
   background: rgb(255, 255, 255);
   box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.0975);
+  animation: dropDown ease-out 0.2s;
+
+  @keyframes dropDown {
+    from {
+      transform: scale(0.99);
+    }
+  }
 
   &::before {
     content: '';

@@ -7,17 +7,14 @@ const followUrl = '/user/relationship';
 interface IUserService {
   getUserData: (token: string | null) => Promise<UserResponseState>;
   getRandomUser: (token: string | null) => Promise<AnotherUserState[]>;
-  getAnotherUserData: (
-    user_Id: string,
-    token: string | null,
-  ) => Promise<UserResponseState>;
+  getAnotherUserData: (user_Id: string, token: string | null) => Promise<UserResponseState>;
   followUser: (userid: string, token: string | null) => void;
   CancelFollowUser: (userid: string, token: string | null) => void;
 }
 
 const UserService: IUserService = class {
   static async getUserData(token: string | null) {
-    const res = await axios.get<UserResponseState>(getUrl, {
+    const res = await axios.get<UserResponseState>(`/api${getUrl}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -26,7 +23,7 @@ const UserService: IUserService = class {
   }
 
   static async getAnotherUserData(user_id: string, token: string | null) {
-    const res = await axios.get<UserResponseState>(`${getUrl}/${user_id}`, {
+    const res = await axios.get<UserResponseState>(`/api${getUrl}/${user_id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -36,7 +33,7 @@ const UserService: IUserService = class {
   }
 
   static async getRandomUser(token: string | null) {
-    const res = await axios.get<AnotherUserState[]>(`${getUrl}s/random`, {
+    const res = await axios.get<AnotherUserState[]>(`/api${getUrl}s/random`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -48,7 +45,7 @@ const UserService: IUserService = class {
   static async followUser(userId: string, token: string | null) {
     try {
       await axios.post(
-        followUrl,
+        `/api${followUrl}`,
         {
           followee_id: userId,
         },
@@ -65,7 +62,7 @@ const UserService: IUserService = class {
 
   static async CancelFollowUser(userId: string, token: string | null) {
     try {
-      await axios.delete(`${followUrl}/${userId}`, {
+      await axios.delete(`/api${followUrl}/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

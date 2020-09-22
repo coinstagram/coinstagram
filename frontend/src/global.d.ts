@@ -27,6 +27,7 @@ declare module 'react' {
     imageUrl?: string;
     isMain?: boolean;
     image?: string[];
+    Loading?: boolean;
     feedPosts?: EachPostState[];
   }
 }

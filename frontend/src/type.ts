@@ -1,5 +1,3 @@
-import { Interface } from 'readline';
-
 export interface followState {
   loading: boolean;
   error: null | Error;
@@ -65,9 +63,16 @@ export interface EachCommentState {
 }
 
 export interface CommentsState {
-  loading: boolean;
-  error: null | Error;
-  postComments: EachCommentState[];
+  feedPostComments: {
+    loading: boolean;
+    error: null | Error;
+    comments: EachCommentState[];
+  };
+  selectedPostComments: {
+    loading: boolean;
+    error: null | Error;
+    comments: EachCommentState[];
+  };
   myComments: EachCommentState[];
 }
 
@@ -146,14 +151,15 @@ export interface SignupInfoState {
 }
 
 export interface PostData {
-  user_id: String;
-  post_context: String;
-  post_anotheruser: String;
-  post_location: String;
-  tag: Array<String>;
-  image: Array<Object>;
+  id: string;
+  user_id: string;
+  post_context: string;
+  post_anotheruser: string;
+  post_location: string;
+  created_at: string;
+  tag: Array<string>;
+  image_path: Array<string>;
 }
-
 export interface AuthState {
   loading: boolean;
   token: null | string;

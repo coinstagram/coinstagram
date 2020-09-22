@@ -3,8 +3,6 @@ import styled from 'styled-components';
 import stayhome from '../../resource/image/stayhome.png';
 
 const StyledSection = styled.section`
-  width: 37%;
-  height: 84px;
   padding: ${props => (props.width > 1030 ? '16px 40px 10px 33px' : '16px 10px 10px 10px')};
   border-radius: 10px;
   background-color: rgb(255, 255, 255);

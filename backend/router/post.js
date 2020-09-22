@@ -18,6 +18,7 @@ const fs = require('fs');
  * }
  */
 router.post('/post', verifyToken, async (req, res) => {
+  console.log('/post');
   const token = req.headers.authorization.split('Bearer ')[1];
   const { user_id } = jwt.verify(
     token,
@@ -41,9 +42,10 @@ router.post('/post', verifyToken, async (req, res) => {
         post_anotheruser,
         post_location,
       ]);
-      sql = `select id, created_at from posts order by id desc limit 1; `;
+      sql = `select id, user_id, created_at from posts order by id desc limit 1; `;
       const [post_id] = await connection.query(sql);
-      res.send({ post_id: post_id[0].id });
+      console.log(post_id);
+      res.send({ ...post_id[0] });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
@@ -387,12 +389,10 @@ const checkEmpty = (testArray) => {
 };
 
 const checkMultArray = (testArray) => {
-  let check;
   try {
-    check = testArray.reduce((acc, it) => [...acc, ...it], []);
+    testArray.reduce((acc, it) => [...acc, ...it], []);
     return true;
   } catch (err) {
-    check = testArray.length;
     return false;
   }
 };
@@ -589,22 +589,24 @@ router.post(
  * }
  */
 router.post('/post/image', verifyToken, async (req, res) => {
-  const { post_id, image } = req.body;
+  console.log('post/image');
+  const { id, image_path } = req.body;
   let sql = ``;
   let sqls = [];
   let params = [];
+  console.log(image_path);
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      if (image[0] === undefined) {
+      if (image_path[0] === undefined) {
         console.log('no image');
         res.send({ success: false });
       } else {
         console.log('is image');
-        for (let imageData of image) {
+        for (let imageData of image_path) {
           sql = `insert into post_image(post_id, image_path, image_name, image_type) values(?, ?, ?, ?);`;
           params = [
-            post_id,
+            id,
             imageData.image_path,
             imageData.image_name,
             imageData.image_type,
@@ -613,7 +615,10 @@ router.post('/post/image', verifyToken, async (req, res) => {
         }
 
         await connection.query(sqls);
-        res.send({ success: true });
+        console.log(image_path);
+        res.send({
+          image_path: image_path.map(({ image_path }) => image_path),
+        });
       }
     } catch (error) {
       await connection.rollback(); // ROLLBACK
