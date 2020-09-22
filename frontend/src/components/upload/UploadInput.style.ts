@@ -10,8 +10,6 @@ export const StyledLabel = styled.label`
   display: block;
   /* height: 478px; */
   height: 598px;
-  height: 598px;
-
   background-image: url(${upload3});
   background-repeat: no-repeat;
   background-position: 46% 40%;

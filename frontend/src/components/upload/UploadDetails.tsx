@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyledText, StyledDiv } from './UploadDetails.style';
+import { StyledText } from './UploadDetails.style';
 
 interface UploadDetailsProps {
   change: (event: React.ChangeEvent<HTMLButtonElement>) => void;
