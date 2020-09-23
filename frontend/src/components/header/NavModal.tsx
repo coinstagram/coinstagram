@@ -1,7 +1,8 @@
 import React from 'react';
 import { logout } from '../../redux/modules/auth';
-import { useDispatch, useSelector } from 'react-redux';
-import RootState from '../../type';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+import TokenService from '../../redux/services/tokenService';
 
 // styles
 import { StyledDivBg, StyledModal, StyledReadyDiv } from './NavModalStyle';
@@ -12,8 +13,6 @@ import { CgProfile } from 'react-icons/cg';
 import { BiBookmark } from 'react-icons/bi';
 
 // components
-import { Link } from 'react-router-dom';
-import TokenService from '../../redux/services/tokenService';
 
 export interface NavModalProps {
   top: number;
@@ -29,8 +28,6 @@ function NavModal({ top, left, favorite, profile, userId }: NavModalProps) {
     dispatch(logout());
     TokenService.remove();
   };
-  const { auth } = useSelector((state: RootState) => state);
-  const { loading } = auth;
 
   return (
     <StyledDivBg>
@@ -58,7 +55,6 @@ function NavModal({ top, left, favorite, profile, userId }: NavModalProps) {
               </li>
               <li onClick={onLogout}>
                 <Link to="/">로그아웃</Link>
-                {loading && '로딩중..'}
               </li>
             </>
           )}

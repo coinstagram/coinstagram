@@ -4,8 +4,8 @@ import React from 'react';
 import { StyledSpan } from './ThumbnailStyle';
 
 export interface ThumbnailProps {
-  imageUrl: string | null;
-  size: number;
+  imageUrl?: string | null;
+  size?: number;
 }
 
 function Thumbnail({ imageUrl, size }: ThumbnailProps) {

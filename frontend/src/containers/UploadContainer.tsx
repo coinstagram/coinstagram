@@ -1,10 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { add_post, addPostSaga } from '../redux/modules/upload';
-import { resetComment } from '../redux/modules/comment';
-
-// styles
-import { StyledButton } from '../components/upload/UploadDetails.style';
+import { resetMyComment } from '../redux/modules/comment';
 
 // components;
 import UploadHeader from '../components/upload/UploadHeader';
@@ -19,14 +16,14 @@ export interface contextValue {
   post_location: string;
   created_at: string;
   tag: Array<string>;
-  image_path: Array<Object>;
+  image_path: Array<string>;
 }
 
 const UploadContainer = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(resetComment());
+    dispatch(resetMyComment());
   }, [dispatch]);
 
   const [data, setData] = useState<contextValue>({
@@ -40,7 +37,7 @@ const UploadContainer = () => {
     image_path: [],
   });
 
-  const image = useCallback((img: Array<Object>) => {
+  const image = useCallback((img: Array<string>) => {
     setData(data => ({
       ...data,
       image_path: img,
@@ -67,17 +64,19 @@ const UploadContainer = () => {
     }
   };
 
-  const onsubmit = (e: any) => {
-    dispatch(add_post(data));
-    dispatch(addPostSaga());
-  };
+  const onsubmit = useCallback(
+    (e: any) => {
+      dispatch(add_post(data));
+      dispatch(addPostSaga());
+    },
+    [dispatch, data],
+  );
 
   return (
     <>
       <UploadHeader />
-      <UploadInput image={image} />
+      <UploadInput image={image} onsubmit={onsubmit} data={data} />
       <UploadDetails change={onchange} data={data} />
-      <StyledButton onClick={onsubmit}>계시하기</StyledButton>
     </>
   );
 };

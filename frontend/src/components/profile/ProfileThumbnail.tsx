@@ -12,9 +12,9 @@ import RootState from '../../type';
 import { changeUserProfile } from '../../redux/modules/userInfo';
 
 interface ProfileThumbnailProps {
-  myId: string;
-  profileId: string;
-  profileImage: null | string;
+  myId?: string;
+  profileId?: string;
+  profileImage?: null | string;
 }
 
 function ProfileThumbnail({ myId, profileId, profileImage }: ProfileThumbnailProps) {

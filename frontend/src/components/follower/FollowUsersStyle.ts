@@ -4,9 +4,9 @@ import borderStyle from '../common/ThumbnailBorderStyle';
 export const StyledDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  height: 84px;
 `;
 export const StyledSection = styled.section`
+  flex-grow: 2;
   z-index: 1;
   height: 84px;
   padding: 16px 40px 10px 33px;
@@ -14,8 +14,6 @@ export const StyledSection = styled.section`
   background-color: rgb(255, 255, 255);
   overflow: hidden;
   position: relative;
-  width: ${props => props.width > 1520 && 50}%;
-  margin: ${props => props.width <= 1000 && '0 auto'};
   border: 1px solid rgb(219, 219, 219);
 
   .hidden-container {
@@ -23,6 +21,11 @@ export const StyledSection = styled.section`
     height: 100%;
     padding-left: 10px;
     padding-top: 2px;
+    button {
+      span {
+        opacity: 1;
+      }
+    }
   }
 
   ul {

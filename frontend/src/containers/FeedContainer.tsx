@@ -1,23 +1,35 @@
 import React, { useCallback, useEffect } from 'react';
 import RootState from '../type';
 import { useSelector, useDispatch } from 'react-redux';
-import { addPostComment, resetComment } from '../redux/modules/comment';
-import { addPostLikeSaga, deletePostLikeSaga } from '../redux/modules/like';
+import { addPostComment, getPostComments, resetMyComment } from '../redux/modules/comment';
+import { addPostLikeSaga, deletePostLikeSaga, getPostLikesSaga, resetPostLikes } from '../redux/modules/like';
 import { addBookmarkSaga, deleteBookmarkSaga } from '../redux/modules/bookmark';
+import { resetData } from '../redux/modules/upload';
 
 // components
 import Feed from '../components/feed/Feed';
+import { uploadPost } from '../redux/modules/post';
 
 function FeedContainer() {
   const dispatch = useDispatch();
   const { posts, userInfo } = useSelector((state: RootState) => state);
+  const { data } = useSelector((state: RootState) => state.upload);
   const { feedPosts } = posts.feedPosts;
   const { loading, error } = posts.feedPosts;
   const myId = userInfo.user && userInfo.user.user_id;
 
   useEffect(() => {
-    dispatch(resetComment());
-  }, [dispatch]);
+    dispatch(resetPostLikes());
+    dispatch(resetMyComment());
+    feedPosts.forEach(post => dispatch(getPostLikesSaga(post.id)));
+    feedPosts.forEach(post => dispatch(getPostComments(post.id)));
+  }, [dispatch, feedPosts]);
+
+  useEffect(() => {
+    if (data.image_path.length === 0) return;
+    dispatch(uploadPost(data));
+    dispatch(resetData());
+  }, [dispatch, data]);
 
   const addCommentPost = useCallback(
     (post_id: number, comment_text: string, myProfile: string) => {

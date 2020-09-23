@@ -40,15 +40,3 @@ export const StyledDiv = styled.div`
     background-color: rgb(255, 255, 255);
   }
 `;
-
-export const StyledButton = styled.button`
-  width: 100%;
-  color: #ffffff;
-  border: none;
-  border-radius: 0 0 5px 5px;
-  font-weight: bold;
-  padding: 10px 15px;
-  outline: none;
-  background: #0095f6;
-  cursor: pointer;
-`;

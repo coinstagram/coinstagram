@@ -68,7 +68,7 @@ router.get('/posts', verifyToken, async (req, res) => {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      sql = 'select * from posts order by id desc limit 20 ;';
+      sql = 'select * from posts order by id desc limit 30 ;';
       const [check] = await connection.query(sql);
       const post_id = check.map(({ id }) => +id);
       let sqls = '';

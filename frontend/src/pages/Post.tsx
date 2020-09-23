@@ -16,7 +16,7 @@ function Post() {
   return (
     <>
       <Header />
-      <StyledMain width={width}>
+      <StyledMain isMain={true} width={width}>
         <UserPostsContainer />
       </StyledMain>
     </>

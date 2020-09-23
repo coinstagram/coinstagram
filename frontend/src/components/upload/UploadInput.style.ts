@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import upload3 from '../../resource/image/upload3.png';
 
 export const StyledDiv = styled.div`
@@ -6,15 +6,13 @@ export const StyledDiv = styled.div`
 `;
 
 export const StyledLabel = styled.label`
-  /* position: relative; */
   display: block;
-  /* height: 478px; */
-  height: 598px;
-  height: 598px;
+  height: 100%;
+  max-height: ${props => (props.width < 400 ? 358 : 598)};
 
   background-image: url(${upload3});
   background-repeat: no-repeat;
-  background-position: 46% 40%;
+  background-position: 50% 40%;
   background-size: 50%;
   background-color: white;
   cursor: pointer;
@@ -34,4 +32,32 @@ export const StyledLabel = styled.label`
     font-weight: bold;
     color: rgb(142, 142, 142);
   }
+`;
+
+export const StyledButton = styled.button`
+  position: absolute;
+  bottom: -39px;
+  width: 100%;
+  color: #ffffff;
+  border: none;
+  border-radius: 0 0 5px 5px;
+  font-weight: bold;
+  padding: 10px 15px;
+  outline: none;
+
+  ${props =>
+    props.image.length === 0 || props.Loading
+      ? css`
+          cursor: auto;
+          background: #b2dffc;
+        `
+      : css`
+          background: #0095f6;
+        `}
+`;
+
+export const StyledSpinnerDiv = styled.div`
+  position: absolute;
+  top: 13px;
+  left: 62%;
 `;

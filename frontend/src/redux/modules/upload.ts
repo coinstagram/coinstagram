@@ -1,6 +1,6 @@
 import { createReducer, createAction, ActionType } from 'typesafe-actions';
 import { AuthState, PostData, uploadState } from '../../type';
-import { select, put, call, takeEvery } from 'redux-saga/effects';
+import { select, put, call, takeLeading } from 'redux-saga/effects';
 import RootState from '../../type';
 import uploadService from '../services/uploadService';
 import { push } from 'connected-react-router';
@@ -11,6 +11,7 @@ const ADD_POST_FAILURE = `coinstagram/upload/ADD_POST_FAILURE`;
 const ADD_POST_REQUEST = `coinstagram/upload/ADD_POST_REQUEST`;
 const ADD_POST_SUCCESS = `coinstagram/upload/ADD_POST_SUCCESS`;
 const ADD_POST = `coinstagram/upload/ADD_POST` as const;
+const RESET_DATA = 'coinstagram/upload/RESET_DATA' as const;
 
 const CHANGE_POST_FAILURE = `coinstagram/upload/CHANGE_POST_FAILURE`;
 const CHANGE_POST_REQUEST = `coinstagram/upload/CHANGE_POST_REQUEST`;
@@ -53,6 +54,10 @@ export const change_post = (data: PostData) => ({
   },
 });
 
+export const resetData = () => ({
+  type: RESET_DATA,
+});
+
 // 액션의 객체 타입 만들기
 const actions = {
   add_post_failure,
@@ -63,6 +68,7 @@ const actions = {
   change_post_request,
   change_post_success,
   change_post,
+  resetData,
 };
 type PostActions = ActionType<typeof actions>;
 
@@ -129,6 +135,9 @@ const postReducer = createReducer<uploadState, PostActions>(initialState, {
     Done: false,
     Error: action.payload,
   }),
+  [RESET_DATA]: state => ({
+    ...initialState,
+  }),
 });
 
 // saga
@@ -190,8 +199,8 @@ function* changePostSagafun() {
 }
 
 export function* uploadSaga() {
-  yield takeEvery(ADD_POST_SAGA, addPostSagafun);
-  yield takeEvery(CHANGE_POST_SAGA, changePostSagafun);
+  yield takeLeading(ADD_POST_SAGA, addPostSagafun);
+  yield takeLeading(CHANGE_POST_SAGA, changePostSagafun);
 }
 
 export default postReducer;
