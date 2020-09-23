@@ -26,6 +26,8 @@ function ProfileThumbnail({ myId, profileId, profileImage }: ProfileThumbnailPro
 
   useEffect(() => {
     if (!imageURL) return;
+    console.log(imageURL);
+
     dispatch(changeUserProfile(imageURL));
   }, [dispatch, imageURL]);
 
@@ -37,6 +39,7 @@ function ProfileThumbnail({ myId, profileId, profileImage }: ProfileThumbnailPro
 
   const isSelectedImg = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const res = await uploadService.UserProFile(event.target.files.item(0), localStorage.getItem('access_token'));
+
     setImageURL(res);
   };
 

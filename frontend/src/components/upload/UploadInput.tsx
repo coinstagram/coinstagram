@@ -32,7 +32,6 @@ const UploadInput: React.FC<UploadDetailsProps> = ({ image, onsubmit, data }) =>
   const isSelectedImg = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const FileUrl = await uploadService.uploadImageView(event.target.files, localStorage.getItem('access_token'));
     setImageFile([...imageFile, ...FileUrl]);
-
     setImageURL([...imageURL, ...FileUrl.map((data: resDataProps) => data.image_path)]);
   };
 

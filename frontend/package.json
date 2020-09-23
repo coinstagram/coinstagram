@@ -70,9 +70,11 @@
     ]
   },
   "devDependencies": {
+    "aws-sdk": "^2.757.0",
     "eslint-config-prettier": "^6.11.0",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.13",
+    "multer-s3": "^2.9.0",
     "prettier": "^2.1.1",
     "redux-devtools-extension": "^2.13.8",
     "typesafe-actions": "^5.1.0"

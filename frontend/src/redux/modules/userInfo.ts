@@ -207,6 +207,8 @@ const initialState: UserInfoState = {
 function userInfoReducer(state: UserInfoState = initialState, action: UserActions): UserInfoState {
   switch (action.type) {
     case CHANGE_USER_PROFILE:
+      console.log(action.payload);
+
       return {
         loading: false,
         error: null,

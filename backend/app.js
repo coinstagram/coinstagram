@@ -9,9 +9,11 @@ const postRouter = require('./router/post');
 const userRouter = require('./router/user');
 const bodyParser = require('body-parser');
 const app = express();
+
 app.use(function (req, res, next) {
   const check = /\/api/g;
   req.url = req.url.replace(check, '');
+  console.log(req.url);
   next();
 });
 

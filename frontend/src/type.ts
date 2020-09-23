@@ -48,8 +48,9 @@ export interface UserState {
 export type stringArray = string[];
 
 export interface imageState {
-  path: string;
-  name: string;
+  image_path: string;
+  image_name: string;
+  image_type: string;
 }
 
 export interface EachCommentState {

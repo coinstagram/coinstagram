@@ -18,6 +18,7 @@ const uploadService = class {
       },
     );
     const { id } = res.data;
+    console.log(id);
 
     const imageRes = await axios.post(
       `/api${getUrl}/image`,
@@ -52,6 +53,8 @@ const uploadService = class {
   }
 
   static async UserProFile(file: File, token: string | null) {
+    console.log('userProfile');
+
     const fd = new FormData();
     fd.append('user-profile', file);
 
