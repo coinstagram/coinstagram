@@ -226,7 +226,7 @@ router.get('/user/:user_id', verifyToken, async (req, res) => {
 });
 
 router.patch('/user/image', verifyToken, async (req, res) => {
-  console.log('/user/image');
+  console.log('/user/image', req.body);
 
   const token = req.headers.authorization.split('Bearer ')[1];
   const userData = jwt.verify(
@@ -239,8 +239,9 @@ router.patch('/user/image', verifyToken, async (req, res) => {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
+      console.log(req.body[0].image_path);
       sql = `update users set user_profile = ? where user_id = ?`;
-      await connection.query(sql, [req.body[0].image, user_id]);
+      await connection.query(sql, [req.body[0].image_path, user_id]);
       res.json({ success: true });
     } catch (error) {
       await connection.rollback(); // ROLLBACK

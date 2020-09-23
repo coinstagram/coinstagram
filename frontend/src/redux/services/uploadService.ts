@@ -53,6 +53,8 @@ const uploadService = class {
   }
 
   static async UserProFile(file: File, token: string | null) {
+    console.log('userProfile');
+
     const fd = new FormData();
     fd.append('user-profile', file);
 
