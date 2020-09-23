@@ -1003,9 +1003,10 @@ router.get('/post/count/:post_id', verifyToken, async (req, res) => {
 
 router.put('/post/chagne/:post_id', verifyToken, async (req, res) => {
   const { post_id } = req.params;
-  const { post_context } = req.body;
+  const { post_context, post_image } = req.body;
 
   let sql = '';
+  let params = [];
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
@@ -1014,14 +1015,36 @@ router.put('/post/chagne/:post_id', verifyToken, async (req, res) => {
         post_context + '',
         post_id + '',
       ]);
+      sql = 'delete from post_image where post_id = ?';
+      await connection.query(sql, +post_id);
 
-      sql = `update post_image set post_context = ? where post_id = ?;`;
-      // const [test] = await connection.query(sql, [
-      //   post_context + '',
-      //   post_id + '',
-      // ]);
+      let sqls = '';
+      if (post_image[0] === undefined) {
+        console.log('no image');
+      } else {
+        console.log('is image');
+        for (let imageData of post_image) {
+          sql = `insert into post_image(post_id, image_path, image_name, image_type) values(?, ?, ?, ?);`;
+          params = [
+            post_id,
+            imageData.image_path,
+            imageData.image_name,
+            imageData.image_type,
+          ];
+          sqls += mysql.format(sql, params);
+        }
+      }
 
-      res.send({ success: test.changedRows });
+      let test2;
+      if (sqls === '') {
+        test2 = { changedRows: 0 };
+      } else {
+        [test2] = await connection.query(sqls);
+      }
+
+      res.send({
+        success: `context: ${test.changedRows} post_image ${test2}`,
+      });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
