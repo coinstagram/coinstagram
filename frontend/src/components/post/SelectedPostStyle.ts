@@ -10,9 +10,11 @@ export const StyledArticle = styled.article`
           display: flex;
           & > div:nth-of-type(1) {
             width: 70%;
-
             li {
               padding-bottom: 65%;
+              img {
+                object-fit: cover;
+              }
             }
           }
           & > div:nth-of-type(2) {
@@ -24,6 +26,7 @@ export const StyledArticle = styled.article`
   .slick-dots {
     bottom: 0;
     top: 95%;
+    padding-bottom: 0;
   }
 `;
 
@@ -31,7 +34,7 @@ export const StyledDiv = styled.div`
   padding: 16px;
   border-bottom: 1px solid rgb(239, 239, 239);
   height: ${props => (props.width > 1500 ? 100 : '')}%;
-  max-height: ${props => (props.width > 1500 ? 433 : 330)};
+  max-height: ${props => (props.width > 1500 ? 432 : 330)};
   overflow-y: auto;
 
   -ms-overflow-style: none;

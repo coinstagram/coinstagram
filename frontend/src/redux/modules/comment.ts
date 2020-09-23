@@ -14,7 +14,8 @@ const FAIL_GET_SELECTED_COMMENTS = 'coinstagram/comment/FAIL_GET_SELECTED_COMMEN
 const START_ADD_COMMENT = 'coinstagram/comment/START_ADD_COMMENT' as const;
 const SUCCESS_ADD_COMMENT = 'coinstagram/comment/SUCCESS_ADD_COMMENT' as const;
 const FAIL_ADD_COMMENT = 'coinstagram/comment/FAIL_ADD_COMMENT' as const;
-const RESET_COMMENT = 'coinstagram/comment/RESET_COMMENT' as const;
+
+const RESET_MYCOMMENT = 'coinstagram/comment/RESET_MYCOMMENT' as const;
 
 // action creator
 const startGetComments = () => ({
@@ -66,8 +67,8 @@ const failAddComment = (error: Error) => ({
   payload: error,
 });
 
-export const resetComment = () => ({
-  type: RESET_COMMENT,
+export const resetMyComment = () => ({
+  type: RESET_MYCOMMENT,
 });
 
 type CommentActions =
@@ -80,7 +81,7 @@ type CommentActions =
   | ReturnType<typeof startAddComment>
   | ReturnType<typeof successAddComment>
   | ReturnType<typeof failAddComment>
-  | ReturnType<typeof resetComment>;
+  | ReturnType<typeof resetMyComment>;
 
 // saga action
 const GET_POST_COMMENTS = 'GET_POST_COMMENTS' as const;
@@ -241,12 +242,17 @@ function commentReducer(state: CommentsState = initialState, action: CommentActi
       return {
         ...state,
       };
-    case RESET_COMMENT:
+    case RESET_MYCOMMENT:
       return {
-        ...state,
         feedPostComments: {
-          ...state.feedPostComments,
-          comments: [...state.feedPostComments.comments, ...state.myComments],
+          loading: false,
+          error: null,
+          comments: [],
+        },
+        selectedPostComments: {
+          loading: false,
+          error: null,
+          comments: [],
         },
         myComments: [],
       };

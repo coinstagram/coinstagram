@@ -19,6 +19,8 @@ const START_GET_SELECTEDPOST_LIKES = 'coinstagram/like/START_GET_SELECTEDPOST_LI
 const SUCCESS_GET_SELECTEDPOST_LIKES = 'coinstagram/like/SUCCESS_GET_SELECTEDPOST_LIKES' as const;
 const FAIL_GET_SELECTEDPOST_LIKES = 'coinstagram/like/FAIL_GET_POST_LIKES' as const;
 
+const RESET_POST_LIKES = 'coinstagram/like/RESET_POST_LIKES' as const;
+
 // const START_GET_COMMENT_LIKES = 'coinstagram/like/START_GET_COMMENT_LIKES' as const;
 // const SUCCESS_GET_COMMENT_LIKES = 'coinstagram/like/SUCCESS_GET_COMMENT_LIKES' as const;
 // const FAIL_GET_COMMENT_LIKES = 'coinstagram/like/FAIL_GET_COMMENT_LIKES' as const;
@@ -94,29 +96,9 @@ const failGetSelectedPostLikes = (error: Error) => ({
   payload: error,
 });
 
-// const startGetCommentLikes = () => ({
-//   type: START_GET_COMMENT_LIKES,
-// });
-
-// const successGetCommentLikes = () => ({
-//   type: SUCCESS_GET_COMMENT_LIKES,
-// });
-
-// const failGetCommentLikes = () => ({
-//   type: FAIL_GET_COMMENT_LIKES,
-// });
-
-// const startAddCommentLikes = () => ({
-//   type: START_ADD_COMMENT_LIKE,
-// });
-
-// const successAddCommentLikes = () => ({
-//   type: SUCCESS_ADD_COMMENT_LIKE,
-// });
-
-// const failAddCommentLikes = () => ({
-//   type: FAIL_ADD_COMMENT_LIKE,
-// });
+export const resetPostLikes = () => ({
+  type: RESET_POST_LIKES,
+});
 
 type likeActios =
   | ReturnType<typeof startGetPostLikes>
@@ -130,15 +112,14 @@ type likeActios =
   | ReturnType<typeof failDeletePostLike>
   | ReturnType<typeof startGetSelectedPostLikes>
   | ReturnType<typeof successGetSelectedPostLikes>
-  | ReturnType<typeof failGetSelectedPostLikes>;
+  | ReturnType<typeof failGetSelectedPostLikes>
+  | ReturnType<typeof resetPostLikes>;
 
 // saga action
 const GET_POST_LIKES_SAGA = 'GET_POST_LIKES_SAGA' as const;
 const ADD_POST_LIKE_SAGA = 'ADD_POST_LIKE_SAGA' as const;
 const DELETE_POST_LIKE_SAGA = 'DELETE_POST_LIKE_SAGA' as const;
 const GET_SELECTEDPOST_LIKES_SAGA = 'GET_SELECTEDPOST_LIKES_SAGA' as const;
-// const GET_COMMENT_LIKES_SAGA = 'GET_COMMENT_LIKES_SAGA' as const;
-// const ADD_COMMENT_LIKE_SAGA = 'ADD_COMMENT_LIKE_SAGA' as const;
 
 // saga action creator
 export const getPostLikesSaga = (post_id: number) => ({
@@ -168,14 +149,6 @@ export const getSelectedPostLikesSaga = (post_id: number) => ({
     post_id,
   },
 });
-
-// export const getCommentLikesSaga = () => ({
-//   type: GET_COMMENT_LIKES_SAGA,
-// });
-
-// export const addCommentLikeSaga = () => ({
-//   type: ADD_COMMENT_LIKE_SAGA,
-// });
 
 type getLikesSagaAction = ReturnType<typeof getPostLikesSaga>;
 type postLikeSagaAction = ReturnType<typeof addPostLikeSaga>;
@@ -410,6 +383,10 @@ function likeReducer(state: likeState = initialState, action: likeActios) {
           error: action.payload,
           userLikes: [],
         },
+      };
+    case RESET_POST_LIKES:
+      return {
+        ...initialState,
       };
     default:
       return state;
