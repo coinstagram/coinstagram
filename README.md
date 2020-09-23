@@ -1,4 +1,8 @@
 # coinstagram
+
+![coinstagram_preview](https://user-images.githubusercontent.com/62285872/93996447-39ea4980-fdcd-11ea-8d23-0587d84a1286.gif)
+
+
 ## 팀 소개
 
 팀명: co-instagram
@@ -139,12 +143,13 @@
 - 라이브러리
 
   React v16.13.1
+  express v4.17.1
 
 - API
 
   <details>
       <summary>목록</summary>
-  	<div>axios v0.2</div>
+  	  <div>axios v0.2</div>
       <div>query-string v6.13.1</div>
       <div>redux-devtools-extension v2.13.8</div>
       <div>react-error-boundary v2.3.1</div>
@@ -154,6 +159,8 @@
       <div>connected-react-router v6.8</div>
       <div>redux v4.0.5</div>
       <div>redux-saga v1.1.3</div>
+      <div>react-slick v0.27</div>
+      <div>react-spinner</div>
       <div>styled-components v5.1.1</div>
       <div>@types/react v16.9.48</div>
       <div>@types/react-dom v16.9.8</div>
@@ -162,11 +169,16 @@
       <div>@types/styled-components v5.1.2</div>
   </details>
   
-- server
-  <div>AWS</div> 
-   
-- DB
-  <div>mySql</div>
+- server & DB
+  <details>
+     <summary>목록</summary>
+     <dif>jsonwebtoken v8.5.1</div>
+     <div>multer v1.4.2</div>
+     <div>nodemon v2.0.4</div>
+     <div>bcrypt</div>
+     <div>dotenv</div>
+     <div>mysql2</div>
+  </details>
 <br>
 
 
