@@ -2,9 +2,11 @@ import React, { useEffect, useRef } from 'react';
 import RootState, { EachPostState } from '../../type';
 import { Link } from 'react-router-dom';
 import useWindowWidth from '../../hooks/useWindowWidth';
+import { useSelector } from 'react-redux';
 
 // styles
 import { StyledArticle, StyledPreviewDiv, StyledSpinnerDiv, StyledDiv, StyledPostDiv, StyledCommentDiv } from './FeedStyle';
+import { StyledErrorDiv } from '../explore/RandomPostsStyle';
 
 // icons
 import { BsPlusCircle } from 'react-icons/bs';
@@ -15,7 +17,6 @@ import FeedBody from './FeedBody';
 import FeedComment from './FeedComment';
 import FeedIcons from './FeedIcons';
 import Spinner from '../common/Spinner';
-import { useSelector } from 'react-redux';
 
 interface FeedProps {
   loading: boolean;
@@ -76,6 +77,7 @@ function Feed({ loading, error, myId, feedPosts, addCommentPost, addPostLikes, d
           <Spinner />
         </StyledSpinnerDiv>
       )}
+      {error !== null && <StyledErrorDiv />}
       {feedPosts.length !== 0 &&
         feedPosts.map(post => (
           <StyledArticle key={post.id} width={width} onFocus={toggleClass} onBlur={toggleClass}>

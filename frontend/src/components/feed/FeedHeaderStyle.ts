@@ -22,7 +22,7 @@ export const UsernameDiv = styled.div`
   outline: none;
   font-weight: bold;
   margin-left: 47px;
-  margin-top: ${props => (props.hasLocation ? '2px' : '10px')};
+  margin-top: ${props => (props.hasLocation ? '2px' : '6px')};
 
   position: absolute;
 

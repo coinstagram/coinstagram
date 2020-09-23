@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { add_post, addPostSaga } from '../redux/modules/upload';
-import { resetComment } from '../redux/modules/comment';
+import { resetMyComment } from '../redux/modules/comment';
 
 // components;
 import UploadHeader from '../components/upload/UploadHeader';
@@ -23,7 +23,7 @@ const UploadContainer = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(resetComment());
+    dispatch(resetMyComment());
   }, [dispatch]);
 
   const [data, setData] = useState<contextValue>({

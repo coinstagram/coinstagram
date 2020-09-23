@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import useWindowWidth from '../../hooks/useWindowWidth';
 
 // styles
@@ -9,9 +8,9 @@ function Logo() {
   const width = useWindowWidth();
   return (
     <>
-      <Link to="/">
+      <a href="https://github.com/coinstagram/coinstagram" target="_blank" rel="noopener noreferrer">
         <StyledH1 width={width}>coInstagram</StyledH1>
-      </Link>
+      </a>
     </>
   );
 }
