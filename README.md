@@ -1,7 +1,8 @@
 # coinstagram
 
 ![coinstagram_preview](https://user-images.githubusercontent.com/62285872/93996447-39ea4980-fdcd-11ea-8d23-0587d84a1286.gif)
-
+<br/>
+<a href="https://www.loom.com/share/9585f74b6b4d4c308a0dcbb78f1fc641">영상보기</a>
 
 ## 팀 소개
 
