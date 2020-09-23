@@ -17,12 +17,7 @@ function RecommendUsersContainer() {
     dispatch(getRandomUserInfoSaga());
   }, [dispatch]);
 
-  return (
-    <>
-      {width > 1520 && <RecommendUsers user={user} followers={followers.users} getRandomUser={getRandomUser} />}
-      {width <= 1520 && <RecommendMobile getRandomUser={getRandomUser} />}
-    </>
-  );
+  return <>{width > 1520 && <RecommendUsers user={user} followers={followers.users} getRandomUser={getRandomUser} />}</>;
 }
 
 export default RecommendUsersContainer;
