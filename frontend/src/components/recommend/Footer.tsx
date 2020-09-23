@@ -18,7 +18,7 @@ function Footer() {
           박해리
         </a>{' '}
         <a href="https://github.com/clowns123" target="_blank" rel="noopener noreferrer">
-          김태현
+          황태현
         </a>
       </span>
       <small>Copyright since &copy; 2020 by COINSTAGRAM CORPORATION ALL RIGHTS RESERVED.</small>

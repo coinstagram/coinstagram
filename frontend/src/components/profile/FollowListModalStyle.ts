@@ -6,7 +6,7 @@ export const StyledBackground = styled(StyledBg)`
 `;
 
 export const StyledDiv = styled(StyledModal)`
-  width: 400px;
+  width: ${props => (props.width < 400 ? 350 : 400)};
   ${props =>
     props.isList &&
     css`
@@ -33,7 +33,7 @@ export const StyledDiv = styled(StyledModal)`
       height: 5px;
     }
     &::-webkit-scrollbar-thumb {
-      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      /* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); */
       background-color: rgb(219, 219, 219);
       border-radius: 12px;
     }

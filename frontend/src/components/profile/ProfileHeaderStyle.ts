@@ -39,7 +39,7 @@ export const StyledSection = styled.section`
       margin-bottom: ${props => (props.width < 750 ? 10 : 20)};
 
       dd {
-        font-size: 28px;
+        font-size: ${props => (props.width < 400 ? 25 : 28)};
         font-weight: 100;
       }
 
