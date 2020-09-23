@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import RootState, { AnotherUserState } from '../../type';
+import useWindowWidth from '../../hooks/useWindowWidth';
 
 // styles
 import { StyledBg, StyledModal, StyledSpan } from './PostModalStyle';
@@ -35,10 +36,11 @@ function PostModal({
   const user_id = user && user.user_id;
   const history = useHistory();
   const urlPost = +useLocation().pathname.split('/')[2];
+  const width = useWindowWidth();
 
   return (
     <StyledBg onClick={popPostModal}>
-      <StyledModal>
+      <StyledModal width={width}>
         <ul>
           {user_id === userId && (
             <>
