@@ -6,7 +6,7 @@
 
 ## 팀 소개
 
-팀명: co-instagram
+팀명: coinstagram
 
 팀원: 이우성, 박해리, 김태현
 
