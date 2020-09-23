@@ -34,10 +34,10 @@ export const StyledDiv = styled.div`
     input {
       background: #fafafa;
       color: #828282;
-      /* padding: 10px; */
-      /* margin-top: 2px; */
+      padding: 10px;
       border: none;
-      /* width: 100%; */
+      /* margin-top: 2px; */
+      width: 100%;
       height: 36px;
       outline: none;
       ${props =>
