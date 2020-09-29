@@ -21,7 +21,8 @@
     "eslint": "^7.7.0"
   },
   "scripts": {
-    "dev": "nodemon app"
+    "dev": "nodemon app",
+    "start": "pm2 start app.js"
   },
   "author": "",
   "license": "ISC"

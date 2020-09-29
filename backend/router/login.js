@@ -16,6 +16,7 @@ const router = express.Router();
  */
 router.post('/login', async (req, res) => {
   const { user_id, user_password } = req.body;
+  console.log('login');
   let sql = '';
   try {
     const connection = await pool.getConnection(async (conn) => conn);
@@ -24,7 +25,7 @@ router.post('/login', async (req, res) => {
 
       // id 확인
       const [isuser] = await connection.query(sql, user_id);
-
+      console.log('isuser: ', isuser);
       if (isuser[0] === undefined) {
         try {
           throw new Error(

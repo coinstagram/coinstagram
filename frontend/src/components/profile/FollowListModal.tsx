@@ -12,6 +12,7 @@ import { ImCancelCircle } from 'react-icons/im';
 
 // components
 import RecommendUsersInfo from '../recommend/RecommendUsersInfo';
+import useWindowWidth from '../../hooks/useWindowWidth';
 
 interface FollowListModalProps {
   myId: string;
@@ -27,6 +28,7 @@ interface FollowListModalProps {
 function FollowListModal({ myId, followers, followees, modal, content, isList, toggleModal, popModal }: FollowListModalProps) {
   const myFollowers = useSelector((state: RootState) => state.userInfo.followers.users);
   const dispatch = useDispatch();
+  const width = useWindowWidth();
   const onLogout = () => {
     dispatch(logout());
     TokenService.remove();
@@ -34,7 +36,7 @@ function FollowListModal({ myId, followers, followees, modal, content, isList, t
 
   return (
     <StyledBackground modal={modal} onClick={e => toggleModal('', e.target, e.currentTarget)}>
-      <StyledDiv isList={isList} onClick={click} className="followList-modal">
+      <StyledDiv isList={isList} onClick={click} className="followList-modal" width={width}>
         {isList && (
           <>
             <div className="list-header">{content}</div>
