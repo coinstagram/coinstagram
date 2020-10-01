@@ -184,13 +184,8 @@ function* changePostSagafun() {
     const { token }: AuthState = yield select((state: RootState) => state.auth);
     const { upload } = yield select((state: uploadState) => state);
 
-    const check = yield call(PostService.changePost, token, upload.data.id, upload.data.post_context);
+    const check = yield call(PostService.changePost, token, upload.data.id, upload.data.post_context, upload.data.image_path);
 
-    if (check.data === 1) {
-      console.log('데이터 바뀜');
-    } else {
-      console.log('데이터 안바뀜');
-    }
     yield put(change_post_success());
     yield put(push('/'));
   } catch (error) {

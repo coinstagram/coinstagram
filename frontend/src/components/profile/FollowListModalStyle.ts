@@ -22,7 +22,7 @@ export const StyledDiv = styled(StyledModal)`
   }
   .list-body {
     padding: 8px 15px 0;
-    height: 240px;
+    height: 230px;
     overflow-y: auto;
     &::-webkit-scrollbar {
       width: 8px;

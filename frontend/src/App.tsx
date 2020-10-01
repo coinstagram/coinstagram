@@ -24,7 +24,6 @@ import NotFound from './pages/NotFound';
 
 // components
 import FollowCancelModal from './components/common/FollowCancelModal';
-import ChangePostContainer from './containers/ChangePostContainer';
 import ChangePost from './pages/ChangePost';
 
 interface contextValue {
