@@ -21,5 +21,5 @@ export const StyledSpan = styled.span`
   background-size: cover;
   background-repeat: no-repeat;
   background-position: 50% 50%;
-  background-image: url(${({ imageUrl }: ThumbnailProps) => (!imageUrl ? profile : `${imageUrl}`)});
+  background-image: url(${({ imageUrl }: ThumbnailProps) => (!imageUrl ? profile : `http://localhost:4000/${imageUrl}`)});
 `;

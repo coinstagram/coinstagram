@@ -11,7 +11,7 @@ import TokenService from '../services/tokenService';
 const SIGNIN_START = 'coinstagram/auth/SIGNIN_START' as const;
 const SIGNIN_SUCCESS = 'coinstagram/auth/SIGNIN_SUCCESS' as const;
 const SIGNIN_FAIL = 'coinstagram/auth/SIGNIN_FAIL' as const;
-const LOG_OUT = 'coinstagram/auth/LOG_OUT' as const;
+export const LOG_OUT = 'coinstagram/auth/LOG_OUT' as const;
 
 // action creator
 export const signinStart = () => ({
@@ -29,7 +29,11 @@ export const logout = () => ({
   type: LOG_OUT,
 });
 
-type AuthActions = ReturnType<typeof signinStart> | ReturnType<typeof signinSuccess> | ReturnType<typeof signinFail> | ReturnType<typeof logout>;
+export type AuthActions =
+  | ReturnType<typeof signinStart>
+  | ReturnType<typeof signinSuccess>
+  | ReturnType<typeof signinFail>
+  | ReturnType<typeof logout>;
 
 const initialState: AuthState = {
   loading: false,

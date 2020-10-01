@@ -5,7 +5,7 @@ import UploadHeader from '../components/upload/UploadHeader';
 import UploadInput from '../components/upload/UploadInput';
 import UploadDetails from '../components/upload/UploadDetails';
 import { useDispatch, useSelector } from 'react-redux';
-import { add_post, addPostSaga, change_post, changePostSaga } from '../redux/modules/upload';
+import { add_post, addPostSaga } from '../redux/modules/upload';
 import { getSelectedPostSaga } from '../redux/modules/post';
 import { useLocation } from 'react-router-dom';
 import RootState from '../type';

@@ -6,7 +6,6 @@ import useWindowWidth from '../hooks/useWindowWidth';
 
 // components
 import RecommendUsers from '../components/recommend/RecommendUsers';
-import RecommendMobile from '../components/recommend/RecommendMobile';
 
 function RecommendUsersContainer() {
   const dispatch = useDispatch();

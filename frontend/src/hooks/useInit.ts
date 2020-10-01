@@ -19,16 +19,19 @@ function useInit() {
   }, [dispatch, token]);
 
   useEffect(() => {
+    if (token === null) return;
     dispatch(getFeedPostsSaga(userId));
-  }, [dispatch, userId, followersInfo]);
+  }, [dispatch, userId, followersInfo, token]);
 
   useEffect(() => {
+    if (token === null) return;
     dispatch(getBookmarksSaga(userId));
-  }, [dispatch, userId]);
+  }, [dispatch, userId, token]);
 
   useEffect(() => {
+    if (token === null) return;
     dispatch(getRandomPostsSaga());
-  }, [dispatch]);
+  }, [dispatch, token]);
 }
 
 export default useInit;
