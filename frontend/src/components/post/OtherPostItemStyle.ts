@@ -25,6 +25,7 @@ export const StyledLi = styled.li`
       position: absolute;
       width: 100%;
       height: 100%;
+      object-fit: cover;
       border-radius: 3px;
       background-color: rgba(219, 219, 219, 0.7);
       animation: fadeIn 2s;

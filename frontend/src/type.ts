@@ -104,8 +104,6 @@ export interface EachPostState {
   post_anotheruser: null | string;
   post_location: null | string;
   created_at: null | string;
-  // comments:
-  // likes:
 }
 
 export interface BookmarkState {
