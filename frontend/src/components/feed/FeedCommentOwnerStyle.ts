@@ -35,6 +35,9 @@ export const StyledDiv = styled.div`
   }
 
   .owner-context {
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 3px;
   }
 
   time {
