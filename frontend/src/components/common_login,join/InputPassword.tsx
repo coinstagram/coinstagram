@@ -13,10 +13,10 @@ export interface passwordProps {
 
 export default function InputPassword({ userPassword, onInputPassword, style, toggleIcon }: passwordProps) {
   const [isPasswordShown, setPasswordShown] = useState(false);
-
   const toggleShowPassword = () => {
     setPasswordShown(!isPasswordShown);
   };
+
   return (
     <>
       <InputCommon
