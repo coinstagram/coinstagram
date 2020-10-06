@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { logout } from '../../redux/modules/auth';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import TokenService from '../../redux/services/tokenService';
+import LogoutModal from '../login/LogoutModal';
 
 // styles
 import { StyledDivBg, StyledModal, StyledReadyDiv } from './NavModalStyle';
@@ -24,11 +25,15 @@ export interface NavModalProps {
 
 function NavModal({ top, left, favorite, profile, userId }: NavModalProps) {
   const dispatch = useDispatch();
+  const [logoutModal, setLogoutModal] = useState(false);
+  console.log(logoutModal);
   const onLogout = () => {
-    dispatch(logout());
-    TokenService.remove();
+    console.log(logoutModal);
+    setLogoutModal(true);
+    // dispatch(logout());
+    // TokenService.remove();
   };
-
+  console.log(logoutModal);
   return (
     <StyledDivBg>
       <StyledModal top={top} left={left}>
@@ -54,10 +59,13 @@ function NavModal({ top, left, favorite, profile, userId }: NavModalProps) {
                 </Link>
               </li>
               <li onClick={onLogout}>
-                <Link to="/">로그아웃</Link>
+                로그아웃
+                {/* <Link to="/">로그아웃</Link> */}
               </li>
             </>
           )}
+          {logoutModal && <LogoutModal />}
+          {/* {profile && logoutModal && <LogoutModal />} */}
           {favorite && (
             <li>
               <StyledReadyDiv>
