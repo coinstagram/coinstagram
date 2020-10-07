@@ -18,9 +18,9 @@ export const StyledLogin = styled.div`
     props.width > 750
       ? css`
           background: #ffffff;
-          height: 365px;
+          height: 400px;
           border: 1px solid #dbdbdb;
-          margin: 50px 0 10px 0%;
+          margin: 0 0 10px 0;
           padding: 0 40px;
         `
       : css`
@@ -28,13 +28,14 @@ export const StyledLogin = styled.div`
           height: 100%;
           border: none;
           margin: 0;
-
           padding: 10vh 10vw;
         `}
 `;
 
 export const StyledForm = styled.form`
   position: relative;
+  margin-bottom: 0;
+  margin-top: 20px;
   padding-bottom: 10px;
   ${props =>
     props.width <= 750 &&

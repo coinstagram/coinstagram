@@ -144,7 +144,8 @@ function App() {
               <Route path="/account/:userid/tagged" component={Profile} />
               <Route path="/account/:userid/saved" component={Profile} />
               <Route path="/account/:userid" component={Profile} />
-              <Route path="/edit" component={Edit} />
+              <Route path="/edit/profile" component={Edit} />
+              <Route path="/edit/password" component={Edit} />
               <Route path="/" exact component={Home} />
               <Route component={NotFound} />
             </Switch>

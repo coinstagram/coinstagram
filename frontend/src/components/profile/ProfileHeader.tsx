@@ -72,7 +72,7 @@ function ProfileHeader({ myId, profileId, profileName, profileIntro, profileImag
               <dd>{profileId}</dd>
             </div>
             {myId === profileId && width >= 750 && (
-              <Link to="/edit">
+              <Link to="/edit/profile">
                 <span tabIndex={-1}>프로필 편집</span>
               </Link>
             )}
@@ -85,7 +85,7 @@ function ProfileHeader({ myId, profileId, profileName, profileIntro, profileImag
             )}
           </div>
           {myId === profileId && width < 750 && (
-            <Link to="/edit">
+            <Link to="/edit/profile">
               <span tabIndex={-1}>프로필 편집</span>
             </Link>
           )}

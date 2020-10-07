@@ -1,16 +1,60 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const StyledDiv = styled.div`
-  width: 650px;
+  display: flex;
+  width: 933px;
   background-color: #ffffff;
-  padding: 50px;
   border: 1px solid #dbdbdb;
   margin: 0 auto;
-  article {
-    margin: 0 auto;
-    width: 100%;
-    .top {
+
+  nav {
+    border-right: 1px solid #dbdbdb;
+    font-size: 1.2rem;
+    ul {
+      width: 236px;
+      li {
+        cursor: pointer;
+        text-align: left;
+        height: 20px;
+        padding: 20px;
+        position: relative;
+        .active {
+          font-weight: bold;
+          ::before {
+            content: '';
+            display: block;
+            background: black;
+            width: 2px;
+            height: 60px;
+            position: absolute;
+            top: 0;
+            left: 0;
+          }
+        }
+        &:hover {
+          background: #f8f9fa;
+          ::before {
+            content: '';
+            display: block;
+            background: #dbdbdb;
+            width: 2px;
+            height: 60px;
+            position: absolute;
+            top: 0;
+            left: 0;
+          }
+        }
+      }
+    }
+  }
+  .wrapper {
+    display: flex;
+    flex-flow: column;
+    header {
       display: flex;
+      width: 100%;
+      padding-top: 50px;
+      padding-left: 50px;
       .profileImg {
         width: 130px;
         text-align: right;
@@ -23,56 +67,20 @@ export const StyledDiv = styled.div`
         font-size: 1.1rem;
         width: 355px;
         margin-bottom: 10px;
+        outline: none;
         .thumbnail-click {
           font-size: 1.2rem;
         }
-        button {
+        label {
           color: #0095f6;
           font-weight: bold;
           text-align: left;
-          outline: none;
+          cursor: pointer;
+          /* outline: none; */
+          width: 121px;
         }
-      }
-    }
-    [class*='Wrapper'] {
-      margin: 10px;
-      display: flex;
-      textarea {
-        height: 60px;
-        width: 355px;
-      }
-      button[type='submit'] {
-        background: #b2dffc;
-        color: white;
-        font-weight: bold;
-        text-align: center;
-        border-radius: 3px;
-        padding: 3px 10px;
-      }
-      .label {
-        width: 130px;
-        text-align: right;
-        margin-right: 50px;
-        font-size: 1.2rem;
-        font-weight: bold;
-        label {
-          padding-top: 0;
-          box-sizing: border-box;
-          white-space: nowrap;
-        }
-      }
-      input {
-        width: 355px;
-        height: 32px;
-        margin-bottom: 10px;
-        padding-left: 10px;
-      }
-      [class*='Input'] {
-        display: flex;
-        flex-flow: column;
-        small {
-          color: #8e8e8e;
-          width: 355px;
+        input {
+          /* outline: none; */
         }
       }
     }
