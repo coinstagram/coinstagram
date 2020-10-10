@@ -18,7 +18,6 @@ const fs = require('fs');
  * }
  */
 router.post('/post', verifyToken, async (req, res) => {
-  console.log('/post');
   const token = req.headers.authorization.split('Bearer ')[1];
   const { user_id } = jwt.verify(
     token,
@@ -29,6 +28,7 @@ router.post('/post', verifyToken, async (req, res) => {
     post_context = '',
     post_anotheruser = '',
     post_location = '',
+    post_tags = '',
   } = req.body;
   let sql = '';
   try {
@@ -42,9 +42,48 @@ router.post('/post', verifyToken, async (req, res) => {
         post_anotheruser,
         post_location,
       ]);
+
+      let sqls = '';
+      let params = [];
+      sql = `INSERT INTO tag (name) VALUES (?);`;
+
+      post_tags.map((tag) => {
+        params = tag;
+        sqls += mysql.format(sql, params);
+      });
+      let tags;
+      if (sqls !== '') {
+        [tags] = await connection.query(sqls);
+      }
+
+      let tagsId = undefined;
+
+      if (tags !== undefined) {
+        if (tags.length !== undefined) {
+          tagsId = tags.map(({ insertId }) => insertId);
+        } else {
+          tagsId = tags.insertId;
+        }
+      }
+
       sql = `select id, user_id, created_at from posts order by id desc limit 1; `;
       const [post_id] = await connection.query(sql);
-      console.log(post_id);
+
+      sqls = '';
+      sql = 'INSERT INTO post_tags (tag_id, post_id) VALUES (?, ?);';
+      if (tagsId !== undefined) {
+        if (tagsId.length !== undefined) {
+          tagsId.map((tagId) => {
+            params = [tagId, post_id[0].id];
+            sqls += mysql.format(sql, params);
+          });
+        } else {
+          params = [tagsId, post_id[0].id];
+          sqls = mysql.format(sql, params);
+        }
+        await connection.query(sqls);
+      }
+
       res.send({ ...post_id[0] });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
@@ -98,53 +137,57 @@ router.get('/posts', verifyToken, async (req, res) => {
     res.status(500).json('DB CONNECT ERROR');
   }
 });
+
 /**
- * get post detail
- * /
+ * /posts/:page
  */
-// router.get('/post/:post_id', verifyToken, async (req, res) => {
-//   const { post_id } = req.params;
-//   let sql = '';
-//   try {
-//     const connection = await pool.getConnection(async (conn) => conn);
-//     try {
-//       sql = `SELECT distinct a.id as id, a.user_id, a.post_context, a.post_anotheruser,a.created_at, a.post_location FROM
-//       (SELECT * FROM posts where id = ?) a left outer join post_tags b on a.id = b.post_id
-//       left outer join tag c on b.tag_id = c.id
-//       left outer join users d on a.user_id = d.user_id;`;
-//       const [check] = await connection.query(sql, [post_id, post_id, post_id]);
-//       sql = `select image_path from post_image where post_id = ?`;
-//       const [image] = await connection.query(sql, post_id);
-//       sql = `select * from comments where post_id = ?`;
-//       const [comment] = await connection.query(sql, post_id);
-//       sql = `select * from post_like where post_id = ?`;
+router.get('/posts/:page', verifyToken, async (req, res) => {
+  let sql = '';
+  try {
+    const { page } = req.params;
+    const line = 15;
+    const pageNum = (page - 1) * line;
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      sql = 'select * from posts order by id desc limit  ?, ?;';
+      const [check] = await connection.query(sql, [pageNum, line]);
+      const post_id = check.map(({ id }) => +id);
+      let sqls = '';
+      let params = [];
+      sql = `select image_path from post_image where post_id = ?;`;
 
-//       const [commentLike] = await connection.query(sql, post_id);
-//       sql = `select * from comment_like where post_id = ?`;
-//       const [postLike] = await connection.query(sql, post_id);
-//       console.log(commentLike);
+      post_id.map((id) => {
+        params = [id];
+        sqls += mysql.format(sql, params);
+      });
 
-//       console.log({
-//         ...check[0],
-//         image: [...image.map(({ image_path }) => image_path)],
-//         comment: [
-//           ...comment.map(({ id, comment_text }) => ({ id, comment_text })),
-//         ],
-//         postLike: [...postLike.map(({ user_id }) => user_id)],
-//       });
-//       res.send(check[0]);
-//     } catch (error) {
-//       await connection.rollback(); // ROLLBACK
-//       await connection.release();
-//       console.log(error);
-//       res.status(500).json('SQL ERROR');
-//     } finally {
-//       await connection.release();
-//     }
-//   } catch (error) {
-//     res.status(500).json('DB CONNECT ERROR');
-//   }
-// });
+      const [image] = await connection.query(sqls);
+
+      sqls = '';
+      sql = `select name from tag where id = (select tag_id from post_tags where post_id = ?);`;
+      post_id.map((id) => {
+        params = [id];
+        sqls += mysql.format(sql, params);
+      });
+      const [hastag] = await connection.query(sqls);
+      console.log(hastag);
+      for (let i = 0; i < image.length; i++) {
+        let imageitem = image[i].map(({ image_path }) => image_path);
+        check[i] = { ...check[i], image_path: imageitem, hastag: hastag[0] };
+      }
+      res.send(check);
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      console.log(error);
+      res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
+});
 
 router.get('/post/:post_id', verifyToken, async (req, res) => {
   console.log('/post/:post_id');
@@ -356,6 +399,52 @@ router.get('/user/post/:user_id', verifyToken, async (req, res) => {
           check[0] = { ...check[0], image_path: imageitem };
         }
       }
+
+      /*
+        sqls = '';
+      sql = `select name from tag where id = (select tag_id from post_tags where post_id = ?);`;
+      post_id.map((id) => {
+        params = [id];
+        sqls += mysql.format(sql, params);
+      });
+      const [hastag] = await connection.query(sqls);
+      console.log(hastag);
+     
+*/
+      sqls = '';
+      sql =
+        'select name from tag where id = (select tag_id from post_tags where post_id = ?);';
+      post_id.map((id) => {
+        params = [id];
+        sqls += mysql.format(sql, params);
+      });
+      const [hastag] = await connection.query(sqls);
+
+      const tag = hastag.map((hastag) =>
+        hastag[0] !== undefined ? hastag[0].name : '',
+      );
+
+      if (sqls.length !== 0) {
+        const [image] = await connection.query(sqls);
+        try {
+          for (let i = 0; i < image.length; i++) {
+            let imageitem = image[i].map(({ image_path }) => image_path);
+            check[i] = {
+              ...check[i],
+              image_path: imageitem,
+              hastag: tag[i],
+            };
+          }
+        } catch (err) {
+          let imageitem = image.map(({ image_path }) => image_path);
+          check[0] = {
+            ...check[0],
+            image_path: imageitem,
+            hastag: tag[0],
+          };
+        }
+      }
+
       res.send(check);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
