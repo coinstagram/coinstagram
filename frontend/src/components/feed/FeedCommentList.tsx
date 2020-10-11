@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import RootState from '../../type';
 import { Link } from 'react-router-dom';
@@ -8,16 +8,19 @@ import { StyledDiv } from './FeedCommentListStyle';
 
 // components
 import FeedCommentItem from './FeedCommentItem';
+import { followContext } from '../../App';
 
 interface FeedCommentListProps {
+  userId?: string;
   postId: number;
   visual?: boolean;
   viewTime?: boolean;
   thumbnail?: boolean;
 }
 
-function FeedCommentList({ postId, visual, viewTime, thumbnail }: FeedCommentListProps) {
+function FeedCommentList({ userId, postId, visual, viewTime, thumbnail }: FeedCommentListProps) {
   const { feedPostComments, selectedPostComments, myComments } = useSelector((state: RootState) => state.comments);
+  const { setFollowInfo } = useContext(followContext);
 
   const currentSelectedComments = selectedPostComments.comments;
   const currentFeedPostComments = feedPostComments.comments.filter(comment => comment.post_id === postId);
@@ -45,7 +48,7 @@ function FeedCommentList({ postId, visual, viewTime, thumbnail }: FeedCommentLis
           <>
             {comments.length >= 3 && (
               <li>
-                <Link to={`/post/${postId}`} className="comment-more">
+                <Link to={`/post/${postId}`} onClick={() => setFollowInfo(userId, '', null)} className="comment-more">
                   <span tabIndex={-1}>댓글 {comments.length}개 모두 보기</span>
                 </Link>
               </li>

@@ -21,7 +21,7 @@ function FeedComment({ userId, context, postId, addCommentPost, postCreatedTime 
     <>
       <StyledContainer>
         <FeedCommentOwner userId={userId} context={context} />
-        <FeedCommentList postId={postId} />
+        <FeedCommentList userId={userId} postId={postId} />
         <StyledPassedTimeDiv className={`${postId}-createdTime`}>{computePassedTime(postCreatedTime)}</StyledPassedTimeDiv>
       </StyledContainer>
       <FeedAddComment userId={userId} postId={postId} addCommentPost={addCommentPost} />

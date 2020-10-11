@@ -8,7 +8,7 @@ export default function HashTag() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const removeTag = (i: number) => {
-    setTags(tags.filter((tag, index) => tag[index] !== tag[i]));
+    setTags(tags.filter((tag, index) => index !== i));
   };
   // let randomColor: string;
   const inputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

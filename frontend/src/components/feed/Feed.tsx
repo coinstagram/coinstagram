@@ -43,6 +43,7 @@ function Feed({ loading, error, myId, feedPosts, addCommentPost, addPostLikes, d
           entries.forEach(entry => {
             if (entry.isIntersecting) {
               // getFeedPosts(userId);
+              console.log('감지완료');
             }
           });
         },
