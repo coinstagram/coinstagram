@@ -11,6 +11,8 @@ import { signInSagaActionCreator } from '../redux/modules/auth';
 import ErrorMessage from '../components/common_login,join/ErrorMessage';
 import useWindowWidth from '../hooks/useWindowWidth';
 import LoadingSpinner from '../components/common_login,join/LoadingSpinner';
+import FacebookLogin from '../components/common_login,join/FacebookLogin';
+import OrLine from '../components/common_login,join/OrLine';
 
 const idRegExp = /^[a-zA-Z0-9]{4,12}$/;
 
@@ -59,6 +61,8 @@ function LoginContainer() {
           사용자 정보가 일치하지 않습니다.
           <p>다시 입력해주세요</p>
         </ErrorMessage>
+        <OrLine />
+        <FacebookLogin />
       </StyledLogin>
     </>
   );

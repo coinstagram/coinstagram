@@ -3,11 +3,16 @@ import styled, { css } from 'styled-components';
 import imageLogo from '../../resource/image/logo.png';
 import { StyledH1 } from '../header/LogoStyle';
 
+const ImageLogoWrapper = styled.div`
+  display: flex;
+  margin: auto;
+`;
 const StyledDiv = styled.div`
   text-align: center;
+  margin: auto 0;
   img {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
   }
 `;
 
@@ -15,19 +20,17 @@ export const MainLogo = styled(StyledH1)`
   font-size: 50px;
   text-align: center;
   margin-top: 25px;
-  margin-bottom: 40px;
+  margin-left: 10px;
   font-weight: 600;
   ${props =>
-    props.width <= 750 &&
-    css`
-      margin-top: 20px;
-      margin-bottom: 20px;
-    `};
-  &.joinLogo {
-    margin-bottom: 20px;
-    margin-left: 10px;
-    ${props => props.width}
-  }
+    props.width <= 750
+      ? css`
+          margin-top: 20px;
+          margin-bottom: 20px;
+        `
+      : css`
+          width: 100%;
+        `};
 `;
 
 export interface logoProps {
@@ -37,14 +40,16 @@ export interface logoProps {
 export default function ImageLogo({ width, logoStyle }: logoProps) {
   return (
     <>
-      {width <= 750 && (
-        <StyledDiv>
-          <img src={imageLogo} alt="instagram_logo" />
-        </StyledDiv>
-      )}
-      <MainLogo width={width} className={logoStyle}>
-        coinstagram
-      </MainLogo>
+      <ImageLogoWrapper>
+        {width <= 750 && (
+          <StyledDiv>
+            <img src={imageLogo} alt="instagram_logo" />
+          </StyledDiv>
+        )}
+        <MainLogo width={width} className={logoStyle}>
+          coinstagram
+        </MainLogo>
+      </ImageLogoWrapper>
     </>
   );
 }

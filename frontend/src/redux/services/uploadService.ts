@@ -10,6 +10,7 @@ const uploadService = class {
         post_context: data.post_context,
         post_anotheruser: data.post_anotheruser,
         post_location: data.post_location,
+        post_tags: data.tag
       },
       {
         headers: {
@@ -18,8 +19,6 @@ const uploadService = class {
       },
     );
     const { id } = res.data;
-    console.log(id);
-
     const imageRes = await axios.post(
       `/api${getUrl}/image`,
       {

@@ -1,9 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import StyledDiv from './HashTagStyle';
 
-const colors = ['red', 'yellow', 'pink', 'green', 'blue'];
+// const colors = ['red', 'yellow', 'pink', 'green', 'blue'];
 
-export default function HashTag() {
+interface HashTagProps {
+  hasTag: (hasTag: Array<string>) => void;
+}
+
+export default function HashTag({ hasTag }: HashTagProps) {
   const [tags, setTags] = useState([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -13,19 +17,23 @@ export default function HashTag() {
   // let randomColor: string;
   const inputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const val = (e.target as HTMLInputElement).value;
-    // if (e.key === 'Enter' && val && val.startsWith('#')) {
     if (e.key === 'Enter' && val) {
       if (tags.find(tag => tag === `#${val}`) || val.length > 10) return;
       if (tags.length >= 5) return;
       setTags([...tags, `#${val}`]);
       inputRef.current.value = null;
+
       // randomColor = colors[Math.floor(Math.random() * colors.length)];
     }
     // else if (e.key === 'Backspace' && !val) {
     //   removeTag(tags.length - 1);
     // }
   };
-  console.log(tags);
+
+  useEffect(() => {
+    hasTag(tags);
+  }, [hasTag, tags]);
+
   return (
     <StyledDiv>
       <ul className="hashTagList">

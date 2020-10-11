@@ -5,13 +5,12 @@ export const StyledDiv = styled.div`
   ${props =>
     props.width > 750 &&
     css`
-      margin: 10vh auto 0;
-      margin-top: 100px;
+      margin: 0 auto;
     `}
 `;
 export const StyledJoinWrapper = styled.div`
   width: 100%;
-  height: 542px;
+  height: 600px;
   background: #ffffff;
   border: 1px solid #dbdbdb;
   margin: 30px 0 10px 0;
@@ -29,6 +28,8 @@ export const StyledJoinWrapper = styled.div`
 
 export const StyledForm = styled.form`
   position: relative;
+  margin-top: 40px;
+  margin-bottom: 0;
   padding-bottom: 10px;
   ${props =>
     props.width <= 750 &&

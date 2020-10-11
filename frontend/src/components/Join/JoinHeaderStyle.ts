@@ -1,11 +1,14 @@
 import styled, { css } from 'styled-components';
 export const Header = styled.div`
-  height: 120px;
-  margin-bottom: 20px;
+  height: 170px;
+  margin-bottom: 55px;
+  display: flex;
+  flex-flow: column;
   ${props =>
     props.width <= 750 &&
     css`
-      display: flex;
+      /* display: flex;
+      flex-flow: column; */
       justify-content: center;
       height: 70px;
       padding-top: 40px;

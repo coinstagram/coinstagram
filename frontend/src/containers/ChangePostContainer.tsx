@@ -22,6 +22,7 @@ export interface contextValue {
 }
 interface test {
   getSelectedPostInfo: () => void;
+  hasTag: (hasTag: Array<string>) => void;
 }
 
 const ChangePostContainer = () => {
@@ -92,11 +93,18 @@ const ChangePostContainer = () => {
     [dispatch, data],
   );
 
+  const hasTag = useCallback((img: Array<string>) => {
+    setData(data => ({
+      ...data,
+      image_path: img,
+    }));
+  }, []);
+
   return (
     <>
       <UploadHeader />
       <UploadInput image={image} onsubmit={onsubmit} data={data} />
-      <UploadDetails change={onchange} data={data} />
+      <UploadDetails change={onchange} data={data} hasTag={hasTag} />
       {/* <StyledButton onClick={onsubmit}>계시하기</StyledButton> */}
     </>
   );
