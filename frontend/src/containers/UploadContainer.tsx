@@ -44,8 +44,17 @@ const UploadContainer = () => {
     }));
   }, []);
 
+  const hasTag = useCallback((tag: Array<string>) => {
+    setData(data => ({
+      ...data,
+      tag: tag,
+    }));
+  }, []);
+
   const onchange = (e: any) => {
     const { id, value } = e.target;
+    console.log(id, ' : ', value);
+
     if (id === 'people') {
       setData({
         ...data,
@@ -76,7 +85,7 @@ const UploadContainer = () => {
     <>
       <UploadHeader />
       <UploadInput image={image} onsubmit={onsubmit} data={data} />
-      <UploadDetails change={onchange} data={data} />
+      <UploadDetails change={onchange} data={data} hasTag={hasTag} />
     </>
   );
 };
