@@ -164,16 +164,19 @@ router.get('/posts/:page', verifyToken, async (req, res) => {
       const [image] = await connection.query(sqls);
 
       sqls = '';
-      sql = `select name from tag where id = (select tag_id from post_tags where post_id = ?);`;
+      sql = `select name from tag where id in (select tag_id from post_tags where post_id = ?);`;
       post_id.map((id) => {
         params = [id];
         sqls += mysql.format(sql, params);
       });
       const [hastag] = await connection.query(sqls);
-      console.log(hastag);
       for (let i = 0; i < image.length; i++) {
         let imageitem = image[i].map(({ image_path }) => image_path);
-        check[i] = { ...check[i], image_path: imageitem, hastag: hastag[0] };
+        check[i] = {
+          ...check[i],
+          image_path: imageitem,
+          hastag: hastag[i].map(({ name }) => name),
+        };
       }
       res.send(check);
     } catch (error) {
@@ -382,11 +385,23 @@ router.get('/user/post/:user_id', verifyToken, async (req, res) => {
       const post_id = check.map(({ id }) => id);
       let sqls = '';
       let params = [];
+
+      sqls = '';
+      sql =
+        'select name from tag where id in (select tag_id from post_tags where post_id = ?);';
+      post_id.map((id) => {
+        params = [id];
+        sqls += mysql.format(sql, params);
+      });
+      const [hastag] = await connection.query(sqls);
+
+      sqls = '';
       sql = `select image_path from post_image where post_id = ?;`;
       post_id.map((id) => {
         params = [id];
         sqls += mysql.format(sql, params);
       });
+
       if (sqls.length !== 0) {
         const [image] = await connection.query(sqls);
         try {
@@ -400,39 +415,16 @@ router.get('/user/post/:user_id', verifyToken, async (req, res) => {
         }
       }
 
-      /*
-        sqls = '';
-      sql = `select name from tag where id = (select tag_id from post_tags where post_id = ?);`;
-      post_id.map((id) => {
-        params = [id];
-        sqls += mysql.format(sql, params);
-      });
-      const [hastag] = await connection.query(sqls);
-      console.log(hastag);
-     
-*/
-      sqls = '';
-      sql =
-        'select name from tag where id = (select tag_id from post_tags where post_id = ?);';
-      post_id.map((id) => {
-        params = [id];
-        sqls += mysql.format(sql, params);
-      });
-      const [hastag] = await connection.query(sqls);
-
-      const tag = hastag.map((hastag) =>
-        hastag[0] !== undefined ? hastag[0].name : '',
-      );
-
       if (sqls.length !== 0) {
         const [image] = await connection.query(sqls);
+        console.log(image);
         try {
           for (let i = 0; i < image.length; i++) {
             let imageitem = image[i].map(({ image_path }) => image_path);
             check[i] = {
               ...check[i],
               image_path: imageitem,
-              hastag: tag[i],
+              hastag: hastag[i].map(({ name }) => name),
             };
           }
         } catch (err) {
@@ -440,7 +432,7 @@ router.get('/user/post/:user_id', verifyToken, async (req, res) => {
           check[0] = {
             ...check[0],
             image_path: imageitem,
-            hastag: tag[0],
+            hastag: hastag[0].map(({ name }) => name),
           };
         }
       }
@@ -547,13 +539,27 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
         });
       } else {
         post_id.forEach((id) => {
-          console.log(id);
           sqls += mysql.format(sql, id);
         });
       }
       // 게시물의 이미지 가져옴
       const [image] = await connection.query(sqls);
       isEmpty = checkEmpty(image);
+
+      sqls = '';
+      sql = `select name from tag where id in (select tag_id from post_tags where post_id = ?);`;
+      // sqls 만들기
+      if (checkMultArray(post_id)) {
+        post_id.map((id) => {
+          params = [id];
+          sqls += mysql.format(sql, params);
+        });
+      } else {
+        post_id.forEach((id) => {
+          sqls += mysql.format(sql, id);
+        });
+      }
+      const [hastag] = await connection.query(sqls);
 
       if (isEmpty) {
         if (checkMultArray(post_list)) {
@@ -574,38 +580,41 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
             return {
               ...list,
               image_path: image[index].map(({ image_path }) => image_path),
+              hastag: hastag[index].map(({ name }) => name),
             };
           } else {
             return {
               ...list,
               image_path: image.map(({ image_path }) => image_path),
+              hastag: hastag.map(({ name }) => name),
             };
           }
         });
       } else {
         result = post_list;
+
         result.forEach((list, index) => {
-          console.log(image);
           if (checkMultArray(image)) {
             result[index] = {
               ...list,
               image_path: image[index].map(({ image_path }) => image_path),
+              hastag: hastag[index].map(({ name }) => name),
             };
           } else {
             result[index] = {
               ...list,
               image_path: image.map(({ image_path }) => image_path),
+              hastag: hastag.map(({ name }) => name),
             };
           }
         });
       }
-      console.log(result);
       res.json(result);
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
       console.log(error);
-      res.status(500).json('SQL ERROR');
+      res.status(500).json('SQL  ERROR');
     } finally {
       await connection.release();
     }
