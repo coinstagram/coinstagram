@@ -27,6 +27,7 @@ function NavModal({ top, left, favorite, profile, userId }: NavModalProps) {
   const dispatch = useDispatch();
   const [logoutModal, setLogoutModal] = useState(false);
   console.log(logoutModal);
+
   const onLogout = () => {
     console.log(logoutModal);
     setLogoutModal(true);
