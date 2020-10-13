@@ -155,9 +155,10 @@ function* addPostSagafun() {
     yield put(add_post_request());
     const { token }: AuthState = yield select((state: RootState) => state.auth);
     const { upload } = yield select((state: uploadState) => state);
-
-    const { id, user_id, created_at, image_path } = yield call(uploadService.uploadPost, upload.data, token);
-
+    
+    const { id, user_id,  created_at, image_path } = yield call(uploadService.uploadPost, upload.data, token);
+    console.log('upload : ',upload);
+    
     yield put(
       add_post({
         id,
@@ -183,9 +184,7 @@ function* changePostSagafun() {
     yield put(change_post_request());
     const { token }: AuthState = yield select((state: RootState) => state.auth);
     const { upload } = yield select((state: uploadState) => state);
-
-    const check = yield call(PostService.changePost, token, upload.data.id, upload.data.post_context, upload.data.image_path);
-
+    yield call(PostService.changePost, token, upload.data.id, upload.data.post_context, upload.data.image_path);
     yield put(change_post_success());
     yield put(push('/'));
   } catch (error) {
