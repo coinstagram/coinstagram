@@ -153,6 +153,12 @@ router.get('/posts/:page', verifyToken, async (req, res) => {
       sql = 'select * from posts order by id desc limit  ?, ?;';
       const [check] = await connection.query(sql, [pageNum, line]);
       const post_id = check.map(({ id }) => +id);
+      let isEmpty = checkEmpty(post_id);
+
+      if (isEmpty) {
+        return res.json([]);
+      }
+
       let sqls = '';
       let params = [];
       sql = `select image_path from post_image where post_id = ?;`;
