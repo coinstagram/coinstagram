@@ -17,6 +17,7 @@ import FeedBody from './FeedBody';
 import FeedComment from './FeedComment';
 import FeedIcons from './FeedIcons';
 import Spinner from '../common/Spinner';
+import useObserver from '../../hooks/useObserver';
 
 interface FeedProps {
   loading: boolean;
@@ -33,28 +34,7 @@ interface FeedProps {
 function Feed({ loading, error, myId, feedPosts, addCommentPost, addPostLikes, deletePostLike, addBookmark, deleteBookmark }: FeedProps) {
   const { randomPosts } = useSelector((state: RootState) => state.posts.randomPosts);
   const width = useWindowWidth();
-  const lastItemRef = useRef<HTMLDivElement>(null);
-  const observerRef = useRef<IntersectionObserver>();
-
-  useEffect(() => {
-    if (!observerRef.current) {
-      observerRef.current = new IntersectionObserver(
-        (entries: IntersectionObserverEntry[]) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              // getFeedPosts(userId);
-              console.log('감지완료');
-            }
-          });
-        },
-        {
-          threshold: 0.9,
-        },
-      );
-    }
-
-    lastItemRef.current && observerRef.current.observe(lastItemRef.current);
-  }, []);
+  const observerObj = useObserver();
 
   const filteredNinePosts = randomPosts.filter((_, i) => i < 9);
 
@@ -78,7 +58,18 @@ function Feed({ loading, error, myId, feedPosts, addCommentPost, addPostLikes, d
           <Spinner />
         </StyledSpinnerDiv>
       )}
-      {error !== null && <StyledErrorDiv />}
+      {error !== null && (
+        <StyledErrorDiv>
+          <p>
+            게시물 로딩에 실패하였습니다.{' '}
+            <span aria-label="아쉬운 표정" role="img">
+              😥
+            </span>{' '}
+            <br />
+            페이지 새로고침 후 다시 실행해 주시기바랍니다.
+          </p>
+        </StyledErrorDiv>
+      )}
       {feedPosts.length !== 0 &&
         feedPosts.map(post => (
           <StyledArticle key={post.id} width={width} onFocus={toggleClass} onBlur={toggleClass}>
@@ -97,12 +88,13 @@ function Feed({ loading, error, myId, feedPosts, addCommentPost, addPostLikes, d
               userId={post.user_id}
               postId={post.id}
               context={post.post_context}
+              hashTags={post.hastag}
               addCommentPost={addCommentPost}
               postCreatedTime={post.created_at}
             />
           </StyledArticle>
         ))}
-      <div ref={lastItemRef}></div>
+      <div ref={observerObj.lastItemRef}></div>
     </StyledDiv>
   );
 

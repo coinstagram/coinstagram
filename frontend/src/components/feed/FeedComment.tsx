@@ -12,15 +12,16 @@ interface FeedCommentProps {
   userId: null | string;
   context: null | string;
   postId: number;
+  hashTags: string[];
   addCommentPost: (post_id: number, comment_text: string, myProfile: string) => void;
   postCreatedTime: string;
 }
 
-function FeedComment({ userId, context, postId, addCommentPost, postCreatedTime }: FeedCommentProps) {
+function FeedComment({ userId, context, postId, hashTags, addCommentPost, postCreatedTime }: FeedCommentProps) {
   return (
     <>
       <StyledContainer>
-        <FeedCommentOwner userId={userId} context={context} />
+        <FeedCommentOwner userId={userId} context={context} hashTags={hashTags} />
         <FeedCommentList userId={userId} postId={postId} />
         <StyledPassedTimeDiv className={`${postId}-createdTime`}>{computePassedTime(postCreatedTime)}</StyledPassedTimeDiv>
       </StyledContainer>

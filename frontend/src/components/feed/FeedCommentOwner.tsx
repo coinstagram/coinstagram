@@ -3,18 +3,19 @@ import { Link } from 'react-router-dom';
 import { computePassedTime } from '../feed/FeedComment';
 
 // styles
-import { StyledDiv } from './FeedCommentOwnerStyle';
+import { StyledDiv, StyledTagDiv, StyledEmptyDiv } from './FeedCommentOwnerStyle';
 import Thumbnail from '../common/Thumbnail';
 
 interface FeedComponentOwnerProps {
   userId: string;
   userProfile?: null | string;
   context: string;
+  hashTags?: string[];
   createdTime?: string;
   thumbnail?: boolean;
 }
 
-function FeedCommentOwner({ userId, userProfile, context, thumbnail, createdTime }: FeedComponentOwnerProps) {
+function FeedCommentOwner({ userId, userProfile, context, hashTags, thumbnail, createdTime }: FeedComponentOwnerProps) {
   return (
     <StyledDiv thumbnail={thumbnail}>
       <span className="owner-comment">
@@ -27,7 +28,16 @@ function FeedCommentOwner({ userId, userProfile, context, thumbnail, createdTime
         </dd>
       </span>
       <span className="owner-context">{context}</span>
-      <time>{computePassedTime(createdTime)}</time>
+      <StyledTagDiv>
+        {hashTags.length !== 0 &&
+          hashTags.map(i => (
+            <Link to={`explore/tags/${i.slice(1)}`} key={i}>
+              {i}
+            </Link>
+          ))}
+        {hashTags.length === 0 && <StyledEmptyDiv />}
+      </StyledTagDiv>
+      {createdTime && <time>{computePassedTime(createdTime)}</time>}
     </StyledDiv>
   );
 }
@@ -35,6 +45,7 @@ function FeedCommentOwner({ userId, userProfile, context, thumbnail, createdTime
 FeedCommentOwner.defaultProps = {
   userProfile: null,
   thumbnail: false,
+  hashTags: [],
 };
 
 export default FeedCommentOwner;

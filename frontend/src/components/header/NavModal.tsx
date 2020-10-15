@@ -53,7 +53,7 @@ function NavModal({ top, left, favorite, profile, userId }: NavModalProps) {
                 </Link>
               </li>
               <li>
-                <Link to="/edit">
+                <Link to="/edit/profile">
                   <IoIosSettings />
                   <span>설정</span>
                 </Link>

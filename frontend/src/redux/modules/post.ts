@@ -23,25 +23,11 @@ const START_DELETE_POST = '/coinstagram/post/START_DELETE_POST' as const;
 const SUCCESS_DELETE_POST = '/coinstagram/post/SUCCESS_DELETE_POST' as const;
 const FAIL_DELETE_POST = '/coinstagram/post/FAIL_DELETE_POST' as const;
 
+const RESET_RANDOM_POST = '/coinstagram/post/RESET_RANDOM_POST' as const;
+
 const UPLOAD_POST = '/coinstagram/post/UPLOAD_POST' as const;
 
 // action creator
-
-export const uploadPost = (post: PostData) => ({
-  type: UPLOAD_POST,
-  payload: {
-    post: {
-      id: +post.id,
-      user_id: post.user_id,
-      post_context: post.post_context,
-      post_anotheruser: post.post_anotheruser,
-      post_location: post.post_location,
-      created_at: post.created_at,
-      image_path: post.image_path,
-    },
-  },
-});
-
 const startGetPostsFeed = () => ({
   type: START_GET_POSTS_FEED,
 });
@@ -126,6 +112,26 @@ const failDeletePost = (error: Error) => ({
   payload: error,
 });
 
+export const resetRandomPost = () => ({
+  type: RESET_RANDOM_POST,
+});
+
+export const uploadPost = (post: PostData) => ({
+  type: UPLOAD_POST,
+  payload: {
+    post: {
+      id: +post.id,
+      user_id: post.user_id,
+      post_context: post.post_context,
+      post_anotheruser: post.post_anotheruser,
+      post_location: post.post_location,
+      created_at: post.created_at,
+      image_path: post.image_path,
+      hastag: post.tag,
+    },
+  },
+});
+
 type PostActions =
   | ReturnType<typeof startGetPostsFeed>
   | ReturnType<typeof successGetPostsFeed>
@@ -142,6 +148,7 @@ type PostActions =
   | ReturnType<typeof startDeletePost>
   | ReturnType<typeof successDeletePost>
   | ReturnType<typeof failDeletePost>
+  | ReturnType<typeof resetRandomPost>
   | ReturnType<typeof uploadPost>;
 
 // saga action type
@@ -152,8 +159,11 @@ const GET_SELECTED_POST_SAGA = 'GET_SELECTED_POST_SAGA' as const;
 const DELETE_POST_SAGA = 'DELETE_POST_SAGA' as const;
 
 // saga action creator
-export const getRandomPostsSaga = () => ({
+export const getRandomPostsSaga = (count: number) => ({
   type: GET_RANDOM_POSTS_SAGA,
+  payload: {
+    count,
+  }
 });
 
 export const getFeedPostsSaga = (user_id: string) => ({
@@ -185,15 +195,15 @@ export const deletePostSaga = (post_id: number) => ({
 });
 
 type PostSagaActions = ReturnType<typeof getUserPostsSaga> | ReturnType<typeof getFeedPostsSaga>;
-
 type onePostSagaAction = ReturnType<typeof getSelectedPostSaga> | ReturnType<typeof deletePostSaga>;
+type randomPostSagaAction = ReturnType<typeof getRandomPostsSaga>;
 
 // saga function
-function* getRandomPosts() {
+function* getRandomPosts(action: randomPostSagaAction) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
     yield put(startGetPostsRandom());
-    const randomPosts: EachPostState[] = yield call(PostService.getRandomPosts, token);
+    const randomPosts: EachPostState[] = yield call(PostService.getRandomPosts, token, action.payload.count);
     yield put(successGetPostsRandom(randomPosts));
   } catch (error) {
     yield put(failGetPostsRandom(error));
@@ -324,7 +334,7 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
         randomPosts: {
           loading: false,
           error: null,
-          randomPosts: action.payload.randomPosts,
+          randomPosts: [...state.randomPosts.randomPosts, ...action.payload.randomPosts],
         },
       };
     case SUCCESS_GET_POSTS_FEED:
@@ -393,6 +403,15 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
         selectedPost: state.selectedPost,
         randomPosts: state.randomPosts,
       };
+      case RESET_RANDOM_POST:
+        return {
+          ...state,
+          randomPosts: {
+            loading: false,
+            error: null,
+            randomPosts: [],
+          }
+        };
     case UPLOAD_POST:
       return {
         ...state,

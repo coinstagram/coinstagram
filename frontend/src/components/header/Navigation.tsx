@@ -26,6 +26,7 @@ interface NavigationProps {
 function Navigation({ imageUrl, userId }: NavigationProps) {
   const width = useWindowWidth();
   const page = useLocation().pathname.split('/')[1];
+  const route = useLocation().pathname.split('/')[2];
   const [state, setState] = useState<State>({
     favorite: false,
     profile: false,
@@ -46,7 +47,7 @@ function Navigation({ imageUrl, userId }: NavigationProps) {
           <Link to="/upload">{page === 'upload' && !state.favorite && !state.profile ? <BsPlusCircleFill /> : <BsPlusCircle />}</Link>
         </li>
         <li aria-label="타인 게시물 보기">
-          <Link to="/explore">{page === 'explore' && !state.favorite && !state.profile ? <FaCompass /> : <BsCompass />}</Link>
+          <Link to="/explore">{page === 'explore' && route === undefined && !state.favorite && !state.profile ? <FaCompass /> : <BsCompass />}</Link>
         </li>
         <li aria-label="새 소식" onClick={toggle} id="favorite">
           <button>{state.favorite ? <BsHeartFill tabIndex={-1} /> : <BsHeart tabIndex={-1} />}</button>
