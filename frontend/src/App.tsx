@@ -21,10 +21,10 @@ import Upload from './pages/Upload';
 import Explore from './pages/Explore';
 import FatalError from './pages/FatalError';
 import NotFound from './pages/NotFound';
+import ChangePost from './pages/ChangePost';
 
 // components
 import FollowCancelModal from './components/common/FollowCancelModal';
-import ChangePost from './pages/ChangePost';
 
 interface contextValue {
   follow: (user_id: string, user_name: string, user_profile: null | string) => void;
@@ -135,8 +135,8 @@ function App() {
           <ConnectedRouter history={history}>
             <Switch>
               <Route path="/explore/tags/:tagid" component={Explore} />
-              <Route path="/post/:postid" component={Post} />
               <Route path="/explore" component={Explore} />
+              <Route path="/post/:postid" component={Post} />
               <Route path="/upload" component={Upload} />
               <Route path="/change/:post_id" component={ChangePost} />
               <Route path="/join" component={Join} />

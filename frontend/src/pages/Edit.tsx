@@ -6,7 +6,6 @@ import useAuth from '../hooks/useAuth';
 import StyledMain from '../components/common/StyledMain';
 
 // components
-// import Working from '../components/Edit/Working';
 import EditForm from '../components/Edit/EditForm';
 
 function Edit() {
@@ -15,7 +14,6 @@ function Edit() {
   return (
     <>
       <Header />
-      {/* <StyledMain><Working /></StyledMain> */}
       <StyledMain>
         <EditForm />
       </StyledMain>

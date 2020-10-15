@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { getAnotherUserSaga } from '../redux/modules/anotherUser';
 import { getSelectedPostSaga, deletePostSaga } from '../redux/modules/post';
 import { addPostComment, getSelectedComments, resetMyComment } from '../redux/modules/comment';
-import { cancelFollowUserSaga, followUserSaga } from '../redux/modules/userInfo';
+import { followUserSaga } from '../redux/modules/userInfo';
 import { addPostLikeSaga, deletePostLikeSaga, getSelectedPostLikesSaga } from '../redux/modules/like';
 import { addBookmarkSaga, deleteBookmarkSaga } from '../redux/modules/bookmark';
 import { getOtherPostsSaga, getPostCountsSaga } from '../redux/modules/otherPost';
@@ -70,10 +70,6 @@ function UserPostsContainer() {
     dispatch(followUserSaga(selectedUserId, selectedUserName, selectedUserProfile));
   }, [dispatch, selectedUserId, selectedUserName, selectedUserProfile]);
 
-  const cancelFollow = useCallback(() => {
-    dispatch(cancelFollowUserSaga(selectedUserId));
-  }, [dispatch, selectedUserId]);
-
   const deletePost = useCallback(
     (post_id: number) => {
       dispatch(deletePostSaga(post_id));
@@ -117,7 +113,6 @@ function UserPostsContainer() {
         addPostLikes={addPostLikes}
         deletePostLike={deletePostLike}
         follow={follow}
-        cancelFollow={cancelFollow}
         deletePost={deletePost}
         addBookmark={addBookmark}
         deleteBookmark={deleteBookmark}

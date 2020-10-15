@@ -145,6 +145,7 @@ router.get('/posts/:page', verifyToken, async (req, res) => {
   let sql = '';
   try {
     const { page } = req.params;
+    console.log('page', page);
     const line = 15;
     const pageNum = (page - 1) * line;
     const connection = await pool.getConnection(async (conn) => conn);
@@ -152,6 +153,12 @@ router.get('/posts/:page', verifyToken, async (req, res) => {
       sql = 'select * from posts order by id desc limit  ?, ?;';
       const [check] = await connection.query(sql, [pageNum, line]);
       const post_id = check.map(({ id }) => +id);
+      let isEmpty = checkEmpty(post_id);
+
+      if (isEmpty) {
+        return res.json([]);
+      }
+
       let sqls = '';
       let params = [];
       sql = `select image_path from post_image where post_id = ?;`;
@@ -382,6 +389,7 @@ router.get('/user/post/:user_id', verifyToken, async (req, res) => {
     try {
       sql = `select * from posts where user_id = ? order by id desc`;
       const [check] = await connection.query(sql, user_id);
+      if (check.length === 0) return res.send([]);
       const post_id = check.map(({ id }) => id);
       let sqls = '';
       let params = [];
@@ -393,7 +401,9 @@ router.get('/user/post/:user_id', verifyToken, async (req, res) => {
         params = [id];
         sqls += mysql.format(sql, params);
       });
-      const [hastag] = await connection.query(sqls);
+      let [hastag] = await connection.query(sqls);
+      console.log('hastag', hastag);
+      // if (hastag === '0') hastag = [];
 
       sqls = '';
       sql = `select image_path from post_image where post_id = ?;`;
@@ -1148,6 +1158,191 @@ router.put('/post/chagne/:post_id', verifyToken, async (req, res) => {
       await connection.release();
       console.log(error);
       res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
+});
+
+// ---------------------------------------
+router.get('/test/:page', verifyToken, async (req, res) => {
+  console.log('/user/relationship/post');
+  const token = req.headers.authorization.split('Bearer ')[1];
+  const userData = jwt.verify(
+    token,
+    // eslint-disable-next-line no-undef
+    process.env.JWT_SECRET,
+  );
+  const user = userData;
+  let sql = '';
+  let isEmpty = false;
+  let sqls = '';
+  let params = [];
+  // 결과값
+  let result = [];
+
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      const { page } = req.params;
+      const line = 15;
+      const pageNum = (page - 1) * line;
+      // 로그인 한 아이디 친구
+      sql = `select user_id from users where user_id in(select followee_id from users_relationship where follower_id = ?)`;
+      const [followee_id] = await connection.query(sql, [user.user_id]);
+      // 친구가 없으면 리턴
+      if (followee_id.length === 0) return res.json(followee_id);
+
+      // 친구의 게시글 확인
+      sql = `select * from posts where user_id = ? order by id desc limit ?, ? ;`;
+      followee_id.push({ user_id: user.user_id });
+
+      followee_id.map(({ user_id }) => {
+        params = [user_id, pageNum, line];
+        sqls += mysql.format(sql, params);
+      });
+
+      const [post_list] = await connection.query(sqls);
+
+      // 친구의 게시글이 없으면 리턴
+      isEmpty = checkEmpty(post_list);
+      if (isEmpty) {
+        return res.json([]);
+      }
+
+      // 친구의 게시글의 id 가져오기
+      // 만약 게시글이 없는 친구는 빈 배열이 들어감
+      let post_id = [];
+      if (checkMultArray(post_list)) {
+        post_list.forEach((list, index1) => {
+          post_id[index1] = list.map(({ id }) => id);
+        });
+      } else {
+        post_list.forEach((list) => {
+          post_id = [...post_id, list.id];
+        });
+      }
+
+      sql = `select image_path from post_image where post_id = ?;`;
+      sqls = '';
+      // sqls 만들기
+      if (checkMultArray(post_id)) {
+        post_id.forEach((list) => {
+          list.forEach((id) => (sqls += mysql.format(sql, id)));
+        });
+      } else {
+        post_id.forEach((id) => {
+          sqls += mysql.format(sql, id);
+        });
+      }
+      // 게시물의 이미지 가져옴
+      const [image] = await connection.query(sqls);
+      isEmpty = checkEmpty(image);
+
+      sqls = '';
+      sql = `select name from tag where id in (select tag_id from post_tags where post_id = (?));`;
+      const test = post_id.reduce((acc, it) => [...acc, ...it], []);
+      // sqls 만들기
+      if (checkMultArray(post_id)) {
+        test.map((id) => {
+          params = [id];
+          sqls += mysql.format(sql, params);
+        });
+      } else {
+        post_id.forEach((id) => {
+          sqls += mysql.format(sql, id);
+        });
+      }
+
+      const [hastag] = await connection.query(sqls);
+
+      if (isEmpty) {
+        if (checkMultArray(post_list)) {
+          post_list.forEach((list, index1) => {
+            result[index1] = list.map(({ id }) => id);
+          });
+        } else {
+          post_list.forEach((list) => {
+            result = [...result, list.id.id];
+          });
+        }
+      }
+      if (checkMultArray(post_list)) {
+        result = post_list.reduce((acc, it) => [...acc, ...it], []);
+
+        result = result.map((list, index) => {
+          if (checkMultArray(image)) {
+            if (checkMultArray(hastag)) {
+              return {
+                ...list,
+                image_path: image[index].map(({ image_path }) => image_path),
+                hastag: hastag[index].map(({ name }) => name),
+              };
+            } else {
+              return {
+                ...list,
+                image_path: image[index].map(({ image_path }) => image_path),
+                hastag: hastag.map(({ name }) => name),
+              };
+            }
+          } else {
+            if (checkMultArray(hastag)) {
+              return {
+                ...list,
+                image_path: image.map(({ image_path }) => image_path),
+                hastag: hastag[index].map(({ name }) => name),
+              };
+            } else {
+              return {
+                ...list,
+                image_path: image.map(({ image_path }) => image_path),
+                hastag: hastag.map(({ name }) => name),
+              };
+            }
+          }
+        });
+      } else {
+        result = post_list;
+        result.forEach((list, index) => {
+          if (checkMultArray(image)) {
+            if (checkMultArray(hastag)) {
+              result[index] = {
+                ...list,
+                image_path: image[index].map(({ image_path }) => image_path),
+                hastag: hastag[index + 1].map(({ name }) => name),
+              };
+            } else {
+              result[index] = {
+                ...list,
+                image_path: image[index].map(({ image_path }) => image_path),
+                hastag: hastag.map(({ name }) => name),
+              };
+            }
+          } else {
+            if (checkMultArray(hastag)) {
+              result[index] = {
+                ...list,
+                image_path: image.map(({ image_path }) => image_path),
+                hastag: hastag[index].map(({ name }) => name),
+              };
+            } else {
+              result[index] = {
+                ...list,
+                image_path: image.map(({ image_path }) => image_path),
+                hastag: hastag.map(({ name }) => name),
+              };
+            }
+          }
+        });
+      }
+      res.json(result);
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      console.log(error);
+      res.status(500).json('SQL  ERROR');
     } finally {
       await connection.release();
     }

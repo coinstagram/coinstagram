@@ -5,10 +5,10 @@ import { addPostComment, getPostComments, resetMyComment } from '../redux/module
 import { addPostLikeSaga, deletePostLikeSaga, getPostLikesSaga, resetPostLikes } from '../redux/modules/like';
 import { addBookmarkSaga, deleteBookmarkSaga } from '../redux/modules/bookmark';
 import { resetData } from '../redux/modules/upload';
+import { uploadPost } from '../redux/modules/post';
 
 // components
 import Feed from '../components/feed/Feed';
-import { uploadPost } from '../redux/modules/post';
 
 function FeedContainer() {
   const dispatch = useDispatch();

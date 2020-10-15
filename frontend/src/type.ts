@@ -99,11 +99,11 @@ export interface EachPostState {
   id: number;
   user_id: null | string;
   post_context: null | string;
-  image_path: string[];
-  // post_tags: stringArray;
   post_anotheruser: null | string;
   post_location: null | string;
   created_at: null | string;
+  image_path: string[];
+  hastag: string[];
 }
 
 export interface BookmarkState {
