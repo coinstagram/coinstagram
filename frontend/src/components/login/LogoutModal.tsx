@@ -5,10 +5,10 @@ import { StyledBg, StyledModal } from './LogoutModalStyle';
 
 export default function LogoutModal() {
   const width = useWindowWidth();
-  //   const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(true);
   const yesLogout = () => {};
   const noLogout = () => {
-    //   setLoggedIn(true);
+    setLoggedIn(true);
   };
   //   const
   return (

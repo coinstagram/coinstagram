@@ -26,7 +26,6 @@ export interface NavModalProps {
 function NavModal({ top, left, favorite, profile, userId }: NavModalProps) {
   const dispatch = useDispatch();
   const [logoutModal, setLogoutModal] = useState(false);
-  console.log(logoutModal);
 
   const onLogout = () => {
     console.log(logoutModal);
@@ -60,8 +59,8 @@ function NavModal({ top, left, favorite, profile, userId }: NavModalProps) {
                 </Link>
               </li>
               <li onClick={onLogout}>
-                로그아웃
-                {/* <Link to="/">로그아웃</Link> */}
+                {/* 로그아웃 */}
+                <Link to="/">로그아웃</Link>
               </li>
             </>
           )}
