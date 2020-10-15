@@ -2,24 +2,28 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import useWindowWidth from '../../hooks/useWindowWidth';
 import RootState from '../../type';
-import Spinner from '../common/Spinner';
-import OtherPostItem from '../post/OtherPostItem';
+import useObserver from '../../hooks/useObserver';
 
 // styles
 import { StyledSection, StyledDiv, StyledErrorDiv } from './RandomPostsStyle';
 import { StyledNocontentDiv } from '../profile/ProfilePostsStyle';
 
+// components
+import Spinner from '../common/Spinner';
+import OtherPostItem from '../post/OtherPostItem';
+
 interface RandomPostsProps {
-  getRandomPosts: () => void;
+  getRandomPosts: (count: number) => void;
   getPostCounts: (post_id: number) => void;
 }
 
 function RandomPosts({ getRandomPosts, getPostCounts }: RandomPostsProps) {
   const { loading, error, randomPosts } = useSelector((state: RootState) => state.posts.randomPosts);
   const width = useWindowWidth();
+  const observerObj = useObserver();
 
   useEffect(() => {
-    getRandomPosts();
+    getRandomPosts(1);
   }, [getRandomPosts]);
 
   return (
@@ -49,15 +53,16 @@ function RandomPosts({ getRandomPosts, getPostCounts }: RandomPostsProps) {
           </span>
         </StyledNocontentDiv>
       )}
-      {!loading && error === null && (
+      {
         <ul>
           {randomPosts.map(post => (
             <OtherPostItem key={post.id} postId={post.id} postOwnerId={post.user_id} getPostCounts={getPostCounts} imageThumbnail={post.image_path} />
           ))}
         </ul>
-      )}
+      }
+      <div ref={observerObj.lastItemRef}></div>
     </StyledSection>
   );
 }
 
-export default RandomPosts;
+export default React.memo(RandomPosts);

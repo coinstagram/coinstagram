@@ -4,7 +4,7 @@ import { CountState, EachPostState } from '../../type';
 const baseUrl = '/post';
 
 interface IPostService {
-  getRandomPosts: (token: string | null) => Promise<EachPostState[]>;
+  getRandomPosts: (token: string | null, count: number) => Promise<EachPostState[]>;
   getFollowersPosts: (token: string | null) => Promise<EachPostState[]>;
   getUserPosts: (token: string | null, user_id: string) => Promise<EachPostState[]>;
   getSelectedPost: (token: string | null, post_id: number) => Promise<EachPostState>;
@@ -15,13 +15,15 @@ interface IPostService {
 }
 
 const PostService: IPostService = class {
-  static async getRandomPosts(token: string | null) {
-    const res = await axios.get<EachPostState[]>(`/api${baseUrl}s`, {
+
+  static async getRandomPosts(token: string | null, count: number) {
+    const res = await axios.get<EachPostState[]>(`/api${baseUrl}s/${count}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
+    console.log('getRandomPosts', res.data);
     return res.data;
   }
 
@@ -32,6 +34,7 @@ const PostService: IPostService = class {
       },
     });
 
+    console.log('getFollowersPosts', res.data);
     return res.data;
   }
 
@@ -42,6 +45,7 @@ const PostService: IPostService = class {
       },
     });
 
+    console.log('getUserPosts', res.data);
     return res.data;
   }
 
@@ -52,6 +56,7 @@ const PostService: IPostService = class {
       },
     });
 
+    console.log('getSelectedPost', res.data);
     return res.data;
   }
 

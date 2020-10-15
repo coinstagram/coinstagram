@@ -6,7 +6,7 @@ export const StyledDiv = styled.div`
   ${props =>
     !props.thumbnail &&
     css`
-      height: 22px;
+      /* height: 22px; */
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -36,7 +36,6 @@ export const StyledDiv = styled.div`
 
   .owner-context {
     border-radius: 5px;
-    cursor: pointer;
     padding: 3px;
   }
 
@@ -46,4 +45,23 @@ export const StyledDiv = styled.div`
     color: rgb(142, 142, 142);
     margin-top: 15px;
   }
+`;
+
+export const StyledTagDiv = styled.div`
+  color: rgb(51, 154, 240);
+
+  a:hover {
+    color: rgb(77, 171, 247);
+  }
+  a:active {
+    color: rgb(34, 139, 230);
+  }
+
+  a + a {
+    margin-left: 10px;
+  }
+`;
+
+export const StyledEmptyDiv = styled.div`
+  height: 20px;
 `;

@@ -30,7 +30,7 @@ function useInit() {
 
   useEffect(() => {
     if (token === null) return;
-    dispatch(getRandomPostsSaga());
+    dispatch(getRandomPostsSaga(1));
   }, [dispatch, token]);
 }
 

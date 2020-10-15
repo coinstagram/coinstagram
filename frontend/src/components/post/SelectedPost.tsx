@@ -27,7 +27,6 @@ interface SelectedPostProps {
   addPostLikes: (post_id: number) => void;
   deletePostLike: (post_id: number) => void;
   follow: () => void;
-  cancelFollow: () => void;
   deletePost: (post_id: number) => void;
   addBookmark: (post_id: number) => void;
   deleteBookmark: (post_id: number) => void;
@@ -42,7 +41,6 @@ function SelectedPost({
   addPostLikes,
   deletePostLike,
   follow,
-  cancelFollow,
   deletePost,
   addBookmark,
   deleteBookmark,
@@ -93,6 +91,7 @@ function SelectedPost({
             <FeedCommentOwner
               userId={selectedUserId}
               userProfile={selectedUserProfile}
+              // hashTags={selectedPostInfo && selectedPostInfo.hastag}
               context={selectedPostInfo && selectedPostInfo.post_context}
               createdTime={selectedPostInfo && selectedPostInfo.created_at}
               thumbnail={true}

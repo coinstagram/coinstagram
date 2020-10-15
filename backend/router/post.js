@@ -145,6 +145,7 @@ router.get('/posts/:page', verifyToken, async (req, res) => {
   let sql = '';
   try {
     const { page } = req.params;
+    console.log('page', page);
     const line = 15;
     const pageNum = (page - 1) * line;
     const connection = await pool.getConnection(async (conn) => conn);
@@ -152,6 +153,12 @@ router.get('/posts/:page', verifyToken, async (req, res) => {
       sql = 'select * from posts order by id desc limit  ?, ?;';
       const [check] = await connection.query(sql, [pageNum, line]);
       const post_id = check.map(({ id }) => +id);
+      let isEmpty = checkEmpty(post_id);
+
+      if (isEmpty) {
+        return res.json([]);
+      }
+
       let sqls = '';
       let params = [];
       sql = `select image_path from post_image where post_id = ?;`;
@@ -382,6 +389,7 @@ router.get('/user/post/:user_id', verifyToken, async (req, res) => {
     try {
       sql = `select * from posts where user_id = ? order by id desc`;
       const [check] = await connection.query(sql, user_id);
+      if (check.length === 0) return res.send([]);
       const post_id = check.map(({ id }) => id);
       let sqls = '';
       let params = [];
@@ -393,7 +401,9 @@ router.get('/user/post/:user_id', verifyToken, async (req, res) => {
         params = [id];
         sqls += mysql.format(sql, params);
       });
-      const [hastag] = await connection.query(sqls);
+      let [hastag] = await connection.query(sqls);
+      console.log('hastag', hastag);
+      // if (hastag === '0') hastag = [];
 
       sqls = '';
       sql = `select image_path from post_image where post_id = ?;`;
