@@ -149,9 +149,15 @@ router.get('/posts/:page', verifyToken, async (req, res) => {
     const pageNum = (page - 1) * line;
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      sql = 'select * from posts order by id desc limit  ?, ?;';
+      sql = 'select * from posts order by rand() limit  ?, ?;';
       const [check] = await connection.query(sql, [pageNum, line]);
       const post_id = check.map(({ id }) => +id);
+
+      let isEmpty = checkEmpty(post_id);
+      if (isEmpty) {
+        return res.json([]);
+      }
+
       let sqls = '';
       let params = [];
       sql = `select image_path from post_image where post_id = ?;`;
@@ -1332,7 +1338,6 @@ router.get('/test/:page', verifyToken, async (req, res) => {
       await connection.rollback(); // ROLLBACK
       await connection.release();
       console.log(error);
-      res.status(500).json('SQL  ERROR');
     } finally {
       await connection.release();
     }
