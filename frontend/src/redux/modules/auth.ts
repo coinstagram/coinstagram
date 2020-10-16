@@ -64,11 +64,6 @@ function authReducer(state: AuthState = initialState, action: AuthActions): Auth
       };
     case LOG_OUT:
       return initialState;
-    // return {
-    //   loading: true,
-    //   error: null,
-    //   token: null,
-    // };
     default:
       return state;
   }
