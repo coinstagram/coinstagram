@@ -20,7 +20,8 @@ function useInit() {
 
   useEffect(() => {
     if (token === null) return;
-    dispatch(getFeedPostsSaga(userId));
+    dispatch(getFeedPostsSaga(1));
+    console.log('follow');
   }, [dispatch, userId, followersInfo, token]);
 
   useEffect(() => {
@@ -31,6 +32,7 @@ function useInit() {
   useEffect(() => {
     if (token === null) return;
     dispatch(getRandomPostsSaga(1));
+    console.log('init random');
   }, [dispatch, token]);
 }
 

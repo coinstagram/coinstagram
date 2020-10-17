@@ -1167,7 +1167,7 @@ router.put('/post/chagne/:post_id', verifyToken, async (req, res) => {
 });
 
 // ---------------------------------------
-router.get('/test/:page', verifyToken, async (req, res) => {
+router.get('/relationship/post/:page', verifyToken, async (req, res) => {
   console.log('/user/relationship/post');
   const token = req.headers.authorization.split('Bearer ')[1];
   const userData = jwt.verify(
@@ -1187,7 +1187,7 @@ router.get('/test/:page', verifyToken, async (req, res) => {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
       const { page } = req.params;
-      const line = 15;
+      const line = 6;
       const pageNum = (page - 1) * line;
       // 로그인 한 아이디 친구
       sql = `select user_id from users where user_id in(select followee_id from users_relationship where follower_id = ?)`;

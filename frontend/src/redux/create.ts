@@ -44,6 +44,7 @@ function preloadedState(token: string | null): RootState {
       feedPosts: {
         loading: false,
         error: null,
+        isLast: false,
         feedPosts: [],
       },
       selectedPost: {
@@ -54,6 +55,7 @@ function preloadedState(token: string | null): RootState {
       randomPosts: {
         loading: false,
         error: null,
+        isLast: false,
         randomPosts: [],
       },
     },

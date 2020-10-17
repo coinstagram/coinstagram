@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import RootState, { EachPostState } from '../../type';
 import { Link } from 'react-router-dom';
 import useWindowWidth from '../../hooks/useWindowWidth';
@@ -34,7 +34,7 @@ interface FeedProps {
 function Feed({ loading, error, myId, feedPosts, addCommentPost, addPostLikes, deletePostLike, addBookmark, deleteBookmark }: FeedProps) {
   const { randomPosts } = useSelector((state: RootState) => state.posts.randomPosts);
   const width = useWindowWidth();
-  const observerObj = useObserver();
+  const observerObj = useObserver('feed');
 
   const filteredNinePosts = randomPosts.filter((_, i) => i < 9);
 
