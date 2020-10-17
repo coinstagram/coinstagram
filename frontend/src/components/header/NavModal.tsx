@@ -59,12 +59,14 @@ function NavModal({ top, left, favorite, profile, userId }: NavModalProps) {
                 </Link>
               </li>
               <li onClick={onLogout}>
+                {/* <li onClick={() => setLogoutModal(true)}> */}
                 {/* 로그아웃 */}
                 <Link to="/">로그아웃</Link>
               </li>
             </>
           )}
-          {logoutModal && <LogoutModal />}
+          {/* <LogoutModal logoutModal={logoutModal} /> */}
+          {/* {logoutModal && <LogoutModal />} */}
           {/* {profile && logoutModal && <LogoutModal />} */}
           {favorite && (
             <li>

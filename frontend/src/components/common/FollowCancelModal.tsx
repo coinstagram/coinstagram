@@ -15,13 +15,7 @@ interface FollowCancelModalProps {
   popFollowModal: () => void;
 }
 
-function FollowCancelModal({
-  user_id,
-  user_profile,
-  targetEl,
-  cancelFollow,
-  popFollowModal,
-}: FollowCancelModalProps) {
+function FollowCancelModal({ user_id, user_profile, targetEl, cancelFollow, popFollowModal }: FollowCancelModalProps) {
   return (
     <StyledBg className="modal-container" onClick={toggleFollowModal}>
       <StyledFollowModal>
@@ -45,15 +39,9 @@ function FollowCancelModal({
     </StyledBg>
   );
 
-  function toggleFollowModal({
-    target,
-  }: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+  function toggleFollowModal({ target }: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     const clickEl = target as Element;
-    if (
-      !clickEl.matches('.modal-container') &&
-      !clickEl.matches('.modal-container li button > span')
-    )
-      return;
+    if (!clickEl.matches('.modal-container') && !clickEl.matches('.modal-container li button > span')) return;
     popFollowModal();
   }
 

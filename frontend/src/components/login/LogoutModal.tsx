@@ -3,7 +3,11 @@ import React, { useState } from 'react';
 import useWindowWidth from '../../hooks/useWindowWidth';
 import { StyledBg, StyledModal } from './LogoutModalStyle';
 
+interface logoutModalProps {
+  logoutModal: boolean;
+}
 export default function LogoutModal() {
+  // export default function LogoutModal({ logoutModal }: logoutModalProps) {
   const width = useWindowWidth();
   const [loggedIn, setLoggedIn] = useState(true);
   const yesLogout = () => {};
