@@ -11,7 +11,8 @@ import { signInSagaActionCreator } from '../redux/modules/auth';
 import ErrorMessage from '../components/common_login,join/ErrorMessage';
 import useWindowWidth from '../hooks/useWindowWidth';
 import LoadingSpinner from '../components/common_login,join/LoadingSpinner';
-import FacebookLogin from '../components/common_login,join/FacebookLogin';
+// import FacebookLogin from '../components/common_login,join/FacebookLogin';
+import Facebook from '../components/login/Facebook';
 import OrLine from '../components/common_login,join/OrLine';
 
 const idRegExp = /^[a-zA-Z0-9]{4,12}$/;
@@ -62,7 +63,8 @@ function LoginContainer() {
           <p>다시 입력해주세요</p>
         </ErrorMessage>
         <OrLine />
-        <FacebookLogin />
+        {/* <FacebookLogin /> */}
+        <Facebook />
       </StyledLogin>
     </>
   );

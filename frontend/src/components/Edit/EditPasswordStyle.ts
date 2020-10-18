@@ -4,6 +4,7 @@ export const StyledArticle = styled.article`
   margin: 0 auto;
   padding: 0 0 50px 50px;
   width: 100%;
+  min-height : 650px;
   [class*='Wrapper'] {
     margin: 10px;
     display: flex;
