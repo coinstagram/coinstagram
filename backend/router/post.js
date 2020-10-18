@@ -1201,9 +1201,10 @@ router.get('/relationship/post/:page', verifyToken, async (req, res) => {
       // 친구의 게시글 확인
       sql = `select * from posts where user_id in(`;
       followee_id.map(({ user_id }) => {
-        params = [...params, user_id];
+        params = [...params, `"${user_id}"`];
       });
       sql += `${params}) order by id desc limit ?, ? ;`;
+      console.log(sql);
       const [post_list] = await connection.query(sql, [+pageNum, +line]);
 
       // 친구의 게시글이 없으면 리턴
