@@ -150,7 +150,7 @@ router.get('/posts/:page', verifyToken, async (req, res) => {
     const pageNum = (page - 1) * line;
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      sql = 'select * from posts order by id desc limit  ?, ?;';
+      sql = 'select * from posts order by in desc limit  ?, ?;';
       const [check] = await connection.query(sql, [pageNum, line]);
       const post_id = check.map(({ id }) => +id);
       let isEmpty = checkEmpty(post_id);
@@ -531,12 +531,12 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
       // 만약 게시글이 없는 친구는 빈 배열이 들어감
       let post_id = [];
       if (checkMultArray(post_list)) {
-        post_list.forEach((list, index1) => {
-          post_id[index1] = list.map(({ id }) => id);
+        post_list.forEach((list) => {
+          post_id = [...post_id, ...list.map(({ id }) => id)];
         });
       } else {
-        post_list.forEach((list) => {
-          post_id = [...post_id, list.id];
+        post_list.forEach(({ id }) => {
+          post_id = [...post_id, id];
         });
       }
 
@@ -560,15 +560,18 @@ router.get('/user/relationship/post', verifyToken, async (req, res) => {
       sql = `select name from tag where id in (select tag_id from post_tags where post_id = ?);`;
       // sqls 만들기
       if (checkMultArray(post_id)) {
-        post_id.map((id) => {
-          params = [id];
-          sqls += mysql.format(sql, params);
-        });
+        if (isEmpty(post_id)) {
+          post_id.map((id) => {
+            params = [id];
+            sqls += mysql.format(sql, params);
+          });
+        }
       } else {
         post_id.forEach((id) => {
           sqls += mysql.format(sql, id);
         });
       }
+
       const [hastag] = await connection.query(sqls);
 
       if (isEmpty) {
@@ -1168,7 +1171,6 @@ router.put('/post/chagne/:post_id', verifyToken, async (req, res) => {
 
 // ---------------------------------------
 router.get('/relationship/post/:page', verifyToken, async (req, res) => {
-  console.log('/user/relationship/post');
   const token = req.headers.authorization.split('Bearer ')[1];
   const userData = jwt.verify(
     token,
@@ -1187,24 +1189,23 @@ router.get('/relationship/post/:page', verifyToken, async (req, res) => {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
       const { page } = req.params;
-      const line = 6;
+      const line = 3;
       const pageNum = (page - 1) * line;
       // 로그인 한 아이디 친구
       sql = `select user_id from users where user_id in(select followee_id from users_relationship where follower_id = ?)`;
       const [followee_id] = await connection.query(sql, [user.user_id]);
+      followee_id.push({ user_id: user.user_id });
       // 친구가 없으면 리턴
       if (followee_id.length === 0) return res.json(followee_id);
 
       // 친구의 게시글 확인
-      sql = `select * from posts where user_id = ? order by id desc limit ?, ? ;`;
-      followee_id.push({ user_id: user.user_id });
-
+      sql = `select * from posts where user_id in(`;
       followee_id.map(({ user_id }) => {
-        params = [user_id, pageNum, line];
-        sqls += mysql.format(sql, params);
+        params = [...params, user_id];
       });
-
-      const [post_list] = await connection.query(sqls);
+      sql += `${params}) order by id desc limit ?, ? ;`;
+      console.log(sql);
+      const [post_list] = await connection.query(sql, [+pageNum, +line]);
 
       // 친구의 게시글이 없으면 리턴
       isEmpty = checkEmpty(post_list);
@@ -1216,14 +1217,15 @@ router.get('/relationship/post/:page', verifyToken, async (req, res) => {
       // 만약 게시글이 없는 친구는 빈 배열이 들어감
       let post_id = [];
       if (checkMultArray(post_list)) {
-        post_list.forEach((list, index1) => {
-          post_id[index1] = list.map(({ id }) => id);
+        post_list.forEach((list) => {
+          post_id = [...post_id, ...list.map(({ id }) => id)];
         });
       } else {
         post_list.forEach((list) => {
           post_id = [...post_id, list.id];
         });
       }
+      console.log('LOG', post_id);
 
       sql = `select image_path from post_image where post_id = ?;`;
       sqls = '';
@@ -1243,10 +1245,10 @@ router.get('/relationship/post/:page', verifyToken, async (req, res) => {
 
       sqls = '';
       sql = `select name from tag where id in (select tag_id from post_tags where post_id = (?));`;
-      const test = post_id.reduce((acc, it) => [...acc, ...it], []);
+      // const test = post_id.reduce((acc, it) => [...acc, ...it], []);
       // sqls 만들기
       if (checkMultArray(post_id)) {
-        test.map((id) => {
+        post_id.map((id) => {
           params = [id];
           sqls += mysql.format(sql, params);
         });
@@ -1308,10 +1310,11 @@ router.get('/relationship/post/:page', verifyToken, async (req, res) => {
         result.forEach((list, index) => {
           if (checkMultArray(image)) {
             if (checkMultArray(hastag)) {
+              console.log(hastag);
               result[index] = {
                 ...list,
                 image_path: image[index].map(({ image_path }) => image_path),
-                hastag: hastag[index + 1].map(({ name }) => name),
+                hastag: hastag[index].map(({ name }) => name),
               };
             } else {
               result[index] = {
@@ -1342,7 +1345,6 @@ router.get('/relationship/post/:page', verifyToken, async (req, res) => {
       await connection.rollback(); // ROLLBACK
       await connection.release();
       console.log(error);
-      res.status(500).json('SQL  ERROR');
     } finally {
       await connection.release();
     }
