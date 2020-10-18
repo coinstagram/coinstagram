@@ -392,7 +392,7 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
       return {
         feedPosts: state.feedPosts,
         selectedPost: {
-          loading: true,
+          loading: false,
           error: action.payload,
           selectedPost: null,
         },
@@ -404,6 +404,7 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
         selectedPost: state.selectedPost,
         randomPosts: {
           ...state.randomPosts,
+          loading: false,
           error: action.payload,
         },
       };
