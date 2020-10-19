@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import useWindowWidth from '../../hooks/useWindowWidth';
 import RootState from '../../type';
@@ -20,11 +20,7 @@ interface RandomPostsProps {
 function RandomPosts({ getRandomPosts, getPostCounts }: RandomPostsProps) {
   const { loading, error, randomPosts } = useSelector((state: RootState) => state.posts.randomPosts);
   const width = useWindowWidth();
-  const observerObj = useObserver();
-
-  useEffect(() => {
-    getRandomPosts(1);
-  }, [getRandomPosts]);
+  const observerObj = useObserver('random');
 
   return (
     <StyledSection width={width}>

@@ -15,7 +15,7 @@ function FeedContainer() {
   const { posts, userInfo } = useSelector((state: RootState) => state);
   const { data } = useSelector((state: RootState) => state.upload);
   const { feedPosts } = posts.feedPosts;
-  const { loading, error } = posts.feedPosts;
+  const { loading, error, isLast } = posts.feedPosts;
   const myId = userInfo.user && userInfo.user.user_id;
 
   useEffect(() => {
@@ -70,6 +70,7 @@ function FeedContainer() {
     <Feed
       loading={loading}
       error={error}
+      isLast={isLast}
       myId={myId}
       feedPosts={feedPosts}
       addCommentPost={addCommentPost}

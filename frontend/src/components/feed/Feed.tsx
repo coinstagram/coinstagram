@@ -1,11 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import RootState, { EachPostState } from '../../type';
 import { Link } from 'react-router-dom';
 import useWindowWidth from '../../hooks/useWindowWidth';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { resetFeedPost } from '../../redux/modules/post';
 
 // styles
-import { StyledArticle, StyledPreviewDiv, StyledSpinnerDiv, StyledDiv, StyledPostDiv, StyledCommentDiv } from './FeedStyle';
+import { StyledArticle, StyledPreviewDiv, StyledSpinnerDiv, StyledDiv, StyledPostDiv, StyledCommentDiv, StyledLastComment } from './FeedStyle';
 import { StyledErrorDiv } from '../explore/RandomPostsStyle';
 
 // icons
@@ -22,6 +23,7 @@ import useObserver from '../../hooks/useObserver';
 interface FeedProps {
   loading: boolean;
   error: null | Error;
+  isLast: boolean;
   myId: null | string;
   feedPosts: EachPostState[];
   addCommentPost: (post_id: number, comment_text: string, myProfile: string) => void;
@@ -31,12 +33,19 @@ interface FeedProps {
   deleteBookmark: (post_id: number) => void;
 }
 
-function Feed({ loading, error, myId, feedPosts, addCommentPost, addPostLikes, deletePostLike, addBookmark, deleteBookmark }: FeedProps) {
+function Feed({ loading, error, isLast, myId, feedPosts, addCommentPost, addPostLikes, deletePostLike, addBookmark, deleteBookmark }: FeedProps) {
+  const dispatch = useDispatch();
   const { randomPosts } = useSelector((state: RootState) => state.posts.randomPosts);
   const width = useWindowWidth();
-  const observerObj = useObserver();
+  const observerObj = useObserver('feed');
 
   const filteredNinePosts = randomPosts.filter((_, i) => i < 9);
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetFeedPost());
+    };
+  }, [dispatch]);
 
   return (
     <StyledDiv>
@@ -52,11 +61,6 @@ function Feed({ loading, error, myId, feedPosts, addCommentPost, addPostLikes, d
             </Link>
           </StyledCommentDiv>
         </StyledPreviewDiv>
-      )}
-      {loading && (
-        <StyledSpinnerDiv>
-          <Spinner />
-        </StyledSpinnerDiv>
       )}
       {error !== null && (
         <StyledErrorDiv>
@@ -94,7 +98,14 @@ function Feed({ loading, error, myId, feedPosts, addCommentPost, addPostLikes, d
             />
           </StyledArticle>
         ))}
-      <div ref={observerObj.lastItemRef}></div>
+      <div style={{ position: 'relative', height: 80 }} ref={observerObj.lastItemRef}>
+        {loading && (
+          <StyledSpinnerDiv>
+            <Spinner />
+          </StyledSpinnerDiv>
+        )}
+        {isLast && <StyledLastComment>마지막 게시물입니다.</StyledLastComment>}
+      </div>
     </StyledDiv>
   );
 
