@@ -25,15 +25,15 @@ export interface NavModalProps {
 
 function NavModal({ top, left, favorite, profile, userId }: NavModalProps) {
   const dispatch = useDispatch();
-  const [logoutModal, setLogoutModal] = useState(false);
-  console.log(logoutModal);
+  const [logoutModal, setLogoutModal] = useState(true);
+
   const onLogout = () => {
-    console.log(logoutModal);
+    // console.log(logoutModal);
     setLogoutModal(true);
-    // dispatch(logout());
-    // TokenService.remove();
+    dispatch(logout());
+    TokenService.remove();
   };
-  console.log(logoutModal);
+  // console.log(logoutModal);
   return (
     <StyledDivBg>
       <StyledModal top={top} left={left}>
@@ -59,12 +59,14 @@ function NavModal({ top, left, favorite, profile, userId }: NavModalProps) {
                 </Link>
               </li>
               <li onClick={onLogout}>
-                로그아웃
-                {/* <Link to="/">로그아웃</Link> */}
+                {/* <li onClick={() => setLogoutModal(true)}> */}
+                {/* 로그아웃 */}
+                <Link to="/">로그아웃</Link>
               </li>
             </>
           )}
-          {logoutModal && <LogoutModal />}
+          {/* <LogoutModal logoutModal={logoutModal} /> */}
+          {/* {logoutModal && <LogoutModal />} */}
           {/* {profile && logoutModal && <LogoutModal />} */}
           {favorite && (
             <li>

@@ -1,5 +1,5 @@
 import RootState, { PostsState, PostData, EachPostState } from '../../type';
-import { takeLatest, put, select, call, takeLeading, takeEvery } from 'redux-saga/effects';
+import { takeLatest, put, select, call, takeLeading } from 'redux-saga/effects';
 import PostService from '../services/postService';
 
 // action type
@@ -24,6 +24,7 @@ const SUCCESS_DELETE_POST = '/coinstagram/post/SUCCESS_DELETE_POST' as const;
 const FAIL_DELETE_POST = '/coinstagram/post/FAIL_DELETE_POST' as const;
 
 const RESET_RANDOM_POST = '/coinstagram/post/RESET_RANDOM_POST' as const;
+const RESET_FEED_POST = '/coinstagram/post/RESET_FEED_POST' as const;
 const LAST_RANDOM_POST = '/coinstagram/post/LAST_RANDOM_POST' as const;
 const LAST_FEED_POST = '/coinstagram/post/LAST_FEED_POST' as const;
 
@@ -113,6 +114,10 @@ export const resetRandomPost = () => ({
   type: RESET_RANDOM_POST,
 });
 
+export const resetFeedPost = () => ({
+  type: RESET_FEED_POST,
+});
+
 const lastRandomPost = () => ({
   type: LAST_RANDOM_POST,
 });
@@ -154,6 +159,7 @@ type PostActions =
   | ReturnType<typeof successDeletePost>
   | ReturnType<typeof failDeletePost>
   | ReturnType<typeof resetRandomPost>
+  | ReturnType<typeof resetFeedPost>
   | ReturnType<typeof lastRandomPost>
   | ReturnType<typeof lastFeedPost>
   | ReturnType<typeof uploadPost>;
@@ -423,11 +429,21 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
             randomPosts: [],
           }
         };
+      case RESET_FEED_POST:
+        return {
+          ...state,
+          feedPosts: {
+            ...state.feedPosts,
+            isLast: false,
+            feedPosts: [],
+          }
+        }
       case LAST_RANDOM_POST:
         return {
           ...state,
           randomPosts: {
             ...state.randomPosts,
+            loading: false,
             isLast: true,
           }
         }
@@ -436,6 +452,7 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
           ...state,
           feedPosts: {
             ...state.feedPosts,
+            loading: false,
             isLast: true,
           }
         }

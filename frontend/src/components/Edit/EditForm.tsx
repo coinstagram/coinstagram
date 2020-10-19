@@ -6,6 +6,7 @@ import RootState from '../../type';
 import { useSelector } from 'react-redux';
 import EditPassword from './EditPassword';
 import EditProfile from './EditProfile';
+import Secession from './Secession';
 
 export default function EditForm() {
   const { user } = useSelector((state: RootState) => state.userInfo);
@@ -24,6 +25,9 @@ export default function EditForm() {
           </li>
           <li>
             <NavLink to={'/edit/password'}>비밀번호 변경</NavLink>
+          </li>
+          <li>
+            <NavLink to={'/edit/account'}>계정 관리</NavLink>
           </li>
         </ul>
       </nav>
@@ -54,6 +58,7 @@ export default function EditForm() {
         </header>
         {pageName === '/edit/password' && <EditPassword />}
         {pageName === '/edit/profile' && <EditProfile profile={profile} userId={user_id} userName={user_name} userEmail={user_email} />}
+        {pageName === '/edit/account' && <Secession />}
       </div>
     </StyledDiv>
   );

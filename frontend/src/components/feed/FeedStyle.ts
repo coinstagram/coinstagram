@@ -126,3 +126,9 @@ function parseImagePath(imageUrl: string) {
     }
   }
 }
+
+export const StyledLastComment = styled.p`
+  margin: 0;
+  text-align: center;
+  line-height: 80px;
+`;

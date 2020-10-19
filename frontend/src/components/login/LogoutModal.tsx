@@ -1,16 +1,27 @@
 import React, { useState } from 'react';
-
+import { Route } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../redux/modules/auth';
+import TokenService from '../../redux/services/tokenService';
 import useWindowWidth from '../../hooks/useWindowWidth';
 import { StyledBg, StyledModal } from './LogoutModalStyle';
+import Home from '../../pages/Home';
 
+interface logoutModalProps {
+  logoutModal: boolean;
+}
 export default function LogoutModal() {
   const width = useWindowWidth();
-  //   const [loggedIn, setLoggedIn] = useState(true);
-  const yesLogout = () => {};
-  const noLogout = () => {
-    //   setLoggedIn(true);
+  const dispatch = useDispatch();
+  const [loggedIn, setLoggedIn] = useState(false);
+  const yesLogout = () => {
+    dispatch(logout());
+    TokenService.remove();
   };
-  //   const
+  const noLogout = () => {
+    setLoggedIn(true);
+  };
+
   return (
     <StyledBg>
       <StyledModal width={width}>
@@ -21,6 +32,7 @@ export default function LogoutModal() {
           </button>
           <button className="noBtn" onClick={noLogout}>
             아니오
+            {loggedIn && <Route path="/" component={Home} />}
           </button>
         </div>
       </StyledModal>
