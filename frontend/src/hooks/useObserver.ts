@@ -24,9 +24,6 @@ function useObserver(section: string) {
             if (entry.isIntersecting) {
               section === 'random' && dispatch(getRandomPostsSaga(count.current));
               section === 'feed' && dispatch(getFeedPostsSaga(count.current));
-              // 팔로워들의 정보가 바뀌면 , count.current 1로 초기화 시키고,
-              // feedPostsSaga 다시 호출
-              console.log('count', count.current);
               count.current += 1;
             }
           });

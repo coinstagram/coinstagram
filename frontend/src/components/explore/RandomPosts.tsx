@@ -29,7 +29,7 @@ function RandomPosts({ getRandomPosts, getPostCounts }: RandomPostsProps) {
           <Spinner />
         </StyledDiv>
       )}
-      {error !== null && (
+      {!loading && error !== null && (
         <StyledErrorDiv>
           <p>
             게시물 로딩에 실패하였습니다.{' '}
