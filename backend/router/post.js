@@ -1189,7 +1189,7 @@ router.get('/relationship/post/:page', verifyToken, async (req, res) => {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
       const { page } = req.params;
-      const line = 3;
+      const line = 6;
       const pageNum = (page - 1) * line;
       // 로그인 한 아이디 친구
       sql = `select user_id from users where user_id in(select followee_id from users_relationship where follower_id = ?)`;
@@ -1201,7 +1201,7 @@ router.get('/relationship/post/:page', verifyToken, async (req, res) => {
       // 친구의 게시글 확인
       sql = `select * from posts where user_id in(`;
       followee_id.map(({ user_id }) => {
-        params = [...params, user_id];
+        params = [...params, `"${user_id}"`];
       });
       sql += `${params}) order by id desc limit ?, ? ;`;
       console.log(sql);
