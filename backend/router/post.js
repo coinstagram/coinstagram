@@ -146,11 +146,11 @@ router.get('/posts/:page', verifyToken, async (req, res) => {
   try {
     const { page } = req.params;
     console.log('page', page);
-    const line = 15;
+    const line = 19;
     const pageNum = (page - 1) * line;
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      sql = 'select * from posts order by rand() limit  ?, ?;';
+      sql = 'select * from posts order by id desc limit  ?, ?;';
       const [check] = await connection.query(sql, [pageNum, line]);
       const post_id = check.map(({ id }) => +id);
       let isEmpty = checkEmpty(post_id);
@@ -176,14 +176,30 @@ router.get('/posts/:page', verifyToken, async (req, res) => {
         params = [id];
         sqls += mysql.format(sql, params);
       });
+
       const [hastag] = await connection.query(sqls);
+
       for (let i = 0; i < image.length; i++) {
-        let imageitem = image[i].map(({ image_path }) => image_path);
-        check[i] = {
-          ...check[i],
-          image_path: imageitem,
-          hastag: hastag[i].map(({ name }) => name),
-        };
+        let imageitem = '';
+        if (checkMultArray(imageitem)) {
+          imageitem = image[i].map(({ image_path }) => image_path);
+          check[i] = {
+            ...check[i],
+            image_path: imageitem,
+            hastag: checkMultArray(hastag)
+              ? hastag[i].map(({ name }) => name)
+              : hastag.map(({ name }) => name),
+          };
+        } else {
+          imageitem = image.map(({ image_path }) => image_path);
+          check[i] = {
+            ...check[i],
+            image_path: imageitem,
+            hastag: checkMultArray(hastag)
+              ? hastag[i].map(({ name }) => name)
+              : hastag.map(({ name }) => name),
+          };
+        }
       }
       res.send(check);
     } catch (error) {
@@ -442,7 +458,9 @@ router.get('/user/post/:user_id', verifyToken, async (req, res) => {
           check[0] = {
             ...check[0],
             image_path: imageitem,
-            hastag: hastag[0].map(({ name }) => name),
+            hastag: checkMultArray(hastag)
+              ? hastag[0].map(({ name }) => name)
+              : hastag[0].name,
           };
         }
       }
