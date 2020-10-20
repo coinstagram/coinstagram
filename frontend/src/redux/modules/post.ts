@@ -1,5 +1,5 @@
 import RootState, { PostsState, PostData, EachPostState } from '../../type';
-import { takeLatest, put, select, call } from 'redux-saga/effects';
+import { takeLatest, put, select, call, takeLeading } from 'redux-saga/effects';
 import PostService from '../services/postService';
 
 // action type
@@ -24,6 +24,9 @@ const SUCCESS_DELETE_POST = '/coinstagram/post/SUCCESS_DELETE_POST' as const;
 const FAIL_DELETE_POST = '/coinstagram/post/FAIL_DELETE_POST' as const;
 
 const RESET_RANDOM_POST = '/coinstagram/post/RESET_RANDOM_POST' as const;
+const RESET_FEED_POST = '/coinstagram/post/RESET_FEED_POST' as const;
+const LAST_RANDOM_POST = '/coinstagram/post/LAST_RANDOM_POST' as const;
+const LAST_FEED_POST = '/coinstagram/post/LAST_FEED_POST' as const;
 
 const UPLOAD_POST = '/coinstagram/post/UPLOAD_POST' as const;
 
@@ -32,17 +35,12 @@ const startGetPostsFeed = () => ({
   type: START_GET_POSTS_FEED,
 });
 
-const successGetPostsFeed = (followersPosts: EachPostState[], myPosts: EachPostState[]) => {
-  const mergedPosts = [...followersPosts, ...myPosts];
-  mergedPosts.sort((a, b) => (a['id'] < b['id'] ? 1 : -1));
-
-  return {
+const successGetPostsFeed = (feedPosts: EachPostState[]) => ({
     type: SUCCESS_GET_POSTS_FEED,
     payload: {
-      mergedPosts,
+      feedPosts,
     },
-  };
-};
+});
 const failGetPostsFeed = (error: Error) => ({
   type: FAIL_GET_POSTS_FEED,
   payload: error,
@@ -116,6 +114,18 @@ export const resetRandomPost = () => ({
   type: RESET_RANDOM_POST,
 });
 
+export const resetFeedPost = () => ({
+  type: RESET_FEED_POST,
+});
+
+const lastRandomPost = () => ({
+  type: LAST_RANDOM_POST,
+});
+
+const lastFeedPost = () => ({
+  type: LAST_FEED_POST,
+});
+
 export const uploadPost = (post: PostData) => ({
   type: UPLOAD_POST,
   payload: {
@@ -149,6 +159,9 @@ type PostActions =
   | ReturnType<typeof successDeletePost>
   | ReturnType<typeof failDeletePost>
   | ReturnType<typeof resetRandomPost>
+  | ReturnType<typeof resetFeedPost>
+  | ReturnType<typeof lastRandomPost>
+  | ReturnType<typeof lastFeedPost>
   | ReturnType<typeof uploadPost>;
 
 // saga action type
@@ -166,10 +179,10 @@ export const getRandomPostsSaga = (count: number) => ({
   }
 });
 
-export const getFeedPostsSaga = (user_id: string) => ({
+export const getFeedPostsSaga = (count: number) => ({
   type: GET_FEED_POSTS_SAGA,
   payload: {
-    user_id,
+    count,
   },
 });
 
@@ -194,7 +207,8 @@ export const deletePostSaga = (post_id: number) => ({
   },
 });
 
-type PostSagaActions = ReturnType<typeof getUserPostsSaga> | ReturnType<typeof getFeedPostsSaga>;
+type userPostSagaAction = ReturnType<typeof getUserPostsSaga>;
+type feedPostSagaAction = ReturnType<typeof getFeedPostsSaga>;
 type onePostSagaAction = ReturnType<typeof getSelectedPostSaga> | ReturnType<typeof deletePostSaga>;
 type randomPostSagaAction = ReturnType<typeof getRandomPostsSaga>;
 
@@ -204,26 +218,25 @@ function* getRandomPosts(action: randomPostSagaAction) {
     const { token } = yield select((state: RootState) => state.auth);
     yield put(startGetPostsRandom());
     const randomPosts: EachPostState[] = yield call(PostService.getRandomPosts, token, action.payload.count);
-    yield put(successGetPostsRandom(randomPosts));
+    yield randomPosts.length === 0 ? put(lastRandomPost()) : put(successGetPostsRandom(randomPosts));
   } catch (error) {
     yield put(failGetPostsRandom(error));
   }
 }
 
-function* getFeedPosts(action: PostSagaActions) {
+function* getFeedPosts(action: feedPostSagaAction) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
 
     yield put(startGetPostsFeed());
-    const followersPosts: EachPostState[] = yield call(PostService.getFollowersPosts, token);
-    const myPosts: EachPostState[] = yield call(PostService.getUserPosts, token, action.payload.user_id);
-    yield put(successGetPostsFeed(followersPosts, myPosts));
+    const feedPosts: EachPostState[] = yield call(PostService.getFeedPosts, token, action.payload.count);
+    yield feedPosts.length === 0 ? put(lastFeedPost()) : put(successGetPostsFeed(feedPosts));
   } catch (error) {
     yield put(failGetPostsFeed(error));
   }
 }
 
-function* getUserPosts(action: PostSagaActions) {
+function* getUserPosts(action: userPostSagaAction) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
     yield put(startGetPostsUser());
@@ -258,8 +271,8 @@ function* deletePost(action: onePostSagaAction) {
 
 // saga function register
 export function* postsSaga() {
-  yield takeLatest(GET_RANDOM_POSTS_SAGA, getRandomPosts);
-  yield takeLatest(GET_FEED_POSTS_SAGA, getFeedPosts);
+  yield takeLeading (GET_RANDOM_POSTS_SAGA, getRandomPosts);
+  yield takeLeading(GET_FEED_POSTS_SAGA, getFeedPosts);
   yield takeLatest(GET_USER_POSTS_SAGA, getUserPosts);
   yield takeLatest(GET_SELECTED_POST_SAGA, getSelectedPost);
   yield takeLatest(DELETE_POST_SAGA, deletePost);
@@ -270,6 +283,7 @@ const initialState: PostsState = {
   feedPosts: {
     loading: false,
     error: null,
+    isLast: false,
     feedPosts: [],
   },
   selectedPost: {
@@ -280,6 +294,7 @@ const initialState: PostsState = {
   randomPosts: {
     loading: false,
     error: null,
+    isLast: false,
     randomPosts: [],
   },
 };
@@ -292,7 +307,8 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
         feedPosts: {
           loading: true,
           error: null,
-          feedPosts: [],
+          isLast: false,
+          feedPosts: state.feedPosts.feedPosts,
         },
         selectedPost: state.selectedPost,
         randomPosts: state.randomPosts,
@@ -302,18 +318,16 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
         feedPosts: state.feedPosts,
         selectedPost: state.selectedPost,
         randomPosts: {
+          ...state.randomPosts,
           loading: true,
-          error: null,
-          randomPosts: state.randomPosts.randomPosts,
         },
       };
     case START_GET_POST_SELECTED:
       return {
         feedPosts: state.feedPosts,
         selectedPost: {
+          ...state.selectedPost,
           loading: true,
-          error: null,
-          selectedPost: null,
         },
         randomPosts: state.randomPosts,
       };
@@ -322,6 +336,7 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
         feedPosts: {
           loading: true,
           error: null,
+          isLast: false,
           feedPosts: state.feedPosts.feedPosts,
         },
         selectedPost: state.selectedPost,
@@ -332,17 +347,17 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
         feedPosts: state.feedPosts,
         selectedPost: state.selectedPost,
         randomPosts: {
+          ...state.randomPosts,
           loading: false,
-          error: null,
           randomPosts: [...state.randomPosts.randomPosts, ...action.payload.randomPosts],
         },
       };
     case SUCCESS_GET_POSTS_FEED:
       return {
         feedPosts: {
+          ...state.feedPosts,
           loading: false,
-          error: null,
-          feedPosts: action.payload.mergedPosts,
+          feedPosts: [...state.feedPosts.feedPosts, ...action.payload.feedPosts],
         },
         selectedPost: state.selectedPost,
         randomPosts: state.randomPosts,
@@ -351,8 +366,8 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
       return {
         feedPosts: state.feedPosts,
         selectedPost: {
+          ...state.selectedPost,
           loading: false,
-          error: null,
           selectedPost: action.payload.selectedPost,
         },
         randomPosts: state.randomPosts,
@@ -362,6 +377,7 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
         feedPosts: {
           loading: false,
           error: null,
+          isLast: state.feedPosts.isLast,
           feedPosts: state.feedPosts.feedPosts.filter(post => post.id !== action.payload.post_id),
         },
         selectedPost: state.selectedPost,
@@ -372,6 +388,7 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
         feedPosts: {
           loading: false,
           error: action.payload,
+          isLast: state.feedPosts.isLast,
           feedPosts: [],
         },
         selectedPost: state.selectedPost,
@@ -381,7 +398,7 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
       return {
         feedPosts: state.feedPosts,
         selectedPost: {
-          loading: true,
+          loading: false,
           error: action.payload,
           selectedPost: null,
         },
@@ -392,9 +409,9 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
         feedPosts: state.feedPosts,
         selectedPost: state.selectedPost,
         randomPosts: {
+          ...state.randomPosts,
           loading: false,
           error: action.payload,
-          randomPosts: [],
         },
       };
     case FAIL_DELETE_POST:
@@ -407,11 +424,38 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
         return {
           ...state,
           randomPosts: {
-            loading: false,
-            error: null,
+            ...state.randomPosts,
+            isLast: false,
             randomPosts: [],
           }
         };
+      case RESET_FEED_POST:
+        return {
+          ...state,
+          feedPosts: {
+            ...state.feedPosts,
+            isLast: false,
+            feedPosts: [],
+          }
+        }
+      case LAST_RANDOM_POST:
+        return {
+          ...state,
+          randomPosts: {
+            ...state.randomPosts,
+            loading: false,
+            isLast: true,
+          }
+        }
+      case LAST_FEED_POST:
+        return {
+          ...state,
+          feedPosts: {
+            ...state.feedPosts,
+            loading: false,
+            isLast: true,
+          }
+        }
     case UPLOAD_POST:
       return {
         ...state,

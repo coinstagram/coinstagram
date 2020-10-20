@@ -128,12 +128,14 @@ export interface SelectedPostState {
 export interface RandomPostsState {
   loading: boolean;
   error: null | Error;
+  isLast: boolean;
   randomPosts: EachPostState[];
 }
 
 export interface FeedPostsState {
   loading: boolean;
   error: null | Error;
+  isLast: boolean;
   feedPosts: EachPostState[];
 }
 

@@ -72,14 +72,20 @@ export default authReducer;
 
 // saga action type
 const START_SIGNIN_SAGA = 'START_SIGNIN_SAGA' as const;
+// const START_FACEBOOK_LOGIN_SAGA = 'START_FACEBOOK_LOGIN_SAGA' as const;
 
 // saga action creator
 export const signInSagaActionCreator = (user_id: string, user_password: string) => ({
   type: START_SIGNIN_SAGA,
   payload: { user_id, user_password },
 });
+// export const facebookLoginSagaActionCreator = (user: any) => ({
+//   type: START_FACEBOOK_LOGIN_SAGA,
+//   payload: { user },
+// });
 
 type SagaActions = ReturnType<typeof signInSagaActionCreator>;
+// | ReturnType<typeof facebookLoginSagaActionCreator>;
 
 function* signinRequestSaga(action: SagaActions) {
   const payload = action.payload;
@@ -95,7 +101,22 @@ function* signinRequestSaga(action: SagaActions) {
   }
 }
 
+// function* facebookLoginRequestSaga(action: SagaActions) {
+//   const payload = action.payload;
+//   yield put(signinStart());
+//   try {
+//     const token = yield call(authService.signin, payload.user_id, payload.user_password);
+//     yield call(TokenService.save, token);
+//     yield put(signinSuccess(token));
+//     if (token) yield put(push('/'));
+//   } catch (e) {
+//     yield console.log(e.message);
+//     yield put(signinFail(e));
+//   }
+// }
+
 // saga function register
 export function* authSaga() {
   yield takeEvery(START_SIGNIN_SAGA, signinRequestSaga);
+  // yield takeEvery(START_FACEBOOK_LOGIN_SAGA, facebookLoginRequestSaga);
 }

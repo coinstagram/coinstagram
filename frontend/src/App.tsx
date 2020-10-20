@@ -146,6 +146,7 @@ function App() {
               <Route path="/account/:userid" component={Profile} />
               <Route path="/edit/profile" component={Edit} />
               <Route path="/edit/password" component={Edit} />
+              <Route path="/edit/account" component={Edit} />
               <Route path="/" exact component={Home} />
               <Route component={NotFound} />
             </Switch>

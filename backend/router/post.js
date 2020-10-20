@@ -150,7 +150,7 @@ router.get('/posts/:page', verifyToken, async (req, res) => {
     const pageNum = (page - 1) * line;
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      sql = 'select * from posts order by id desc limit  ?, ?;';
+      sql = 'select * from posts order by in desc limit  ?, ?;';
       const [check] = await connection.query(sql, [pageNum, line]);
       const post_id = check.map(({ id }) => +id);
       let isEmpty = checkEmpty(post_id);
@@ -1207,7 +1207,7 @@ router.get('/relationship/post/:page', verifyToken, async (req, res) => {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
       const { page } = req.params;
-      const line = 3;
+      const line = 6;
       const pageNum = (page - 1) * line;
       // 로그인 한 아이디 친구
       sql = `select user_id from users where user_id in(select followee_id from users_relationship where follower_id = ?)`;
