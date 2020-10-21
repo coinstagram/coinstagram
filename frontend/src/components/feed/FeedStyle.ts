@@ -85,7 +85,7 @@ export const StyledCommentDiv = styled.div`
   }
 
   a {
-    display: inline-block:
+    display: inline-block;
     margin-top: 10px;
     vertical-align: bottom;
     font-size: 60px;
@@ -102,7 +102,7 @@ export const StyledPostDiv = styled.div`
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-size: cover;
-  background-image: url(${props => `${paseImagePath(props.image[0])}`});
+  background-image: url(${props => `${parseImagePath(props.image[0])}`});
 
   @keyframse fadeIn {
     from {
@@ -117,7 +117,7 @@ export const StyledPostDiv = styled.div`
   animation: fadeIn 2s;
 `;
 
-function paseImagePath(imageUrl: string) {
+function parseImagePath(imageUrl: string) {
   if (imageUrl !== null && imageUrl !== undefined) {
     if (imageUrl.split('\\')[1] !== undefined) {
       return imageUrl.split('\\')[1];
@@ -126,3 +126,9 @@ function paseImagePath(imageUrl: string) {
     }
   }
 }
+
+export const StyledLastComment = styled.p`
+  margin: 0;
+  text-align: center;
+  line-height: 80px;
+`;

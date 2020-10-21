@@ -5,7 +5,7 @@ const baseUrl = '/post';
 
 interface IPostService {
   getRandomPosts: (token: string | null, count: number) => Promise<EachPostState[]>;
-  getFollowersPosts: (token: string | null) => Promise<EachPostState[]>;
+  getFeedPosts: (token: string | null, count: number) => Promise<EachPostState[]>;
   getUserPosts: (token: string | null, user_id: string) => Promise<EachPostState[]>;
   getSelectedPost: (token: string | null, post_id: number) => Promise<EachPostState>;
   getSpecificPost: (token: null | string, post_id: number) => Promise<EachPostState>;
@@ -27,14 +27,14 @@ const PostService: IPostService = class {
     return res.data;
   }
 
-  static async getFollowersPosts(token: string | null) {
-    const res = await axios.get<EachPostState[]>(`/api/user/relationship${baseUrl}`, {
+  static async getFeedPosts(token: string | null, count: number) {
+    const res = await axios.get<EachPostState[]>(`/api/relationship${baseUrl}/${count}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
-    console.log('getFollowersPosts', res.data);
+    console.log('getFeedPosts', res.data);
     return res.data;
   }
 

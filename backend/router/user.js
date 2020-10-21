@@ -256,4 +256,78 @@ router.patch('/user/image', verifyToken, async (req, res) => {
   }
 });
 
+/**
+ * delete user_data
+ * /user
+ */
+router.delete('/user', verifyToken, async (req, res) => {
+  console.log('delete userData');
+  const token = req.headers.authorization.split('Bearer ')[1];
+  const { user_id } = jwt.verify(
+    token,
+    // eslint-disable-next-line no-undef
+    process.env.JWT_SECRET,
+  );
+  console.log(user_id);
+  let sql = '';
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      sql = 'SET foreign_key_checks = 0;';
+      await connection.query(sql);
+      sql = ' delete from users where user_id = ?';
+      const [result] = await connection.query(sql, user_id);
+      const isDel = result.affectedRows;
+      sql = 'SET foreign_key_checks = 1;';
+      await connection.query(sql);
+      res.send({ success: isDel === 0 ? 'false' : 'ture' });
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      console.log(error);
+      res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
+});
+
+router.patch('/user', verifyToken, async (req, res) => {
+  console.log('/user patch');
+  let sql = '';
+  const {
+    user_name,
+    user_introduce,
+    user_phone,
+    user_email,
+    user_profile,
+  } = req.body;
+  console.log(user_name, user_introduce, user_phone, user_email, user_profile);
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      sql = `update users set user_name = ?, user_introduce = ?, user_phone = ?, user_email=?, user_profile=?`;
+      const [a] = await connection.query(sql, [
+        user_name,
+        user_introduce,
+        user_phone,
+        user_email,
+        user_profile,
+      ]);
+
+      res.json({ success: true });
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      console.log(error);
+      res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
+});
 module.exports = router;

@@ -17,6 +17,7 @@ const StyledDiv = styled.div`
 
   .list-container {
     max-width: ${props => (props.feedPosts.length === 0 ? 1450 : 1150)};
+    overflow: hidden;
   }
 
   .recommend-container {
