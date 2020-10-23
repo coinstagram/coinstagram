@@ -6,7 +6,8 @@ import useAuth from '../hooks/useAuth';
 import StyledMain from '../components/common/StyledMain';
 
 // components
-import EditForm from '../components/Edit/EditForm';
+// import EditForm from '../components/Edit/EditForm';
+import EditContainer from '../containers/EditContainer';
 
 function Edit() {
   useAuth();
@@ -15,7 +16,7 @@ function Edit() {
     <>
       <Header />
       <StyledMain>
-        <EditForm />
+        <EditContainer />
       </StyledMain>
     </>
   );

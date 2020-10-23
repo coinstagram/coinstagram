@@ -209,6 +209,10 @@ export interface OtherPostState {
   otherPosts: EachPostState[];
   counts: CountState;
 }
+export interface EditState {
+  loading : boolean;
+  error:null |Error;
+}
 
 interface RootState {
   auth: AuthState;
@@ -220,6 +224,7 @@ interface RootState {
   likes: likeState;
   bookmarks: BookmarkState;
   otherPosts: OtherPostState;
+  edit : EditState;
 }
 
 export default RootState;
