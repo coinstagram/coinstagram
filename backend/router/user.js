@@ -309,7 +309,7 @@ router.patch('/user', verifyToken, async (req, res) => {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
       sql = `update users set user_name = ?, user_introduce = ?, user_phone = ?, user_email=?, user_profile=?`;
-      const [a] = await connection.query(sql, [
+      await connection.query(sql, [
         user_name,
         user_introduce,
         user_phone,
