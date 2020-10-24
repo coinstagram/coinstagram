@@ -11,6 +11,7 @@ import upload from './upload';
 import likes from './like';
 import bookmarks from './bookmark';
 import otherPosts from './otherPost';
+import edit from './edit';
 
 const rootReducer = (history: History) =>
   combineReducers({
@@ -24,6 +25,7 @@ const rootReducer = (history: History) =>
     likes,
     bookmarks,
     otherPosts,
+    edit,
     router: connectRouter(history),
   });
 

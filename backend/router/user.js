@@ -303,18 +303,20 @@ router.patch('/user', verifyToken, async (req, res) => {
     user_phone,
     user_email,
     user_profile,
+    user_gender
   } = req.body;
   console.log(user_name, user_introduce, user_phone, user_email, user_profile);
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      sql = `update users set user_name = ?, user_introduce = ?, user_phone = ?, user_email=?, user_profile=?`;
+      sql = `update users set user_name = ?, user_introduce = ?, user_phone = ?, user_email=?, user_profile=?, user_gender=?`;
       const [a] = await connection.query(sql, [
         user_name,
         user_introduce,
         user_phone,
         user_email,
         user_profile,
+        user_gender
       ]);
 
       res.json({ success: true });

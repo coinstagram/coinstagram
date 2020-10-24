@@ -1,7 +1,6 @@
-import { call, put } from 'redux-saga/effects';
+import { call, put, takeEvery } from 'redux-saga/effects';
 // 로그인 관련 reducer file
 import { AxiosError } from 'axios';
-import { takeEvery } from 'redux-saga/effects';
 import { SignupState } from '../../type';
 import authService from '../services/authService';
 import { push } from 'connected-react-router';
@@ -10,6 +9,8 @@ import { push } from 'connected-react-router';
 const SIGNUP_START = 'coinstagram/signup/SIGNUP_START' as const;
 const SIGNUP_SUCCESS = 'coinstagram/signup/SIGNUP_SUCCESS' as const;
 const SIGNUP_FAIL = 'coinstagram/signup/SIGNUP_FAIL' as const;
+
+
 
 // action creator
 export const signupStart = () => ({
