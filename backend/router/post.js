@@ -146,7 +146,7 @@ router.get('/posts/:page', verifyToken, async (req, res) => {
   try {
     const { page } = req.params;
     console.log('page', page);
-    const line = 19;
+    const line = 5;
     const pageNum = (page - 1) * line;
     const connection = await pool.getConnection(async (conn) => conn);
     try {
