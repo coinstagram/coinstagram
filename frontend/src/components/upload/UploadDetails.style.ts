@@ -10,7 +10,7 @@ export const StyledText: any = styled.textarea<ITest>`
   border: none;
   border-top: 1px solid rgb(219, 219, 219);
   width: 100%;
-  height: 120px;
+  height: 100px;
   padding: 10px;
   resize: none;
   outline: none;

@@ -15,7 +15,10 @@ const UploadMain = styled(StyledMain)`
   padding: ${props => props.width < 655 && '55px 0 0'};
 `;
 const StyledSection = styled.section`
+  position: relative;
   border: 1px solid rgb(219, 219, 219);
+  background: #ffffff;
+  border-radius: 10px 10px 0 0;
 `;
 
 function ChangePost() {
