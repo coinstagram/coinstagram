@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../redux/modules/auth';
 import TokenService from '../../redux/services/tokenService';
 import RootState, { AnotherUserState } from '../../type';
-
+import LogoutModal from '../login/LogoutModal';
 // styles
 import { StyledDiv, StyledBackground, StyledBtn } from './FollowListModalStyle';
 
@@ -29,9 +29,11 @@ function FollowListModal({ myId, followers, followees, modal, content, isList, t
   const myFollowers = useSelector((state: RootState) => state.userInfo.followers.users);
   const dispatch = useDispatch();
   const width = useWindowWidth();
+  const [logoutModal, setLogoutModal] = useState(false);
   const onLogout = () => {
-    dispatch(logout());
-    TokenService.remove();
+    // dispatch(logout());
+    // TokenService.remove();
+    setLogoutModal(true);
   };
 
   return (
@@ -89,6 +91,7 @@ function FollowListModal({ myId, followers, followees, modal, content, isList, t
             </li>
           </ul>
         )}
+        {logoutModal && <LogoutModal />}
       </StyledDiv>
     </StyledBackground>
   );
