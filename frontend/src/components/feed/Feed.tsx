@@ -37,7 +37,7 @@ function Feed({ loading, error, isLast, myId, feedPosts, addCommentPost, addPost
   const dispatch = useDispatch();
   const { randomPosts } = useSelector((state: RootState) => state.posts.randomPosts);
   const width = useWindowWidth();
-  const observerObj = useObserver('feed');
+  const observerObj = useObserver('feed', isLast);
 
   const filteredNinePosts = randomPosts.filter((_, i) => i < 9);
 
