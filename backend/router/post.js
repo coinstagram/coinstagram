@@ -150,7 +150,7 @@ router.get('/posts/:page', verifyToken, async (req, res) => {
     const pageNum = (page - 1) * line;
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      sql = 'select * from posts order by in desc limit  ?, ?;';
+      sql = 'select * from posts order by id desc limit  ?, ?;';
       const [check] = await connection.query(sql, [pageNum, line]);
       const post_id = check.map(({ id }) => +id);
       let isEmpty = checkEmpty(post_id);
@@ -167,7 +167,6 @@ router.get('/posts/:page', verifyToken, async (req, res) => {
         params = [id];
         sqls += mysql.format(sql, params);
       });
-
       const [image] = await connection.query(sqls);
 
       sqls = '';
@@ -181,7 +180,7 @@ router.get('/posts/:page', verifyToken, async (req, res) => {
 
       for (let i = 0; i < image.length; i++) {
         let imageitem = '';
-        if (checkMultArray(imageitem)) {
+        if (checkMultArray(image)) {
           imageitem = image[i].map(({ image_path }) => image_path);
           check[i] = {
             ...check[i],
@@ -191,7 +190,9 @@ router.get('/posts/:page', verifyToken, async (req, res) => {
               : hastag.map(({ name }) => name),
           };
         } else {
-          imageitem = image.map(({ image_path }) => image_path);
+          imageitem = checkMultArray(image)
+            ? image[i][0].image_path
+            : image[0].image_path;
           check[i] = {
             ...check[i],
             image_path: imageitem,
@@ -230,6 +231,14 @@ router.get('/post/:post_id', verifyToken, async (req, res) => {
 
       sql = `select image_path from post_image where post_id = ?`;
       const [image] = await connection.query(sql, post_id);
+
+      // sql = 'select tag_id from post_tags where post_id = ?';
+
+      sql =
+        'select name from tag where id in (select tag_id from post_tags where post_id = ?);';
+
+      let [hastag] = await connection.query(sql, post_id);
+      console.log('hastag', hastag);
 
       const reqData = {
         ...check[0],
