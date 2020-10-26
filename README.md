@@ -182,6 +182,9 @@
   </details>
 <br>
 
+## DB structure
+![Untitled Diagram](https://user-images.githubusercontent.com/62285872/97163882-a2f62000-17c4-11eb-8104-9cb290e77764.png)
+
 
 
 ## Design prototype
