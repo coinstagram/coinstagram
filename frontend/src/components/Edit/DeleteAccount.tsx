@@ -1,17 +1,10 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import { StyledArticle } from './DeleteAccountStyle';
-import { deleteSagaActionCreator } from '../../redux/modules/edit';
 
 interface DeleteAccountProps {
-  userId: string;
+  deleteAccount: (e: React.FormEvent<HTMLFormElement>) => void;
 }
-export default function DeleteAccount({ userId }: DeleteAccountProps) {
-  const dispatch = useDispatch();
-  const deleteAccount = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    dispatch(deleteSagaActionCreator(userId));
-  };
+export default function DeleteAccount({ deleteAccount }: DeleteAccountProps) {
   return (
     <StyledArticle>
       <h3>계정 삭제</h3>
