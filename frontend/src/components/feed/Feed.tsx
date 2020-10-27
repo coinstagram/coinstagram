@@ -49,6 +49,38 @@ function Feed({ loading, error, isLast, myId, feedPosts, addCommentPost, addPost
 
   return (
     <StyledDiv>
+      {feedPosts.length !== 0 &&
+        feedPosts.map(post => (
+          <StyledArticle key={post.id} width={width} onFocus={toggleClass} onBlur={toggleClass}>
+            <h3 className="a11y-hidden">{post.user_id}의 게시물</h3>
+            <FeedHeader userId={post.user_id} postId={post.id} location={post.post_location} />
+            <FeedBody imageUrl={post.image_path} />
+            <FeedIcons
+              myId={myId}
+              postId={post.id}
+              addPostLikes={addPostLikes}
+              deletePostLike={deletePostLike}
+              addBookmark={addBookmark}
+              deleteBookmark={deleteBookmark}
+            />
+            <FeedComment
+              userId={post.user_id}
+              postId={post.id}
+              context={post.post_context}
+              hashTags={post.hastag}
+              addCommentPost={addCommentPost}
+              postCreatedTime={post.created_at}
+            />
+          </StyledArticle>
+        ))}
+      <div style={{ position: 'relative', height: isLast ? '' : 80 }} ref={observerObj.lastItemRef}>
+        {loading && (
+          <StyledSpinnerDiv>
+            <Spinner />
+          </StyledSpinnerDiv>
+        )}
+        {isLast && feedPosts.length !== 0 && <StyledLastComment>마지막 게시물입니다.</StyledLastComment>}
+      </div>
       {feedPosts.length === 0 && !loading && error === null && (
         <StyledPreviewDiv>
           {filteredNinePosts.map(post => (
@@ -74,38 +106,6 @@ function Feed({ loading, error, isLast, myId, feedPosts, addCommentPost, addPost
           </p>
         </StyledErrorDiv>
       )}
-      {feedPosts.length !== 0 &&
-        feedPosts.map(post => (
-          <StyledArticle key={post.id} width={width} onFocus={toggleClass} onBlur={toggleClass}>
-            <h3 className="a11y-hidden">{post.user_id}의 게시물</h3>
-            <FeedHeader userId={post.user_id} postId={post.id} location={post.post_location} />
-            <FeedBody imageUrl={post.image_path} />
-            <FeedIcons
-              myId={myId}
-              postId={post.id}
-              addPostLikes={addPostLikes}
-              deletePostLike={deletePostLike}
-              addBookmark={addBookmark}
-              deleteBookmark={deleteBookmark}
-            />
-            <FeedComment
-              userId={post.user_id}
-              postId={post.id}
-              context={post.post_context}
-              hashTags={post.hastag}
-              addCommentPost={addCommentPost}
-              postCreatedTime={post.created_at}
-            />
-          </StyledArticle>
-        ))}
-      <div style={{ position: 'relative', height: 80 }} ref={observerObj.lastItemRef}>
-        {loading && (
-          <StyledSpinnerDiv>
-            <Spinner />
-          </StyledSpinnerDiv>
-        )}
-        {isLast && <StyledLastComment>마지막 게시물입니다.</StyledLastComment>}
-      </div>
     </StyledDiv>
   );
 
