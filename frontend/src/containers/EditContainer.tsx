@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { editSagaActionCreator } from '../redux/modules/edit';
+import { editSagaActionCreator, deleteSagaActionCreator } from '../redux/modules/userInfo';
 import RootState from '../type';
 import { useSelector } from 'react-redux';
 import EditForm from '../components/Edit/EditForm';
 
 export interface IEdit {
-  user_profile: string;
-  user_name: string;
-  user_id: string;
-  user_introduce: string;
-  user_email: string;
-  user_phone: string;
-  user_gender: string;
+  user_profile?: string;
+  user_name?: string;
+  user_id?: string;
+  user_introduce?: string;
+  user_email?: string;
+  user_phone?: string;
+  user_gender?: string;
 }
 function EditContainer() {
   const { user } = useSelector((state: RootState) => state.userInfo);
@@ -72,14 +72,18 @@ function EditContainer() {
       // editSagaActionCreator(profile, name, id, introduce, email, phone, gender),
     );
   };
+  const deleteAccount = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    dispatch(deleteSagaActionCreator(edit.user_id));
+  };
   return (
     <section>
       <h3 className="a11y-hidden">profile edit</h3>
-      <form onSubmit={changeProfile}>
-        <EditForm edit={edit} user={user} handleChange={handleChange} />
-        {/* <EditProfile userName={user_name} userIntroduce={user_introduce} userPhone={user_phone} userEmail={user_email} userProfile={user_profile} onInputName={onInputName} onInputIntroduce={onInputIntroduce} onInputPhone={onInputPhone} onInputEmail={onInputEmail} onInputProfile={onInputProfile} /> */}
-        {/* <EditProfile edit={edit} setEdit={setEdit}/> */}
-      </form>
+      {/* <form onSubmit={changeProfile}> */}
+      <EditForm edit={edit} user={user} handleChange={handleChange} changeProfile={changeProfile} deleteAccount={deleteAccount} />
+      {/* <EditProfile userName={user_name} userIntroduce={user_introduce} userPhone={user_phone} userEmail={user_email} userProfile={user_profile} onInputName={onInputName} onInputIntroduce={onInputIntroduce} onInputPhone={onInputPhone} onInputEmail={onInputEmail} onInputProfile={onInputProfile} /> */}
+      {/* <EditProfile edit={edit} setEdit={setEdit}/> */}
+      {/* </form> */}
     </section>
   );
 }

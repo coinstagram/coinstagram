@@ -14,26 +14,28 @@ import { IEdit } from '../../containers/EditContainer';
 
 export interface EditFormProps {
   edit: {
-    user_profile: string;
-    user_name: string;
-    user_id: string;
-    user_introduce: string;
-    user_email: string;
-    user_phone: string;
-    user_gender: string;
+    user_profile?: string;
+    user_name?: string;
+    user_id?: string;
+    user_introduce?: string;
+    user_email?: string;
+    user_phone?: string;
+    user_gender?: string;
   };
   user: {
-    user_profile: string;
-    user_name: string;
-    user_id: string;
-    user_introduce: string;
-    user_email: string;
-    user_phone: string;
-    user_gender: string;
+    user_profile?: string;
+    user_name?: string;
+    user_id?: string;
+    user_introduce?: string;
+    user_email?: string;
+    user_phone?: string;
+    user_gender?: string;
   };
   handleChange: (edit: IEdit) => void;
+  changeProfile: (e: React.FormEvent<HTMLFormElement>) => void;
+  deleteAccount?: (e: React.FormEvent<HTMLFormElement>) => void;
 }
-export default function EditForm({ edit, user, handleChange }: EditFormProps) {
+export default function EditForm({ edit, user, handleChange, changeProfile, deleteAccount }: EditFormProps) {
   // const { user } = useSelector((state: RootState) => state.userInfo);
   // const profile = user !== null ? user.user_profile : null;
   const pageName = useLocation().pathname;
@@ -95,6 +97,7 @@ export default function EditForm({ edit, user, handleChange }: EditFormProps) {
           <EditProfile
             // profile={edit.user_profile}
             user={user}
+            changeProfile={changeProfile}
             // userId={edit.user_id}
             // userName={edit.user_name}
             // userEmail={edit.user_email}
@@ -102,7 +105,7 @@ export default function EditForm({ edit, user, handleChange }: EditFormProps) {
             handleChange={handleChange}
           />
         )}
-        {pageName === '/edit/account' && <DeleteAccount userId={edit.user_id} />}
+        {pageName === '/edit/account' && <DeleteAccount deleteAccount={deleteAccount} />}
       </div>
     </StyledDiv>
   );

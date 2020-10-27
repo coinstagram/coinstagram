@@ -9,7 +9,6 @@ import { commentSaga } from './comment';
 import { likeSaga } from './like';
 import { bookmarkSaga } from './bookmark';
 import { otherPostsSaga } from './otherPost';
-import {editSaga} from './edit';
 
 function* rootSaga() {
   yield all([
@@ -23,7 +22,6 @@ function* rootSaga() {
     likeSaga(),
     bookmarkSaga(),
     otherPostsSaga(),
-    editSaga()
   ]);
 }
 
