@@ -15,6 +15,7 @@ function preloadedState(token: string | null): RootState {
     edit : {
       loading: false,
       error: null,
+      user:null
     },
     auth: {
       loading: false,

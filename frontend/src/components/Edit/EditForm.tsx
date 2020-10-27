@@ -3,8 +3,8 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { StyledDiv } from './EditFormStyle';
 import Thumbnail from '../common/Thumbnail';
-import RootState from '../../type';
-import { useSelector } from 'react-redux';
+// import RootState from '../../type';
+// import { useSelector } from 'react-redux';
 import EditPassword from './EditPassword';
 import EditProfile from './EditProfile';
 import DeleteAccount from './DeleteAccount';
@@ -14,22 +14,28 @@ import { IEdit } from '../../containers/EditContainer';
 
 export interface EditFormProps {
   edit: {
-    user_name: string;
-    user_introduce: string;
-    user_phone: string;
-    user_email: string;
     user_profile: string;
+    user_name: string;
+    user_id: string;
+    user_introduce: string;
+    user_email: string;
+    user_phone: string;
+    user_gender: string;
+  };
+  user: {
+    user_profile: string;
+    user_name: string;
+    user_id: string;
+    user_introduce: string;
+    user_email: string;
+    user_phone: string;
     user_gender: string;
   };
   handleChange: (edit: IEdit) => void;
 }
-export default function EditForm({ edit, handleChange }: EditFormProps) {
-  // export default function EditForm({ handleChange }: EditFormProps) {
-  const { user } = useSelector((state: RootState) => state.userInfo);
-  const profile = user !== null ? user.user_profile : null;
-  const user_id = user !== null ? user.user_id : null;
-  const user_name = user !== null ? user.user_name : null;
-  const user_email = user !== null ? user.user_email : null;
+export default function EditForm({ edit, user, handleChange }: EditFormProps) {
+  // const { user } = useSelector((state: RootState) => state.userInfo);
+  // const profile = user !== null ? user.user_profile : null;
   const pageName = useLocation().pathname;
 
   // 프로필 사진 변경
@@ -61,12 +67,12 @@ export default function EditForm({ edit, handleChange }: EditFormProps) {
       <div className="wrapper">
         <header>
           <div className="profileImg">
-            <Thumbnail size={40} imageUrl={profile} />
+            <Thumbnail size={40} imageUrl={user.user_profile} />
           </div>
 
           <div className="changeProfile" tabIndex={-1}>
             <dt className="a11y-hidden">user_id</dt>
-            <dd className="thumbnail-click">{user_id}</dd>
+            <dd className="thumbnail-click">{user.user_id}</dd>
             {pageName === '/edit/profile' && (
               <>
                 <label htmlFor="fileupload">프로필 사진 바꾸기</label>
@@ -86,9 +92,17 @@ export default function EditForm({ edit, handleChange }: EditFormProps) {
         </header>
         {pageName === '/edit/password' && <EditPassword />}
         {pageName === '/edit/profile' && (
-          <EditProfile profile={profile} userId={user_id} userName={user_name} userEmail={user_email} edit={edit} handleChange={handleChange} />
+          <EditProfile
+            // profile={edit.user_profile}
+            user={user}
+            // userId={edit.user_id}
+            // userName={edit.user_name}
+            // userEmail={edit.user_email}
+            edit={edit}
+            handleChange={handleChange}
+          />
         )}
-        {pageName === '/edit/account' && <DeleteAccount userId={user_id} />}
+        {pageName === '/edit/account' && <DeleteAccount userId={edit.user_id} />}
       </div>
     </StyledDiv>
   );

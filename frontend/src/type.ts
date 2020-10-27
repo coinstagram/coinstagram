@@ -39,7 +39,7 @@ export interface UserState {
   user_email: null | string;
   user_gender: null | string;
   user_introduce: null | string;
-  user_phone: null | number;
+  user_phone: null | string;
   user_profile: null | string;
   iat?: number;
   exp?: number;
@@ -212,6 +212,7 @@ export interface OtherPostState {
 export interface EditState {
   loading : boolean;
   error:null |Error;
+  user:UserState;
 }
 
 interface RootState {
