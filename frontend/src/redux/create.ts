@@ -13,13 +13,6 @@ const sagaMiddleWare = createSagaMiddleware();
 
 function preloadedState(token: string | null): RootState {
   return {
-    //   edit : {
-    //     editLoadingState : {
-    //     loading : false,
-    //     error: null,
-    //   },
-    //   user:null
-    // },
     auth: {
       loading: false,
       error: null,

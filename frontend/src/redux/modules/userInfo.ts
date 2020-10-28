@@ -505,7 +505,10 @@ function userInfoReducer(state: UserInfoState = initialState, action: UserAction
     case DELETE_SUCCESS:
       return {
         ...state,
-        editLoadingState: state.editLoadingState,
+        editLoadingState: {
+          loading: false,
+          error: null,
+        },
         user: {
           user_profile: null,
           user_name: null,

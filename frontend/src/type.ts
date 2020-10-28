@@ -176,10 +176,10 @@ export interface UserInfoState {
   loading: boolean;
   error: null | Error;
   user: null | UserState;
-  editLoadingState : {
-    loading:boolean,
-    error:null | Error
-},
+  editLoadingState: {
+    loading: boolean;
+    error: null | Error;
+  };
   followers: followState;
   followees: AnotherUserState[];
   randomUsers: followState;
@@ -217,7 +217,7 @@ export interface OtherPostState {
 //   editLoadingState : {
 //     loading : boolean;
 //     error:null |Error;
-//   };  
+//   };
 //   user:UserState;
 // }
 
