@@ -150,38 +150,31 @@ router.get('/posts/:page', verifyToken, async (req, res) => {
     const pageNum = (page - 1) * line;
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      sql = 'select * from posts order by in desc limit  ?, ?;';
+      sql = 'select * from posts order by id desc limit  ?, ?;';
       const [check] = await connection.query(sql, [pageNum, line]);
       const post_id = check.map(({ id }) => +id);
       let isEmpty = checkEmpty(post_id);
-
       if (isEmpty) {
         return res.json([]);
       }
-
       let sqls = '';
       let params = [];
       sql = `select image_path from post_image where post_id = ?;`;
-
       post_id.map((id) => {
         params = [id];
         sqls += mysql.format(sql, params);
       });
-
       const [image] = await connection.query(sqls);
-
       sqls = '';
       sql = `select name from tag where id in (select tag_id from post_tags where post_id = ?);`;
       post_id.map((id) => {
         params = [id];
         sqls += mysql.format(sql, params);
       });
-
       const [hastag] = await connection.query(sqls);
-
       for (let i = 0; i < image.length; i++) {
         let imageitem = '';
-        if (checkMultArray(imageitem)) {
+        if (checkMultArray(image)) {
           imageitem = image[i].map(({ image_path }) => image_path);
           check[i] = {
             ...check[i],
@@ -191,7 +184,9 @@ router.get('/posts/:page', verifyToken, async (req, res) => {
               : hastag.map(({ name }) => name),
           };
         } else {
-          imageitem = image.map(({ image_path }) => image_path);
+          imageitem = checkMultArray(image)
+            ? image[i][0].image_path
+            : image[0].image_path;
           check[i] = {
             ...check[i],
             image_path: imageitem,
