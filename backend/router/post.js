@@ -146,7 +146,7 @@ router.get('/posts/:page', verifyToken, async (req, res) => {
   try {
     const { page } = req.params;
     console.log('page', page);
-    const line = 19;
+    const line = 15;
     const pageNum = (page - 1) * line;
     const connection = await pool.getConnection(async (conn) => conn);
     try {
@@ -225,6 +225,14 @@ router.get('/post/:post_id', verifyToken, async (req, res) => {
 
       sql = `select image_path from post_image where post_id = ?`;
       const [image] = await connection.query(sql, post_id);
+
+      // sql = 'select tag_id from post_tags where post_id = ?';
+
+      sql =
+        'select name from tag where id in (select tag_id from post_tags where post_id = ?);';
+
+      let [hastag] = await connection.query(sql, post_id);
+      console.log('hastag', hastag);
 
       const reqData = {
         ...check[0],
