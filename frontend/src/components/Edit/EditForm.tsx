@@ -1,27 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { StyledDiv } from './EditFormStyle';
 import Thumbnail from '../common/Thumbnail';
-// import RootState from '../../type';
-// import { useSelector } from 'react-redux';
 import EditPassword from './EditPassword';
 import EditProfile from './EditProfile';
 import DeleteAccount from './DeleteAccount';
-import uploadService from '../../redux/services/uploadService';
-import { changeUserProfile } from '../../redux/modules/userInfo';
 import { IEdit } from '../../containers/EditContainer';
 
 export interface EditFormProps {
-  edit: {
-    user_profile?: string;
-    user_name?: string;
-    user_id?: string;
-    user_introduce?: string;
-    user_email?: string;
-    user_phone?: string;
-    user_gender?: string;
-  };
+  edit: IEdit;
   user: {
     user_profile?: string;
     user_name?: string;
@@ -31,26 +18,14 @@ export interface EditFormProps {
     user_phone?: string;
     user_gender?: string;
   };
+  isSelectedImg?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleChange: (edit: IEdit) => void;
   changeProfile: (e: React.FormEvent<HTMLFormElement>) => void;
   deleteAccount?: (e: React.FormEvent<HTMLFormElement>) => void;
 }
-export default function EditForm({ edit, user, handleChange, changeProfile, deleteAccount }: EditFormProps) {
-  // const { user } = useSelector((state: RootState) => state.userInfo);
-  // const profile = user !== null ? user.user_profile : null;
+export default function EditForm({ edit, user, handleChange, changeProfile, isSelectedImg, deleteAccount }: EditFormProps) {
   const pageName = useLocation().pathname;
 
-  // 프로필 사진 변경
-  const dispatch = useDispatch();
-  const [imageURL, setImageURL] = useState<string | null>(null);
-  useEffect(() => {
-    if (!imageURL) return;
-    dispatch(changeUserProfile(imageURL));
-  }, [dispatch, imageURL]);
-  const isSelectedImg = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const res = await uploadService.UserProFile(event.target.files.item(0), localStorage.getItem('access_token'));
-    setImageURL(res);
-  };
   return (
     <StyledDiv>
       <nav>
@@ -69,12 +44,12 @@ export default function EditForm({ edit, user, handleChange, changeProfile, dele
       <div className="wrapper">
         <header>
           <div className="profileImg">
-            <Thumbnail size={40} imageUrl={user.user_profile} />
+            <Thumbnail size={40} imageUrl={user && user.user_profile} />
           </div>
 
           <div className="changeProfile" tabIndex={-1}>
-            <dt className="a11y-hidden">user_id</dt>
-            <dd className="thumbnail-click">{user.user_id}</dd>
+            <dt className="a11y-hidden">{user && user.user_id}</dt>
+            <dd className="thumbnail-click">{user && user.user_id}</dd>
             {pageName === '/edit/profile' && (
               <>
                 <label htmlFor="fileupload">프로필 사진 바꾸기</label>
@@ -84,27 +59,16 @@ export default function EditForm({ edit, user, handleChange, changeProfile, dele
                   name="fildupload"
                   className="a11y-hidden"
                   tabIndex={-1}
+                  // value={edit.user_profile}
                   onChange={isSelectedImg}
                   accept="image/png, image/jpeg"
                 />
               </>
             )}
-            {/* {img && <Thumbnail />} */}
           </div>
         </header>
+        {pageName === '/edit/profile' && <EditProfile user={user} changeProfile={changeProfile} edit={edit} handleChange={handleChange} />}
         {pageName === '/edit/password' && <EditPassword />}
-        {pageName === '/edit/profile' && (
-          <EditProfile
-            // profile={edit.user_profile}
-            user={user}
-            changeProfile={changeProfile}
-            // userId={edit.user_id}
-            // userName={edit.user_name}
-            // userEmail={edit.user_email}
-            edit={edit}
-            handleChange={handleChange}
-          />
-        )}
         {pageName === '/edit/account' && <DeleteAccount deleteAccount={deleteAccount} />}
       </div>
     </StyledDiv>

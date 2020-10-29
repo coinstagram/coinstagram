@@ -154,30 +154,24 @@ router.get('/posts/:page', verifyToken, async (req, res) => {
       const [check] = await connection.query(sql, [pageNum, line]);
       const post_id = check.map(({ id }) => +id);
       let isEmpty = checkEmpty(post_id);
-
       if (isEmpty) {
         return res.json([]);
       }
-
       let sqls = '';
       let params = [];
       sql = `select image_path from post_image where post_id = ?;`;
-
       post_id.map((id) => {
         params = [id];
         sqls += mysql.format(sql, params);
       });
       const [image] = await connection.query(sqls);
-
       sqls = '';
       sql = `select name from tag where id in (select tag_id from post_tags where post_id = ?);`;
       post_id.map((id) => {
         params = [id];
         sqls += mysql.format(sql, params);
       });
-
       const [hastag] = await connection.query(sqls);
-
       for (let i = 0; i < image.length; i++) {
         let imageitem = '';
         if (checkMultArray(image)) {

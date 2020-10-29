@@ -15,7 +15,7 @@ function Login() {
       <LoginPhoneImage />
       <LoginWrapper width={width}>
         <LoginContainer />
-        <Link to={'/join'}>
+        <Link to="/join">
           <JoinAskLogin askContent="계정이 없으신가요?" content="가입하기" />
         </Link>
         {width > 750 && <JoinAppDownload />}
