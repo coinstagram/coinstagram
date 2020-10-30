@@ -405,29 +405,24 @@ router.get('/comment/post/:post_id', verifyToken, async (req, res) => {
  * get post detail
  * /user/post/:user_id
  */
-router.get('/user/post/:user_id', verifyToken, async (req, res) => {
+router.get('/user/:user_id/:page', verifyToken, async (req, res) => {
   console.log('/user/post/:user_id');
-  const { user_id } = req.params;
+  const { user_id, page } = req.params;
+  const line = 20;
+  const pageNum = (page - 1) * line;
   let sql = ``;
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      sql = `select * from posts where user_id = ? order by id desc`;
-      const [check] = await connection.query(sql, user_id);
+      sql = `select * from posts where user_id = ? order by id desc limit ?, ?`;
+      const [check] = await connection.query(sql, [user_id, pageNum, line]);
       if (check.length === 0) return res.send([]);
       const post_id = check.map(({ id }) => id);
       let sqls = '';
       let params = [];
 
-      sqls = '';
-      sql =
-        'select name from tag where id in (select tag_id from post_tags where post_id = ?);';
-      post_id.map((id) => {
-        params = [id];
-        sqls += mysql.format(sql, params);
-      });
-      let [hastag] = await connection.query(sqls);
-      console.log('hastag', hastag);
+      sql = `select name from tag where id in (select tag_id from post_tags where post_id in(${post_id}));`;
+      let [hastag] = await connection.query(sql);
       // if (hastag === '0') hastag = [];
 
       sqls = '';
@@ -452,10 +447,10 @@ router.get('/user/post/:user_id', verifyToken, async (req, res) => {
 
       if (sqls.length !== 0) {
         const [image] = await connection.query(sqls);
-        console.log(image);
         try {
           for (let i = 0; i < image.length; i++) {
             let imageitem = image[i].map(({ image_path }) => image_path);
+            console.log(imageitem);
             check[i] = {
               ...check[i],
               image_path: imageitem,
@@ -463,7 +458,7 @@ router.get('/user/post/:user_id', verifyToken, async (req, res) => {
             };
           }
         } catch (err) {
-          let imageitem = image.map(({ image_path }) => image_path);
+          let imageitem = image[0].map(({ image_path }) => image_path);
           check[0] = {
             ...check[0],
             image_path: imageitem,
