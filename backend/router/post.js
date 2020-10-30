@@ -7,6 +7,92 @@ const pool = require('../config/database');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+
+router.get('/posts/hastag/:hastag/:page', verifyToken, async (req, res) => {
+  const { page } = req.params;
+  const line = 15;
+  const pageNum = (page - 1) * line;
+  let { hastag } = req.params;
+  hastag = `#${hastag}`;
+  const token = req.headers.authorization.split('Bearer ')[1];
+  const { user_id } = jwt.verify(
+    token,
+    // eslint-disable-next-line no-undef
+    process.env.JWT_SECRET,
+  );
+  console.log('/post/hastag/ 입니다.');
+  let sql = '';
+  let sqls = '';
+  let params = [];
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      sql = `select post_id from post_tags where tag_id in ((select id from tag where name = ?));`;
+      const [postId] = await connection.query(sql, [hastag]);
+      const post_id = postId.map(({ post_id }) => post_id);
+
+      sql = `select * from posts where id in (${post_id.join(
+        ',',
+      )}) limit  ?, ?;`;
+      let [check] = await connection.query(sql, [pageNum, line]);
+      let isEmpty = checkEmpty(post_id);
+      if (isEmpty) {
+        return res.json([]);
+      }
+      let sqls = '';
+      let params = [];
+      sql = `select image_path from post_image where post_id = ?;`;
+      post_id.map((id) => {
+        params = [id];
+        sqls += mysql.format(sql, params);
+      });
+      const [image] = await connection.query(sqls);
+      sqls = '';
+      sql = `select name from tag where id in (select tag_id from post_tags where post_id = ?);`;
+      post_id.map((id) => {
+        params = [id];
+        sqls += mysql.format(sql, params);
+      });
+      const [tag] = await connection.query(sqls);
+      console.log(post_id);
+      for (let i = 0; i < post_id.length; i++) {
+        let imageitem = '';
+        if (checkMultArray(image)) {
+          imageitem = image[i].map(({ image_path }) => image_path);
+          check[i] = {
+            ...check[i],
+            image_path: imageitem,
+            hastag: checkMultArray(tag)
+              ? tag[i].map(({ name }) => name)
+              : tag.map(({ name }) => name),
+          };
+        } else {
+          imageitem = checkMultArray(image)
+            ? image[i][0].image_path
+            : image[0].image_path;
+          check[i] = {
+            ...check[i],
+            image_path: imageitem,
+            hastag: checkMultArray(tag)
+              ? tag[i].map(({ name }) => name)
+              : tag.map(({ name }) => name),
+          };
+        }
+      }
+      res.send(check);
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      console.log(error);
+      res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
+});
+
 /**
  * add post
  * /post
@@ -1368,5 +1454,7 @@ router.get('/relationship/post/:page', verifyToken, async (req, res) => {
     res.status(500).json('DB CONNECT ERROR');
   }
 });
+
+//-------------------
 
 module.exports = router;

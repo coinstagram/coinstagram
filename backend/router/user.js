@@ -276,11 +276,35 @@ router.delete('/user', verifyToken, async (req, res) => {
       sql = 'SET foreign_key_checks = 0;';
       await connection.query(sql);
       sql = ' delete from users where user_id = ?';
-      const [result] = await connection.query(sql, user_id);
-      const isDel = result.affectedRows;
+      await connection.query(sql, user_id);
       sql = 'SET foreign_key_checks = 1;';
       await connection.query(sql);
-      res.send({ success: isDel === 0 ? 'false' : 'ture' });
+
+      sql = 'SET foreign_key_checks = 0;';
+      await connection.query(sql);
+      sql = ' delete from posts where user_id = ?';
+      await connection.query(sql, user_id);
+      sql = 'SET foreign_key_checks = 1;';
+      await connection.query(sql);
+
+      sql = 'SET foreign_key_checks = 0;';
+      await connection.query(sql);
+      sql =
+        ' delete from post_tags where post_id in (select id from posts where user_id = ?)';
+      await connection.query(sql, user_id);
+      sql = 'SET foreign_key_checks = 1;';
+      await connection.query(sql);
+
+      // select * from tag where id in (select tag_id from post_tags where post_id in (select id from posts where user_id = 111111));
+      sql = 'SET foreign_key_checks = 0;';
+      await connection.query(sql);
+      sql =
+        ' delete from tag where id in (select tag_id from post_tags where post_id in (select id from posts where user_id = ?))';
+      await connection.query(sql, user_id);
+      sql = 'SET foreign_key_checks = 1;';
+      await connection.query(sql);
+
+      res.send({ success: 'ture' });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
       await connection.release();
