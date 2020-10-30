@@ -298,24 +298,34 @@ router.patch('/user', verifyToken, async (req, res) => {
   console.log('/user patch');
   let sql = '';
   const {
-    user_name,
-    user_introduce,
-    user_phone,
-    user_email,
     user_profile,
+    user_name,
+    user_id,
+    user_introduce,
+    user_email,
+    user_phone,
     user_gender,
   } = req.body;
-  console.log(user_name, user_introduce, user_phone, user_email, user_profile);
+  console.log(
+    user_profile,
+    user_name,
+    user_id,
+    user_introduce,
+    user_email,
+    user_phone,
+    user_gender,
+  );
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
-      sql = `update users set user_name = ?, user_introduce = ?, user_phone = ?, user_email=?, user_profile=?, user_gender=?`;
+      sql = `update users set user_profile=?, user_name = ?, user_id = ?, user_introduce = ?, user_email=?, user_phone = ?, user_gender=?`;
       await connection.query(sql, [
-        user_name,
-        user_introduce,
-        user_phone,
-        user_email,
         user_profile,
+        user_name,
+        user_id,
+        user_introduce,
+        user_email,
+        user_phone,
         user_gender,
       ]);
 

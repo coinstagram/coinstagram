@@ -1,8 +1,7 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import useWindowWidth from '../../hooks/useWindowWidth';
-import RootState from '../../type';
 import useObserver from '../../hooks/useObserver';
+import { EachPostState } from '../../type';
 
 // styles
 import { StyledSection, StyledDiv, StyledErrorDiv } from './RandomPostsStyle';
@@ -11,24 +10,22 @@ import { StyledNocontentDiv } from '../profile/ProfilePostsStyle';
 // components
 import Spinner from '../common/Spinner';
 import OtherPostItem from '../post/OtherPostItem';
+import { StyledLastComment, StyledSpinnerDiv } from '../feed/FeedStyle';
 
 interface RandomPostsProps {
-  getRandomPosts: (count: number) => void;
+  loading: boolean;
+  error: Error | null;
+  randomPosts: EachPostState[];
+  isLast: boolean;
   getPostCounts: (post_id: number) => void;
 }
 
-function RandomPosts({ getRandomPosts, getPostCounts }: RandomPostsProps) {
-  const { loading, error, randomPosts } = useSelector((state: RootState) => state.posts.randomPosts);
+function RandomPosts({ loading, error, randomPosts, isLast, getPostCounts }: RandomPostsProps) {
   const width = useWindowWidth();
-  const observerObj = useObserver('random');
+  const observerObj = useObserver('random', isLast);
 
   return (
     <StyledSection width={width}>
-      {loading && (
-        <StyledDiv>
-          <Spinner />
-        </StyledDiv>
-      )}
       {!loading && error !== null && (
         <StyledErrorDiv>
           <p>
@@ -56,7 +53,14 @@ function RandomPosts({ getRandomPosts, getPostCounts }: RandomPostsProps) {
           ))}
         </ul>
       }
-      <div ref={observerObj.lastItemRef}></div>
+      <div style={{ position: 'relative', height: 80 }} ref={observerObj.lastItemRef}>
+        {loading && (
+          <StyledSpinnerDiv>
+            <Spinner />
+          </StyledSpinnerDiv>
+        )}
+        {isLast && <StyledLastComment>마지막 게시물입니다.</StyledLastComment>}
+      </div>{' '}
     </StyledSection>
   );
 }

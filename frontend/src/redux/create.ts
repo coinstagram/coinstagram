@@ -6,16 +6,13 @@ import createSagaMiddleware from 'redux-saga';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { routerMiddleware } from 'connected-react-router';
 import { createBrowserHistory } from 'history';
+import { createNull } from 'typescript';
 
 export const history = createBrowserHistory();
 const sagaMiddleWare = createSagaMiddleware();
 
 function preloadedState(token: string | null): RootState {
   return {
-    edit : {
-      loading: false,
-      error: null,
-    },
     auth: {
       loading: false,
       error: null,
@@ -25,6 +22,10 @@ function preloadedState(token: string | null): RootState {
       loading: false,
       error: null,
       user: null,
+      editLoadingState: {
+        loading: false,
+        error: null,
+      },
       followers: {
         loading: false,
         error: null,

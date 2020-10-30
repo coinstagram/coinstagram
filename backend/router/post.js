@@ -146,7 +146,7 @@ router.get('/posts/:page', verifyToken, async (req, res) => {
   try {
     const { page } = req.params;
     console.log('page', page);
-    const line = 19;
+    const line = 15;
     const pageNum = (page - 1) * line;
     const connection = await pool.getConnection(async (conn) => conn);
     try {
@@ -154,30 +154,24 @@ router.get('/posts/:page', verifyToken, async (req, res) => {
       const [check] = await connection.query(sql, [pageNum, line]);
       const post_id = check.map(({ id }) => +id);
       let isEmpty = checkEmpty(post_id);
-
       if (isEmpty) {
         return res.json([]);
       }
-
       let sqls = '';
       let params = [];
       sql = `select image_path from post_image where post_id = ?;`;
-
       post_id.map((id) => {
         params = [id];
         sqls += mysql.format(sql, params);
       });
       const [image] = await connection.query(sqls);
-
       sqls = '';
       sql = `select name from tag where id in (select tag_id from post_tags where post_id = ?);`;
       post_id.map((id) => {
         params = [id];
         sqls += mysql.format(sql, params);
       });
-
       const [hastag] = await connection.query(sqls);
-
       for (let i = 0; i < image.length; i++) {
         let imageitem = '';
         if (checkMultArray(image)) {
@@ -238,11 +232,12 @@ router.get('/post/:post_id', verifyToken, async (req, res) => {
         'select name from tag where id in (select tag_id from post_tags where post_id = ?);';
 
       let [hastag] = await connection.query(sql, post_id);
-      console.log('hastag', hastag);
+      console.log(hastag.map(({ name }) => name));
 
       const reqData = {
         ...check[0],
         image_path: [...image.map(({ image_path }) => image_path)],
+        hastag: hastag.map(({ name }) => name),
       };
       res.send(reqData);
     } catch (error) {
@@ -421,9 +416,13 @@ router.get('/user/:user_id/:page', verifyToken, async (req, res) => {
       let sqls = '';
       let params = [];
 
-      sql = `select name from tag where id in (select tag_id from post_tags where post_id in(${post_id}));`;
-      let [hastag] = await connection.query(sql);
-      // if (hastag === '0') hastag = [];
+      sqls = '';
+      sql = `select name from tag where id in (select tag_id from post_tags where post_id = ?);`;
+      post_id.map((id) => {
+        params = [id];
+        sqls += mysql.format(sql, params);
+      });
+      const [hastag] = await connection.query(sqls);
 
       sqls = '';
       sql = `select image_path from post_image where post_id = ?;`;
@@ -449,19 +448,14 @@ router.get('/user/:user_id/:page', verifyToken, async (req, res) => {
         const [image] = await connection.query(sqls);
         try {
           for (let i = 0; i < image.length; i++) {
-            let imageitem = image[i].map(({ image_path }) => image_path);
-            console.log(imageitem);
             check[i] = {
               ...check[i],
-              image_path: imageitem,
               hastag: hastag[i].map(({ name }) => name),
             };
           }
         } catch (err) {
-          let imageitem = image[0].map(({ image_path }) => image_path);
           check[0] = {
             ...check[0],
-            image_path: imageitem,
             hastag: checkMultArray(hastag)
               ? hastag[0].map(({ name }) => name)
               : hastag[0].name,

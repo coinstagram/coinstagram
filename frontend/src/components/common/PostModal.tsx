@@ -45,13 +45,9 @@ function PostModal({
           {user_id === userId && (
             <>
               <li>
-                <button>
-                  <span tabIndex={-1}>
-                    <Link to={`/change/${postId}`}>
-                      <span tabIndex={-1}>수정하기</span>
-                    </Link>
-                  </span>
-                </button>
+                <Link to={`/change/${postId}`}>
+                  <span tabIndex={-1}>수정하기</span>
+                </Link>
               </li>
               <li>
                 <button onClick={postDelete}>

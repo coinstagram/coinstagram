@@ -34,13 +34,13 @@ export interface AnotherUserState {
 }
 
 export interface UserState {
-  user_id: null | string;
-  user_name: null | string;
-  user_email: null | string;
-  user_gender: null | string;
-  user_introduce: null | string;
-  user_phone: null | number;
-  user_profile: null | string;
+  user_id?: null | string;
+  user_name?: null | string;
+  user_email?: null | string;
+  user_gender?: null | string;
+  user_introduce?: null | string;
+  user_phone?: null | string;
+  user_profile?: null | string;
   iat?: number;
   exp?: number;
 }
@@ -176,6 +176,10 @@ export interface UserInfoState {
   loading: boolean;
   error: null | Error;
   user: null | UserState;
+  editLoadingState: {
+    loading: boolean;
+    error: null | Error;
+  };
   followers: followState;
   followees: AnotherUserState[];
   randomUsers: followState;
@@ -209,10 +213,13 @@ export interface OtherPostState {
   otherPosts: EachPostState[];
   counts: CountState;
 }
-export interface EditState {
-  loading : boolean;
-  error:null |Error;
-}
+// export interface EditState {
+//   editLoadingState : {
+//     loading : boolean;
+//     error:null |Error;
+//   };
+//   user:UserState;
+// }
 
 interface RootState {
   auth: AuthState;
@@ -224,7 +231,7 @@ interface RootState {
   likes: likeState;
   bookmarks: BookmarkState;
   otherPosts: OtherPostState;
-  edit : EditState;
+  // edit : EditState;
 }
 
 export default RootState;
