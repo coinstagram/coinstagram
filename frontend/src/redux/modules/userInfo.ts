@@ -245,7 +245,6 @@ function* followingCancelSaga(action: followSagaActions) {
 }
 function* editRequestSaga(action: editSagaActions) {
   const payload = action.payload;
-  console.log(payload);
   yield put(editStart());
   try {
     const { token }: AuthState = yield select((state: RootState) => state.auth);
@@ -327,7 +326,6 @@ const initialState: UserInfoState = {
 function userInfoReducer(state: UserInfoState = initialState, action: UserActions): UserInfoState {
   switch (action.type) {
     case CHANGE_USER_PROFILE:
-      console.log(action.payload);
       return {
         ...state,
         loading: false,

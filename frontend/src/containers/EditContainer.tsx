@@ -7,7 +7,6 @@ import EditForm from '../components/Edit/EditForm';
 import uploadService from '../redux/services/uploadService';
 import TokenService from '../redux/services/tokenService';
 import { logout } from '../redux/modules/auth';
-// import { changeUserProfile } from '../redux/modules/userInfo';
 
 export interface IEdit {
   user_name?: string;
@@ -18,26 +17,8 @@ export interface IEdit {
 }
 function EditContainer() {
   const dispatch = useDispatch();
-  // const { token } = useSelector((state: RootState) => state.auth);
   const { user } = useSelector((state: RootState) => state.userInfo);
 
-  // useEffect(() => {
-  //   if (token === null) return;
-  //   dispatch(getUserInfoSaga());
-  // }, [dispatch, token]);
-  // const [edit, setEdit] = useState<IEdit>({
-  //   user_name: '',
-  //   user_introduce: '',
-  //   user_email: '',
-  //   user_phone: '',
-  //   user_gender: '',
-  // });
-  // const name = user !== null ? user.user_name : edit.user_name;
-  // const id = user !== null ? user.user_id : null;
-  // const introduce = user !== null ? user.user_introduce : edit.user_introduce;
-  // const email = user !== null ? user.user_email : edit.user_email;
-  // const phone = user !== null ? user.user_phone : edit.user_phone;
-  // const gender = user !== null ? user.user_gender : edit.user_gender;
   const name = user !== null ? user.user_name : null;
   const id = user !== null ? user.user_id : null;
   const introduce = user !== null ? user.user_introduce : null;
@@ -52,21 +33,17 @@ function EditContainer() {
     user_phone: phone,
     user_gender: gender,
   });
+
   const handleChange = (edit: IEdit): void => {
     setEdit(edit);
   };
   // 프로필 사진 변경
   const [imageURL, setImageURL] = useState<string | null>(null);
 
-  // useEffect(() => {
-  //   if (!imageURL) return;
-  //   dispatch(changeUserProfile(imageURL));
-  // }, [dispatch, imageURL]);
-
   const isSelectedImg = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const res = await uploadService.UserProFile(event.target.files.item(0), localStorage.getItem('access_token'));
     setImageURL(res);
-    console.log(event.target);
+    console.log(res);
   };
 
   const changeProfile = (e: React.FormEvent<HTMLFormElement>) => {
