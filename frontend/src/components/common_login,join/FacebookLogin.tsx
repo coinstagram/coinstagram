@@ -16,6 +16,7 @@ export const StyledButton = styled.button`
   text-align: center;
   border-radius: 3px;
   margin-bottom: 10px;
+  padding: 5px;
   width: 100%;
   cursor: pointer;
   img {

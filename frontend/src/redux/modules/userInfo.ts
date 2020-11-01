@@ -327,7 +327,6 @@ const initialState: UserInfoState = {
 function userInfoReducer(state: UserInfoState = initialState, action: UserActions): UserInfoState {
   switch (action.type) {
     case CHANGE_USER_PROFILE:
-      console.log(action.payload);
       return {
         ...state,
         loading: false,
@@ -482,7 +481,11 @@ function userInfoReducer(state: UserInfoState = initialState, action: UserAction
       return {
         ...state,
         editLoadingState: state.editLoadingState,
-        user: action.payload,
+        user: {
+          ...action.payload,
+          user_profile: action.payload.user_profile === null ? state.user.user_profile : action.payload.user_profile,
+        },
+        // user: action.payload,
       };
     case EDIT_FAIL:
       return {
