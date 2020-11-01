@@ -2,14 +2,15 @@ import React from 'react';
 import { StyledArticle } from './EditProfileStyle';
 import { EditFormProps } from './EditForm';
 
-function EditProfile({ user, edit, handleChange, changeProfile }: EditFormProps) {
-  const onChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLSelectElement>) => {
-    const { value, name } = e.target;
-    handleChange({
-      ...edit,
-      [name]: value,
-    });
-  };
+function EditProfile({ user, edit, onChange, changeProfile }: EditFormProps) {
+  // function EditProfile({ user, edit, handleChange, changeProfile }: EditFormProps) {
+  // const onChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLSelectElement>) => {
+  //   const { value, name } = e.target;
+  //   handleChange({
+  //     ...edit,
+  //     [name]: value,
+  //   });
+  // };
 
   return (
     <StyledArticle>

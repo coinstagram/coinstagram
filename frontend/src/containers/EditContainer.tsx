@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { editSagaActionCreator, deleteSagaActionCreator } from '../redux/modules/userInfo';
 import RootState from '../type';
 import { useSelector } from 'react-redux';
-import EditForm from '../components/Edit/EditForm';
 import uploadService from '../redux/services/uploadService';
 import TokenService from '../redux/services/tokenService';
 import { logout } from '../redux/modules/auth';
+
+// components
+import EditForm from '../components/Edit/EditForm';
 
 export interface IEdit {
   user_name?: string;
@@ -34,16 +36,29 @@ function EditContainer() {
     user_gender: gender,
   });
 
-  const handleChange = (edit: IEdit): void => {
-    setEdit(edit);
+  const onChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLSelectElement>) => {
+    const { value, name } = e.target;
+    setEdit({
+      ...edit,
+      [name]: value,
+    });
   };
-  // 프로필 사진 변경
+
+  useEffect(() => {
+    setEdit({
+      user_name: name,
+      user_introduce: introduce,
+      user_email: email,
+      user_phone: phone,
+      user_gender: gender,
+    });
+  }, [email, gender, introduce, name, phone, user]);
+
   const [imageURL, setImageURL] = useState<string | null>(null);
 
   const isSelectedImg = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const res = await uploadService.UserProFile(event.target.files.item(0), localStorage.getItem('access_token'));
     setImageURL(res);
-    console.log(res);
   };
 
   const changeProfile = (e: React.FormEvent<HTMLFormElement>) => {
@@ -62,7 +77,7 @@ function EditContainer() {
       <EditForm
         edit={edit}
         user={user}
-        handleChange={handleChange}
+        onChange={onChange}
         changeProfile={changeProfile}
         isSelectedImg={isSelectedImg}
         deleteAccount={deleteAccount}
