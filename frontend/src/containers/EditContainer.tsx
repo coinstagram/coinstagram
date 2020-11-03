@@ -92,7 +92,6 @@ function EditContainer() {
   const changeProfile = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(editSagaActionCreator(imageURL, edit.user_name, id, edit.user_introduce, edit.user_email, edit.user_phone, edit.user_gender));
-    // dispatch(editSagaActionCreator(imageURL, edit.user_name, id, edit.user_introduce, edit.user_email, edit.user_phone, edit.user_gender));
   };
   const deleteAccount = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
