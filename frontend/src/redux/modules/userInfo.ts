@@ -278,7 +278,6 @@ function* editRequestSaga(action: editSagaActions) {
 }
 function* deleteRequestSaga(action: deleteSagaActions) {
   const payload = action.payload;
-  console.log(payload);
   yield put(deleteStart());
   try {
     const { token }: AuthState = yield select((state: RootState) => state.auth);

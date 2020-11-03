@@ -76,11 +76,9 @@ export const StyledDiv = styled.div`
           font-weight: bold;
           text-align: left;
           cursor: pointer;
-          /* outline: none; */
           width: 121px;
         }
         input {
-          /* outline: none; */
         }
       }
     }

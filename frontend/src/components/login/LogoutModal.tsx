@@ -32,7 +32,7 @@ export default function LogoutModal() {
           </button>
           <button className="noBtn" onClick={noLogout}>
             아니오
-            {loggedIn && <Route path="/" component={Home} />}
+            {/* {loggedIn && <Route path="/" component={Home} />} */}
           </button>
         </div>
       </StyledModal>

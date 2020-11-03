@@ -20,7 +20,7 @@ export interface IEdit {
 function EditContainer() {
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.userInfo);
-
+  const profile = user !== null ? user.user_profile : null;
   const name = user !== null ? user.user_name : null;
   const id = user !== null ? user.user_id : null;
   const introduce = user !== null ? user.user_introduce : null;
@@ -35,7 +35,7 @@ function EditContainer() {
     user_phone: phone,
     user_gender: gender,
   });
-
+  const [imageURL, setImageURL] = useState<string | null>(null);
   const onChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLSelectElement>) => {
     const { value, name } = e.target;
     setEdit({
@@ -52,9 +52,8 @@ function EditContainer() {
       user_phone: phone,
       user_gender: gender,
     });
-  }, [email, gender, introduce, name, phone, user]);
-
-  const [imageURL, setImageURL] = useState<string | null>(null);
+    setImageURL(profile);
+  }, [email, gender, introduce, name, phone, profile, user]);
 
   const isSelectedImg = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const res = await uploadService.UserProFile(event.target.files.item(0), localStorage.getItem('access_token'));
@@ -77,6 +76,7 @@ function EditContainer() {
       <EditForm
         edit={edit}
         user={user}
+        imageURL={imageURL}
         onChange={onChange}
         changeProfile={changeProfile}
         isSelectedImg={isSelectedImg}

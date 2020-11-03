@@ -18,22 +18,14 @@ export interface EditFormProps {
     user_phone?: string;
     user_gender?: string;
   };
+  imageURL?: string;
   isSelectedImg?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onChange: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLSelectElement>) => void;
-  // handleChange: (edit: IEdit) => void;
   changeProfile: (e: React.FormEvent<HTMLFormElement>) => void;
   deleteAccount?: (e: React.FormEvent<HTMLFormElement>) => void;
 }
-export default function EditForm({ edit, user, onChange, isSelectedImg, changeProfile, deleteAccount }: EditFormProps) {
+export default function EditForm({ edit, user, imageURL, onChange, isSelectedImg, changeProfile, deleteAccount }: EditFormProps) {
   const pageName = useLocation().pathname;
-
-  // const onChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLSelectElement>) => {
-  //   const { value, name } = e.target;
-  //   handleChange({
-  //     ...edit,
-  //     [name]: value,
-  //   });
-  // };
 
   return (
     <StyledDiv>
@@ -53,21 +45,20 @@ export default function EditForm({ edit, user, onChange, isSelectedImg, changePr
       <div className="wrapper">
         <header>
           <div className="profileImg">
-            <Thumbnail size={40} imageUrl={user && user.user_profile} />
+            <Thumbnail size={40} imageUrl={imageURL} />
           </div>
           <div className="changeProfile" tabIndex={-1}>
             <dt className="a11y-hidden">{user && user.user_id}</dt>
             <dd className="thumbnail-click">{user && user.user_id}</dd>
             {pageName === '/edit/profile' && (
               <>
-                <label htmlFor="fileupload">프로필 사진 바꾸기</label>
+                <label htmlFor="user_profile">프로필 사진 바꾸기</label>
                 <input
                   type="file"
-                  id="fileupload"
+                  id="user_profile"
                   name="user_profile"
                   className="a11y-hidden"
                   tabIndex={-1}
-                  // value={edit.user_profile}
                   onChange={isSelectedImg}
                   accept="image/png, image/jpeg"
                 />

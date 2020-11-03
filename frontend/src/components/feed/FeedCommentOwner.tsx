@@ -30,9 +30,9 @@ function FeedCommentOwner({ userId, userProfile, context, hashTags, thumbnail, c
       <span className="owner-context">{context}</span>
       <StyledTagDiv>
         {hashTags.length !== 0 &&
-          hashTags.map(i => (
-            <Link to={`explore/tags/${i.slice(1)}`} key={i}>
-              {i}
+          hashTags.map(tag => (
+            <Link to={`/explore/tags/${tag.slice(1)}`} key={tag}>
+              {tag}
             </Link>
           ))}
         {hashTags.length === 0 && <StyledEmptyDiv />}
