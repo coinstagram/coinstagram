@@ -12,7 +12,7 @@ export const StyledArticle = styled.article`
       width: 355px;
     }
     button[type='submit'] {
-      background: #b2dffc;
+      background: #0095f6;
       color: white;
       font-weight: bold;
       text-align: center;
