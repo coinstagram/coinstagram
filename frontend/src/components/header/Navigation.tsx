@@ -12,6 +12,7 @@ import { FaCompass } from 'react-icons/fa';
 import Thumbnail from '../common/Thumbnail';
 import NavModal from './NavModal';
 import useWindowWidth from '../../hooks/useWindowWidth';
+import LogoutModal from '../login/LogoutModal';
 
 interface State {
   favorite: boolean;
@@ -34,6 +35,13 @@ function Navigation({ imageUrl, userId }: NavigationProps) {
   const top = useRef<number>(0);
   const left = useRef<number>(0);
 
+  const [logoutModal, setLogoutModal] = useState(false);
+  const onLogout = () => {
+    setLogoutModal(true);
+  };
+  const closeModal = () => {
+    setLogoutModal(false);
+  };
   return (
     <StyledNav width={width}>
       <h2 id="nav-heading" className="a11y-hidden">
@@ -57,9 +65,10 @@ function Navigation({ imageUrl, userId }: NavigationProps) {
           <StyledButton clicked={state.profile}>
             <Thumbnail size={width > 400 ? 28 : 22} imageUrl={imageUrl} />
           </StyledButton>
-          {state.profile && <NavModal top={top.current} left={left.current} profile={state.profile} userId={userId} />}
+          {state.profile && <NavModal top={top.current} left={left.current} profile={state.profile} userId={userId} onLogout={onLogout} />}
         </li>
       </ul>
+      {logoutModal && <LogoutModal closeModal={closeModal} />}
     </StyledNav>
   );
 

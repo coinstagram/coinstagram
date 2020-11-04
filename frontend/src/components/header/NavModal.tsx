@@ -1,9 +1,5 @@
-import React, { useState } from 'react';
-import { logout } from '../../redux/modules/auth';
-import { useDispatch } from 'react-redux';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import TokenService from '../../redux/services/tokenService';
-import LogoutModal from '../login/LogoutModal';
 
 // styles
 import { StyledDivBg, StyledModal, StyledReadyDiv } from './NavModalStyle';
@@ -22,18 +18,11 @@ export interface NavModalProps {
   profile?: boolean;
   userId?: null | string;
 }
+interface logoutProps extends NavModalProps {
+  onLogout?: () => void;
+}
 
-function NavModal({ top, left, favorite, profile, userId }: NavModalProps) {
-  const dispatch = useDispatch();
-  const [logoutModal, setLogoutModal] = useState(true);
-
-  const onLogout = () => {
-    // console.log(logoutModal);
-    setLogoutModal(true);
-    dispatch(logout());
-    TokenService.remove();
-  };
-  // console.log(logoutModal);
+function NavModal({ top, left, favorite, profile, userId, onLogout }: logoutProps) {
   return (
     <StyledDivBg>
       <StyledModal top={top} left={left}>
@@ -58,16 +47,11 @@ function NavModal({ top, left, favorite, profile, userId }: NavModalProps) {
                   <span>설정</span>
                 </Link>
               </li>
-              {/* <li onClick={onLogout}> */}
-              <li onClick={() => setLogoutModal(true)}>
-                {/* 로그아웃 */}
-                <Link to="/">로그아웃</Link>
+              <li onClick={onLogout}>
+                <span>로그아웃</span>
               </li>
             </>
           )}
-          {/* <LogoutModal logoutModal={logoutModal} /> */}
-          {/* {logoutModal && <LogoutModal />} */}
-          {/* {profile && logoutModal && <LogoutModal />} */}
           {favorite && (
             <li>
               <StyledReadyDiv>
