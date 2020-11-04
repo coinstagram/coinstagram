@@ -6,7 +6,7 @@ const baseUrl = '/post';
 interface IPostService {
   getRandomPosts: (token: string | null, count: number) => Promise<EachPostState[]>;
   getFeedPosts: (token: string | null, count: number) => Promise<EachPostState[]>;
-  getUserPosts: (token: string | null, user_id: string) => Promise<EachPostState[]>;
+  getUserPosts: (token: string | null, user_id: string, count: number) => Promise<EachPostState[]>;
   getSelectedPost: (token: string | null, post_id: number) => Promise<EachPostState>;
   getSpecificPost: (token: null | string, post_id: number) => Promise<EachPostState>;
   deletePost: (token: string | null, post_id: number) => void;
@@ -23,7 +23,6 @@ const PostService: IPostService = class {
       },
     });
 
-    console.log('getRandomPosts', res.data);
     return res.data;
   }
 
@@ -34,18 +33,16 @@ const PostService: IPostService = class {
       },
     });
 
-    console.log('getFeedPosts', res.data);
     return res.data;
   }
 
-  static async getUserPosts(token: string | null, user_id: string) {
-    const res = await axios.get<EachPostState[]>(`/api/user${baseUrl}/${user_id}`, {
+  static async getUserPosts(token: string | null, user_id: string, count: number) {
+    const res = await axios.get<EachPostState[]>(`/api/user${baseUrl}/${user_id}/${count}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
-    console.log('getUserPosts', res.data);
     return res.data;
   }
 
@@ -56,7 +53,6 @@ const PostService: IPostService = class {
       },
     });
 
-    console.log('getSelectedPost', res.data);
     return res.data;
   }
 
@@ -89,8 +85,6 @@ const PostService: IPostService = class {
   }
 
   static async changePost(token: string | null, post_id: number, post_context: string, post_image: Array<string> | null) {
-    console.log(post_image);
-
     const res = await axios.put(
       `/api/post/chagne/${post_id}`,
       {

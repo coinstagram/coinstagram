@@ -6,16 +6,18 @@ export const StyledBackground = styled(StyledBg)`
 `;
 
 export const StyledDiv = styled(StyledModal)`
+  position: absolute;
   width: ${props => (props.width < 400 ? 350 : 400)};
+  left: ${props => (props.width < 400 ? 'calc(50% - 175px)' : 'calc(50% - 200px)')};
   ${props =>
-    props.isList &&
+    props.isList ?
     css`
       height: 300px;
       box-sizing: border-box;
+    `: 
+    css`
+    top: calc(50% - 108px);
     `}
-  position: absolute;
-  top: calc(50% - 108px);
-  left: ${props => (props.width < 400 ? 'calc(50% - 175px)' : 'calc(50% - 200px)')};
   .list-header {
     padding: 15px;
     text-align: center;
@@ -48,7 +50,10 @@ export const StyledDiv = styled(StyledModal)`
 
 export const StyledBtn = styled.button`
   position: absolute;
+  top: 15px;
+  right: 15px;
   padding: 3px;
+  
   span {
     outline: none;
     font-size: 20px;

@@ -19,16 +19,16 @@ const START_GET_POSTS_RANDOM = 'coinstagram/post/START_GET_POSTS_RANDOM' as cons
 const SUCCESS_GET_POSTS_RANDOM = 'coinstagram/post/SUCCESS_GET_POSTS_RANDOM' as const;
 const FAIL_GET_POSTS_RANDOM = 'coinstagram/post/FAIL_GET_POSTS_RANDOM' as const;
 
-const START_DELETE_POST = '/coinstagram/post/START_DELETE_POST' as const;
-const SUCCESS_DELETE_POST = '/coinstagram/post/SUCCESS_DELETE_POST' as const;
-const FAIL_DELETE_POST = '/coinstagram/post/FAIL_DELETE_POST' as const;
+const START_DELETE_POST = 'coinstagram/post/START_DELETE_POST' as const;
+const SUCCESS_DELETE_POST = 'coinstagram/post/SUCCESS_DELETE_POST' as const;
+const FAIL_DELETE_POST = 'coinstagram/post/FAIL_DELETE_POST' as const;
 
-const RESET_RANDOM_POST = '/coinstagram/post/RESET_RANDOM_POST' as const;
-const RESET_FEED_POST = '/coinstagram/post/RESET_FEED_POST' as const;
-const LAST_RANDOM_POST = '/coinstagram/post/LAST_RANDOM_POST' as const;
-const LAST_FEED_POST = '/coinstagram/post/LAST_FEED_POST' as const;
+const RESET_RANDOM_POST = 'coinstagram/post/RESET_RANDOM_POST' as const;
+const RESET_FEED_POST = 'coinstagram/post/RESET_FEED_POST' as const;
+const LAST_RANDOM_POST = 'coinstagram/post/LAST_RANDOM_POST' as const;
+const LAST_FEED_POST = 'coinstagram/post/LAST_FEED_POST' as const;
 
-const UPLOAD_POST = '/coinstagram/post/UPLOAD_POST' as const;
+const UPLOAD_POST = 'coinstagram/post/UPLOAD_POST' as const;
 
 // action creator
 const startGetPostsFeed = () => ({
@@ -186,10 +186,11 @@ export const getFeedPostsSaga = (count: number) => ({
   },
 });
 
-export const getUserPostsSaga = (user_id: string) => ({
+export const getUserPostsSaga = (user_id: string, count: number) => ({
   type: GET_USER_POSTS_SAGA,
   payload: {
     user_id,
+    count,
   },
 });
 
@@ -240,7 +241,7 @@ function* getUserPosts(action: userPostSagaAction) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
     yield put(startGetPostsUser());
-    const CertainUserPosts: EachPostState[] = yield call(PostService.getUserPosts, token, action.payload.user_id);
+    const CertainUserPosts: EachPostState[] = yield call(PostService.getUserPosts, token, action.payload.user_id, action.payload.count);
     yield put(successGetPostsUser(CertainUserPosts));
   } catch (error) {
     yield put(failGetPostsUser(error));

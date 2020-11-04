@@ -210,6 +210,7 @@ export interface uploadState {
 export interface OtherPostState {
   loading: boolean;
   error: null | Error;
+  isLast: boolean;
   otherPosts: EachPostState[];
   counts: CountState;
 }
