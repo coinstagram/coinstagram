@@ -164,7 +164,7 @@ function otherPostReducer(state: OtherPostState = initialState, action: OtherPos
       return {
         loading: false,
         error: null,
-        isLast: false,
+        isLast: state.isLast,
         otherPosts: state.otherPosts,
         counts: {
           loading: true,
@@ -176,7 +176,7 @@ function otherPostReducer(state: OtherPostState = initialState, action: OtherPos
       return {
         loading: false,
         error: null,
-        isLast: false,
+        isLast: state.isLast,
         otherPosts: state.otherPosts,
         counts: {
           loading: false,
@@ -190,7 +190,7 @@ function otherPostReducer(state: OtherPostState = initialState, action: OtherPos
       return {
         loading: false,
         error: null,
-        isLast: false,
+        isLast: state.isLast,
         otherPosts: state.otherPosts,
         counts: {
           loading: true,

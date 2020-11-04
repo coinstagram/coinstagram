@@ -1,4 +1,4 @@
-import RootState, { PostsState, PostData, EachPostState } from '../../type';
+import RootState, { PostsState, EachPostState } from '../../type';
 import { takeLatest, put, select, call, takeLeading } from 'redux-saga/effects';
 import PostService from '../services/postService';
 
@@ -27,8 +27,6 @@ const RESET_RANDOM_POST = 'coinstagram/post/RESET_RANDOM_POST' as const;
 const RESET_FEED_POST = 'coinstagram/post/RESET_FEED_POST' as const;
 const LAST_RANDOM_POST = 'coinstagram/post/LAST_RANDOM_POST' as const;
 const LAST_FEED_POST = 'coinstagram/post/LAST_FEED_POST' as const;
-
-const UPLOAD_POST = 'coinstagram/post/UPLOAD_POST' as const;
 
 // action creator
 const startGetPostsFeed = () => ({
@@ -126,22 +124,6 @@ const lastFeedPost = () => ({
   type: LAST_FEED_POST,
 });
 
-export const uploadPost = (post: PostData) => ({
-  type: UPLOAD_POST,
-  payload: {
-    post: {
-      id: +post.id,
-      user_id: post.user_id,
-      post_context: post.post_context,
-      post_anotheruser: post.post_anotheruser,
-      post_location: post.post_location,
-      created_at: post.created_at,
-      image_path: post.image_path,
-      hastag: post.tag,
-    },
-  },
-});
-
 type PostActions =
   | ReturnType<typeof startGetPostsFeed>
   | ReturnType<typeof successGetPostsFeed>
@@ -161,8 +143,7 @@ type PostActions =
   | ReturnType<typeof resetRandomPost>
   | ReturnType<typeof resetFeedPost>
   | ReturnType<typeof lastRandomPost>
-  | ReturnType<typeof lastFeedPost>
-  | ReturnType<typeof uploadPost>;
+  | ReturnType<typeof lastFeedPost>;
 
 // saga action type
 const GET_RANDOM_POSTS_SAGA = 'GET_RANDOM_POSTS_SAGA' as const;
@@ -457,14 +438,6 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
             isLast: true,
           }
         }
-    case UPLOAD_POST:
-      return {
-        ...state,
-        feedPosts: {
-          ...state.feedPosts,
-          feedPosts: [action.payload.post, ...state.feedPosts.feedPosts],
-        },
-      };
     default:
       return state;
   }
