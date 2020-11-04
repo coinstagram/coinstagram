@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAnotherUserSaga } from '../redux/modules/anotherUser';
 import RootState from '../type';
 import { useLocation } from 'react-router-dom';
-import { getOtherPostsSaga, getPostCountsSaga } from '../redux/modules/otherPost';
+import { getPostCountsSaga } from '../redux/modules/otherPost';
 import { getBookmarkPostsSaga, getBookmarksSaga } from '../redux/modules/bookmark';
 import { resetMyComment } from '../redux/modules/comment';
 
@@ -33,10 +33,6 @@ function ProfileContainer() {
     if (isMe()) return;
     dispatch(getAnotherUserSaga(profileId));
   }, [dispatch, profileId, isMe]);
-
-  useEffect(() => {
-    dispatch(getOtherPostsSaga(profileId));
-  }, [dispatch, profileId]);
 
   useEffect(() => {
     if (bookmarkedId.length !== 0) return;

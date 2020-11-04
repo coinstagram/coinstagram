@@ -26,16 +26,8 @@ function ProfileThumbnail({ myId, profileId, profileImage }: ProfileThumbnailPro
 
   useEffect(() => {
     if (!imageURL) return;
-    console.log(imageURL);
-
     dispatch(changeUserProfile(imageURL));
   }, [dispatch, imageURL]);
-
-  // useEffect(() => {
-  //   if (myInfo && myInfo.user_profile) {
-  //     setImageURL(myInfo.user_profile);
-  //   }
-  // }, [myInfo]);
 
   const isSelectedImg = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const res = await uploadService.UserProFile(event.target.files.item(0), localStorage.getItem('access_token'));

@@ -53,7 +53,6 @@ const UploadContainer = () => {
 
   const onchange = (e: any) => {
     const { id, value } = e.target;
-    console.log(id, ' : ', value);
 
     if (id === 'people') {
       setData({

@@ -11,8 +11,6 @@ interface UploadDetailsProps {
 
 const UploadDetails: React.FC<UploadDetailsProps> = ({ change, data, hasTag }) => {
   const contextRef = useRef();
-  const peopleRef = useRef();
-  // const locationRef = useRef();
   return (
     <>
       <StyledText id="context" placeholder="문구를 입력해 주세요." onChange={change} value={!data ? '' : data.post_context} ref={contextRef} />{' '}

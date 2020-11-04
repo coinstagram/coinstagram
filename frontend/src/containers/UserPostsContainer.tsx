@@ -92,7 +92,7 @@ function UserPostsContainer() {
   );
 
   const getOtherPosts = useCallback(() => {
-    dispatch(getOtherPostsSaga(selectedUserId));
+    dispatch(getOtherPostsSaga(selectedUserId, 1));
   }, [dispatch, selectedUserId]);
 
   const getPostCounts = useCallback(

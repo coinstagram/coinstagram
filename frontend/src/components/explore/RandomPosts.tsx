@@ -4,7 +4,7 @@ import useObserver from '../../hooks/useObserver';
 import { EachPostState } from '../../type';
 
 // styles
-import { StyledSection, StyledDiv, StyledErrorDiv } from './RandomPostsStyle';
+import { StyledSection, StyledErrorDiv } from './RandomPostsStyle';
 import { StyledNocontentDiv } from '../profile/ProfilePostsStyle';
 
 // components

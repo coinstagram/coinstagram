@@ -3,13 +3,14 @@ import { useDispatch } from 'react-redux';
 import { editSagaActionCreator, deleteSagaActionCreator } from '../redux/modules/userInfo';
 import RootState from '../type';
 import { useSelector } from 'react-redux';
-import EditForm from '../components/Edit/EditForm';
 import uploadService from '../redux/services/uploadService';
 import TokenService from '../redux/services/tokenService';
 import { logout } from '../redux/modules/auth';
 
+// components
+import EditForm from '../components/Edit/EditForm';
+
 export interface IEdit {
-  // user_profile: string;
   user_name?: string;
   user_introduce?: string;
   user_email?: string;

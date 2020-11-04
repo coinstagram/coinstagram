@@ -1,14 +1,15 @@
 import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { getFeedPostsSaga, getRandomPostsSaga, resetFeedPost } from '../redux/modules/post';
+import { getOtherPostsSaga } from '../redux/modules/otherPost';
+import { getFeedPostsSaga, getRandomPostsSaga } from '../redux/modules/post';
 
-function useObserver(section: string, isLast: boolean) {
+function useObserver(section: string, isLast: boolean, user_id?: string) {
   const dispatch = useDispatch();
   const observerRef = useRef<IntersectionObserver>();
   const lastItemRef = useRef<HTMLDivElement>(null);
   const count = useRef<number>(1);
 
-  lastItemRef.current && isLast === true && observerRef.current.unobserve(lastItemRef.current);
+  lastItemRef.current && isLast && observerRef.current.unobserve(lastItemRef.current);
 
   useEffect(() => {
     if (!observerRef.current) {
@@ -18,7 +19,7 @@ function useObserver(section: string, isLast: boolean) {
             if (entry.isIntersecting) {
               section === 'random' && dispatch(getRandomPostsSaga(count.current));
               section === 'feed' && dispatch(getFeedPostsSaga(count.current));
-              console.log(count.current);
+              section === 'user' && dispatch(getOtherPostsSaga(user_id, count.current));
               count.current += 1;
             }
           });
@@ -30,18 +31,9 @@ function useObserver(section: string, isLast: boolean) {
     }
 
     lastItemRef.current && observerRef.current.observe(lastItemRef.current);
-  }, [dispatch, section]);
-
-  // useEffect(() => {
-  //   count.current = 1;
-  //   dispatch(resetFeedPost());
-  //   dispatch(getFeedPostsSaga(1));
-
-  //   lastItemRef.current && observerRef.current.observe(lastItemRef.current);
-  // }, [dispatch, users]);
+  }, [dispatch, section, user_id]);
 
   return {
-    observerRef,
     lastItemRef,
   };
 }
