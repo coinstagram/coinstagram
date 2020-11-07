@@ -166,7 +166,7 @@ function* getBookmarkPosts(action: GetBookmarkPostsAction) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
     yield put(startGetBookmarkPosts());
-    const postInfo = yield call(PostService.getSpecificPost, token, action.payload.post_id);
+    const postInfo = yield call(PostService.getSelectedPost, token, action.payload.post_id);
     yield put(successGetBookmarkPosts(postInfo));
   } catch (error) {
     yield put(failGetBookmarkPosts(error));

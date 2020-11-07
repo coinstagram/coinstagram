@@ -1,38 +1,30 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { contextValue } from '../../containers/UploadContainer';
 import StyledDiv from './HashTagStyle';
 
 interface HashTagProps {
-  hasTag: (hasTag: Array<string>) => void;
+  hasTag: (tag: Array<string>) => void;
+  data: contextValue;
 }
 
-export default function HashTag({ hasTag }: HashTagProps) {
+export default function HashTag({ hasTag, data }: HashTagProps) {
   const [tags, setTags] = useState([]);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  const removeTag = (i: number) => {
-    setTags(tags.filter((tag, index) => index !== i));
-  };
-
-  const inputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const val = (e.target as HTMLInputElement).value;
-    if (e.key === 'Enter' && val) {
-      if (tags.find(tag => tag === `#${val}`) || val.length > 10) return;
-      if (tags.length >= 5) return;
-      setTags([...tags, `#${val}`]);
-      inputRef.current.value = null;
-    }
-  };
 
   useEffect(() => {
     hasTag(tags);
   }, [hasTag, tags]);
+
+  useEffect(() => {
+    if (data.tag.length === 0) return;
+    setTags(data.tag);
+  }, [data.tag]);
 
   return (
     <StyledDiv>
       <ul className="hashTagList">
         <label htmlFor="hashTag">태그하기</label>
         {tags.map((tag, i) => (
-          // <li key={tag} className="hashTagItem" style={{ background: randomColor }}>
           <li key={tag} className="hashTagItem">
             {tag}
             <button type="button" onClick={() => removeTag(i)}>
@@ -46,4 +38,18 @@ export default function HashTag({ hasTag }: HashTagProps) {
       </ul>
     </StyledDiv>
   );
+
+  function removeTag(i: number) {
+    setTags(tags.filter((tag, index) => index !== i));
+  }
+
+  function inputKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    const val = (e.target as HTMLInputElement).value;
+    if (e.key === 'Enter' && val) {
+      if (tags.find(tag => tag === `#${val}`) || val.length > 10) return;
+      if (tags.length >= 5) return;
+      setTags([...tags, `#${val}`]);
+      inputRef.current.value = null;
+    }
+  }
 }

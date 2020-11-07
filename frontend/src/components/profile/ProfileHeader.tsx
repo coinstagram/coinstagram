@@ -32,6 +32,7 @@ function ProfileHeader({ myId, profileId, profileName, profileIntro, profileImag
     isList: true,
     content: '',
   });
+  const [logoutModal, setLogoutModal] = useState(false);
   const width = useWindowWidth();
 
   const toggleModal = useCallback(
@@ -60,7 +61,6 @@ function ProfileHeader({ myId, profileId, profileName, profileIntro, profileImag
     },
     [state],
   );
-  const [logoutModal, setLogoutModal] = useState(false);
   const onLogout = () => {
     setLogoutModal(true);
   };
@@ -70,7 +70,7 @@ function ProfileHeader({ myId, profileId, profileName, profileIntro, profileImag
   return (
     <>
       <StyledSection width={width}>
-        <h3 className="a11y-hidden">{profileId}의 프로필</h3>
+        <h2 className="a11y-hidden">{profileId}의 프로필</h2>
         <ProfileThumbnail myId={myId} profileId={profileId} profileImage={profileImage} />
         <div className="info-container">
           <div className="id-container">
@@ -105,8 +105,8 @@ function ProfileHeader({ myId, profileId, profileName, profileIntro, profileImag
         </div>
         {width < 750 && (
           <>
-            <ProfileNameAndInroduce profileName={profileName} profileIntro={profileIntro} />
             <ProfileCountInfo followers={followers} followees={followees} toggleModal={toggleModal} />
+            <ProfileNameAndInroduce profileName={profileName} profileIntro={profileIntro} />
           </>
         )}
       </StyledSection>
