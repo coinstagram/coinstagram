@@ -19,14 +19,21 @@ const START_GET_POSTS_RANDOM = 'coinstagram/post/START_GET_POSTS_RANDOM' as cons
 const SUCCESS_GET_POSTS_RANDOM = 'coinstagram/post/SUCCESS_GET_POSTS_RANDOM' as const;
 const FAIL_GET_POSTS_RANDOM = 'coinstagram/post/FAIL_GET_POSTS_RANDOM' as const;
 
+const START_GET_POSTS_TAGGED = 'coinstagram/post/START_GET_POSTS_TAGGED' as const;
+const SUCCESS_GET_POSTS_TAGGED = 'coinstagram/post/SUCCESS_GET_POSTS_TAGGED' as const;
+const FAIL_GET_POSTS_TAGGED = 'coinstagram/post/FAIL_GET_POSTS_TAGGED' as const;
+
 const START_DELETE_POST = 'coinstagram/post/START_DELETE_POST' as const;
 const SUCCESS_DELETE_POST = 'coinstagram/post/SUCCESS_DELETE_POST' as const;
 const FAIL_DELETE_POST = 'coinstagram/post/FAIL_DELETE_POST' as const;
 
 const RESET_RANDOM_POST = 'coinstagram/post/RESET_RANDOM_POST' as const;
 const RESET_FEED_POST = 'coinstagram/post/RESET_FEED_POST' as const;
+
 const LAST_RANDOM_POST = 'coinstagram/post/LAST_RANDOM_POST' as const;
+const LAST_TAGGED_POST = 'coinstagram/post/LAST_TAGGED_POST' as const;
 const LAST_FEED_POST = 'coinstagram/post/LAST_FEED_POST' as const;
+
 
 // action creator
 const startGetPostsFeed = () => ({
@@ -76,6 +83,22 @@ const failGetPostsRandom = (error: Error) => ({
   payload: error,
 });
 
+const startGetPostsTagged = () => ({
+  type: START_GET_POSTS_TAGGED,
+});
+
+const successGetPostsTagged = (taggedPosts: EachPostState[]) => ({
+  type: SUCCESS_GET_POSTS_TAGGED,
+  payload: {
+    taggedPosts,
+  },
+});
+
+const failGetPostsTagged = (error: Error) => ({
+  type: FAIL_GET_POSTS_TAGGED,
+  payload: error,
+});
+
 const startGetPostSelected = () => ({
   type: START_GET_POST_SELECTED,
 });
@@ -120,6 +143,11 @@ const lastRandomPost = () => ({
   type: LAST_RANDOM_POST,
 });
 
+const lastTaggedPost = () => ({
+  type: LAST_TAGGED_POST,
+});
+
+
 const lastFeedPost = () => ({
   type: LAST_FEED_POST,
 });
@@ -128,7 +156,10 @@ type PostActions =
   | ReturnType<typeof startGetPostsFeed>
   | ReturnType<typeof successGetPostsFeed>
   | ReturnType<typeof failGetPostsFeed>
-  | ReturnType<typeof startGetPostsUser>
+  | ReturnType<typeof startGetPostsTagged>
+  | ReturnType<typeof successGetPostsTagged>
+  | ReturnType<typeof startGetPostsTagged>
+  | ReturnType<typeof failGetPostsTagged>
   | ReturnType<typeof successGetPostsUser>
   | ReturnType<typeof failGetPostsUser>
   | ReturnType<typeof startGetPostsRandom>
@@ -143,10 +174,12 @@ type PostActions =
   | ReturnType<typeof resetRandomPost>
   | ReturnType<typeof resetFeedPost>
   | ReturnType<typeof lastRandomPost>
+  | ReturnType<typeof lastTaggedPost>
   | ReturnType<typeof lastFeedPost>;
 
 // saga action type
 const GET_RANDOM_POSTS_SAGA = 'GET_RANDOM_POSTS_SAGA' as const;
+const GET_TAGGED_POSTS_SAGA = 'GET_TAGGED_POSTS_SAGA' as const;
 const GET_FEED_POSTS_SAGA = 'GET_FEED_POSTS_SAGA' as const;
 const GET_USER_POSTS_SAGA = 'GET_USER_POSTS_SAGA' as const;
 const GET_SELECTED_POST_SAGA = 'GET_SELECTED_POST_SAGA' as const;
@@ -156,6 +189,14 @@ const DELETE_POST_SAGA = 'DELETE_POST_SAGA' as const;
 export const getRandomPostsSaga = (count: number) => ({
   type: GET_RANDOM_POSTS_SAGA,
   payload: {
+    count,
+  }
+});
+
+export const getTaggedPostsSaga = (tag: string, count: number) => ({
+  type: GET_TAGGED_POSTS_SAGA,
+  payload: {
+    tag,
     count,
   }
 });
@@ -189,10 +230,11 @@ export const deletePostSaga = (post_id: number) => ({
   },
 });
 
-type userPostSagaAction = ReturnType<typeof getUserPostsSaga>;
-type feedPostSagaAction = ReturnType<typeof getFeedPostsSaga>;
-type onePostSagaAction = ReturnType<typeof getSelectedPostSaga> | ReturnType<typeof deletePostSaga>;
 type randomPostSagaAction = ReturnType<typeof getRandomPostsSaga>;
+type taggedPostSagaAction = ReturnType<typeof getTaggedPostsSaga>;
+type feedPostSagaAction = ReturnType<typeof getFeedPostsSaga>;
+type userPostSagaAction = ReturnType<typeof getUserPostsSaga>;
+type onePostSagaAction = ReturnType<typeof getSelectedPostSaga> | ReturnType<typeof deletePostSaga>;
 
 // saga function
 function* getRandomPosts(action: randomPostSagaAction) {
@@ -203,6 +245,18 @@ function* getRandomPosts(action: randomPostSagaAction) {
     yield randomPosts.length === 0 ? put(lastRandomPost()) : put(successGetPostsRandom(randomPosts));
   } catch (error) {
     yield put(failGetPostsRandom(error));
+  }
+}
+
+function* getTaggedPosts(action: taggedPostSagaAction) {
+  try {
+    const { token } = yield select((state: RootState) => state.auth);
+    yield put(startGetPostsTagged());
+    const taggedPosts: EachPostState[] = yield call(PostService.getTaggedPost, token, action.payload.tag, action.payload.count);
+    console.log(taggedPosts);
+    yield taggedPosts.length === 0 ? put(lastTaggedPost()) : put(successGetPostsTagged(taggedPosts));
+  } catch (error) {
+    yield put(failGetPostsTagged(error));
   }
 }
 
@@ -254,6 +308,7 @@ function* deletePost(action: onePostSagaAction) {
 // saga function register
 export function* postsSaga() {
   yield takeLeading (GET_RANDOM_POSTS_SAGA, getRandomPosts);
+  yield takeLeading (GET_TAGGED_POSTS_SAGA, getTaggedPosts);
   yield takeLeading(GET_FEED_POSTS_SAGA, getFeedPosts);
   yield takeLatest(GET_USER_POSTS_SAGA, getUserPosts);
   yield takeLatest(GET_SELECTED_POST_SAGA, getSelectedPost);
@@ -304,6 +359,15 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
           loading: true,
         },
       };
+    case START_GET_POSTS_TAGGED:
+      return {
+        feedPosts: state.feedPosts,
+        selectedPost: state.selectedPost,
+        randomPosts: {
+          ...state.randomPosts,
+          loading: true,
+        },
+      };
     case START_GET_POST_SELECTED:
       return {
         feedPosts: state.feedPosts,
@@ -332,6 +396,16 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
           ...state.randomPosts,
           loading: false,
           randomPosts: [...state.randomPosts.randomPosts, ...action.payload.randomPosts],
+        },
+      };
+    case SUCCESS_GET_POSTS_TAGGED:
+      return {
+        feedPosts: state.feedPosts,
+        selectedPost: state.selectedPost,
+        randomPosts: {
+          ...state.randomPosts,
+          loading: false,
+          randomPosts: [...state.randomPosts.randomPosts, ...action.payload.taggedPosts],
         },
       };
     case SUCCESS_GET_POSTS_FEED:
@@ -396,6 +470,16 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
           error: action.payload,
         },
       };
+    case FAIL_GET_POSTS_TAGGED:
+      return {
+        feedPosts: state.feedPosts,
+        selectedPost: state.selectedPost,
+        randomPosts: {
+          ...state.randomPosts,
+          loading: false,
+          error: action.payload,
+        },
+      };
     case FAIL_DELETE_POST:
       return {
         feedPosts: state.feedPosts,
@@ -421,6 +505,15 @@ function postReducer(state: PostsState = initialState, action: PostActions): Pos
           }
         }
       case LAST_RANDOM_POST:
+        return {
+          ...state,
+          randomPosts: {
+            ...state.randomPosts,
+            loading: false,
+            isLast: true,
+          }
+        }
+      case LAST_TAGGED_POST:
         return {
           ...state,
           randomPosts: {

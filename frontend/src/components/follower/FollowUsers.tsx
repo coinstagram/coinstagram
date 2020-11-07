@@ -110,7 +110,7 @@ function FollowUsers({ followers, loading, error }: FoolowUsersProps) {
   return (
     <StyledDiv>
       <StyledSection width={width}>
-        <h3 className="a11y-hidden">팔로우한 계정</h3>
+        <h2 className="a11y-hidden">팔로우한 계정</h2>
         <div className="hidden-container">
           {state.count !== 0 && <PrevBtn onClick={prev} />}
           {state.visual && state.slideCount !== state.count && <NextBtn onClick={next} />}

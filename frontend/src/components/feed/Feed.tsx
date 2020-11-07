@@ -52,7 +52,9 @@ function Feed({ loading, error, isLast, myId, feedPosts, addCommentPost, addPost
       {feedPosts.length !== 0 &&
         feedPosts.map(post => (
           <StyledArticle key={post.id} width={width} onFocus={toggleClass} onBlur={toggleClass}>
-            <h3 className="a11y-hidden">{post.user_id}의 게시물</h3>
+            <h2 className="a11y-hidden">
+              {post.user_id}의 게시물 {post.id}
+            </h2>
             <FeedHeader userId={post.user_id} postId={post.id} location={post.post_location} />
             <FeedBody imageUrl={post.image_path} />
             <FeedIcons

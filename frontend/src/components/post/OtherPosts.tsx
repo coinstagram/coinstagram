@@ -25,7 +25,7 @@ function OtherPosts({ selectedUserId, getOtherPosts, getPostCounts }: AnotherPos
 
   return (
     <StyledSection>
-      <h3 className="a11y-hidden">{selectedUserId}님의 다른 게시물</h3>
+      <h2 className="a11y-hidden">{selectedUserId}님의 다른 게시물</h2>
       <div>
         <dt className="a11y-hidden">user id</dt>
         <dd>

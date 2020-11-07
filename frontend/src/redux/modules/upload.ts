@@ -156,7 +156,6 @@ function* addPostSagafun() {
     const { upload } = yield select((state: uploadState) => state);
     
     const { id, user_id,  created_at, image_path } = yield call(uploadService.uploadPost, upload.data, token);
-    console.log('upload : ',upload);
     
     yield put(
       add_post({

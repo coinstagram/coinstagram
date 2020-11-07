@@ -9,7 +9,7 @@ import StyledMain from '../components/common/StyledMain';
 // components
 import Header from '../components/header/Header';
 import RandomPostsContainer from '../containers/RandomPostsContainer';
-import TagedPosts from '../components/explore/TagedPosts';
+import TaggedPostsContainer from '../containers/TaggedPostsContainer';
 
 function Explore() {
   const width = useWindowWidth();
@@ -21,7 +21,7 @@ function Explore() {
       <Header />
       <StyledMain width={width}>
         {route === undefined && <RandomPostsContainer />}
-        {route === 'tags' && <TagedPosts />}
+        {route === 'tags' && <TaggedPostsContainer />}
       </StyledMain>
     </>
   );

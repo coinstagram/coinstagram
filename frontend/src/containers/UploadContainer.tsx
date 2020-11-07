@@ -84,7 +84,7 @@ const UploadContainer = () => {
     <>
       <UploadHeader />
       <UploadInput image={image} onsubmit={onsubmit} data={data} />
-      <UploadDetails change={onchange} data={data} hasTag={hasTag} />
+      <UploadDetails hasTag={hasTag} change={onchange} data={data} />
     </>
   );
 };
