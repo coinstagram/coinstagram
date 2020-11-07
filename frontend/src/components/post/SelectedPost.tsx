@@ -62,9 +62,9 @@ function SelectedPost({
   return (
     <>
       <StyledArticle width={width} imageUrl={selectedPostImages[selectedPostImages.length - 1]}>
-        <h3 className="a11y-hidden">
+        <h2 className="a11y-hidden">
           {selectedUserId}님의 게시물 {selectedPostId}
-        </h3>
+        </h2>
         <div>
           {width < 1500 && (
             <FeedHeader

@@ -50,12 +50,12 @@ function HomeMain() {
   return (
     <>
       <StyledDiv feedPosts={feedPosts}>
+        <div className="recommend-container">
+          <RecommendUsersContainer />
+        </div>
         <div className="list-container">
           <FollowUsersContainer />
           <FeedContainer />
-        </div>
-        <div className="recommend-container">
-          <RecommendUsersContainer />
         </div>
       </StyledDiv>
       {postModal && (

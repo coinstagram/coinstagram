@@ -6,11 +6,11 @@ import { EachPostState } from '../../type';
 // styles
 import { StyledSection, StyledErrorDiv } from './RandomPostsStyle';
 import { StyledNocontentDiv } from '../profile/ProfilePostsStyle';
+import { StyledLastComment, StyledSpinnerDiv } from '../feed/FeedStyle';
 
 // components
 import Spinner from '../common/Spinner';
 import OtherPostItem from '../post/OtherPostItem';
-import { StyledLastComment, StyledSpinnerDiv } from '../feed/FeedStyle';
 
 interface RandomPostsProps {
   loading: boolean;
@@ -22,10 +22,11 @@ interface RandomPostsProps {
 
 function RandomPosts({ loading, error, randomPosts, isLast, getPostCounts }: RandomPostsProps) {
   const width = useWindowWidth();
-  const observerObj = useObserver('random', isLast);
+  const observer = useObserver('random', isLast);
 
   return (
     <StyledSection width={width}>
+      <h2 className="a11y-hidden">랜덤 게시물</h2>
       {!loading && error !== null && (
         <StyledErrorDiv>
           <p>
@@ -53,7 +54,7 @@ function RandomPosts({ loading, error, randomPosts, isLast, getPostCounts }: Ran
           ))}
         </ul>
       }
-      <div style={{ position: 'relative', height: 80 }} ref={observerObj.lastItemRef}>
+      <div style={{ position: 'relative', height: 80 }} ref={observer.lastItemRef}>
         {loading && (
           <StyledSpinnerDiv>
             <Spinner />
