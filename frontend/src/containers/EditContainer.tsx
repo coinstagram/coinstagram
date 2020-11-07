@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { editSagaActionCreator, deleteSagaActionCreator } from '../redux/modules/userInfo';
 import RootState from '../type';
 import { useSelector } from 'react-redux';
-import EditForm from '../components/Edit/EditForm';
 import uploadService from '../redux/services/uploadService';
 import TokenService from '../redux/services/tokenService';
 import { logout } from '../redux/modules/auth';
-// import { changeUserProfile } from '../redux/modules/userInfo';
+
+// components
+import EditForm from '../components/Edit/EditForm';
 
 export interface IEdit {
   user_name?: string;
@@ -18,26 +19,8 @@ export interface IEdit {
 }
 function EditContainer() {
   const dispatch = useDispatch();
-  // const { token } = useSelector((state: RootState) => state.auth);
   const { user } = useSelector((state: RootState) => state.userInfo);
-
-  // useEffect(() => {
-  //   if (token === null) return;
-  //   dispatch(getUserInfoSaga());
-  // }, [dispatch, token]);
-  // const [edit, setEdit] = useState<IEdit>({
-  //   user_name: '',
-  //   user_introduce: '',
-  //   user_email: '',
-  //   user_phone: '',
-  //   user_gender: '',
-  // });
-  // const name = user !== null ? user.user_name : edit.user_name;
-  // const id = user !== null ? user.user_id : null;
-  // const introduce = user !== null ? user.user_introduce : edit.user_introduce;
-  // const email = user !== null ? user.user_email : edit.user_email;
-  // const phone = user !== null ? user.user_phone : edit.user_phone;
-  // const gender = user !== null ? user.user_gender : edit.user_gender;
+  const profile = user !== null ? user.user_profile : null;
   const name = user !== null ? user.user_name : null;
   const id = user !== null ? user.user_id : null;
   const introduce = user !== null ? user.user_introduce : null;
@@ -52,21 +35,29 @@ function EditContainer() {
     user_phone: phone,
     user_gender: gender,
   });
-  const handleChange = (edit: IEdit): void => {
-    setEdit(edit);
-  };
-  // 프로필 사진 변경
   const [imageURL, setImageURL] = useState<string | null>(null);
+  const onChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLSelectElement>) => {
+    const { value, name } = e.target;
+    setEdit({
+      ...edit,
+      [name]: value,
+    });
+  };
 
-  // useEffect(() => {
-  //   if (!imageURL) return;
-  //   dispatch(changeUserProfile(imageURL));
-  // }, [dispatch, imageURL]);
+  useEffect(() => {
+    setEdit({
+      user_name: name,
+      user_introduce: introduce,
+      user_email: email,
+      user_phone: phone,
+      user_gender: gender,
+    });
+    setImageURL(profile);
+  }, [email, gender, introduce, name, phone, profile, user]);
 
   const isSelectedImg = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const res = await uploadService.UserProFile(event.target.files.item(0), localStorage.getItem('access_token'));
     setImageURL(res);
-    console.log(event.target);
   };
 
   const changeProfile = (e: React.FormEvent<HTMLFormElement>) => {
@@ -85,7 +76,8 @@ function EditContainer() {
       <EditForm
         edit={edit}
         user={user}
-        handleChange={handleChange}
+        imageURL={imageURL}
+        onChange={onChange}
         changeProfile={changeProfile}
         isSelectedImg={isSelectedImg}
         deleteAccount={deleteAccount}

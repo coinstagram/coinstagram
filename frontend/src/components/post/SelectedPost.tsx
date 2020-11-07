@@ -91,7 +91,7 @@ function SelectedPost({
             <FeedCommentOwner
               userId={selectedUserId}
               userProfile={selectedUserProfile}
-              // hashTags={selectedPostInfo && selectedPostInfo.hastag}
+              hashTags={selectedPostInfo === null ? [] : selectedPostInfo.hastag}
               context={selectedPostInfo && selectedPostInfo.post_context}
               createdTime={selectedPostInfo && selectedPostInfo.created_at}
               thumbnail={true}

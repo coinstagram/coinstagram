@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getRandomPostsSaga, resetRandomPost } from '../redux/modules/post';
+import { resetRandomPost } from '../redux/modules/post';
 import { getPostCountsSaga } from '../redux/modules/otherPost';
 import { resetMyComment } from '../redux/modules/comment';
 import RootState from '../type';
@@ -19,13 +19,6 @@ function RandomPostsContainer() {
       dispatch(resetRandomPost());
     };
   }, [dispatch]);
-
-  const getRandomPosts = useCallback(
-    (count: number) => {
-      dispatch(getRandomPostsSaga(count));
-    },
-    [dispatch],
-  );
 
   const getPostCounts = useCallback(
     (post_id: number) => {

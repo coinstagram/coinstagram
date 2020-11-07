@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
 import RootState from '../../type';
 import useWindowWidth from '../../hooks/useWindowWidth';
+import useObserver from '../../hooks/useObserver';
+import { resetOtherPost } from '../../redux/modules/otherPost';
 
 // icons
 import { BsCardImage, BsTag, BsBookmarks } from 'react-icons/bs';
@@ -11,6 +13,7 @@ import { BsCardImage, BsTag, BsBookmarks } from 'react-icons/bs';
 import { StyledSection, StyledNavDiv, StyledSpinnerDiv, StyledReadyDiv, StyledNocontentDiv } from './ProfilePostsStyle';
 import { StyledDiv } from '../post/OtherPostListStyle';
 import { StyledErrorDiv } from '../explore/RandomPostsStyle';
+import { StyledLastComment } from '../feed/FeedStyle';
 
 // components
 import OtherPostItem from '../post/OtherPostItem';
@@ -25,13 +28,15 @@ interface ProfilePostsProps {
 }
 
 function ProfilePosts({ profileId, myId, bookmarkedId, getPostCounts, getBookmarkPosts }: ProfilePostsProps) {
+  const dispatch = useDispatch();
   const pageName = useLocation().pathname.split('/')[3];
-  const { loading, error, otherPosts } = useSelector((state: RootState) => state.otherPosts);
+  const { loading, error, otherPosts, isLast } = useSelector((state: RootState) => state.otherPosts);
   const { bookmarkPosts } = useSelector((state: RootState) => state.bookmarks);
   const bookmarkLoading = bookmarkPosts.loading;
   const bookmarkError = bookmarkPosts.error;
   const bookmarkedPosts = bookmarkPosts.bookmarkPosts;
   const width = useWindowWidth();
+  const observer = useObserver('user', isLast, profileId);
 
   useEffect(() => {
     if (profileId !== myId) return;
@@ -39,6 +44,10 @@ function ProfilePosts({ profileId, myId, bookmarkedId, getPostCounts, getBookmar
 
     bookmarkedId.forEach(id => getBookmarkPosts(id));
   }, [getBookmarkPosts, bookmarkedId, myId, profileId]);
+
+  useEffect(() => {
+    return () => dispatch(resetOtherPost());
+  }, [dispatch]);
 
   return (
     <StyledSection width={width}>
@@ -60,11 +69,6 @@ function ProfilePosts({ profileId, myId, bookmarkedId, getPostCounts, getBookmar
         </ul>
       </StyledNavDiv>
       <StyledDiv width={width}>
-        {loading && (
-          <StyledSpinnerDiv>
-            <Spinner />
-          </StyledSpinnerDiv>
-        )}
         {pageName === undefined && error !== null && (
           <StyledErrorDiv>
             <p>
@@ -86,17 +90,27 @@ function ProfilePosts({ profileId, myId, bookmarkedId, getPostCounts, getBookmar
           </StyledNocontentDiv>
         )}
         {pageName === undefined && (
-          <ul>
-            {otherPosts.map(post => (
-              <OtherPostItem
-                key={post.id}
-                postId={post.id}
-                postOwnerId={post.user_id}
-                getPostCounts={getPostCounts}
-                imageThumbnail={post.image_path}
-              />
-            ))}
-          </ul>
+          <>
+            <ul>
+              {otherPosts.map(post => (
+                <OtherPostItem
+                  key={post.id}
+                  postId={post.id}
+                  postOwnerId={post.user_id}
+                  getPostCounts={getPostCounts}
+                  imageThumbnail={post.image_path}
+                />
+              ))}
+            </ul>
+            <div style={{ position: 'relative', height: isLast ? '' : 80 }} ref={observer.lastItemRef}>
+              {loading && (
+                <StyledSpinnerDiv>
+                  <Spinner />
+                </StyledSpinnerDiv>
+              )}
+              {isLast && otherPosts.length !== 0 && <StyledLastComment>마지막 게시물입니다.</StyledLastComment>}
+            </div>{' '}
+          </>
         )}
         {bookmarkLoading && (
           <StyledSpinnerDiv>

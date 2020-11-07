@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import RootState from '../type';
-
 import InputUserId from '../components/common_login,join/InputUserId';
 import InputPassword from '../components/common_login,join/InputPassword';
 import { StyledLogin, StyledForm } from '../components/login/LoginStyle';
@@ -10,9 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signInSagaActionCreator } from '../redux/modules/auth';
 import ErrorMessage from '../components/common_login,join/ErrorMessage';
 import useWindowWidth from '../hooks/useWindowWidth';
-import LoadingSpinner from '../components/common_login,join/LoadingSpinner';
-// import FacebookLogin from '../components/common_login,join/FacebookLogin';
-import Facebook from '../components/login/Facebook';
+import FacebookLogin from '../components/common_login,join/FacebookLogin';
+// import Facebook from '../components/login/Facebook';
 import OrLine from '../components/common_login,join/OrLine';
 
 const idRegExp = /^[a-zA-Z0-9]{4,12}$/;
@@ -51,20 +49,19 @@ function LoginContainer() {
           <InputUserId userId={user_id} onInputUserId={onInputUserId} toggleIcon={idCheck} />
           <InputPassword userPassword={user_password} onInputPassword={onInputPassword} toggleIcon={passwordCheck} style={{ marginBottom: '20px' }} />
           <JoinLoginButton
+            loading={loading}
             content="로그인"
             disabled={!idCheck && !passwordCheck}
             className={['button', idCheck && passwordCheck && 'active'].join(' ')}
-          />
-
-          {loading && <LoadingSpinner />}
+          ></JoinLoginButton>
         </StyledForm>
         <ErrorMessage error={error}>
           사용자 정보가 일치하지 않습니다.
           <p>다시 입력해주세요</p>
         </ErrorMessage>
         <OrLine />
-        {/* <FacebookLogin /> */}
-        <Facebook />
+        <FacebookLogin />
+        {/* <Facebook /> */}
       </StyledLogin>
     </>
   );

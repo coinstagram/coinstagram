@@ -11,6 +11,11 @@ const START_GET_POST_COUNTS = 'coinstagram/otherPost/START_GET_POST_COUNTS' as c
 const SUCCESS_GET_POST_COUNTS = 'coinstagram/otherPost/SUCCESS_GET_POST_COUNTS' as const;
 const FAIL_GET_POST_COUNTS = 'coinstagram/otherPost/FAIL_GET_POST_COUNTS' as const;
 
+const LAST_OTHER_POST = 'coinstagram/otherPost/LAST_OTHER_POST' as const;
+
+const RESET_OTHER_POST = 'coinstagram/otherPost/RESET_OTEHR_POST' as const;
+
+
 // action creator
 const startGetOtherPosts = () => ({
   type: START_GET_OTHER_POSTS,
@@ -45,23 +50,34 @@ const failGetPostCounts = (error: Error) => ({
   payload: error,
 });
 
+const lastOtherPost = () => ({
+  type: LAST_OTHER_POST,
+});
+
+export const resetOtherPost = () => ({
+  type: RESET_OTHER_POST,
+});
+
 type OtherPostActions =
   | ReturnType<typeof startGetOtherPosts>
   | ReturnType<typeof successGetOtherPosts>
   | ReturnType<typeof failGetOtherPosts>
   | ReturnType<typeof startGetPostCounts>
   | ReturnType<typeof successGetPostCounts>
-  | ReturnType<typeof failGetPostCounts>;
+  | ReturnType<typeof failGetPostCounts>
+  | ReturnType<typeof lastOtherPost>
+  | ReturnType<typeof resetOtherPost>;
 
 // saga action
 const GET_OTEHR_POSTS_SAGA = 'GET_OTEHR_POSTS_SAGA' as const;
 const GET_POST_COUNTS_SAGA = 'GET_POST_COUNTS_SAGA' as const;
 
 // saga action creator
-export const getOtherPostsSaga = (user_id: string) => ({
+export const getOtherPostsSaga = (user_id:string, count: number) => ({
   type: GET_OTEHR_POSTS_SAGA,
   payload: {
     user_id,
+    count,
   },
 });
 
@@ -80,8 +96,8 @@ function* getOtherPosts(action: OtherPostSagaAction) {
   try {
     const { token } = yield select((state: RootState) => state.auth);
     yield put(startGetOtherPosts());
-    const otherPosts = yield call(PostService.getUserPosts, token, action.payload.user_id);
-    yield put(successGetOtherPosts(otherPosts));
+    const otherPosts = yield call(PostService.getUserPosts, token, action.payload.user_id, action.payload.count);
+    yield otherPosts.length === 0 ? put(lastOtherPost()) : put(successGetOtherPosts(otherPosts));
   } catch (error) {
     yield put(failGetOtherPosts(error));
   }
@@ -108,6 +124,7 @@ export function* otherPostsSaga() {
 const initialState: OtherPostState = {
   loading: false,
   error: null,
+  isLast: false,
   otherPosts: [],
   counts: {
     loading: false,
@@ -123,27 +140,31 @@ function otherPostReducer(state: OtherPostState = initialState, action: OtherPos
       return {
         loading: true,
         error: null,
-        otherPosts: [],
+        isLast: false,
+        otherPosts: state.otherPosts,
         counts: state.counts,
       };
     case SUCCESS_GET_OTHER_POSTS:
       return {
         loading: false,
         error: null,
-        otherPosts: action.payload.otherPosts,
+        isLast: false,
+        otherPosts: [...state.otherPosts, ...action.payload.otherPosts],
         counts: state.counts,
       };
     case FAIL_GET_OTHER_POSTS:
       return {
         loading: false,
         error: action.payload,
-        otherPosts: [],
+        otherPosts: state.otherPosts,
+        isLast: false,
         counts: state.counts,
       };
     case START_GET_POST_COUNTS:
       return {
         loading: false,
         error: null,
+        isLast: state.isLast,
         otherPosts: state.otherPosts,
         counts: {
           loading: true,
@@ -155,6 +176,7 @@ function otherPostReducer(state: OtherPostState = initialState, action: OtherPos
       return {
         loading: false,
         error: null,
+        isLast: state.isLast,
         otherPosts: state.otherPosts,
         counts: {
           loading: false,
@@ -168,7 +190,32 @@ function otherPostReducer(state: OtherPostState = initialState, action: OtherPos
       return {
         loading: false,
         error: null,
+        isLast: state.isLast,
         otherPosts: state.otherPosts,
+        counts: {
+          loading: true,
+          error: null,
+          counts: state.counts.counts,
+        },
+      };
+    case LAST_OTHER_POST:
+      return {
+        loading: false,
+        error: null,
+        isLast: true,
+        otherPosts: state.otherPosts,
+        counts: {
+          loading: true,
+          error: null,
+          counts: state.counts.counts,
+        },
+      }
+    case RESET_OTHER_POST:
+      return {
+        loading: false,
+        error: null,
+        isLast: false,
+        otherPosts: [],
         counts: {
           loading: true,
           error: null,

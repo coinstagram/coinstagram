@@ -14,6 +14,7 @@ import ProfileThumbnail from './ProfileThumbnail';
 import ProfileCountInfo from './ProfileCountInfo';
 import ProfileNameAndInroduce from './ProfileNameAndIntroduce';
 import FollowListModal from './FollowListModal';
+import LogoutModal from '../login/LogoutModal';
 
 interface ProfileHeaderProps {
   myId: string;
@@ -59,7 +60,13 @@ function ProfileHeader({ myId, profileId, profileName, profileIntro, profileImag
     },
     [state],
   );
-
+  const [logoutModal, setLogoutModal] = useState(false);
+  const onLogout = () => {
+    setLogoutModal(true);
+  };
+  const closeModal = () => {
+    setLogoutModal(false);
+  };
   return (
     <>
       <StyledSection width={width}>
@@ -112,7 +119,10 @@ function ProfileHeader({ myId, profileId, profileName, profileIntro, profileImag
         isList={state.isList}
         toggleModal={toggleModal}
         popModal={popModal}
+        onLogout={onLogout}
+        closeModal={closeModal}
       />
+      {logoutModal && <LogoutModal closeModal={closeModal} />}
     </>
   );
 

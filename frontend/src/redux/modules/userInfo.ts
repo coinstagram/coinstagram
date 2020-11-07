@@ -245,7 +245,6 @@ function* followingCancelSaga(action: followSagaActions) {
 }
 function* editRequestSaga(action: editSagaActions) {
   const payload = action.payload;
-  console.log(payload);
   yield put(editStart());
   try {
     const { token }: AuthState = yield select((state: RootState) => state.auth);
@@ -279,7 +278,6 @@ function* editRequestSaga(action: editSagaActions) {
 }
 function* deleteRequestSaga(action: deleteSagaActions) {
   const payload = action.payload;
-  console.log(payload);
   yield put(deleteStart());
   try {
     const { token }: AuthState = yield select((state: RootState) => state.auth);
@@ -327,7 +325,6 @@ const initialState: UserInfoState = {
 function userInfoReducer(state: UserInfoState = initialState, action: UserActions): UserInfoState {
   switch (action.type) {
     case CHANGE_USER_PROFILE:
-      console.log(action.payload);
       return {
         ...state,
         loading: false,
@@ -478,6 +475,7 @@ function userInfoReducer(state: UserInfoState = initialState, action: UserAction
         },
         user: state.user,
       };
+<<<<<<< HEAD
       case EDIT_SUCCESS:
         return {
           ...state,
@@ -488,6 +486,18 @@ function userInfoReducer(state: UserInfoState = initialState, action: UserAction
           },
           // user: action.payload,
         };
+=======
+    case EDIT_SUCCESS:
+      return {
+        ...state,
+        editLoadingState: state.editLoadingState,
+        user: {
+          ...action.payload,
+          user_profile: action.payload.user_profile === null ? state.user.user_profile : action.payload.user_profile,
+        },
+        // user: action.payload,
+      };
+>>>>>>> bac226726602f882573cf00b63c3f2e111ebc102
     case EDIT_FAIL:
       return {
         ...state,

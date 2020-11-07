@@ -486,10 +486,11 @@ router.get('/comment/post/:post_id', verifyToken, async (req, res) => {
  * get post detail
  * /user/post/:user_id
  */
-router.get('/user/:user_id/:page', verifyToken, async (req, res) => {
+router.get('/user/post/:user_id/:page', verifyToken, async (req, res) => {
   console.log('/user/post/:user_id');
   const { user_id, page } = req.params;
-  const line = 20;
+  console.log('user_id/:page', user_id, page);
+  const line = 12;
   const pageNum = (page - 1) * line;
   let sql = ``;
   try {

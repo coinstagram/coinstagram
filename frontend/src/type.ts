@@ -210,16 +210,10 @@ export interface uploadState {
 export interface OtherPostState {
   loading: boolean;
   error: null | Error;
+  isLast: boolean;
   otherPosts: EachPostState[];
   counts: CountState;
 }
-// export interface EditState {
-//   editLoadingState : {
-//     loading : boolean;
-//     error:null |Error;
-//   };
-//   user:UserState;
-// }
 
 interface RootState {
   auth: AuthState;
@@ -231,7 +225,6 @@ interface RootState {
   likes: likeState;
   bookmarks: BookmarkState;
   otherPosts: OtherPostState;
-  // edit : EditState;
 }
 
 export default RootState;

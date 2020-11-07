@@ -15,6 +15,7 @@ export const StyledModal = styled.div`
   border-radius: 12px;
   animation: smaller 0.2s;
   width: ${props => (props.width < 350 ? 300 : 350)};
+  color: rgb(50, 50, 50);
   p {
     text-align: center;
     font-weight: bold;
@@ -23,6 +24,8 @@ export const StyledModal = styled.div`
   .btns {
     display: flex;
     border-top: 1px solid rgb(219, 219, 219);
+    transition: background-color 2s ease-in-out;
+    border-radius: 0 0 12px 12px;
     button {
       &:nth-of-type(1) {
         border-right: 1px solid rgb(219, 219, 219);
