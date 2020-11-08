@@ -20,6 +20,13 @@ export default function HashTag({ hasTag }: HashTagProps) {
     if (e.key === 'Enter' && val) {
       if (tags.find(tag => tag === `#${val}`) || val.length > 10) return;
       if (tags.length >= 5) return;
+      if (tags[tags.length - 1] !== undefined) {
+        if (tags[tags.length - 1][tags[tags.length - 1].length - 1] === val) {
+          inputRef.current.value = null;
+          return;
+        }
+      }
+
       setTags([...tags, `#${val}`]);
       inputRef.current.value = null;
 
