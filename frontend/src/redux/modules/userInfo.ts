@@ -245,7 +245,6 @@ function* followingCancelSaga(action: followSagaActions) {
 }
 function* editRequestSaga(action: editSagaActions) {
   const payload = action.payload;
-  console.log(payload);
   yield put(editStart());
   try {
     const { token }: AuthState = yield select((state: RootState) => state.auth);
@@ -279,7 +278,6 @@ function* editRequestSaga(action: editSagaActions) {
 }
 function* deleteRequestSaga(action: deleteSagaActions) {
   const payload = action.payload;
-  console.log(payload);
   yield put(deleteStart());
   try {
     const { token }: AuthState = yield select((state: RootState) => state.auth);

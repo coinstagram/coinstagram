@@ -49,6 +49,17 @@ export const StyledModal = styled.div`
     li {
       width: 100%;
       height: 37px;
+      &:nth-child(4) {
+        padding: 5px;
+        box-sizing: border-box;
+        cursor: pointer;
+        span {
+          padding-left: 20px;
+        }
+        &:hover {
+          background: rgb(248, 249, 250);
+        }
+      }
       a {
         box-sizing: border-box;
         display: flex;

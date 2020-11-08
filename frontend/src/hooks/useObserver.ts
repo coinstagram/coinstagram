@@ -1,25 +1,30 @@
 import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { getFeedPostsSaga, getRandomPostsSaga, resetFeedPost } from '../redux/modules/post';
+import { useLocation } from 'react-router-dom';
+import { getOtherPostsSaga } from '../redux/modules/otherPost';
+import { getFeedPostsSaga, getRandomPostsSaga, getTaggedPostsSaga } from '../redux/modules/post';
 
 function useObserver(section: string, isLast: boolean) {
+  const user_id = useLocation().pathname.split('/')[2];
+  const tag = useLocation().pathname.split('/')[3];
   const dispatch = useDispatch();
   const observerRef = useRef<IntersectionObserver>();
   const lastItemRef = useRef<HTMLDivElement>(null);
-  const count = useRef<number>(1);
 
-  lastItemRef.current && isLast === true && observerRef.current.unobserve(lastItemRef.current);
+  lastItemRef.current && isLast && observerRef.current.unobserve(lastItemRef.current);
 
   useEffect(() => {
+    let count = 1;
     if (!observerRef.current) {
       observerRef.current = new IntersectionObserver(
         (entries: IntersectionObserverEntry[]) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
-              section === 'random' && dispatch(getRandomPostsSaga(count.current));
-              section === 'feed' && dispatch(getFeedPostsSaga(count.current));
-              console.log(count.current);
-              count.current += 1;
+              section === 'random' && dispatch(getRandomPostsSaga(count));
+              section === 'tag' && dispatch(getTaggedPostsSaga(tag, count));
+              section === 'feed' && dispatch(getFeedPostsSaga(count));
+              section === 'user' && dispatch(getOtherPostsSaga(user_id, count));
+              count += 1;
             }
           });
         },
@@ -30,18 +35,9 @@ function useObserver(section: string, isLast: boolean) {
     }
 
     lastItemRef.current && observerRef.current.observe(lastItemRef.current);
-  }, [dispatch, section]);
-
-  // useEffect(() => {
-  //   count.current = 1;
-  //   dispatch(resetFeedPost());
-  //   dispatch(getFeedPostsSaga(1));
-
-  //   lastItemRef.current && observerRef.current.observe(lastItemRef.current);
-  // }, [dispatch, users]);
+  }, [dispatch, section, tag, user_id]);
 
   return {
-    observerRef,
     lastItemRef,
   };
 }

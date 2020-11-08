@@ -25,7 +25,7 @@ function RecommendUsers({ user, followers, getRandomUser }: RecommendUsersProps)
 
   return (
     <StyledSection>
-      <h3 className="a11y-hidden">추천 계정</h3>
+      <h2 className="a11y-hidden">추천 계정</h2>
       <RecommendUsersHeader user={user} />
       <RecommendUsersBody loading={loading} error={error} randomUsers={users} followers={followers} />
       <Footer />

@@ -30,7 +30,7 @@ function Upload() {
       <Header />
       <UploadMain width={width}>
         <StyledSection>
-          <h3 className="a11y-hidden">게시물 업로드</h3>
+          <h2 className="a11y-hidden">게시물 업로드</h2>
           <UploadContainer />
         </StyledSection>
       </UploadMain>

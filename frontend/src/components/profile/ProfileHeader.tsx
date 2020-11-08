@@ -14,6 +14,7 @@ import ProfileThumbnail from './ProfileThumbnail';
 import ProfileCountInfo from './ProfileCountInfo';
 import ProfileNameAndInroduce from './ProfileNameAndIntroduce';
 import FollowListModal from './FollowListModal';
+import LogoutModal from '../login/LogoutModal';
 
 interface ProfileHeaderProps {
   myId: string;
@@ -31,6 +32,7 @@ function ProfileHeader({ myId, profileId, profileName, profileIntro, profileImag
     isList: true,
     content: '',
   });
+  const [logoutModal, setLogoutModal] = useState(false);
   const width = useWindowWidth();
 
   const toggleModal = useCallback(
@@ -59,11 +61,16 @@ function ProfileHeader({ myId, profileId, profileName, profileIntro, profileImag
     },
     [state],
   );
-
+  const onLogout = () => {
+    setLogoutModal(true);
+  };
+  const closeModal = () => {
+    setLogoutModal(false);
+  };
   return (
     <>
       <StyledSection width={width}>
-        <h3 className="a11y-hidden">{profileId}의 프로필</h3>
+        <h2 className="a11y-hidden">{profileId}의 프로필</h2>
         <ProfileThumbnail myId={myId} profileId={profileId} profileImage={profileImage} />
         <div className="info-container">
           <div className="id-container">
@@ -98,8 +105,8 @@ function ProfileHeader({ myId, profileId, profileName, profileIntro, profileImag
         </div>
         {width < 750 && (
           <>
-            <ProfileNameAndInroduce profileName={profileName} profileIntro={profileIntro} />
             <ProfileCountInfo followers={followers} followees={followees} toggleModal={toggleModal} />
+            <ProfileNameAndInroduce profileName={profileName} profileIntro={profileIntro} />
           </>
         )}
       </StyledSection>
@@ -112,7 +119,10 @@ function ProfileHeader({ myId, profileId, profileName, profileIntro, profileImag
         isList={state.isList}
         toggleModal={toggleModal}
         popModal={popModal}
+        onLogout={onLogout}
+        closeModal={closeModal}
       />
+      {logoutModal && <LogoutModal closeModal={closeModal} />}
     </>
   );
 

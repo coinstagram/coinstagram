@@ -6,7 +6,6 @@ import createSagaMiddleware from 'redux-saga';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { routerMiddleware } from 'connected-react-router';
 import { createBrowserHistory } from 'history';
-import { createNull } from 'typescript';
 
 export const history = createBrowserHistory();
 const sagaMiddleWare = createSagaMiddleware();
@@ -117,6 +116,7 @@ function preloadedState(token: string | null): RootState {
     otherPosts: {
       loading: false,
       error: null,
+      isLast: false,
       otherPosts: [],
       counts: {
         loading: false,

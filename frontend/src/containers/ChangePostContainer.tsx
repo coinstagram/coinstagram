@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
-
-// components;
-import UploadHeader from '../components/upload/UploadHeader';
-import UploadInput from '../components/upload/UploadInput';
-import UploadDetails from '../components/upload/UploadDetails';
 import { useDispatch, useSelector } from 'react-redux';
 import { add_post, addPostSaga } from '../redux/modules/upload';
 import { getSelectedPostSaga } from '../redux/modules/post';
 import { useLocation } from 'react-router-dom';
 import RootState from '../type';
+
+// components;
+import UploadHeader from '../components/upload/UploadHeader';
+import UploadInput from '../components/upload/UploadInput';
+import UploadDetails from '../components/upload/UploadDetails';
 
 export interface contextValue {
   id: string;
@@ -20,12 +20,9 @@ export interface contextValue {
   tag: Array<string>;
   image_path: Array<string>;
 }
-interface test {
-  getSelectedPostInfo: () => void;
-  hasTag: (hasTag: Array<string>) => void;
-}
 
 const ChangePostContainer = () => {
+  const dispatch = useDispatch();
   const [data, setData] = useState<contextValue>({
     id: '',
     user_id: '',
@@ -36,14 +33,12 @@ const ChangePostContainer = () => {
     tag: [],
     image_path: [],
   });
-  const dispatch = useDispatch();
-
   const selectedPostId = +useLocation().pathname.split('/')[2];
+  const { selectedPost } = useSelector(({ posts }: RootState) => posts.selectedPost);
+
   useEffect(() => {
     dispatch(getSelectedPostSaga(selectedPostId));
   }, [dispatch, selectedPostId]);
-
-  const { selectedPost } = useSelector(({ posts }: RootState) => posts.selectedPost);
 
   useEffect(() => {
     if (!!selectedPost) {
@@ -54,6 +49,7 @@ const ChangePostContainer = () => {
         post_context: selectedPost.post_context,
         post_anotheruser: selectedPost.post_anotheruser,
         post_location: selectedPost.post_location,
+        tag: selectedPost.hastag,
       }));
     }
   }, [selectedPost]);
@@ -62,6 +58,13 @@ const ChangePostContainer = () => {
     setData(data => ({
       ...data,
       image_path: img,
+    }));
+  }, []);
+
+  const hasTag = useCallback((tag: Array<string>) => {
+    setData(data => ({
+      ...data,
+      tag: tag,
     }));
   }, []);
 
@@ -92,13 +95,6 @@ const ChangePostContainer = () => {
     },
     [dispatch, data],
   );
-
-  const hasTag = useCallback((img: Array<string>) => {
-    setData(data => ({
-      ...data,
-      image_path: img,
-    }));
-  }, []);
 
   return (
     <>

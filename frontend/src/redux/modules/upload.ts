@@ -140,16 +140,15 @@ const postReducer = createReducer<uploadState, PostActions>(initialState, {
   }),
 });
 
-// saga
 // saga action
 const ADD_POST_SAGA = `coinstagram/upload/ADD_POST_SAGA` as const;
 const CHANGE_POST_SAGA = `coinstagram/upload/CHANGE_POST_SAGA` as const;
+
 // saga action creator
 export const addPostSaga = createAction(ADD_POST_SAGA)();
 export const changePostSaga = createAction(CHANGE_POST_SAGA)();
 
 // saga function
-
 function* addPostSagafun() {
   try {
     yield put(add_post_request());
@@ -157,7 +156,6 @@ function* addPostSagafun() {
     const { upload } = yield select((state: uploadState) => state);
     
     const { id, user_id,  created_at, image_path } = yield call(uploadService.uploadPost, upload.data, token);
-    console.log('upload : ',upload);
     
     yield put(
       add_post({

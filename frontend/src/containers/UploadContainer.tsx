@@ -53,7 +53,6 @@ const UploadContainer = () => {
 
   const onchange = (e: any) => {
     const { id, value } = e.target;
-    console.log(id, ' : ', value);
 
     if (id === 'people') {
       setData({
@@ -85,7 +84,7 @@ const UploadContainer = () => {
     <>
       <UploadHeader />
       <UploadInput image={image} onsubmit={onsubmit} data={data} />
-      <UploadDetails change={onchange} data={data} hasTag={hasTag} />
+      <UploadDetails hasTag={hasTag} change={onchange} data={data} />
     </>
   );
 };

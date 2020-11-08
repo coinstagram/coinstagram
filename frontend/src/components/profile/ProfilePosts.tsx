@@ -1,20 +1,18 @@
-import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import RootState from '../../type';
 import useWindowWidth from '../../hooks/useWindowWidth';
 
 // icons
 import { BsCardImage, BsTag, BsBookmarks } from 'react-icons/bs';
 
 // styles
-import { StyledSection, StyledNavDiv, StyledSpinnerDiv, StyledReadyDiv, StyledNocontentDiv } from './ProfilePostsStyle';
+import { StyledSection, StyledNavDiv } from './ProfilePostsStyle';
 import { StyledDiv } from '../post/OtherPostListStyle';
-import { StyledErrorDiv } from '../explore/RandomPostsStyle';
 
 // components
-import OtherPostItem from '../post/OtherPostItem';
-import Spinner from '../common/Spinner';
+import ProfilePostsUploaded from './ProfilePostsUploaded';
+import ProfilePostsBookmarked from './ProfilePostsBookmarked';
+import ProfilePostsTagged from './ProfilePostsTagged';
 
 interface ProfilePostsProps {
   profileId: string;
@@ -26,19 +24,7 @@ interface ProfilePostsProps {
 
 function ProfilePosts({ profileId, myId, bookmarkedId, getPostCounts, getBookmarkPosts }: ProfilePostsProps) {
   const pageName = useLocation().pathname.split('/')[3];
-  const { loading, error, otherPosts } = useSelector((state: RootState) => state.otherPosts);
-  const { bookmarkPosts } = useSelector((state: RootState) => state.bookmarks);
-  const bookmarkLoading = bookmarkPosts.loading;
-  const bookmarkError = bookmarkPosts.error;
-  const bookmarkedPosts = bookmarkPosts.bookmarkPosts;
   const width = useWindowWidth();
-
-  useEffect(() => {
-    if (profileId !== myId) return;
-    if (bookmarkedId.length === 0) return;
-
-    bookmarkedId.forEach(id => getBookmarkPosts(id));
-  }, [getBookmarkPosts, bookmarkedId, myId, profileId]);
 
   return (
     <StyledSection width={width}>
@@ -60,83 +46,11 @@ function ProfilePosts({ profileId, myId, bookmarkedId, getPostCounts, getBookmar
         </ul>
       </StyledNavDiv>
       <StyledDiv width={width}>
-        {loading && (
-          <StyledSpinnerDiv>
-            <Spinner />
-          </StyledSpinnerDiv>
-        )}
-        {pageName === undefined && error !== null && (
-          <StyledErrorDiv>
-            <p>
-              게시물 로딩에 실패하였습니다.{' '}
-              <span aria-label="아쉬운 표정" role="img">
-                😅
-              </span>{' '}
-              <br />
-              페이지 새로고침 후 다시 실행해 주시기바랍니다.
-            </p>
-          </StyledErrorDiv>
-        )}
-        {pageName === undefined && !loading && !error && otherPosts.length === 0 && (
-          <StyledNocontentDiv>
-            아직 업로드하신 게시물이 없어요{' '}
-            <span aria-label="아쉬운 표정" role="img">
-              😂
-            </span>
-          </StyledNocontentDiv>
-        )}
-        {pageName === undefined && (
-          <ul>
-            {otherPosts.map(post => (
-              <OtherPostItem
-                key={post.id}
-                postId={post.id}
-                postOwnerId={post.user_id}
-                getPostCounts={getPostCounts}
-                imageThumbnail={post.image_path}
-              />
-            ))}
-          </ul>
-        )}
-        {bookmarkLoading && (
-          <StyledSpinnerDiv>
-            <Spinner />
-          </StyledSpinnerDiv>
-        )}
-        {bookmarkError !== null && (
-          <StyledErrorDiv>
-            <p>
-              게시물 로딩에 실패하였습니다.{' '}
-              <span aria-label="아쉬운 표정" role="img">
-                😅
-              </span>{' '}
-              <br />
-              페이지 새로고침 후 다시 실행해 주시기바랍니다.
-            </p>
-          </StyledErrorDiv>
-        )}
-        {pageName === 'saved' && !bookmarkLoading && bookmarkedPosts.length === 0 && (
-          <StyledNocontentDiv>
-            아직 찜한 게시물이 없어요{' '}
-            <span aria-label="아쉬운 표정" role="img">
-              😊
-            </span>
-          </StyledNocontentDiv>
-        )}
+        {pageName === undefined && <ProfilePostsUploaded profileId={profileId} getPostCounts={getPostCounts} />}
         {pageName === 'saved' && (
-          <ul>
-            {bookmarkedPosts.map(post => (
-              <OtherPostItem
-                key={post.id}
-                postId={post.id}
-                postOwnerId={post.user_id}
-                getPostCounts={getPostCounts}
-                imageThumbnail={post.image_path}
-              />
-            ))}
-          </ul>
+          <ProfilePostsBookmarked bookmarkedId={bookmarkedId} getPostCounts={getPostCounts} getBookmarkPosts={getBookmarkPosts} />
         )}
-        {pageName === 'tagged' && <StyledReadyDiv />}
+        {pageName === 'tagged' && <ProfilePostsTagged />}
       </StyledDiv>
     </StyledSection>
   );

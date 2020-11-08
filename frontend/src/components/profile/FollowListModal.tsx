@@ -1,9 +1,6 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../../redux/modules/auth';
-import TokenService from '../../redux/services/tokenService';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import RootState, { AnotherUserState } from '../../type';
-import LogoutModal from '../login/LogoutModal';
 // styles
 import { StyledDiv, StyledBackground, StyledBtn } from './FollowListModalStyle';
 
@@ -23,18 +20,13 @@ interface FollowListModalProps {
   isList?: boolean;
   toggleModal: (content?: string, target?: EventTarget, curTarget?: EventTarget) => void;
   popModal: () => void;
+  onLogout?: () => void;
+  closeModal?: () => void;
 }
 
-function FollowListModal({ myId, followers, followees, modal, content, isList, toggleModal, popModal }: FollowListModalProps) {
+function FollowListModal({ myId, followers, followees, modal, content, isList, toggleModal, popModal, onLogout, closeModal }: FollowListModalProps) {
   const myFollowers = useSelector((state: RootState) => state.userInfo.followers.users);
-  const dispatch = useDispatch();
   const width = useWindowWidth();
-  const [logoutModal, setLogoutModal] = useState(false);
-  const onLogout = () => {
-    // dispatch(logout());
-    // TokenService.remove();
-    setLogoutModal(true);
-  };
 
   return (
     <StyledBackground modal={modal} onClick={e => toggleModal('', e.target, e.currentTarget)}>
@@ -91,7 +83,6 @@ function FollowListModal({ myId, followers, followees, modal, content, isList, t
             </li>
           </ul>
         )}
-        {logoutModal && <LogoutModal />}
       </StyledDiv>
     </StyledBackground>
   );
