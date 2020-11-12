@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getBookmarksSaga } from '../redux/modules/bookmark';
-import { getRandomPostsSaga } from '../redux/modules/post';
 import { getUserInfoSaga } from '../redux/modules/userInfo';
 import RootState from '../type';
 
@@ -20,11 +19,6 @@ function useInit() {
     if (token === null) return;
     dispatch(getBookmarksSaga(userId));
   }, [dispatch, userId, token]);
-
-  useEffect(() => {
-    if (token === null) return;
-    dispatch(getRandomPostsSaga(1));
-  }, [dispatch, token]);
 }
 
 export default useInit;
