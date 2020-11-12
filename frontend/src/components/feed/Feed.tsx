@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import RootState, { EachPostState } from '../../type';
 import { Link } from 'react-router-dom';
 import useWindowWidth from '../../hooks/useWindowWidth';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetFeedPost } from '../../redux/modules/post';
+import useObserver from '../../hooks/useObserver';
+import PostService from '../../redux/services/postService';
 
 // styles
 import { StyledArticle, StyledPreviewDiv, StyledSpinnerDiv, StyledDiv, StyledPostDiv, StyledCommentDiv, StyledLastComment } from './FeedStyle';
@@ -18,7 +20,6 @@ import FeedBody from './FeedBody';
 import FeedComment from './FeedComment';
 import FeedIcons from './FeedIcons';
 import Spinner from '../common/Spinner';
-import useObserver from '../../hooks/useObserver';
 
 interface FeedProps {
   loading: boolean;
@@ -35,17 +36,22 @@ interface FeedProps {
 
 function Feed({ loading, error, isLast, myId, feedPosts, addCommentPost, addPostLikes, deletePostLike, addBookmark, deleteBookmark }: FeedProps) {
   const dispatch = useDispatch();
-  const { randomPosts } = useSelector((state: RootState) => state.posts.randomPosts);
+  const { token } = useSelector((state: RootState) => state.auth);
+  const recommendPosts = useRef<EachPostState[]>([]);
   const width = useWindowWidth();
   const observerObj = useObserver('feed', isLast);
-
-  const filteredNinePosts = randomPosts.filter((_, i) => i < 9);
 
   useEffect(() => {
     return () => {
       dispatch(resetFeedPost());
     };
   }, [dispatch]);
+
+  useEffect(() => {
+    (async function () {
+      recommendPosts.current = await PostService.getRandomPosts(token, 1);
+    })();
+  }, [token]);
 
   return (
     <StyledDiv>
@@ -85,9 +91,7 @@ function Feed({ loading, error, isLast, myId, feedPosts, addCommentPost, addPost
       </div>
       {feedPosts.length === 0 && !loading && error === null && (
         <StyledPreviewDiv>
-          {filteredNinePosts.map(post => (
-            <StyledPostDiv key={post.id} image={post.image_path} />
-          ))}
+          {recommendPosts.current.map((post, index) => index < 9 && <StyledPostDiv key={post.id} image={post.image_path} />)}
           <StyledCommentDiv>
             <p>지금 당신의 추억을 공유해 보세요</p>
             <Link to="/upload">
