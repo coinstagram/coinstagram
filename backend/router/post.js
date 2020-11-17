@@ -22,8 +22,6 @@ router.get('/posts/hastag/:hastag/:page', verifyToken, async (req, res) => {
   );
   console.log('/post/hastag/ 입니다.');
   let sql = '';
-  let sqls = '';
-  let params = [];
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
@@ -31,9 +29,7 @@ router.get('/posts/hastag/:hastag/:page', verifyToken, async (req, res) => {
       const [postId] = await connection.query(sql, [hastag]);
       const post_id = postId.map(({ post_id }) => post_id);
 
-      sql = `select * from posts where id in (${post_id.join(
-        ',',
-      )}) limit  ?, ?;`;
+      sql = `select * from posts where id in (${post_id.join()}) limit  ?, ?;`;
       let [check] = await connection.query(sql, [pageNum, line]);
       let isEmpty = checkEmpty(post_id);
       if (isEmpty) {
@@ -54,7 +50,6 @@ router.get('/posts/hastag/:hastag/:page', verifyToken, async (req, res) => {
         sqls += mysql.format(sql, params);
       });
       const [tag] = await connection.query(sqls);
-      console.log(post_id);
       for (let i = 0; i < post_id.length; i++) {
         let imageitem = '';
         if (checkMultArray(image)) {
@@ -79,6 +74,7 @@ router.get('/posts/hastag/:hastag/:page', verifyToken, async (req, res) => {
           };
         }
       }
+      console.log(check);
       res.send(check);
     } catch (error) {
       await connection.rollback(); // ROLLBACK

@@ -17,6 +17,15 @@ interface OtherPostItemProps {
   getPostCounts: (post_id: number) => void;
 }
 
+const checkMultArray = (testArray: any) => {
+  try {
+    testArray.reduce((acc: any, it: any) => [...acc, ...it], []);
+    return true;
+  } catch (err) {
+    return false;
+  }
+};
+
 function OtherPostItem({ postId, postOwnerId, imageThumbnail, getPostCounts }: OtherPostItemProps) {
   const { counts } = useSelector((state: RootState) => state.otherPosts.counts);
   const { setFollowInfo } = useContext(followContext);
@@ -27,11 +36,22 @@ function OtherPostItem({ postId, postOwnerId, imageThumbnail, getPostCounts }: O
   useEffect(() => {
     getPostCounts(postId);
   }, [getPostCounts, postId]);
+  useEffect(() => {
+    console.log(imageThumbnail[imageThumbnail.length - 1]);
+    console.log(imageThumbnail);
+  });
 
   return (
     <StyledLi>
       <Link to={`/post/${postId}`} onClick={() => setFollowInfo(postOwnerId, '', null)}>
-        <img src={`http://localhost:4000/${imageThumbnail[imageThumbnail.length - 1]}`} alt={`${postOwnerId}님의 게시물-${postId}}`} />
+        <img
+          src={
+            checkMultArray(imageThumbnail)
+              ? `http://localhost:4000/${imageThumbnail[imageThumbnail.length - 1]}`
+              : `http://localhost:4000/${imageThumbnail}`
+          }
+          alt={`${postOwnerId}님의 게시물-${postId}}`}
+        />
         {imageThumbnail.length > 1 && <FaClone />}
         <StyledCountDiv>
           <div>
