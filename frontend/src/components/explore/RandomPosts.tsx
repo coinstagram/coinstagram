@@ -1,7 +1,7 @@
 import React from 'react';
+import { EachPostState } from '../../type';
 import useWindowWidth from '../../hooks/useWindowWidth';
 import useObserver from '../../hooks/useObserver';
-import { EachPostState } from '../../type';
 
 // styles
 import { StyledSection, StyledErrorDiv } from './RandomPostsStyle';

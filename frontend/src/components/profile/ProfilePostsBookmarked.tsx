@@ -18,10 +18,16 @@ interface ProfilePostsBookmarkedProps {
 
 function ProfilePostsBookmarked({ getPostCounts, getBookmarkPosts, bookmarkedId }: ProfilePostsBookmarkedProps) {
   const { loading, error, bookmarkPosts } = useSelector((state: RootState) => state.bookmarks.bookmarkPosts);
+  const length = bookmarkedId.length;
+  const postCount = Math.ceil(length / 12);
 
   useEffect(() => {
-    bookmarkedId.forEach(id => getBookmarkPosts(id));
-  }, [getBookmarkPosts, bookmarkedId]);
+    bookmarkedId.forEach((id, index) => index < postCount && getBookmarkPosts(id));
+  }, [bookmarkedId, getBookmarkPosts, postCount]);
+
+  // useEffect(() => {
+  // bookmarkedId.forEach(id => getBookmarkPosts(id));
+  // }, [getBookmarkPosts, bookmarkedId]);
 
   return (
     <>
