@@ -475,18 +475,6 @@ function userInfoReducer(state: UserInfoState = initialState, action: UserAction
         },
         user: state.user,
       };
-<<<<<<< HEAD
-      case EDIT_SUCCESS:
-        return {
-          ...state,
-          editLoadingState: state.editLoadingState,
-          user: {
-            ...action.payload,
-            user_profile: action.payload.user_profile === null ? state.user.user_profile : action.payload.user_profile,
-          },
-          // user: action.payload,
-        };
-=======
     case EDIT_SUCCESS:
       return {
         ...state,
@@ -497,7 +485,6 @@ function userInfoReducer(state: UserInfoState = initialState, action: UserAction
         },
         // user: action.payload,
       };
->>>>>>> bac226726602f882573cf00b63c3f2e111ebc102
     case EDIT_FAIL:
       return {
         ...state,
