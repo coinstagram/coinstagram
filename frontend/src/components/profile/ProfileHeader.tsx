@@ -61,12 +61,7 @@ function ProfileHeader({ myId, profileId, profileName, profileIntro, profileImag
     },
     [state],
   );
-  const onLogout = () => {
-    setLogoutModal(true);
-  };
-  const closeModal = () => {
-    setLogoutModal(false);
-  };
+
   return (
     <>
       <StyledSection width={width}>
@@ -125,6 +120,13 @@ function ProfileHeader({ myId, profileId, profileName, profileIntro, profileImag
       {logoutModal && <LogoutModal closeModal={closeModal} />}
     </>
   );
+
+  function onLogout() {
+    setLogoutModal(true);
+  }
+  function closeModal() {
+    setLogoutModal(false);
+  }
 
   function popModal() {
     setState({

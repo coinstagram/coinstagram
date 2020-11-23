@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const express = require('express');
 const pool = require('../config/database');
 
@@ -353,6 +354,38 @@ router.patch('/user', verifyToken, async (req, res) => {
         user_gender,
       ]);
 
+      res.json({ success: true });
+    } catch (error) {
+      await connection.rollback(); // ROLLBACK
+      await connection.release();
+      console.log(error);
+      res.status(500).json('SQL ERROR');
+    } finally {
+      await connection.release();
+    }
+  } catch (error) {
+    res.status(500).json('DB CONNECT ERROR');
+  }
+});
+
+router.patch('/user/password', verifyToken, async (req, res) => {
+  console.log('user/password');
+  const { user_password } = req.body;
+  const token = req.headers.authorization.split('Bearer ')[1];
+  const { user_id } = jwt.verify(
+    token,
+    // eslint-disable-next-line no-undef
+    process.env.JWT_SECRET,
+  );
+  let sql = '';
+
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    try {
+      const hashedPassword = await bcrypt.hash(user_password + '', 2);
+      sql = `update users set user_password = ? where user_id = ?`;
+      const [res] = await connection.query(sql, [hashedPassword, user_id]);
+      console.log(res);
       res.json({ success: true });
     } catch (error) {
       await connection.rollback(); // ROLLBACK
