@@ -36,10 +36,6 @@ function OtherPostItem({ postId, postOwnerId, imageThumbnail, getPostCounts }: O
   useEffect(() => {
     getPostCounts(postId);
   }, [getPostCounts, postId]);
-  useEffect(() => {
-    console.log(imageThumbnail[imageThumbnail.length - 1]);
-    console.log(imageThumbnail);
-  });
 
   return (
     <StyledLi>
