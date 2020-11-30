@@ -253,7 +253,6 @@ function* getTaggedPosts(action: taggedPostSagaAction) {
     const { token } = yield select((state: RootState) => state.auth);
     yield put(startGetPostsTagged());
     const taggedPosts: EachPostState[] = yield call(PostService.getTaggedPost, token, action.payload.tag, action.payload.count);
-    console.log(taggedPosts);
     yield taggedPosts.length === 0 ? put(lastTaggedPost()) : put(successGetPostsTagged(taggedPosts));
   } catch (error) {
     yield put(failGetPostsTagged(error));
