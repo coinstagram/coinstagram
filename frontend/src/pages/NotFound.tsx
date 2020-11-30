@@ -1,7 +1,12 @@
 import React from 'react';
+import StyledNotFound from '../components/NotFoundStyle';
 
 function NotFound() {
-  return <h1>NotFound</h1>;
+  return (
+    <>
+      <StyledNotFound />
+    </>
+  );
 }
 
 export default NotFound;

@@ -5,14 +5,16 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import create from './redux/create';
+import TokenService from './redux/services/tokenService';
 
-const store = create();
+const token = TokenService.get();
+const store = create(token);
 
 ReactDOM.render(
   <Provider store={store}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
+    {/* <React.StrictMode> */}
+    <App />
+    {/* </React.StrictMode> */}
   </Provider>,
   document.getElementById('root'),
 );

@@ -1,10 +1,10 @@
-import React, { useRef, useCallback, useState, useEffect } from 'react';
+import React, { useRef, useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 // components
 import Thumbnail from './Thumbnail';
-import NextBtn from '../styles/NextBtn';
-import PrevBtn from '../styles/PrevBtn';
+import NextBtn from './common/NextBtn';
+import PrevBtn from './common/PrevBtn';
 
 const StyledSection = styled.section`
   height: 84px;
@@ -45,10 +45,6 @@ function FollowUsers() {
   });
   const divRef = useRef<HTMLDivElement>(null);
   const ulRef = useRef<HTMLUListElement>(null);
-
-  useEffect(() => {
-    const { divPos, lastLiPos, slideWidth } = getSlideInfo() as Position;
-  });
 
   const next = useCallback(() => {
     const { divPos, lastLiPos, slideWidth } = getSlideInfo() as Position;

@@ -10,15 +10,128 @@ import { createBrowserHistory } from 'history';
 export const history = createBrowserHistory();
 const sagaMiddleWare = createSagaMiddleware();
 
-// const preloadedState: RootState = {}
+function preloadedState(token: string | null): RootState {
+  return {
+    auth: {
+      loading: false,
+      error: null,
+      token,
+    },
+    userInfo: {
+      loading: false,
+      error: null,
+      user: null,
+      editLoadingState: {
+        loading: false,
+        error: null,
+      },
+      followers: {
+        loading: false,
+        error: null,
+        users: [],
+      },
+      followees: [],
+      randomUsers: {
+        loading: false,
+        error: null,
+        users: [],
+      },
+    },
+    anotherUserInfo: {
+      loading: false,
+      error: null,
+      user: null,
+      followers: [],
+      followees: [],
+    },
+    posts: {
+      feedPosts: {
+        loading: false,
+        error: null,
+        isLast: false,
+        feedPosts: [],
+      },
+      selectedPost: {
+        loading: false,
+        error: null,
+        selectedPost: null,
+      },
+      randomPosts: {
+        loading: false,
+        error: null,
+        isLast: false,
+        randomPosts: [],
+      },
+    },
+    upload: {
+      Loading: false,
+      Done: false,
+      Error: null,
+      data: {
+        id: '',
+        user_id: '',
+        post_context: '',
+        post_anotheruser: '',
+        post_location: '',
+        tag: [],
+        image_path: [],
+        created_at: '',
+      },
+    },
+    comments: {
+      feedPostComments: {
+        loading: false,
+        error: null,
+        comments: [],
+      },
+      selectedPostComments: {
+        loading: false,
+        error: null,
+        comments: [],
+      },
+      myComments: [],
+    },
+    likes: {
+      feedPostLikes: {
+        loading: false,
+        error: null,
+        userLikes: [],
+      },
+      selectedPostLikes: {
+        loading: false,
+        error: null,
+        userLikes: [],
+      },
+    },
+    bookmarks: {
+      loading: false,
+      error: null,
+      bookmarks: [],
+      bookmarkPosts: {
+        loading: false,
+        error: null,
+        bookmarkPosts: [],
+      },
+    },
+    otherPosts: {
+      loading: false,
+      error: null,
+      isLast: false,
+      otherPosts: [],
+      counts: {
+        loading: false,
+        error: null,
+        counts: [],
+      },
+    },
+  };
+}
 
-function create(): Store<RootState> {
+function create(token: string | null): Store<RootState> {
   const store: Store<RootState> = createStore(
     rootReducer(history),
-    // preloadedState,
-    composeWithDevTools(
-      applyMiddleware(routerMiddleware(history), sagaMiddleWare),
-    ),
+    preloadedState(token),
+    composeWithDevTools(applyMiddleware(routerMiddleware(history), sagaMiddleWare)),
   );
 
   sagaMiddleWare.run(rootSaga);

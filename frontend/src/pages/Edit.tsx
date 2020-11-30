@@ -1,14 +1,24 @@
 import React from 'react';
-import Header from '../components/Header';
-import StyledMain from '../styles/StyledMain';
+import Header from '../components/header/Header';
+import useAuth from '../hooks/useAuth';
+
+// styles
+import StyledMain from '../components/common/StyledMain';
+
+// components
+import EditContainer from '../containers/EditContainer';
 
 function Edit() {
+  useAuth();
+
   return (
     <>
       <Header />
-      <StyledMain>Edit</StyledMain>
+      <StyledMain>
+        <EditContainer />
+      </StyledMain>
     </>
   );
 }
 
-export default Edit;
+export default React.memo(Edit);

@@ -13,9 +13,7 @@ const borderStyle = (width: number, isFollower: boolean) => css`
     right: ${-2 * width};
     z-index: -1;
     border-radius: 50%;
-    background: ${isFollower
-      ? 'linear-gradient(to bottom left, rgb(174, 0, 255), rgba(255, 132, 66))'
-      : 'rgb(0, 0, 0)'};
+    background: ${isFollower ? 'linear-gradient(to bottom left, rgb(174, 0, 255), rgba(255, 132, 66))' : 'rgb(0, 0, 0)'};
   }
 `;
 
@@ -37,13 +35,9 @@ const StyledButton = styled.button`
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 50% 50%;
-    background-image: url(${({ imageUrl }: ThumbnailProps) =>
-      imageUrl === '' ? profile : imageUrl});
+    background-image: url(${({ imageUrl }: ThumbnailProps) => (imageUrl === '' ? profile : imageUrl)});
 
-    ${({ profile }: ThumbnailProps) =>
-      profile === true
-        ? borderStyle(1, false)
-        : profile === null && borderStyle(2, true)}
+    ${({ profile }: ThumbnailProps) => (profile === true ? borderStyle(1, false) : profile === null && borderStyle(2, true))}
   }
 
   div {
@@ -62,11 +56,7 @@ const StyledButton = styled.button`
   }
 
   &.selected > span::after {
-    background: linear-gradient(
-      to bottom left,
-      rgb(174, 0, 255),
-      rgba(255, 255, 255)
-    );
+    background: linear-gradient(to bottom left, rgb(174, 0, 255), rgba(255, 255, 255));
 
     transition: transform 2s;
     transform: rotate(720deg);
@@ -81,12 +71,7 @@ interface ThumbnailProps {
 
 function Thumbnail({ imageUrl, size, profile }: ThumbnailProps) {
   return (
-    <StyledButton
-      onClick={loading}
-      imageUrl={imageUrl}
-      size={size}
-      profile={profile}
-    >
+    <StyledButton onClick={loading} imageUrl={imageUrl} size={size} profile={profile}>
       <span tabIndex={-1} />
       {profile === null && (
         <div tabIndex={-1}>
@@ -97,9 +82,7 @@ function Thumbnail({ imageUrl, size, profile }: ThumbnailProps) {
     </StyledButton>
   );
 
-  function loading({
-    currentTarget,
-  }: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  function loading({ currentTarget }: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     currentTarget.classList.toggle('selected');
   }
 }

@@ -1,14 +1,26 @@
 import React from 'react';
-import Header from '../components/Header';
-import StyledMain from '../styles/StyledMain';
+import useAuth from '../hooks/useAuth';
+import useWindowWidth from '../hooks/useWindowWidth';
+
+// styles
+import StyledMain from '../components/common/StyledMain';
+
+//containers
+import Header from '../components/header/Header';
+import ProfileContainer from '../containers/ProfileContainer';
 
 function Profile() {
+  const width = useWindowWidth();
+  useAuth();
+
   return (
     <>
       <Header />
-      <StyledMain>Profile</StyledMain>
+      <StyledMain width={width}>
+        <ProfileContainer />
+      </StyledMain>
     </>
   );
 }
 
-export default Profile;
+export default React.memo(Profile);

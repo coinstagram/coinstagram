@@ -1,14 +1,26 @@
 import React from 'react';
-import Header from '../components/Header';
-import StyledMain from '../styles/StyledMain';
+import Header from '../components/header/Header';
+import useWindowWidth from '../hooks/useWindowWidth';
+import useAuth from '../hooks/useAuth';
+
+// styles
+import StyledMain from '../components/common/StyledMain';
+
+// components
+import UserPostsContainer from '../containers/UserPostsContainer';
 
 function Post() {
+  const width = useWindowWidth();
+  useAuth();
+
   return (
     <>
       <Header />
-      <StyledMain>Post</StyledMain>
+      <StyledMain isMain={true} width={width}>
+        <UserPostsContainer />
+      </StyledMain>
     </>
   );
 }
 
-export default Post;
+export default React.memo(Post);

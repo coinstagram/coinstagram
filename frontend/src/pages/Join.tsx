@@ -1,7 +1,10 @@
 import React from 'react';
+import JoinWrapper from '../components/Join/JoinWrapper';
 
 function Join() {
-  return <div>Join</div>;
+  // function Join({children}:JoinProps) {
+  // const width = useWindowWidth();
+  return <JoinWrapper></JoinWrapper>;
 }
 
-export default Join;
+export default React.memo(Join);

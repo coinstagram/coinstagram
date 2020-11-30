@@ -4,15 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import useWindowWidth from '../hooks/useWindowWidth';
 
 // icons
-import {
-  BsHouseDoorFill,
-  BsHouseDoor,
-  BsPlusCircleFill,
-  BsPlusCircle,
-  BsHeartFill,
-  BsHeart,
-  BsCompass,
-} from 'react-icons/bs';
+import { BsHouseDoorFill, BsHouseDoor, BsPlusCircleFill, BsPlusCircle, BsHeartFill, BsHeart, BsCompass } from 'react-icons/bs';
 import { FaCompass } from 'react-icons/fa';
 
 // components
@@ -28,8 +20,7 @@ const StyledNav = styled.nav`
     align-items: center;
   }
   li + li {
-    margin-left: ${(props: StyledNavProps) =>
-      props.width < 600 ? '15px' : '22px'};
+    margin-left: ${(props: StyledNavProps) => (props.width < 600 ? '15px' : '22px')};
   }
   li {
     height: 25px;
@@ -68,40 +59,16 @@ function Navigation() {
       </h2>
       <ul aria-labelledby="nav-heading">
         <li aria-label="홈">
-          <Link to="/">
-            {page === '' && !state.favorite && !state.profile ? (
-              <BsHouseDoorFill />
-            ) : (
-              <BsHouseDoor />
-            )}
-          </Link>
+          <Link to="/">{page === '' && !state.favorite && !state.profile ? <BsHouseDoorFill /> : <BsHouseDoor />}</Link>
         </li>
         <li aria-label="게시물 업로드">
-          <Link to="/upload">
-            {page === 'upload' && !state.favorite && !state.profile ? (
-              <BsPlusCircleFill />
-            ) : (
-              <BsPlusCircle />
-            )}
-          </Link>
+          <Link to="/upload">{page === 'upload' && !state.favorite && !state.profile ? <BsPlusCircleFill /> : <BsPlusCircle />}</Link>
         </li>
         <li aria-label="타인 게시물 보기">
-          <Link to="/explore">
-            {page === 'explore' && !state.favorite && !state.profile ? (
-              <FaCompass />
-            ) : (
-              <BsCompass />
-            )}
-          </Link>
+          <Link to="/explore">{page === 'explore' && !state.favorite && !state.profile ? <FaCompass /> : <BsCompass />}</Link>
         </li>
         <li aria-label="새 소식" id="favorite" onClick={toggle}>
-          <button>
-            {state.favorite ? (
-              <BsHeartFill tabIndex={-1} />
-            ) : (
-              <BsHeart tabIndex={-1} />
-            )}
-          </button>
+          <button>{state.favorite ? <BsHeartFill tabIndex={-1} /> : <BsHeart tabIndex={-1} />}</button>
         </li>
         <li aria-label="내 프로필" id="profile" onClick={toggle}>
           <Thumbnail size={26} profile={state.profile} />
@@ -110,9 +77,7 @@ function Navigation() {
     </StyledNav>
   );
 
-  function toggle({
-    currentTarget,
-  }: React.MouseEvent<HTMLLIElement, MouseEvent>) {
+  function toggle({ currentTarget }: React.MouseEvent<HTMLLIElement, MouseEvent>) {
     const id = (currentTarget as Element).id;
     const isState = (x: string): x is keyof State => x in state;
     if (!isState(id)) return;
