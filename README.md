@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # coinstagram
 ## 팀 소개
 
@@ -382,4 +381,3 @@
 ## Flow Chart
 
 ![instargram_flowchart](https://user-images.githubusercontent.com/62285872/91688129-439cda80-eb9c-11ea-8c2b-0fa3f3d4f66c.png)
->>>>>>> 4bd9190c7b1019eac0f627a0ec6973124a35e486
